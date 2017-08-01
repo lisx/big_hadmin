@@ -2,6 +2,7 @@ package com.sparrow.hadmin.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.sparrow.hadmin.entity.support.BaseEntity;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -16,6 +17,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "tb_role")
+@Data
 public class Role extends BaseEntity {
 
 	/**
@@ -66,69 +68,5 @@ public class Role extends BaseEntity {
 	@ManyToMany(cascade = { CascadeType.REFRESH }, fetch = FetchType.LAZY)
 	@JoinTable(name = "tb_role_resource", joinColumns = { @JoinColumn(name = "role_id") }, inverseJoinColumns = { @JoinColumn(name = "resource_id") })
 	private java.util.Set<Resource> resources;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getRoleKey() {
-		return roleKey;
-	}
-
-	public void setRoleKey(String roleKey) {
-		this.roleKey = roleKey;
-	}
-
-	public Integer getStatus() {
-		return status;
-	}
-
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-
-	public Date getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
-	}
-
-	public java.util.Set<Resource> getResources() {
-		return resources;
-	}
-
-	public void setResources(java.util.Set<Resource> resources) {
-		this.resources = resources;
-	}
 
 }

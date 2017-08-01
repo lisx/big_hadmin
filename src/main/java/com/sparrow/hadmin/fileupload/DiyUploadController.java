@@ -31,7 +31,7 @@ public class DiyUploadController {
     @Autowired
     private Environment env;
     //上传文件的保存路径
-    protected String dirTemp = "upload/temp";
+    protected String dirTemp = "/upload/temp";
 
 
     @RequestMapping(value = "/html5/upload.html", method = RequestMethod.POST)

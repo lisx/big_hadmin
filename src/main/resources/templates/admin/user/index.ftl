@@ -25,6 +25,8 @@
                         <p>
                         	<@shiro.hasPermission name="system:user:add">
                         		<button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;添加</button>
+                                <button class="btn btn-success " type="button" onclick="uploadUser();"><i class="fa fa-plus"></i>&nbsp;上传用户</button>
+                                <button class="btn btn-success " type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传文件</button>
                         	</@shiro.hasPermission>
                         </p>
                         <hr>
@@ -71,8 +73,8 @@
 			    //是否启用查询
 			    search: true,
 			    //是否启用详细信息视图
-			    detailView:true,
-			    detailFormatter:detailFormatter,
+			    //detailView:true,
+			    //detailFormatter:detailFormatter,
 			    //表示服务端请求
 			    sidePagination: "server",
 			    //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
@@ -104,49 +106,25 @@
                     	return r;
                     }
 			    },{
-			        title: "昵称",
+			        title: "姓名",
 			        field: "nickName"
 			    },{
-			        title: "性别",
-			        field: "sex",
+			        title: "状态",
+			        field: "ifUse",
 			        formatter: function(value, row, index) {
                         if (value == '0')
-                        	return '<span class="label label-warning">女</span>';
-                        return '<span class="label label-primary">男</span>';
+                        	return '<span class="label label-warning">未删除</span>';
+                        return '<span class="label label-primary">已删除</span>';
                     }
 			    },{
-			        title: "出生日期",
-			        field: "birthday"
+                    title: "单位",
+                    field: "unitId",
 			    },{
 			        title: "电话",
 			        field: "telephone"
 			    },{
-			        title: "邮箱",
-			        field: "email"
-			    },{
-			        title: "状态",
-			        sortable: true,
-			        field: "deleteStatus",
-                    formatter: function (value, row, index) {
-                        if (value == '0')
-                        	return '<span class="label label-info">未删除</span>';
-                        return '<span class="label label-danger">已删除</span>';
-                    }
-			    },{
-			        title: "锁定",
-			        field: "locked",
-			        formatter: function (value, row, index) {
-                        if (value == '0')
-                        	return '<span class="label label-info">未锁定</span>';
-                        return '<span class="label label-danger">已锁定</span>';
-                    }
-			    },{
 			        title: "创建时间",
 			        field: "createTime",
-			        sortable: true
-			    },{
-			        title: "更新时间",
-			        field: "updateTime",
 			        sortable: true
 			    },{
 			        title: "操作",
@@ -185,7 +163,33 @@
         	      end: function(index){
         	    	  $('#table_list').bootstrapTable("refresh");
        	    	  }
-        	    });
+            });
+        }
+        function uploadUser(){
+            layer.open({
+                type: 2,
+                title: '批量上传用户',
+                shadeClose: true,
+                shade: false,
+                area: ['600px', '600px'],
+                content: '${ctx!}/admin/user/uploadUser',
+                end: function(index){
+                    $('#table_list').bootstrapTable("refresh");
+                }
+            });
+        }
+        function uploadFile(){
+            layer.open({
+                type: 2,
+                title: '批量上传证书',
+                shadeClose: true,
+                shade: false,
+                area: ['600px', '600px'],
+                content: '${ctx!}/admin/user/uploadFile',
+                end: function(index){
+                    $('#table_list').bootstrapTable("refresh");
+                }
+            });
         }
         function grant(id){
         	layer.open({

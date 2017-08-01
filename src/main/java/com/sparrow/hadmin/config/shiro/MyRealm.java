@@ -76,9 +76,9 @@ public class MyRealm extends AuthorizingRealm {
 			throw new IncorrectCredentialsException("账号或密码不正确");
 		}
 		// 账号锁定
-		if (user.getLocked() == 1) {
-			throw new LockedAccountException("账号已被锁定,请联系管理员");
-		}
+//		if (user.getLocked() == 1) {
+//			throw new LockedAccountException("账号已被锁定,请联系管理员");
+//		}
 
 		SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, password, getName());
 

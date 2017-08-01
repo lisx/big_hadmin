@@ -1,21 +1,18 @@
 package com.sparrow.hadmin.entity;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.sparrow.hadmin.entity.support.BaseEntity;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
 
 /**
- * <p>
- * 用户账户表
- * </p>
+ * 用户表
  *
- * @author 贤云
- * @since 2016-12-28
  */
 @Entity
-@Table(name = "tb_user")
+@Table(name = "big_user")
+@Data
 public class User extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
@@ -29,12 +26,15 @@ public class User extends BaseEntity {
 	private Integer id;
 
 	/**
-	 * 账户名
+	 * 用户名
 	 */
 	private String userName;
-
+    /**
+     * 员工编号
+     */
+    private String userCode;
 	/**
-	 * 昵称
+	 * 姓名
 	 */
 	private String nickName;
 
@@ -44,15 +44,14 @@ public class User extends BaseEntity {
 	private String password;
 
 	/**
-	 * 性别 0 女 1 男
+	 * 单位
 	 */
-	private Integer sex;
+	private Integer unitId;
 
 	/**
-	 * 出生日期
+	 * 逻辑删除状态 0 未删除 1 删除
 	 */
-	@JSONField(format = "yyyy-MM-dd")
-	private Date birthday;
+	private Integer ifUse;
 
 	/**
 	 * 电话
@@ -60,166 +59,32 @@ public class User extends BaseEntity {
 	private String telephone;
 
 	/**
-	 * 邮箱
+	 * 服务信息卡
 	 */
-	private String email;
+	private String fwxxkUrl;
 
 	/**
-	 * 住址
+	 * 综控员上岗证
 	 */
-	private String address;
+	private String zkysgzUrl;
 
 	/**
-	 * 逻辑删除状态 0 未删除 1 删除
+	 * FAS证
 	 */
-	private Integer deleteStatus;
+	private String faszUrl;
 
 	/**
-	 * 是否锁定
-	 *
-	 * 0 未锁定 1 锁定
+	 * 头像
 	 */
-	private Integer locked;
+	private String photoUrl;
 
-	/**
-	 * 用户描述
-	 */
-	private String description;
-
-	/**
-	 * 创建时间
-	 */
-	@JSONField(format = "yyyy-MM-dd HH:mm:ss")
-	private Date createTime;
-
-	/**
-	 * 更新时间
-	 */
-	@JSONField(format = "yyyy-MM-dd HH:mm:ss")
-	private Date updateTime;
 
 	@ManyToMany(cascade = { CascadeType.REFRESH }, fetch = FetchType.LAZY)
-	@JoinTable(name = "tb_user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
+	@JoinTable(name = "big_user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
 	private java.util.Set<Role> roles;
+    private Date createdAt;
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public String getNickName() {
-		return nickName;
-	}
-
-	public void setNickName(String nickName) {
-		this.nickName = nickName;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public Integer getSex() {
-		return sex;
-	}
-
-	public void setSex(Integer sex) {
-		this.sex = sex;
-	}
-
-	public Date getBirthday() {
-		return birthday;
-	}
-
-	public void setBirthday(Date birthday) {
-		this.birthday = birthday;
-	}
-
-	public String getTelephone() {
-		return telephone;
-	}
-
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public Integer getDeleteStatus() {
-		return deleteStatus;
-	}
-
-	public void setDeleteStatus(Integer deleteStatus) {
-		this.deleteStatus = deleteStatus;
-	}
-
-	public Integer getLocked() {
-		return locked;
-	}
-
-	public void setLocked(Integer locked) {
-		this.locked = locked;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-
-	public Date getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
-	}
-
-	public java.util.Set<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(java.util.Set<Role> roles) {
-		this.roles = roles;
-	}
-
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
 }

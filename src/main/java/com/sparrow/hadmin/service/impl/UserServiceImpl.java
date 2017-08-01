@@ -48,19 +48,19 @@ public class UserServiceImpl extends BaseServiceImpl<User, Integer> implements I
 		if(user.getId() != null){
 			User dbUser = find(user.getId());
 			dbUser.setNickName(user.getNickName());
-			dbUser.setSex(user.getSex());
-			dbUser.setBirthday(user.getBirthday());
+//			dbUser.setSex(user.getSex());
+//			dbUser.setBirthday(user.getBirthday());
 			dbUser.setTelephone(user.getTelephone());
-			dbUser.setEmail(user.getEmail());
-			dbUser.setAddress(user.getAddress());
-			dbUser.setLocked(user.getLocked());
-			dbUser.setDescription(user.getDescription());
-			dbUser.setUpdateTime(new Date());
+//			dbUser.setEmail(user.getEmail());
+//			dbUser.setAddress(user.getAddress());
+//			dbUser.setLocked(user.getLocked());
+//			dbUser.setDescription(user.getDescription());
+//			dbUser.setUpdateTime(new Date());
 			update(dbUser);
 		}else{
-			user.setCreateTime(new Date());
-			user.setUpdateTime(new Date());
-			user.setDeleteStatus(0);
+//			user.setCreateTime(new Date());
+//			user.setUpdateTime(new Date());
+//			user.setDeleteStatus(0);
 			user.setPassword(MD5Utils.md5("111111"));
 			save(user);
 		}
