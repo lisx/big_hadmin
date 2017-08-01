@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.sparrow</groupId>
+	<groupId>com.ducetech</groupId>
 	<artifactId>springboot-hadmin</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
@@ -173,7 +173,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>com.sparrow.hadmin.Application</mainClass>
+					<mainClass>com.ducetech.hadmin.Application</mainClass>
 					<fork>true</fork>
 				</configuration>
 				<dependencies>

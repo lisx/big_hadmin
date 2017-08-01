@@ -75,6 +75,9 @@
                                 <a class="J_menuItem" href="${ctx!}/admin/resource/index">资源管理</a>
                             </li>
                          </@shiro.hasPermission>
+                             <li>
+                                 <a class="J_menuItem" href="${ctx!}/admin/station/index">车站信息</a>
+                             </li>
                         </ul>
                     </li>
                     <li>
@@ -117,7 +120,7 @@
                                     <a href="${ctx!}/admin/logout">
                                         <div>
                                             <i class="fa fa-remove"></i> 注销
-                                            <span class="pull-right text-muted small"><@shiro.principal type="com.sparrow.hadmin.entity.User" property="userName"/></span>
+                                            <span class="pull-right text-muted small"><@shiro.principal type="com.ducetech.hadmin.entity.User" property="userName"/></span>
                                         </div>
                                     </a>
                                 </li>

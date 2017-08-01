@@ -45,7 +45,7 @@
         </div>
         <div class="signup-footer">
             <div class="pull-left">
-                &copy; 贤云
+                &copy; lisx
             </div>
         </div>
     </div>
