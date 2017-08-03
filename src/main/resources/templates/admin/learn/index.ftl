@@ -21,27 +21,71 @@
             <div class="col-sm-12">
                 <div class="ibox ">
                     <div class="ibox-title">
-                        <h5>车站信息管理</h5>
+                        <h5>学习园地</h5>
                     </div>
-                    <div class="ibox-content">
-                        <p>
-                        	<@shiro.hasPermission name="system:resource:add">
-                        		<button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;添加</button>
-                        	</@shiro.hasPermission>
-                        </p>
-                        <hr>
-                        <div class="row row-lg">
-		                    <div class="col-sm-12">
-		                        <!-- Example Card View -->
-		                        <div class="example-wrap">
-		                            <div class="example">
-		                            	<table id="table_list"></table>
-		                            </div>
-		                        </div>
-		                        <!-- End Example Card View -->
-		                    </div>
-	                    </div>
+                    <div class="col-sm-13">
+                        <div class="tabs-container">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true"> 培训资料</a>
+                                </li>
+                                <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">练习/考试</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="tab-1" class="tab-pane active">
+                                    <div class="panel-body">
+                                            <p>
+                                            <@shiro.hasPermission name="system:resource:add">
+                                                <button class="btn btn-success " type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传</button>
+                                                <button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;新建文件夹</button>
+                                                <button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;下载</button>
+                                                <button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;删除</button>
+                                            </@shiro.hasPermission>
+                                            </p>
+                                            <hr>
+                                            <div class="row row-lg">
+                                                <div class="col-sm-12">
+                                                    <!-- Example Card View -->
+                                                    <div class="example-wrap">
+                                                        <div class="example">
+                                                            <table id="table_train_list"></table>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Example Card View -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <div id="tab-2" class="tab-pane">
+                                    <div class="panel-body">
+                                            <p>
+                                            <@shiro.hasPermission name="system:resource:add">
+                                                <button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;上传题库</button>
+                                                <button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;批量导入附件</button>
+                                                <button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;下载</button>
+                                                <button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;删除</button>
+                                            </@shiro.hasPermission>
+                                            </p>
+                                        <hr>
+                                        <div class="row row-lg">
+                                            <div class="col-sm-12">
+                                                <!-- Example Card View -->
+                                                <div class="example-wrap">
+                                                    <div class="example">
+                                                        <table id="table_list2"></table>
+                                                    </div>
+                                                </div>
+                                                <!-- End Example Card View -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -55,13 +99,13 @@
     <script>
         $(document).ready(function () {
 			//初始化表格,动态从服务器加载数据
-			$("#table_list").bootstrapTable({
+			$("#table_train_list").bootstrapTable({
 			    //使用get请求到服务器获取数据
 			    method: "POST",
 			    //必须设置，不然request.getParameter获取不到请求参数
 			    contentType: "application/x-www-form-urlencoded",
 			    //获取数据的Servlet地址
-			    url: "${ctx!}/admin/station/list",
+			    url: "${ctx!}/admin/learn/list",
 			    //表格显示条纹
 			    striped: true,
 			    //启动分页
@@ -75,8 +119,8 @@
 			    //是否启用查询
 			    search: true,
 			    //是否启用详细信息视图
-			    detailView:true,
-			    detailFormatter:detailFormatter,
+			   // detailView:true,
+			   // detailFormatter:detailFormatter,
 			    //表示服务端请求
 			    sidePagination: "server",
 			    //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
@@ -95,40 +139,41 @@
 			        field: "id",
 			        sortable: true
 			    },{
-			        title: "车站名称",
-			        field: "nodeName"
+			        title: "文件名",
+			        field: "fileName"
 			    },{
+                    title: "文件大小",
+                    field: "fileSize",
+                },{
 			        title: "创建时间",
 			        field: "createTime",
-			        sortable: true
-			    },{
-			        title: "更新时间",
-			        field: "updateTime",
 			        sortable: true
 			    },{
 			        title: "操作",
 			        field: "empty",
                     formatter: function (value, row, index) {
-                    	var operateHtml = '<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="edit(\''+row.id+'\')"><i class="fa fa-edit"></i>&nbsp;修改</button> &nbsp;</@shiro.hasPermission>';
+                    	var operateHtml = '<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="down(\'http://127.0.0.1:8080/image/'+row.fileName+'\')"><i class="fa fa-edit"></i>&nbsp;下载</button> &nbsp;</@shiro.hasPermission>';
                     	operateHtml = operateHtml + '<@shiro.hasPermission name="system:resource:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button></@shiro.hasPermission>';
                         return operateHtml;
                     }
 			    }]
 			});
         });
-
-        function edit(id){
-        	layer.open({
-        	      type: 2,
-        	      title: '资源修改',
-        	      shadeClose: true,
-        	      shade: false,
-        	      area: ['893px', '600px'],
-        	      content: '${ctx!}/admin/resource/edit/' + id,
-        	      end: function(index){
-        	    	  $('#table_list').bootstrapTable("refresh");
-       	    	  }
-        	    });
+        function uploadFile(){
+            layer.open({
+                type: 2,
+                title: '批量上传资料',
+                shadeClose: true,
+                shade: false,
+                area: ['600px', '600px'],
+                content: '${ctx!}/admin/learn/uploadFile',
+                end: function(index){
+                    $('#table_list').bootstrapTable("refresh");
+                }
+            });
+        }
+        function down(url){
+            window.location.href=url;
         }
         function add(){
         	layer.open({
@@ -136,8 +181,8 @@
         	      title: '资源添加',
         	      shadeClose: true,
         	      shade: false,
-        	      area: ['893px', '600px'],
-        	      content: '${ctx!}/admin/resource/add',
+        	      area: ['400px', '400px'],
+        	      content: '${ctx!}/admin/folder/edit/1',
         	      end: function(index){
         	    	  $('#table_list').bootstrapTable("refresh");
        	    	  }

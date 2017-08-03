@@ -60,7 +60,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Integer> implements I
 //			user.setCreateTime(new Date());
 //			user.setUpdateTime(new Date());
 //			user.setDeleteStatus(0);
-			user.setPassword(MD5Utils.md5("111111"));
+			user.setPassword(MD5Utils.md5("123456"));
 			save(user);
 		}
 	}

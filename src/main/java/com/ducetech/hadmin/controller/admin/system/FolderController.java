@@ -37,7 +37,7 @@ public class FolderController {
     public String edit(@PathVariable Integer id, ModelMap map) {
         Folder folder = folderDao.findOne(id);
         map.put("folder", folder);
-        return "admin/folder/form";
+        return "admin/learn/form";
     }
 
     @RequestMapping(value= {"/saveAndFlush"} ,method = RequestMethod.POST)

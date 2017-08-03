@@ -1,9 +1,17 @@
 package com.ducetech.hadmin.controller.admin.system;
 
 import com.ducetech.hadmin.common.JsonResult;
+import com.ducetech.hadmin.common.utils.BigConstant;
+import com.ducetech.hadmin.common.utils.StringUtil;
+import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.ILearnDao;
 import com.ducetech.hadmin.entity.Learn;
+import com.ducetech.hadmin.entity.User;
+import com.ducetech.hadmin.service.ILearnService;
+import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
+import com.ducetech.hadmin.service.specification.SpecificationOperator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,27 +33,50 @@ import java.util.List;
  * @create 2017-08-02 11:07
  **/
 @Controller
-@RequestMapping("/admin/training")
-public class LearnController {
+@RequestMapping("/admin/learn")
+public class LearnController  extends BaseController {
     @Autowired
-    ILearnDao learnDao;
+    ILearnService learnService;
+    @Autowired
+
     @RequestMapping("/index")
     public String index() {
         return "admin/learn/index";
     }
 
+    /**
+     * 查询集合
+     * @return Page<User>
+     */
+    @RequestMapping(value = { "/list" })
+    @ResponseBody
+    public Page<Learn> list() {
+        SimpleSpecificationBuilder<Learn> builder = new SimpleSpecificationBuilder<>();
+        String searchText = request.getParameter("searchText");
+        if(!StringUtil.isBlank(searchText)){
+            builder.add("name", SpecificationOperator.Operator.likeAll.name(), searchText);
+        }
+        return learnService.findAll(builder.generateSpecification(), getPageRequest());
+    }
+
     @RequestMapping(value = "/uploadFile", method = RequestMethod.GET)
     public String uploadFile() {
-        return "admin/station/uploadFile";
+        return "admin/learn/file";
     }
+
+    @RequestMapping(value = "/add", method = RequestMethod.GET)
+    public String add() {
+        return "admin/learn/form";
+    }
+
 
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(HttpServletRequest request){
-        List<MultipartFile> files =((MultipartHttpServletRequest)request).getFiles("file");
+    public JsonResult uploadFilePost(MultipartHttpServletRequest request){
+        List<MultipartFile> files =request.getFiles("file");
         MultipartFile file;
         //创建临时文件夹
-        File dirTempFile = new File("/Users/lisx/Ducetech/logs/");
+        File dirTempFile = new File(BigConstant.IMAGE_PATH);
         if (!dirTempFile.exists()) {
             dirTempFile.mkdirs();
         }
@@ -61,9 +92,10 @@ public class LearnController {
                     stream.close();
                     learn=new Learn();
                     learn.setFileName(file.getOriginalFilename());
-                    learn.setFileSize(""+file.getSize()/1024/1024);
+                    learn.setFileSize(""+Math.round(file.getSize()/1024));
                     learn.setCreateTime(new Date());
-                    learnDao.save(learn);
+                    System.out.println("fileSize"+learn.getFileSize());
+                    learnService.save(learn);
                 } catch (Exception e) {
                     //stream =  null;
                     return JsonResult.success("You failed to upload " + i + " =>" + e.getMessage());
@@ -74,4 +106,5 @@ public class LearnController {
         }
         return JsonResult.success();
     }
+
 }

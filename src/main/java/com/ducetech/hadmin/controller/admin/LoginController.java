@@ -2,10 +2,13 @@ package com.ducetech.hadmin.controller.admin;
 
 import com.ducetech.hadmin.controller.BaseController;
 
+import com.ducetech.hadmin.entity.User;
+import com.ducetech.hadmin.service.IUserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,9 +17,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class LoginController extends BaseController {
+    @Autowired
+    IUserService userService;
 	@RequestMapping(value = { "/admin/login" }, method = RequestMethod.GET)
 	public String login() {
-
+        User user=userService.findByUserName("admin");
+        if(null==user){
+            user=new User();
+            user.setUserName("admin");
+            user.setNickName("管理员");
+            userService.saveOrUpdate(user);
+        }
 		return "admin/login";
 	}
 	@RequestMapping(value = { "/admin/login" }, method = RequestMethod.POST)
