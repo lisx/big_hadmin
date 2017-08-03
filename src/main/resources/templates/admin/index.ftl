@@ -56,7 +56,7 @@
                     <li>
                         <a href="#">
                             <i class="fa fa fa-cog"></i>
-                            <span class="nav-label">系统管理</span>
+                            <span class="nav-label">基础信息维护</span>
                             <span class="fa arrow"></span>
                         </a>
                         <ul class="nav nav-second-level">
@@ -78,6 +78,45 @@
                              <li>
                                  <a class="J_menuItem" href="${ctx!}/admin/station/index">车站信息</a>
                              </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa fa-cog"></i>
+                            <span class="nav-label">运营管理</span>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <ul class="nav nav-second-level">
+                        <@shiro.hasPermission name="system:article:sort:index">
+                            <li>
+                                <a class="J_menuItem" href="${ctx!}/admin/learn/index">学习园地</a>
+                            </li>
+                        </@shiro.hasPermission>
+                        <@shiro.hasPermission name="system:article:index">
+                            <li>
+                                <a class="J_menuItem" href="${ctx!}/admin/station/file">车站文件</a>
+                            </li>
+                        </@shiro.hasPermission>
+                        <@shiro.hasPermission name="system:article:index">
+                            <li>
+                                <a class="J_menuItem" href="${ctx!}/admin/operation/index">运营图管理</a>
+                            </li>
+                        </@shiro.hasPermission>
+                        <@shiro.hasPermission name="system:article:index">
+                            <li>
+                                <a class="J_menuItem" href="${ctx!}/admin/article/index">通知管理</a>
+                            </li>
+                        </@shiro.hasPermission>
+                        <@shiro.hasPermission name="system:article:index">
+                            <li>
+                                <a class="J_menuItem" href="${ctx!}/admin/article/index">消防安全文件</a>
+                            </li>
+                        </@shiro.hasPermission>
+                        <@shiro.hasPermission name="system:article:index">
+                            <li>
+                                <a class="J_menuItem" href="${ctx!}/admin/article/index">首页滚波图</a>
+                            </li>
+                        </@shiro.hasPermission>
                         </ul>
                     </li>
                     <li>

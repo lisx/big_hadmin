@@ -1,7 +1,7 @@
 package com.ducetech.hadmin.entity;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.ducetech.hadmin.entity.support.BaseEntity;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -15,7 +15,8 @@ import java.util.Date;
  * @since 2017-7-1
  */
 @Entity
-@Table(name ="big_station")
+@Table(name ="big_line_station")
+@Data
 public class Station extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
@@ -28,55 +29,30 @@ public class Station extends BaseEntity {
 	@Column(name = "id", nullable = false)
 	private Integer id;
 
-	/**
-	 * 资源名称
-	 */
-	private String name;
-
-	/**
-	 * 资源唯一标识
-	 */
-	private String sourceKey;
-
-	/**
-	 * 资源类型,0:目录;1:菜单;2:按钮
-	 */
-	private Integer type;
-
-	/**
-	 * 资源url
-	 */
-	private String sourceUrl;
-
-	/**
-	 * 层级
-	 */
-	private Integer level;
-
-	/**
-	 * 排序
-	 */
-	private Integer sort;
-
-	/**
-	 * 图标
-	 */
-	private String icon;
-
-	/**
-	 * 是否隐藏
-	 *
-	 * 0显示 1隐藏
-	 */
-	private Integer isHide;
-
-	/**
-	 * 描述
-	 */
-	private String description;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "parent_id")
-	private Station parent;
+    private String nodeName;
+    //线路站点编号
+    private String nodeCode;
+    //创建人
+    private long createdId;
+    //是否使用/假删除
+    private boolean ifUse;
+    //创建时间
+    private Date createdAt;
+    //更新时间
+    private Date updatedAt;
+    //站区名称
+    private String stationArea;
+    //所属运营公司
+    private String stationCompany;
+    //站区联系电话
+    private String stationPhone;
+    //简写名称
+    private String shortName;
+    //站点联系电话
+    private String sitePhone;
+    //简写名称
+    private String shortCode;
+    //排序
+    private String sorting;
 
 }
