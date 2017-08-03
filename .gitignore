@@ -2,3 +2,4 @@
 log/
 target/
 springboot-hadmin.iml
+src/main/resources/static/image/
