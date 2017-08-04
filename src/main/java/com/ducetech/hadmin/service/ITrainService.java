@@ -1,23 +1,20 @@
 package com.ducetech.hadmin.service;
 
-import com.ducetech.hadmin.entity.Learn;
+import com.ducetech.hadmin.entity.Train;
 import com.ducetech.hadmin.service.support.IBaseService;
 
 /**
- * <p>
- * 用户服务类
- * </p>
- *
+ * 培训资料
  * @author lisx
- * @since 2016-12-28
+ * @create 2017-08-04 17:33
  */
-public interface ILearnService extends IBaseService<Learn, Integer> {
+public interface ITrainService extends IBaseService<Train, Integer> {
 
 	/**
 	 * 增加或者修改文章分类
 	 * @param learn
 	 */
-	void saveOrUpdate(Learn learn);
+	void saveOrUpdate(Train learn);
 
     void delete(Integer id);
 

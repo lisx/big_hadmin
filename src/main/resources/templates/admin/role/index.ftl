@@ -73,8 +73,8 @@
 			    //是否启用查询
 			    search: true,
 			    //是否启用详细信息视图
-			    detailView:true,
-			    detailFormatter:detailFormatter,
+			   // detailView:true,
+			    //detailFormatter:detailFormatter,
 			    //表示服务端请求
 			    sidePagination: "server",
 			    //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
@@ -89,6 +89,8 @@
 			    },
 			    //数据列
 			    columns: [{
+                    checkbox: true
+                }, {
 			        title: "ID",
 			        field: "id",
 			        sortable: true
@@ -97,7 +99,8 @@
 			        field: "name"
 			    },{
 			        title: "角色KEY",
-			        field: "roleKey"
+			        field: "roleKey",
+                    sortable:true
 			    },{
 			        title: "状态",
 			        field: "status",
@@ -167,26 +170,20 @@
         	    });
         }
         function del(id){
-        	layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
-        		$.ajax({
-    	    		   type: "POST",
-    	    		   dataType: "json",
-    	    		   url: "${ctx!}/admin/role/delete/" + id,
-    	    		   success: function(msg){
-	 	   	    			layer.msg(msg.message, {time: 2000},function(){
-	 	   	    				$('#table_list').bootstrapTable("refresh");
-	 	   	    				layer.close(index);
-	 	   					});
-    	    		   }
-    	    	});
-       		});
+            layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: "${ctx!}/admin/role/delete/" + id,
+                    success: function(msg){
+                        layer.msg(msg.message, {time: 2000},function(){
+                            $('#table_list').bootstrapTable("refresh");
+                            layer.close(index);
+                        });
+                    }
+                });
+            });
         }
-
-        function detailFormatter(index, row) {
-	        var html = [];
-	        html.push('<p><b>描述:</b> ' + row.description + '</p>');
-	        return html.join('');
-	    }
     </script>
 
 

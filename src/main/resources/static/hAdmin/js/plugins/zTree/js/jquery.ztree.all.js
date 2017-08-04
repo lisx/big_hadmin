@@ -1670,9 +1670,9 @@
             setting.treeObj.empty();
             settings[setting.treeId] = setting;
             //For some older browser,(e.g., ie6)
-            if (typeof document.body.style.maxHeight === "undefined") {
-                setting.view.expandSpeed = "";
-            }
+            // if (typeof document.body.style.maxHeight === "undefined") {
+            //     setting.view.expandSpeed = "";
+            // }
             data.initRoot(setting);
             var root = data.getRoot(setting),
                 childKey = setting.data.key.children;

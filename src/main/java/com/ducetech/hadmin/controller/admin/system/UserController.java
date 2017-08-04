@@ -51,7 +51,8 @@ public class UserController extends BaseController {
 	 */
 	@RequestMapping(value = { "/", "/index" })
 	public String index() {
-		return "admin/user/index";
+		System.out.println("++++++"+request.getSession());
+	    return "admin/user/index";
 	}
 
     /**
@@ -65,6 +66,13 @@ public class UserController extends BaseController {
 		String searchText = request.getParameter("searchText");
 		if(!StringUtil.isBlank(searchText)){
 			builder.add("nickName", Operator.likeAll.name(), searchText);
+            builder.addOr("userName", Operator.likeAll.name(), searchText);
+            builder.addOr("userCode", Operator.likeAll.name(), searchText);
+            builder.addOr("telephone", Operator.likeAll.name(), searchText);
+            builder.addOr("station", Operator.likeAll.name(), searchText);
+            builder.addOr("stationArea", Operator.likeAll.name(), searchText);
+            builder.addOr("line", Operator.likeAll.name(), searchText);
+            builder.addOr("createdTime", Operator.likeAll.name(), searchText);
 		}
         return userService.findAll(builder.generateSpecification(), getPageRequest());
 	}

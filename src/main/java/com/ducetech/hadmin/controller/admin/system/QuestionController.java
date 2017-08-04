@@ -4,10 +4,8 @@ import com.ducetech.hadmin.common.JsonResult;
 import com.ducetech.hadmin.common.utils.BigConstant;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
-import com.ducetech.hadmin.dao.ILearnDao;
-import com.ducetech.hadmin.entity.Learn;
-import com.ducetech.hadmin.entity.User;
-import com.ducetech.hadmin.service.ILearnService;
+import com.ducetech.hadmin.entity.Question;
+import com.ducetech.hadmin.service.IQuestionService;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,16 +24,16 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 学习园地
+ * 培训资料
  *
  * @author lisx
  * @create 2017-08-02 11:07
  **/
 @Controller
-@RequestMapping("/admin/learn")
-public class LearnController  extends BaseController {
+@RequestMapping("/admin/question")
+public class QuestionController extends BaseController {
     @Autowired
-    ILearnService learnService;
+    IQuestionService questionService;
     @Autowired
 
     @RequestMapping("/index")
@@ -50,13 +47,13 @@ public class LearnController  extends BaseController {
      */
     @RequestMapping(value = { "/list" })
     @ResponseBody
-    public Page<Learn> list() {
-        SimpleSpecificationBuilder<Learn> builder = new SimpleSpecificationBuilder<>();
+    public Page<Question> list() {
+        SimpleSpecificationBuilder<Question> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
         if(!StringUtil.isBlank(searchText)){
             builder.add("name", SpecificationOperator.Operator.likeAll.name(), searchText);
         }
-        return learnService.findAll(builder.generateSpecification(), getPageRequest());
+        return questionService.findAll(builder.generateSpecification(), getPageRequest());
     }
 
     @RequestMapping(value = "/uploadFile", method = RequestMethod.GET)
@@ -69,6 +66,15 @@ public class LearnController  extends BaseController {
         return "admin/learn/form";
     }
 
+    /**
+     * 进上传试题页面
+     * @param file
+     * @return
+     */
+    @RequestMapping(value="/uploadQuestion",method=RequestMethod.GET)
+    public String uploadQuestion(MultipartFile file){
+        return "admin/learn/uploadQuestion";
+    }
 
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
@@ -80,7 +86,7 @@ public class LearnController  extends BaseController {
         if (!dirTempFile.exists()) {
             dirTempFile.mkdirs();
         }
-        Learn learn;
+        Question question;
         BufferedOutputStream stream;
         for (int i =0; i< files.size(); ++i) {
             file = files.get(i);
@@ -90,12 +96,12 @@ public class LearnController  extends BaseController {
                     stream = new BufferedOutputStream(new FileOutputStream(new File(dirTempFile.getAbsolutePath()+"/"+file.getOriginalFilename())));
                     stream.write(bytes);
                     stream.close();
-                    learn=new Learn();
-                    learn.setFileName(file.getOriginalFilename());
-                    learn.setFileSize(""+Math.round(file.getSize()/1024));
-                    learn.setCreateTime(new Date());
-                    System.out.println("fileSize"+learn.getFileSize());
-                    learnService.save(learn);
+                    question=new Question();
+                    question.setFileName(file.getOriginalFilename());
+                    question.setFileSize(""+Math.round(file.getSize()/1024));
+                    question.setCreateTime(new Date());
+                    System.out.println("fileSize"+question.getFileSize());
+                    questionService.save(question);
                 } catch (Exception e) {
                     //stream =  null;
                     return JsonResult.success("You failed to upload " + i + " =>" + e.getMessage());

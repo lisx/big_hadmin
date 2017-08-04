@@ -10,153 +10,100 @@
     <link href="${ctx!}/hadmin/css/font-awesome.css?v=4.4.0" rel="stylesheet">
     <link href="${ctx!}/hadmin/css/animate.css" rel="stylesheet">
     <link href="${ctx!}/hadmin/css/style.css?v=4.1.0" rel="stylesheet">
-    <!-- 全局js -->
-    <!--jquery-->
-<#include "/admin/common/common.ftl">
-    <script src="${ctx!}/hadmin/js/plugins/zTree/js/jquery.ztree.all.js"></script>
-    <link href="${ctx!}/hadmin/js/plugins/zTree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
-    <script>
+    <link rel="stylesheet" href="${ctx!}/hadmin/js/plugins/zTree/css/demo.css" type="text/css">
+    <link rel="stylesheet" href="${ctx!}/hadmin/js/plugins/zTree/css/metroStyle/metroStyle.css" type="text/css">
+    <script type="text/javascript" src="${ctx!}/hadmin/js/plugins/zTree/js/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="${ctx!}/hadmin/js/plugins/zTree/js/jquery.ztree.core.js"></script>
+    <script type="text/javascript" src="${ctx!}/hadmin/js/plugins/zTree/js/jquery.ztree.exedit.js"></script>
+    <SCRIPT type="text/javascript">
+        <!--
+        var setting = {
+            view: {
+                addHoverDom: addHoverDom,
+                removeHoverDom: removeHoverDom,
+                selectedMulti: false
+            },
+            check: {
+                enable: true
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            edit: {
+                enable: true
+            }
+        };
 
-        $(document).ready(function () {
-            var setting = {
-                data: {
-                    simpleData: {
-                        enable: true,
-                        idKey: "id",
-                        pIdKey: "pId",
-                        rootPId: -1
-                    }
-                }
-            };
-            $.ajax({
-                type : "GET",
-                url : "${ctx!}/admin/station/tree/",
-                dataType : 'json',
-                success : function(msg) {
-                    $.fn.zTree.init($("#tree"), setting, msg);
-                }
-            });
-            //初始化表格,动态从服务器加载数据
-            $("#table_list").bootstrapTable({
-                //使用get请求到服务器获取数据
-                method: "POST",
-                //必须设置，不然request.getParameter获取不到请求参数
-                contentType: "application/x-www-form-urlencoded",
-                //获取数据的Servlet地址
-                url: "${ctx!}/admin/station/list",
-                //表格显示条纹
-                striped: true,
-                //启动分页
-                pagination: true,
-                //每页显示的记录数
-                pageSize: 10,
-                //当前第几页
-                pageNumber: 1,
-                //记录数可选列表
-                pageList: [5, 10, 15, 20, 25],
-                //是否启用查询
-                search: true,
-                //是否启用详细信息视图
-                detailView:true,
-                detailFormatter:detailFormatter,
-                //表示服务端请求
-                sidePagination: "server",
-                //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
-                //设置为limit可以获取limit, offset, search, sort, order
-                queryParamsType: "undefined",
-                //json数据解析
-                responseHandler: function(res) {
-                    return {
-                        "rows": res.content,
-                        "total": res.totalElements
-                    };
-                },
-                //数据列
-                columns: [{
-                    title: "ID",
-                    field: "id",
-                },{
-                    title: "车站名称",
-                    field: "nodeName"
-                },{
-                    title: "创建时间",
-                    field: "createTime",
-                },{
-                    title: "更新时间",
-                    field: "updateTime",
-                },{
-                    title: "操作",
-                    field: "empty",
-                    formatter: function (value, row, index) {
-                        var operateHtml = '<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="edit(\''+row.id+'\')"><i class="fa fa-edit"></i>&nbsp;修改</button> &nbsp;</@shiro.hasPermission>';
-                        operateHtml = operateHtml + '<@shiro.hasPermission name="system:resource:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button></@shiro.hasPermission>';
-                        return operateHtml;
-                    }
-                }]
-            });
+        var zNodes =[
+            { id:1, pId:0, name:"父节点1", open:true},
+            { id:11, pId:1, name:"父节点11"},
+            { id:111, pId:11, name:"叶子节点111"},
+            { id:112, pId:11, name:"叶子节点112"},
+            { id:113, pId:11, name:"叶子节点113"},
+            { id:114, pId:11, name:"叶子节点114"},
+            { id:12, pId:1, name:"父节点12"},
+            { id:121, pId:12, name:"叶子节点121"},
+            { id:122, pId:12, name:"叶子节点122"},
+            { id:123, pId:12, name:"叶子节点123"},
+            { id:124, pId:12, name:"叶子节点124"},
+            { id:13, pId:1, name:"父节点13", isParent:true},
+            { id:2, pId:0, name:"父节点2"},
+            { id:21, pId:2, name:"父节点21", open:true},
+            { id:211, pId:21, name:"叶子节点211"},
+            { id:212, pId:21, name:"叶子节点212"},
+            { id:213, pId:21, name:"叶子节点213"},
+            { id:214, pId:21, name:"叶子节点214"},
+            { id:22, pId:2, name:"父节点22"},
+            { id:221, pId:22, name:"叶子节点221"},
+            { id:222, pId:22, name:"叶子节点222"},
+            { id:223, pId:22, name:"叶子节点223"},
+            { id:224, pId:22, name:"叶子节点224"},
+            { id:23, pId:2, name:"父节点23"},
+            { id:231, pId:23, name:"叶子节点231"},
+            { id:232, pId:23, name:"叶子节点232"},
+            { id:233, pId:23, name:"叶子节点233"},
+            { id:234, pId:23, name:"叶子节点234"},
+            { id:3, pId:0, name:"父节点3", isParent:true}
+        ];
+
+        $(document).ready(function(){
+            $.fn.zTree.init($("#treeDemo"), setting, zNodes);
         });
 
-        function edit(id){
-            layer.open({
-                type: 2,
-                title: '资源修改',
-                shadeClose: true,
-                shade: false,
-                area: ['893px', '600px'],
-                content: '${ctx!}/admin/resource/edit/' + id,
-                end: function(index){
-                    $('#table_list').bootstrapTable("refresh");
-                }
+        var newCount = 1;
+        function addHoverDom(treeId, treeNode) {
+            var sObj = $("#" + treeNode.tId + "_span");
+            if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
+            var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
+                    + "' title='add node' onfocus='this.blur();'></span>";
+            sObj.after(addStr);
+            var btn = $("#addBtn_"+treeNode.tId);
+            if (btn) btn.bind("click", function(){
+//                var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+//                zTree.addNodes(treeNode, {id:(100 + newCount), pId:treeNode.id, name:"new node" + (newCount++)});
+                saveNode(treeNode);
+                return false;
             });
+        };
+        /*保存新的节点*/
+        function saveNode(parentNode){
+            var zTree = getTree();
+            var _nodeName="新节点";
+            $.post('/admin/station/tree',{pId:parentNode.id,name:_nodeName},function(data){
+                var newCode = {id:data.nodeCode,pId:parentNode.id,name:_nodeName};
+                zTree.addNodes(parentNode,newCode);
+            },"json");
         }
-        function add(){
-            layer.open({
-                type: 2,
-                title: '资源添加',
-                shadeClose: true,
-                shade: false,
-                area: ['893px', '600px'],
-                content: '${ctx!}/admin/resource/add',
-                end: function(index){
-                    $('#table_list').bootstrapTable("refresh");
-                }
-            });
+        function getTree(){
+            return $.fn.zTree.getZTreeObj("treeDemo");
         }
-        function uploadFile(){
-            layer.open({
-                type: 2,
-                title: '批量上传资料',
-                shadeClose: true,
-                shade: false,
-                area: ['600px', '600px'],
-                content: '${ctx!}/admin/station/uploadFile',
-                end: function(index){
-                    $('#table_list').bootstrapTable("refresh");
-                }
-            });
-        }
-        function del(id){
-            layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
-                $.ajax({
-                    type: "POST",
-                    dataType: "json",
-                    url: "${ctx!}/admin/resource/delete/" + id,
-                    success: function(msg){
-                        layer.msg(msg.message, {time: 2000},function(){
-                            $('#table_list').bootstrapTable("refresh");
-                            layer.close(index);
-                        });
-                    }
-                });
-            });
-        }
-
-        function detailFormatter(index, row) {
-            var html = [];
-            html.push('<p><b>描述:</b> ' + row.description + '</p>');
-            return html.join('');
-        }
-    </script>
+        function removeHoverDom(treeId, treeNode) {
+            $("#addBtn_"+treeNode.tId).unbind().remove();
+        };
+        //-->
+    </SCRIPT>
 </head>
 
 <body class="gray-bg">
@@ -177,9 +124,7 @@
                         <hr>
                         <div class="row row-lg">
 		                    <div class="col-sm-3">
-                                <div class="ibox-content">
-                                    <ul id="tree" class="ztree"></ul>
-                                </div>
+                                    <div class='tree'><ul id="treeDemo" class="ztree"></ul></div>
                             </div>
                             <div class="col-sm-9">
 		                        <!-- Example Card View -->

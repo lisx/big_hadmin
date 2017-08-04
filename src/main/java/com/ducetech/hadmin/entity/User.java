@@ -44,14 +44,17 @@ public class User extends BaseEntity {
 	private String password;
 
 	/**
-	 * 单位
+	 * 单位 站点 站区 线路
 	 */
-	private Integer unitId;
+
+	private String station;
+    private String stationArea;
+    private String line;
 
 	/**
 	 * 逻辑删除状态 0 未删除 1 删除
 	 */
-	private Integer ifUse;
+	private Integer ifUse=0;
 
 	/**
 	 * 电话

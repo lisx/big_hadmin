@@ -2,9 +2,10 @@ package com.ducetech.hadmin.controller.admin.system;
 
 import com.alibaba.fastjson.JSONArray;
 import com.ducetech.hadmin.common.JsonResult;
+import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
-import com.ducetech.hadmin.dao.ILearnDao;
-import com.ducetech.hadmin.entity.Learn;
+import com.ducetech.hadmin.dao.IBigFileDao;
+import com.ducetech.hadmin.entity.BigFile;
 import com.ducetech.hadmin.entity.Station;
 import com.ducetech.hadmin.service.IStationService;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
@@ -37,7 +38,7 @@ public class StationController extends BaseController {
 	@Autowired
 	private IStationService stationService;
     @Autowired
-    ILearnDao learnDao;
+    IBigFileDao fileDao;
     /**
      * 树形菜单
      * @return
@@ -45,14 +46,22 @@ public class StationController extends BaseController {
 	@RequestMapping("/tree")
 	@ResponseBody
 	public JSONArray tree(){
-		JSONArray list = stationService.tree(1);
-		System.out.println("||||||||"+list.size());
-		return list;
+        List<Station> stations = stationService.findAll();
+        return Station.createTree(stations);
 	}
-
+    /**
+     * 增加节点
+     */
+    public Station save(String name, String pId){
+        String pcode =StringUtil.trim(pId);
+        List<Station> stations = stationService.findAll();
+        String nodeCode = Station.getNodeCode(stations,pcode);
+        Station node = new Station(name,nodeCode);
+        stationService.save(node);
+        return (node);
+    }
 	@RequestMapping("/index")
 	public String index() {
-
 		return "admin/station/index";
 	}
 
@@ -75,23 +84,21 @@ public class StationController extends BaseController {
         if (!dirTempFile.exists()) {
             dirTempFile.mkdirs();
         }
-        Learn learn;
+        BigFile learn;
         BufferedOutputStream stream;
         for (int i =0; i< files.size(); ++i) {
             file = files.get(i);
             if (!file.isEmpty()) {
                 try {
-                    System.out.println("|||||||||||||||");
                     byte[] bytes = file.getBytes();
                     stream = new BufferedOutputStream(new FileOutputStream(new File(dirTempFile.getAbsolutePath()+"/"+file.getOriginalFilename())));
                     stream.write(bytes);
                     stream.close();
-                    learn=new Learn();
+                    learn=new BigFile();
                     learn.setFileName(file.getOriginalFilename());
                     learn.setFileSize(""+file.getSize()/1000);
                     learn.setCreateTime(new Date());
-                    learnDao.save(learn);
-                    System.out.println("file.getSize():"+file.getSize()+"|");
+                    fileDao.save(learn);
                 } catch (Exception e) {
                     //stream =  null;
                     return JsonResult.success("You failed to upload " + i + " =>" + e.getMessage());

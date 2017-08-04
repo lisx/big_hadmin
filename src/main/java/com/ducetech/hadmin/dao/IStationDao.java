@@ -27,4 +27,7 @@ public interface IStationDao extends IBaseDao<Station,Integer> {
     Station findByNodeCode(String nodeCode);
 
     List<Station> findByNodeCodeLike(String nodeCode);
+    @Modifying
+    @Query(nativeQuery = true,value = "SELECT * from big_station a where a.nodeCode like :parentCode and length(a.nodeCode)=:nodeLength order by a.nodeCode")
+    List<Station> querySubNodesByCode(List<Station> parentCode, String nodeLength);
 }

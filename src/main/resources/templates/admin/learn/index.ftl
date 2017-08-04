@@ -60,8 +60,8 @@
                                     <div class="panel-body">
                                             <p>
                                             <@shiro.hasPermission name="system:resource:add">
-                                                <button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;上传题库</button>
-                                                <button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;批量导入附件</button>
+                                                <button class="btn btn-success " type="button" onclick="uploadQuestion();"><i class="fa fa-plus"></i>&nbsp;上传题库</button>
+                                                <button class="btn btn-success " type="button" onclick="uploadImage();"><i class="fa fa-plus"></i>&nbsp;批量导入附件</button>
                                                 <button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;下载</button>
                                                 <button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;删除</button>
                                             </@shiro.hasPermission>
@@ -97,6 +97,32 @@
 
     <!-- Page-Level Scripts -->
     <script>
+        function uploadQuestion(){
+            layer.open({
+                type: 2,
+                title: '上传题库',
+                shadeClose: true,
+                shade: false,
+                area: ['893px', '600px'],
+                content: '${ctx!}/admin/learn/uploadQuestion',
+                end: function(index){
+                    $('#table_list').bootstrapTable("refresh");
+                }
+            });
+        }
+        function uploadImage(){
+            layer.open({
+                type: 2,
+                title: '批量上传附件',
+                shadeClose: true,
+                shade: false,
+                area: ['400px', '400px'],
+                content: '${ctx!}/admin/folder/edit/1',
+                end: function(index){
+                    $('#table_list').bootstrapTable("refresh");
+                }
+            });
+        }
         $(document).ready(function () {
 			//初始化表格,动态从服务器加载数据
 			$("#table_train_list").bootstrapTable({

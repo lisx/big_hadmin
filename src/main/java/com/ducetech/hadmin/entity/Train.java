@@ -6,7 +6,7 @@ import lombok.Data;
 import javax.persistence.*;
 
 /**
- * 学习园地
+ * 学习园地 培训
  *
  * @author lisx
  * @create 2017-08-02 14:56
@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Entity
 @Table(name ="big_file")
 @Data
-public class Learn extends BaseEntity {
+public class Train extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 

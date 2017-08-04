@@ -87,38 +87,11 @@
     	    rules: {
     	    	userName: {
     	        required: true,
-    	        minlength: 4,
     	    	maxlength: 10
     	      },
     	      	nickName: {
     	        required: true,
-    	        minlength: 4,
     	    	maxlength: 10
-    	      },
-    	      	sex: {
-    	        required: true
-    	      },
-    	      	birthday: {
-    	      	date:true,
-    	        required: true
-    	      },
-    	      	telephone: {
-    	        required: true
-    	      },
-    	      	email: {
-    	      	email:true,
-    	        required: true
-    	      },
-    	      	address: {
-    	        required: true,
-    	        maxlength: 40
-    	      },
-    	      	locked: {
-    	        required: true
-    	      },
-    	      	description: {
-    	        required: true,
-    	        maxlength: 40
     	      }
     	    },
     	    messages: {},

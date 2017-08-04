@@ -63,6 +63,10 @@ public class StationServiceImpl extends BaseServiceImpl<Station, Integer>
         obj.put("name", name);
         return obj;
     }
+    public List<Station> querySubNodesByCode(String parentCode){
+        List<Station> all = stationDao.findAll();
+        return stationDao.querySubNodesByCode(all,parentCode);
+    }
     @Override
     public void saveOrUpdate(Station station) {
 

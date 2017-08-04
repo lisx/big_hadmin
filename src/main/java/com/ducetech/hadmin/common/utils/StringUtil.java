@@ -20,4 +20,22 @@ public class StringUtil {
         str = (str == null) ? null : str.trim();
         return str;
     }
+    /**
+     * 将字符串的左侧填充某个值
+     * @param scale
+     * @return
+     */
+    public static String leftJoin(Object obj,int scale,String val){
+        String str = String.valueOf(obj);
+        int len = str.length();
+        if(len<scale){
+            int diff = scale-len;
+            String prefix="";
+            for(int i=0;i<diff;i++){
+                prefix+=val;
+            }
+            str = prefix+str;
+        }
+        return str;
+    }
 }

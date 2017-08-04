@@ -42,18 +42,6 @@
                         <span class="ng-scope">分类</span>
                     </li>
                     <li>
-                        <a class="J_menuItem" href="${ctx!}/hadmin/index.html" target="_blank">
-                            <i class="fa fa-television"></i>
-                            <span class="nav-label">实例demo</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="J_menuItem" href="${ctx!}/admin/welcome">
-                            <i class="fa fa-home"></i>
-                            <span class="nav-label">主页</span>
-                        </a>
-                    </li>
-                    <li>
                         <a href="#">
                             <i class="fa fa fa-cog"></i>
                             <span class="nav-label">基础信息维护</span>
@@ -119,25 +107,6 @@
                         </@shiro.hasPermission>
                         </ul>
                     </li>
-                    <li>
-                        <a href="#">
-                            <i class="fa fa fa-cog"></i>
-                            <span class="nav-label">文章管理</span>
-                            <span class="fa arrow"></span>
-                        </a>
-                        <ul class="nav nav-second-level">
-                        <@shiro.hasPermission name="system:article:sort:index">
-                            <li>
-                                <a class="J_menuItem" href="${ctx!}/admin/article/sort/index">分类管理</a>
-                            </li>
-                        </@shiro.hasPermission>
-                            <@shiro.hasPermission name="system:article:index">
-                                <li>
-                                    <a class="J_menuItem" href="${ctx!}/admin/article/index">文章管理</a>
-                                </li>
-                            </@shiro.hasPermission>
-                        </ul>
-                    </li>
                     <li class="line dk"></li>
                 </ul>
             </div>
@@ -152,7 +121,7 @@
                     <ul class="nav navbar-top-links navbar-right">
                         <li class="dropdown">
                             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
-                                <i class="fa fa-user"></i> <span class="label label-primary"></span>【<@shiro.principal type="User" property="nickName"/>】
+                                <i class="fa fa-user"></i> <span class="label label-primary"></span>【<@shiro.principal type="com.ducetech.hadmin.entity.User" property="userName"/>】
                             </a>
                             <ul class="dropdown-menu dropdown-alerts">
                                 <li>

@@ -117,8 +117,8 @@
                         return '<span class="label label-primary">已删除</span>';
                     }
 			    },{
-                    title: "单位",
-                    field: "unitId",
+                    title: "站点",
+                    field: "station",
 			    },{
 			        title: "电话",
 			        field: "telephone"

@@ -1,12 +1,12 @@
 package com.ducetech.hadmin.service.impl;
 
 import com.ducetech.hadmin.dao.IArticleSortDao;
-import com.ducetech.hadmin.dao.ILearnDao;
+import com.ducetech.hadmin.dao.ITrainDao;
 import com.ducetech.hadmin.dao.support.IBaseDao;
 import com.ducetech.hadmin.entity.ArticleSort;
-import com.ducetech.hadmin.entity.Learn;
+import com.ducetech.hadmin.entity.Train;
 import com.ducetech.hadmin.service.IArticleSortService;
-import com.ducetech.hadmin.service.ILearnService;
+import com.ducetech.hadmin.service.ITrainService;
 import com.ducetech.hadmin.service.support.impl.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,25 +22,24 @@ import java.util.Date;
  * @since 2016-12-28
  */
 @Service
-public class LearnServiceImpl extends BaseServiceImpl<Learn, Integer> implements ILearnService {
+public class TrainServiceImpl extends BaseServiceImpl<Train, Integer> implements ITrainService {
 	@Autowired
-	private ILearnDao learnDao;
+	private ITrainDao trainDao;
 	@Override
-	public IBaseDao<Learn, Integer> getBaseDao() {
-		return this.learnDao;
+	public IBaseDao<Train, Integer> getBaseDao() {
+		return this.trainDao;
 	}
 
-	@Override
-	public void saveOrUpdate(Learn learn) {
-		if(learn.getId() != null){
-			Learn dbUser = find(learn.getId());
-            learn.setUpdateTime(new Date());
-            dbUser.setFileName(learn.getFileName());
-            dbUser.setFileSize(learn.getFileSize());
+	public void saveOrUpdate(Train train) {
+		if(train.getId() != null){
+			Train dbUser = find(train.getId());
+            train.setUpdateTime(new Date());
+            dbUser.setFileName(train.getFileName());
+            dbUser.setFileSize(train.getFileSize());
 			update(dbUser);
 		}else{
-			learn.setCreateTime(new Date());
-			save(learn);
+			train.setCreateTime(new Date());
+			save(train);
 		}
 	}
 
