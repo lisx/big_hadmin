@@ -1,11 +1,8 @@
 package com.ducetech.hadmin.service.impl;
 
-import com.ducetech.hadmin.dao.IArticleSortDao;
 import com.ducetech.hadmin.dao.ITrainDao;
 import com.ducetech.hadmin.dao.support.IBaseDao;
-import com.ducetech.hadmin.entity.ArticleSort;
 import com.ducetech.hadmin.entity.Train;
-import com.ducetech.hadmin.service.IArticleSortService;
 import com.ducetech.hadmin.service.ITrainService;
 import com.ducetech.hadmin.service.support.impl.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +30,12 @@ public class TrainServiceImpl extends BaseServiceImpl<Train, Integer> implements
 	public void saveOrUpdate(Train train) {
 		if(train.getId() != null){
 			Train dbUser = find(train.getId());
-            train.setUpdateTime(new Date());
+            train.setUpdateTime(new Date()+"");
             dbUser.setFileName(train.getFileName());
             dbUser.setFileSize(train.getFileSize());
 			update(dbUser);
 		}else{
-			train.setCreateTime(new Date());
+			train.setCreateTime(new Date()+"");
 			save(train);
 		}
 	}

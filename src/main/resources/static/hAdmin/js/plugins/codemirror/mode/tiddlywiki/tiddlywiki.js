@@ -343,7 +343,7 @@ CodeMirror.defineMode("tiddlywiki", function () {
     }
   }
 
-  // Interface
+  // interface
   return {
     startState: function () {
       return {

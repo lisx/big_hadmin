@@ -207,7 +207,7 @@ CodeMirror.defineMode("kotlin", function (config, parserConfig) {
     return state.context = state.context.prev;
   }
 
-  // Interface
+  // interface
 
   return {
     startState: function (basecolumn) {

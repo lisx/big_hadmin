@@ -79,10 +79,13 @@ jQuery(function() {
         swf: BASE_URL + '/Uploader.swf',
 
         disableGlobalDnd: true,
-
-        chunked: true,
+        formData: {
+            uid: 123
+        },
+        //分片
+        chunked: false,
         // server: 'http://webuploader.duapp.com/server/fileupload.php',
-        server: '/admin/learn/uploadFilePost',
+        server: '/admin/train/uploadFilePost',
         fileNumLimit: 300,
         fileSizeLimit: 200 * 1024 * 1024,    // 200 M
         fileSingleSizeLimit: 15 * 1024 * 1024    // 50 M

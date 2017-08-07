@@ -1,5 +1,6 @@
 package com.ducetech.hadmin.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.ducetech.hadmin.entity.support.BaseEntity;
 import lombok.Data;
 
@@ -30,7 +31,7 @@ public class User extends BaseEntity {
 	 */
 	private String userName;
     /**
-     * 员工编号
+     * 员工工号
      */
     private String userCode;
 	/**
@@ -81,13 +82,9 @@ public class User extends BaseEntity {
 	 */
 	private String photoUrl;
 
-
+    @JSONField(serialize = false)
 	@ManyToMany(cascade = { CascadeType.REFRESH }, fetch = FetchType.LAZY)
 	@JoinTable(name = "big_user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
 	private java.util.Set<Role> roles;
-    private Date createdAt;
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
 }

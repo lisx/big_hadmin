@@ -12,6 +12,8 @@ import com.ducetech.hadmin.service.specification.SpecificationOperator.Operator;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  *@deprecated  用户管理
@@ -38,6 +41,7 @@ public class UserController extends BaseController {
 
 	private final IUserService userService;
 	private final IRoleService roleService;
+    private RedisTemplate redis;
 
     @Autowired
     public UserController(IUserService userService, IRoleService roleService) {
@@ -110,7 +114,7 @@ public class UserController extends BaseController {
                                 user.setFwxxkUrl(fwxxkUrl);
                                 user.setZkysgzUrl(zkysgzUrl);
                                 user.setFaszUrl(faszUrl);
-                                user.setCreatedAt(new Date());
+                                user.setCreateTime(new Date()+"");
                                 user.setIfUse(0);
                                 user.setUserCode(userCode);
                                 user.setUserName(userName);
@@ -170,10 +174,13 @@ public class UserController extends BaseController {
 	@RequestMapping(value= {"/edit"} ,method = RequestMethod.POST)
 	@ResponseBody
 	public JsonResult edit(User user){
+        ValueOperations<Integer, String> operations = redis.opsForValue();
 		try {
 		    user.setIfUse(0);
-		    user.setCreateTime(new Date());
+		    user.setCreateTime(new Date()+"");
 			userService.saveOrUpdate(user);
+            // 插入缓存
+            operations.set(user.getId(), user.getUserName(), 10, TimeUnit.SECONDS);
 		} catch (Exception e) {
 			return JsonResult.failure(e.getMessage());
 		}

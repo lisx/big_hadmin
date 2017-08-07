@@ -391,7 +391,7 @@ CodeMirror.defineMode("haxe", function(config, parserConfig) {
     if (type == "variable") {register(value); return cont(typeuse);}
   }
 
-  // Interface
+  // interface
 
   return {
     startState: function(basecolumn) {

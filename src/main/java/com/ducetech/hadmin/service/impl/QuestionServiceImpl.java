@@ -33,10 +33,10 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question, Integer> impl
 	public void saveOrUpdate(Question train) {
 		if(train.getId() != null){
             Question dbUser = find(train.getId());
-            train.setUpdateTime(new Date());
+            train.setUpdateTime(new Date()+"");
 			update(dbUser);
 		}else{
-			train.setCreateTime(new Date());
+			train.setCreateTime(new Date()+"");
 			save(train);
 		}
 	}

@@ -24,6 +24,18 @@
 <div class="ibox-content">
     <div class="page-container">
         <p>您可以尝试文件拖拽，使用QQ截屏工具，然后激活窗口后粘贴，或者点击添加图片按钮，来体验此demo.</p>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">下拉列表：</label>
+                <div class="col-sm-9">
+                    <select class="form-control" name="demoId">
+                        <option value="111">111</option>
+                        <option value="222">222</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
         <div id="uploader" class="wu-example">
             <div class="queueList">
                 <div id="dndArea" class="placeholder">
@@ -57,17 +69,14 @@
 
 
 <!-- Web Uploader -->
-<script type="text/javascript">
-    // 添加全局站点信息
-    var BASE_URL = '${ctx!}/hadmin/js/plugins/webuploader';
-</script>
 <script src="${ctx!}/hadmin/js/plugins/webuploader/webuploader.min.js"></script>
 
 <script src="${ctx!}/hadmin/js/demo/webuploader-learn-demo.js"></script>
 
-
-
-
+<script type="text/javascript">
+    // 添加全局站点信息
+    var BASE_URL = '${ctx!}/hadmin/js/plugins/webuploader';
+</script>
 </body>
 
 </html>

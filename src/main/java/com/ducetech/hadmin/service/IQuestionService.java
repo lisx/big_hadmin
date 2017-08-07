@@ -1,7 +1,6 @@
 package com.ducetech.hadmin.service;
 
 import com.ducetech.hadmin.entity.Question;
-import com.ducetech.hadmin.entity.Train;
 import com.ducetech.hadmin.service.support.IBaseService;
 
 /**

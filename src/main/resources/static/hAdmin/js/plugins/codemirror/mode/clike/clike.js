@@ -117,7 +117,7 @@ CodeMirror.defineMode("clike", function(config, parserConfig) {
     return state.context = state.context.prev;
   }
 
-  // Interface
+  // interface
 
   return {
     startState: function(basecolumn) {

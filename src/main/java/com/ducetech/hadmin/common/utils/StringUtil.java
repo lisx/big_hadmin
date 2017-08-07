@@ -38,4 +38,7 @@ public class StringUtil {
         }
         return str;
     }
+    public static String suffix(String fileName){
+        return fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
+    }
 }

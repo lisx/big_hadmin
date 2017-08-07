@@ -1,8 +1,15 @@
 package com.ducetech.hadmin.controller;
 
 import com.ducetech.hadmin.common.DateEditor;
+import com.ducetech.hadmin.entity.User;
 import com.ducetech.hadmin.service.IUserService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.SessionKey;
+import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
+import org.apache.shiro.web.session.mgt.WebSessionKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.data.domain.PageRequest;
@@ -117,6 +124,27 @@ public class BaseController {
 		}
     	PageRequest pageRequest = new PageRequest(page, size, sort);
     	return pageRequest;
+    }
+    /**
+     * 获取用户登录信息
+     *
+     *org.apache.shiro.subject.support.DefaultSubjectContext_PRINCIPALS_SESSION_KEY ; com.hncxhd.bywl.entity.manual.User@533752b2
+     */
+    public User getUser(){
+        //boolean status = false;
+        String sessionID =request.getSession().getId();
+        SessionKey key = new WebSessionKey(sessionID,request,response);
+        try{
+            Session se = SecurityUtils.getSecurityManager().getSession(key);
+            Object obj = se.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
+            //org.apache.shiro.subject.SimplePrincipalCollection cannot be cast to com.hncxhd.bywl.entity.manual.User
+            SimplePrincipalCollection coll = (SimplePrincipalCollection) obj;
+            return (User)coll.getPrimaryPrincipal();
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+        }
+        return null;
     }
 
 }

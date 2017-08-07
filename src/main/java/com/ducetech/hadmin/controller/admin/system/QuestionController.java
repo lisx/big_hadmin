@@ -76,6 +76,7 @@ public class QuestionController extends BaseController {
         return "admin/learn/uploadQuestion";
     }
 
+
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult uploadFilePost(MultipartHttpServletRequest request){
@@ -97,10 +98,7 @@ public class QuestionController extends BaseController {
                     stream.write(bytes);
                     stream.close();
                     question=new Question();
-                    question.setFileName(file.getOriginalFilename());
-                    question.setFileSize(""+Math.round(file.getSize()/1024));
-                    question.setCreateTime(new Date());
-                    System.out.println("fileSize"+question.getFileSize());
+//
                     questionService.save(question);
                 } catch (Exception e) {
                     //stream =  null;

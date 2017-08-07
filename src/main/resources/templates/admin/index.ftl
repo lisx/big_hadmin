@@ -77,7 +77,7 @@
                         <ul class="nav nav-second-level">
                         <@shiro.hasPermission name="system:article:sort:index">
                             <li>
-                                <a class="J_menuItem" href="${ctx!}/admin/learn/index">学习园地</a>
+                                <a class="J_menuItem" href="${ctx!}/admin/train/index">学习园地</a>
                             </li>
                         </@shiro.hasPermission>
                         <@shiro.hasPermission name="system:article:index">

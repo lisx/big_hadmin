@@ -129,7 +129,7 @@ CodeMirror.defineMode("pig", function(_config, parserConfig) {
     }
   }
 
-  // Interface
+  // interface
   return {
     startState: function() {
       return {

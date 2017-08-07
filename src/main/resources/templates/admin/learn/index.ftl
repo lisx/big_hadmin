@@ -94,35 +94,8 @@
 	<#include "/admin/common/common.ftl">
     <!-- 自定义js -->
     <script src="${ctx!}/hadmin/js/content.js?v=${version!}"></script>
-
     <!-- Page-Level Scripts -->
     <script>
-        function uploadQuestion(){
-            layer.open({
-                type: 2,
-                title: '上传题库',
-                shadeClose: true,
-                shade: false,
-                area: ['893px', '600px'],
-                content: '${ctx!}/admin/learn/uploadQuestion',
-                end: function(index){
-                    $('#table_list').bootstrapTable("refresh");
-                }
-            });
-        }
-        function uploadImage(){
-            layer.open({
-                type: 2,
-                title: '批量上传附件',
-                shadeClose: true,
-                shade: false,
-                area: ['400px', '400px'],
-                content: '${ctx!}/admin/folder/edit/1',
-                end: function(index){
-                    $('#table_list').bootstrapTable("refresh");
-                }
-            });
-        }
         $(document).ready(function () {
 			//初始化表格,动态从服务器加载数据
 			$("#table_train_list").bootstrapTable({
@@ -131,7 +104,7 @@
 			    //必须设置，不然request.getParameter获取不到请求参数
 			    contentType: "application/x-www-form-urlencoded",
 			    //获取数据的Servlet地址
-			    url: "${ctx!}/admin/learn/list",
+			    url: "${ctx!}/admin/train/list",
 			    //表格显示条纹
 			    striped: true,
 			    //启动分页
@@ -178,7 +151,7 @@
 			        title: "操作",
 			        field: "empty",
                     formatter: function (value, row, index) {
-                    	var operateHtml = '<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="down(\'http://127.0.0.1:8080/image/'+row.fileName+'\')"><i class="fa fa-edit"></i>&nbsp;下载</button> &nbsp;</@shiro.hasPermission>';
+                    	var operateHtml = '<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="down(\'http://127.0.0.1:8080/upload/train/'+row.fileName+'\')"><i class="fa fa-edit"></i>&nbsp;下载</button> &nbsp;</@shiro.hasPermission>';
                     	operateHtml = operateHtml + '<@shiro.hasPermission name="system:resource:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button></@shiro.hasPermission>';
                         return operateHtml;
                     }
@@ -192,7 +165,7 @@
                 shadeClose: true,
                 shade: false,
                 area: ['600px', '600px'],
-                content: '${ctx!}/admin/learn/uploadFile',
+                content: '${ctx!}/admin/train/uploadFile',
                 end: function(index){
                     $('#table_list').bootstrapTable("refresh");
                 }
@@ -230,6 +203,32 @@
        		});
         }
 
+        function uploadQuestion(){
+            layer.open({
+                type: 2,
+                title: '上传题库',
+                shadeClose: true,
+                shade: false,
+                area: ['893px', '600px'],
+                content: '${ctx!}/admin/learn/uploadQuestion',
+                end: function(index){
+                    $('#table_list').bootstrapTable("refresh");
+                }
+            });
+        }
+        function uploadImage(){
+            layer.open({
+                type: 2,
+                title: '批量上传附件',
+                shadeClose: true,
+                shade: false,
+                area: ['400px', '400px'],
+                content: '${ctx!}/admin/folder/edit/1',
+                end: function(index){
+                    $('#table_list').bootstrapTable("refresh");
+                }
+            });
+        }
         function detailFormatter(index, row) {
 	        var html = [];
 	        html.push('<p><b>描述:</b> ' + row.description + '</p>');
