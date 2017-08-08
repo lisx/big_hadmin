@@ -30,12 +30,12 @@ public class TrainServiceImpl extends BaseServiceImpl<Train, Integer> implements
 	public void saveOrUpdate(Train train) {
 		if(train.getId() != null){
 			Train dbUser = find(train.getId());
-            train.setUpdateTime(new Date()+"");
+            train.setUpdateTime(new Date());
             dbUser.setFileName(train.getFileName());
             dbUser.setFileSize(train.getFileSize());
 			update(dbUser);
 		}else{
-			train.setCreateTime(new Date()+"");
+			train.setCreateTime(new Date());
 			save(train);
 		}
 	}

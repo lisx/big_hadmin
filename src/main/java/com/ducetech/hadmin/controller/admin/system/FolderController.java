@@ -44,7 +44,7 @@ public class FolderController {
     @ResponseBody
     public JsonResult edit(Folder folder){
         try {
-            folder.setCreateTime(new Date()+"");
+            folder.setCreateTime(new Date());
             folderDao.saveAndFlush(folder);
         } catch (Exception e) {
             return JsonResult.failure(e.getMessage());

@@ -77,18 +77,6 @@ public class Resource extends BaseEntity {
 	 */
 	private String description;
 
-	/**
-	 * 创建时间
-	 */
-	@JSONField(format = "yyyy-MM-dd HH:mm:ss")
-	private Date createTime;
-
-	/**
-	 * 更新时间
-	 */
-	@JSONField(format = "yyyy-MM-dd HH:mm:ss")
-	private Date updateTime;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "parent_id")
 	private Resource parent;

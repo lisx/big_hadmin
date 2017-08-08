@@ -8,6 +8,7 @@ import org.springframework.cache.annotation.EnableCaching;
 @EnableCaching
 public class Application{
 	private static Logger logger = LoggerFactory.getLogger(Application.class);
+
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 		logger.debug("启动成功");

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -81,5 +82,10 @@ public class UserServiceImpl extends BaseServiceImpl<User, Integer> implements I
 		user.setRoles(roles);
 		update(user);
 	}
+
+    @Override
+    public User findByUserCode(String userCode) {
+        return userDao.findByUserCode(userCode);
+    }
 
 }

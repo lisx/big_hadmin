@@ -1,11 +1,13 @@
 package com.ducetech.hadmin.bigInterfacel;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.ValueFilter;
 import com.ducetech.hadmin.common.utils.MD5Utils;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IUserDao;
 import com.ducetech.hadmin.entity.User;
+import com.sun.star.util.DateTime;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -29,11 +31,9 @@ public class UserInterface extends BaseController {
     private ValueFilter filter = new ValueFilter() {
         @Override
         public Object process(Object obj, String s, Object v) {
-            if(v==null)
+            if(v==null||v.equals(null)){
                 return "";
-//            if(v instanceof List){
-//                return "";
-//            }
+            }
             return v;
         }
     };
@@ -64,29 +64,30 @@ public class UserInterface extends BaseController {
         obj.put("state",state);
         obj.put("msg",msg);
         obj.put("data",user);
-        return JSONObject.parseObject(JSONObject.toJSONString(obj,filter));
+        return JSONObject.parseObject(JSONObject.toJSONString(obj, filter));
     }
     static Map<Long, User> users = Collections.synchronizedMap(new HashMap<Long, User>());
     @ApiOperation(value="获取用户列表", notes="根据站点站区或线路获取用户")
     @RequestMapping(value={"/list"}, method=RequestMethod.GET)
     @ApiImplicitParam(name="station",value="线路，站点，站区",dataType="string", paramType = "query")
-    public List<User> getUserList(String station) {
+    public JSONObject getUserList(String station) {
+        JSONObject obj=new JSONObject();
+        int state=0;
+        String msg;
         System.out.println("|||||||||||||"+station);
         List<User> r = userDao.findAllByStation(station);
-        return r;
-    }
-    @ApiOperation(value="创建用户", notes="根据User对象创建用户")
-    @ApiImplicitParam(name = "user", value = "用户详细实体user", required = true, dataType = "User")
-    @RequestMapping(value="", method=RequestMethod.POST)
-    public String postUser(@RequestBody User user) {
-        //users.put(user.getId()+"", user);
-        return "success";
+        obj.put("state",state);
+        if(r!=null)
+        obj.put("msg","查询成功！");
+        obj.put("data",r);
+        String json=JSONObject.toJSONString(obj,filter);
+        return JSONObject.parseObject(json);
     }
     @ApiOperation(value="获取用户详细信息", notes="根据url的id来获取用户详细信息")
     @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "Long")
     @RequestMapping(value="/{id}", method=RequestMethod.GET)
-    public User getUser(@PathVariable Long id) {
-        return users.get(id);
+    public User getUser(@PathVariable Integer id) {
+        return userDao.findOne(id);
     }
     @ApiOperation(value="更新用户详细信息", notes="根据url的id来指定更新对象，并根据传过来的user信息来更新用户详细信息")
     @ApiImplicitParams({

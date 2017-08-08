@@ -53,17 +53,6 @@ public class Role extends BaseEntity {
 	 */
 	private String description;
 
-	/**
-	 * 创建时间
-	 */
-	@JSONField(format = "yyyy-MM-dd HH:mm:ss")
-	private Date createTime;
-
-	/**
-	 * 更新时间
-	 */
-	@JSONField(format = "yyyy-MM-dd HH:mm:ss")
-	private Date updateTime;
 
 	@ManyToMany(cascade = { CascadeType.REFRESH }, fetch = FetchType.LAZY)
 	@JoinTable(name = "tb_role_resource", joinColumns = { @JoinColumn(name = "role_id") }, inverseJoinColumns = { @JoinColumn(name = "resource_id") })

@@ -63,7 +63,7 @@ public class MyRealm extends AuthorizingRealm {
 			AuthenticationToken token) throws AuthenticationException {
 		String username = (String) token.getPrincipal();
 
-		User user = userService.findByUserName(username);
+		User user = userService.findByUserCode(username);
 
 		String password = new String((char[]) token.getCredentials());
 

@@ -97,7 +97,7 @@ public class StationController extends BaseController {
                     learn=new BigFile();
                     learn.setFileName(file.getOriginalFilename());
                     learn.setFileSize(""+file.getSize()/1000);
-                    learn.setCreateTime(new Date()+"");
+                    learn.setCreateTime(new Date());
                     fileDao.save(learn);
                 } catch (Exception e) {
                     //stream =  null;

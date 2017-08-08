@@ -117,7 +117,7 @@ public class TrainController  extends BaseController {
                     bf.setFileType(type);
                     bf.setFileName(file.getOriginalFilename());
                     bf.setFileSize(""+Math.round(file.getSize()/1024));
-                    bf.setCreateTime(new Date()+"");
+                    bf.setCreateTime(new Date());
                     bf.setFileUrl(filePath);
                     bf.setCreateId(user.getId()+"");
                     bigFileService.saveOrUpdate(bf);

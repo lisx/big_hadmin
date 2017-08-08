@@ -3,6 +3,8 @@ package com.ducetech.hadmin.service;
 import com.ducetech.hadmin.service.support.IBaseService;
 import com.ducetech.hadmin.entity.User;
 
+import java.util.List;
+
 /**
  * <p>
  * 用户服务类
@@ -33,4 +35,5 @@ public interface IUserService extends IBaseService<User, Integer> {
 	 */
 	void grant(Integer id, String[] roleIds);
 
+    User findByUserCode(String username);
 }
