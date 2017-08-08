@@ -167,7 +167,7 @@
                 area: ['600px', '600px'],
                 content: '${ctx!}/admin/train/uploadFile',
                 end: function(index){
-                    $('#table_list').bootstrapTable("refresh");
+                    $('#table_train_list').bootstrapTable("refresh");
                 }
             });
         }
@@ -177,25 +177,25 @@
         function add(){
         	layer.open({
         	      type: 2,
-        	      title: '资源添加',
+        	      title: '新建文件夹',
         	      shadeClose: true,
         	      shade: false,
         	      area: ['400px', '400px'],
         	      content: '${ctx!}/admin/folder/edit/1',
         	      end: function(index){
-        	    	  $('#table_list').bootstrapTable("refresh");
+        	    	  $('#table_train_list').bootstrapTable("refresh");
        	    	  }
         	    });
         }
         function del(id){
         	layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
         		$.ajax({
-    	    		   type: "POST",
+    	    		   type: "DELETE",
     	    		   dataType: "json",
-    	    		   url: "${ctx!}/admin/resource/delete/" + id,
+    	    		   url: "${ctx!}/admin/train/delete/" + id,
     	    		   success: function(msg){
 	 	   	    			layer.msg(msg.message, {time: 2000},function(){
-	 	   	    				$('#table_list').bootstrapTable("refresh");
+	 	   	    				$('#table_train_list').bootstrapTable("refresh");
 	 	   	    				layer.close(index);
 	 	   					});
     	    		   }
