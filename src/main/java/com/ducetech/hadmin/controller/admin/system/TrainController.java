@@ -9,6 +9,7 @@ import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IFolderDao;
 import com.ducetech.hadmin.entity.BigFile;
+import com.ducetech.hadmin.entity.Folder;
 import com.ducetech.hadmin.entity.User;
 import com.ducetech.hadmin.service.IBigFileService;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
@@ -54,27 +55,42 @@ public class TrainController  extends BaseController {
     public String index() {
         return "admin/learn/index";
     }
-
+    @RequestMapping("/toFolder")
+    public String tofolder(String folder,Model map) {
+        System.out.println("folder+++"+folder);
+        map.addAttribute("folder",folder);
+        return "admin/learn/folder";
+    }
     /**
      * 查询集合
      * @return Page<User>
      */
     @RequestMapping(value = { "/list" })
     @ResponseBody
-    public Page<BigFile> list() {
+    public Page<BigFile> list(String folder) {
+        System.out.println("list:folder"+folder);
         SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
+        builder.add("folder", SpecificationOperator.Operator.likeAll.name(), folder);
         if(!StringUtil.isBlank(searchText)){
             builder.add("fileName", SpecificationOperator.Operator.likeAll.name(), searchText);
         }
         return bigFileService.findAll(builder.generateSpecification(), getPageRequest());
     }
-
+    @RequestMapping(value = { "/folder" })
+    @ResponseBody
+    public Page<Folder> folder() {
+        SimpleSpecificationBuilder<Folder> builder = new SimpleSpecificationBuilder<>();
+        String searchText = request.getParameter("searchText");
+        if(!StringUtil.isBlank(searchText)){
+            builder.add("name", SpecificationOperator.Operator.likeAll.name(), searchText);
+        }
+        return folderDao.findAll(builder.generateSpecification(), getPageRequest());
+    }
     @RequestMapping(value = "/uploadFile", method = RequestMethod.GET)
-    public String uploadFile(Model map) {
-        List list = folderDao.findAll();
-        System.out.println("++++++"+list.size());
-        map.addAttribute("folders",list);
+    public String uploadFile(Model map,String folder) {
+        System.out.println("++++++"+folder);
+        map.addAttribute("folder",folder);
         return "admin/learn/uploadTrain";
     }
 
@@ -84,8 +100,8 @@ public class TrainController  extends BaseController {
     }
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(MultipartHttpServletRequest request,String chunk,String chunks,String size){
-        System.out.println((String) request.getAttribute("uid"));
+    public JsonResult uploadFilePost(MultipartHttpServletRequest request,String chunk,String chunks,String size,String folder){
+        System.out.println((String) request.getAttribute("folder"));
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
         MultipartFile file;
@@ -128,7 +144,7 @@ public class TrainController  extends BaseController {
                         bf.setFileName(file.getOriginalFilename());
                         bf.setFileSize(""+Math.round(file.getSize()/1024));
                         bf.setCreateTime(new Date());
-
+                        bf.setFolder(folder);
                         bf.setFileUrl(filePath);
                         bf.setCreateId(user.getId()+"");
                         bf.setStation(user.getStation());
@@ -146,7 +162,7 @@ public class TrainController  extends BaseController {
                         bf.setFileName(file.getOriginalFilename());
                         bf.setFileSize(""+Math.round(file.getSize()/1024));
                         bf.setCreateTime(new Date());
-
+                        bf.setFolder(folder);
                         bf.setFileUrl(filePath);
                         bf.setCreateId(user.getId()+"");
                         bf.setStation(user.getStation());
@@ -180,7 +196,7 @@ public class TrainController  extends BaseController {
                                     bf.setFileName(file.getOriginalFilename());
                                     bf.setFileSize(""+Math.round(Integer.parseInt(size)/1024/1024));
                                     bf.setCreateTime(new Date());
-
+                                    bf.setFolder(folder);
                                     bf.setFileUrl(filePath);
                                     bf.setCreateId(user.getId()+"");
                                     bf.setStation(user.getStation());

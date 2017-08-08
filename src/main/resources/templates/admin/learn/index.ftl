@@ -38,8 +38,6 @@
                                             <@shiro.hasPermission name="system:resource:add">
                                                 <button class="btn btn-success " type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传</button>
                                                 <button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;新建文件夹</button>
-                                                <button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;下载</button>
-                                                <button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;删除</button>
                                             </@shiro.hasPermission>
                                             </p>
                                             <hr>
@@ -62,8 +60,6 @@
                                             <@shiro.hasPermission name="system:resource:add">
                                                 <button class="btn btn-success " type="button" onclick="uploadQuestion();"><i class="fa fa-plus"></i>&nbsp;上传题库</button>
                                                 <button class="btn btn-success " type="button" onclick="uploadImage();"><i class="fa fa-plus"></i>&nbsp;批量导入附件</button>
-                                                <button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;下载</button>
-                                                <button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;删除</button>
                                             </@shiro.hasPermission>
                                             </p>
                                         <hr>
@@ -97,6 +93,7 @@
     <!-- Page-Level Scripts -->
     <script>
         $(document).ready(function () {
+            console.log("++++++++++++++++++++++")
 			//初始化表格,动态从服务器加载数据
 			$("#table_train_list").bootstrapTable({
 			    //使用get请求到服务器获取数据
@@ -104,7 +101,7 @@
 			    //必须设置，不然request.getParameter获取不到请求参数
 			    contentType: "application/x-www-form-urlencoded",
 			    //获取数据的Servlet地址
-			    url: "${ctx!}/admin/train/list",
+			    url: "${ctx!}/admin/train/folder",
 			    //表格显示条纹
 			    striped: true,
 			    //启动分页
@@ -138,11 +135,8 @@
 			        field: "id",
 			        sortable: true
 			    },{
-			        title: "文件名",
-			        field: "fileName"
-			    },{
-                    title: "文件大小",
-                    field: "fileSize",
+                    title: "文件夹",
+                    field: "name",
                 },{
 			        title: "创建时间",
 			        field: "createTime",
@@ -151,7 +145,7 @@
 			        title: "操作",
 			        field: "empty",
                     formatter: function (value, row, index) {
-                    	var operateHtml = '<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="down(\'http://127.0.0.1:8080/upload/train/'+row.fileType+'/'+row.fileName+'\')"><i class="fa fa-edit"></i>&nbsp;下载</button> &nbsp;</@shiro.hasPermission>';
+                    	var operateHtml = '<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="show(\''+row.name+'\')"><i class="fa fa-edit"></i>&nbsp;查看</button> &nbsp;</@shiro.hasPermission>';
                     	operateHtml = operateHtml + '<@shiro.hasPermission name="system:resource:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button></@shiro.hasPermission>';
                         return operateHtml;
                     }
@@ -171,8 +165,18 @@
                 }
             });
         }
-        function down(url){
-            window.location.href=url;
+        function show(station){
+            layer.open({
+                type: 2,
+                //title: '培训资料',
+                shadeClose: true,
+                shade: false,
+                area: ['1654px', '800px'],
+                content: '${ctx!}/admin/train/toFolder?folder='+station,
+                end: function(index){
+                    $('#table_train_list').bootstrapTable("refresh");
+                }
+            });
         }
         function add(){
         	layer.open({

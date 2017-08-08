@@ -40,7 +40,7 @@ public class StationInterface {
         List<Station> stations = stationDao.findByStationArea(3);
         obj.put("data", stations);
         obj.put("msg","查询成功");
-        obj.put("sate","1");
+        obj.put("state","1");
         return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
 
@@ -58,7 +58,7 @@ public class StationInterface {
             obj.put("data","");
         }
         obj.put("msg","查询成功");
-        obj.put("sate","1");
+        obj.put("state","1");
         return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
 

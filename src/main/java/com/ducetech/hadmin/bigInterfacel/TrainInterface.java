@@ -44,7 +44,7 @@ public class TrainInterface {
         List<BigFile> stations = trainDao.findByStationBetween(station, null);
         obj.put("data", stations);
         obj.put("msg","查询成功");
-        obj.put("sate","1");
+        obj.put("state","1");
         return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
 

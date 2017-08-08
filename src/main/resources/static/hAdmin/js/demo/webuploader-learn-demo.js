@@ -80,7 +80,8 @@ jQuery(function() {
 
         disableGlobalDnd: true,
         formData: {
-            uid: 123
+            folder: $("#folder").val(),
+            demo:$('#folder option:selected').text()
         },
         //分片
         chunked: true,
