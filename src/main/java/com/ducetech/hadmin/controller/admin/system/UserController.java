@@ -1,6 +1,8 @@
 package com.ducetech.hadmin.controller.admin.system;
 
+import com.ducetech.hadmin.Application;
 import com.ducetech.hadmin.common.JsonResult;
+import com.ducetech.hadmin.common.utils.BigConstant;
 import com.ducetech.hadmin.common.utils.PoiUtil;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.entity.Role;
@@ -10,6 +12,8 @@ import com.ducetech.hadmin.service.IUserService;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator.Operator;
 import com.ducetech.hadmin.common.utils.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -37,7 +41,7 @@ import java.util.Set;
 @Controller
 @RequestMapping("/admin/user")
 public class UserController extends BaseController {
-
+    private static Logger logger = LoggerFactory.getLogger(Application.class);
 	private final IUserService userService;
 	private final IRoleService roleService;
 
@@ -135,10 +139,11 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult uploadFilePost(HttpServletRequest request){
+        logger.debug("进入上传方法");
         List<MultipartFile> files =((MultipartHttpServletRequest)request).getFiles("file");
         MultipartFile file;
         //创建临时文件夹
-        File dirTempFile = new File("/Users/lisx/Ducetech/logs/");
+        File dirTempFile = new File(BigConstant.USER_PATH);
         if (!dirTempFile.exists()) {
             dirTempFile.mkdirs();
         }

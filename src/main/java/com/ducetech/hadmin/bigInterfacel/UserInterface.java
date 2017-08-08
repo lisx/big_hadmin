@@ -1,13 +1,11 @@
 package com.ducetech.hadmin.bigInterfacel;
 
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.ValueFilter;
 import com.ducetech.hadmin.common.utils.MD5Utils;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IUserDao;
 import com.ducetech.hadmin.entity.User;
-import com.sun.star.util.DateTime;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -37,6 +35,9 @@ public class UserInterface extends BaseController {
             return v;
         }
     };
+    int state=0;
+    String msg;
+    JSONObject obj;
     @Autowired
     IUserDao userDao;
     @ApiOperation(value="用户登录", notes="根据用户工号及密码登录")
@@ -45,11 +46,9 @@ public class UserInterface extends BaseController {
             @ApiImplicitParam(name="code",value="用户工号",dataType="string", paramType = "query"),
             @ApiImplicitParam(name="password",value="用户密码",dataType="string", paramType = "query")})
     public JSONObject login(String code,String password){
-        logger.debug("进入登录接口");
+        logger.debug("进入登录接口==code:{}|password:{}",code,password);
         User user=userDao.findByUserCode(code);
-        JSONObject obj=new JSONObject();
-        int state=0;
-        String msg;
+        obj=new JSONObject();
         if(null!=user){
             if(user.getPassword().equals(MD5Utils.md5(password))){
                 user.setRoles(null);
@@ -71,10 +70,10 @@ public class UserInterface extends BaseController {
     @RequestMapping(value={"/list"}, method=RequestMethod.GET)
     @ApiImplicitParam(name="station",value="线路，站点，站区",dataType="string", paramType = "query")
     public JSONObject getUserList(String station) {
-        JSONObject obj=new JSONObject();
+        logger.debug("进入获取用户列表接口==station:{}"+station);
+        obj=new JSONObject();
         int state=0;
         String msg;
-        System.out.println("|||||||||||||"+station);
         List<User> r = userDao.findAllByStation(station);
         obj.put("state",state);
         if(r!=null)
@@ -84,28 +83,17 @@ public class UserInterface extends BaseController {
         return JSONObject.parseObject(json);
     }
     @ApiOperation(value="获取用户详细信息", notes="根据url的id来获取用户详细信息")
-    @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "Long")
+    @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "Integer")
     @RequestMapping(value="/{id}", method=RequestMethod.GET)
-    public User getUser(@PathVariable Integer id) {
-        return userDao.findOne(id);
+    public JSONObject getUser(@PathVariable Integer id) {
+        logger.debug("进入获取用户详情接口=={}"+id);
+        obj=new JSONObject();
+        User user=userDao.findOne(id);
+        obj.put("state",state);
+        obj.put("msg",msg);
+        obj.put("data",user);
+        return obj;
     }
-    @ApiOperation(value="更新用户详细信息", notes="根据url的id来指定更新对象，并根据传过来的user信息来更新用户详细信息")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "Long"),
-            @ApiImplicitParam(name = "user", value = "用户详细实体user", required = true, dataType = "User")
-    })
-    @RequestMapping(value="/{id}", method=RequestMethod.PUT)
-    public String putUser(@PathVariable String id, @RequestBody User user) {
-        User u = users.get(id);
-        u.setUserName(user.getUserName());
-       // users.put(id, u);
-        return "success";
-    }
-    @ApiOperation(value="删除用户", notes="根据url的id来指定删除对象")
-    @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "Long")
-    @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
-    public String deleteUser(@PathVariable Long id) {
-        users.remove(id);
-        return "success";
-    }
+
+
 }

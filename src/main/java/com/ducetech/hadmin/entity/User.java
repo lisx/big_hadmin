@@ -1,6 +1,7 @@
 package com.ducetech.hadmin.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.ducetech.hadmin.common.utils.BigConstant;
 import com.ducetech.hadmin.entity.support.BaseEntity;
 import lombok.Data;
 
@@ -87,4 +88,24 @@ public class User extends BaseEntity {
 	@JoinTable(name = "big_user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
 	private java.util.Set<Role> roles;
 
+    public String getFwxxkUrl() {
+        if(null==fwxxkUrl)
+            return "";
+        else
+        return BigConstant.getImageUrl(fwxxkUrl);
+    }
+
+    public String getFaszUrl() {
+        if(null==faszUrl)
+            return "";
+        else
+        return BigConstant.getImageUrl(faszUrl);
+    }
+
+    public String getZkysgzUrl() {
+        if(null==zkysgzUrl)
+            return "";
+        else
+        return BigConstant.getImageUrl(zkysgzUrl);
+    }
 }

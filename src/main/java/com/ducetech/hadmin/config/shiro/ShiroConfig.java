@@ -53,7 +53,7 @@ public class ShiroConfig {
 		shiroFilter.setSecurityManager(securityManager);
 		shiroFilter.setLoginUrl("/admin/login");
 		shiroFilter.setSuccessUrl("/admin/index");
-		shiroFilter.setUnauthorizedUrl("/previlige/no");
+		shiroFilter.setUnauthorizedUrl("/admin/login");
 		Map<String, String> filterChainDefinitionMap = new HashMap<String, String>();
 		filterChainDefinitionMap.put("/hadmin/**", "anon");
 
