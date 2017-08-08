@@ -7,6 +7,7 @@ import com.ducetech.hadmin.common.utils.FileUtil;
 import com.ducetech.hadmin.common.utils.PdfUtil;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
+import com.ducetech.hadmin.dao.IFolderDao;
 import com.ducetech.hadmin.entity.BigFile;
 import com.ducetech.hadmin.entity.User;
 import com.ducetech.hadmin.service.IBigFileService;
@@ -17,12 +18,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -43,6 +47,8 @@ public class TrainController  extends BaseController {
     private static org.slf4j.Logger logger = LoggerFactory.getLogger(TrainController.class);
     @Autowired
     IBigFileService bigFileService;
+    @Autowired
+    IFolderDao folderDao;
 
     @RequestMapping("/index")
     public String index() {
@@ -65,7 +71,10 @@ public class TrainController  extends BaseController {
     }
 
     @RequestMapping(value = "/uploadFile", method = RequestMethod.GET)
-    public String uploadFile() {
+    public String uploadFile(Model map) {
+        List list = folderDao.findAll();
+        System.out.println("++++++"+list.size());
+        map.addAttribute("folders",list);
         return "admin/learn/uploadTrain";
     }
 

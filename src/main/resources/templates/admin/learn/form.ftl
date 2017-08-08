@@ -48,6 +48,7 @@
     <script src="${ctx!}/hadmin/js/plugins/layer/layer.min.js"></script>
     <script src="${ctx!}/hadmin/js/plugins/layer/laydate/laydate.js"></script>
     <script type="text/javascript">
+
     $(document).ready(function () {
 
 	    $("#frm").validate({

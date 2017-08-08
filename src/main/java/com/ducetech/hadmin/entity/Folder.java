@@ -25,5 +25,6 @@ public class Folder extends BaseEntity {
     @Column(name = "id", nullable = false)
     private Integer id;
     private String name;
+    private String station;
 
 }
