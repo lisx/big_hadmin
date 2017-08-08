@@ -1,7 +1,9 @@
 package com.ducetech.hadmin.controller.admin.system;
 
+import com.alibaba.druid.util.StringUtils;
 import com.ducetech.hadmin.common.JsonResult;
 import com.ducetech.hadmin.common.utils.BigConstant;
+import com.ducetech.hadmin.common.utils.FileUtil;
 import com.ducetech.hadmin.common.utils.PdfUtil;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
@@ -37,6 +39,7 @@ import java.util.logging.Logger;
 @Controller
 @RequestMapping("/admin/train")
 public class TrainController  extends BaseController {
+    private static org.slf4j.Logger logger = LoggerFactory.getLogger(TrainController.class);
     @Autowired
     IBigFileService bigFileService;
 
@@ -71,7 +74,7 @@ public class TrainController  extends BaseController {
     }
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(MultipartHttpServletRequest request){
+    public JsonResult uploadFilePost(MultipartHttpServletRequest request,String chunk,String chunks,String size){
         System.out.println((String) request.getAttribute("uid"));
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
@@ -95,6 +98,7 @@ public class TrainController  extends BaseController {
         for (int i =0; i< files.size(); ++i) {
             file = files.get(i);
             String type = null;
+
             String filePath=BigConstant.TRAIN_PATH+file.getOriginalFilename();
             if (!file.isEmpty()) {
                 try {
@@ -104,23 +108,70 @@ public class TrainController  extends BaseController {
                     stream.close();
                     String suffix=StringUtil.suffix(filePath);
                     if(suffix.equals(docx)||suffix.equals(doc)||suffix.equals(xlsx)||suffix.equals(xls)||suffix.equals(ppt)) {
+
                         PdfUtil.office2PDF(filePath, filePath + pdf);
                         filePath = filePath+pdf;
                         type="office";
+                        BigFile bf=new BigFile();
+                        bf.setMenuType("3");
+                        bf.setFileType(type);
+                        bf.setFileName(file.getOriginalFilename());
+                        bf.setFileSize(""+Math.round(file.getSize()/1024));
+                        bf.setCreateTime(new Date());
+                        bf.setFileUrl(filePath);
+                        bf.setCreateId(user.getId()+"");
+                        bigFileService.saveOrUpdate(bf);
                     }else if(suffix.equals(png)||suffix.equals(jpeg)||suffix.equals(jpg)){
                         type="image";
+                        BigFile bf=new BigFile();
+                        bf.setMenuType("3");
+                        bf.setFileType(type);
+                        bf.setFileName(file.getOriginalFilename());
+                        bf.setFileSize(""+Math.round(file.getSize()/1024));
+                        bf.setCreateTime(new Date());
+                        bf.setFileUrl(filePath);
+                        bf.setCreateId(user.getId()+"");
+                        bigFileService.saveOrUpdate(bf);
                     }else{
-                        type="video";
+                        try {
+
+                            //拿到文件对象
+                            //第一个参数是目标文件的完整路径
+                            //第二参数是webupload分片传过来的文件
+                            //FileUtil的这个方法是把目标文件的指针，移到文件末尾，然后把分片文件追加进去，实现文件合并。简单说。就是每次最新的分片合到一个文件里面去。
+                            FileUtil.randomAccessFile(BigConstant.TRAIN_VIDEO_PATH+file.getOriginalFilename(), file);
+                            //如果文件小与5M的话，分片参数chunk的值是null
+                            //5M的这个阈值是在upload3.js中的chunkSize属性决定的，超过chunkSize设置的大小才会进行分片，否则就不分片，不分片的话，webupload传到后台的chunk参数值就是null
+                            if(StringUtils.isEmpty(chunk)){
+                                //不分片的情况
+                                logger.debug("success");
+                            }else{
+                                //分片的情况
+                                //chunk 分片索引，下标从0开始
+                                //chunks 总分片数
+                                if (Integer.valueOf(chunk) == (Integer.valueOf(chunks) - 1)) {
+                                    type="video";
+                                    logger.debug("上传成功");
+                                    BigFile bf=new BigFile();
+                                    bf.setMenuType("3");
+                                    bf.setFileType(type);
+                                    bf.setFileName(file.getOriginalFilename());
+                                    bf.setFileSize(""+Math.round(file.getSize()/1024));
+                                    bf.setCreateTime(new Date());
+                                    bf.setFileUrl(filePath);
+                                    bf.setCreateId(user.getId()+"");
+                                    bigFileService.saveOrUpdate(bf);
+                                } else {
+                                    logger.debug("上传中" + file.getOriginalFilename() + " chunk:" + chunk, "");
+                                }
+                            }
+                        } catch (Exception e) {
+                            logger.debug("上传失败{}",e.getMessage());
+                        }
+
+
                     }
-                    BigFile bf=new BigFile();
-                    bf.setMenuType("3");
-                    bf.setFileType(type);
-                    bf.setFileName(file.getOriginalFilename());
-                    bf.setFileSize(""+Math.round(file.getSize()/1024));
-                    bf.setCreateTime(new Date());
-                    bf.setFileUrl(filePath);
-                    bf.setCreateId(user.getId()+"");
-                    bigFileService.saveOrUpdate(bf);
+
                 } catch (Exception e) {
                     //stream =  null;
                     return JsonResult.success("You failed to upload " + i + " =>" + e.getMessage());

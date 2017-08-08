@@ -25,4 +25,6 @@ public class BigConstant {
     public static String getImageUrl(String name){
         return SERVICE_URL+name+jpg;
     }
+
+    public static final String TRAIN_VIDEO_PATH ="src/main/resources/static/upload/train/video/";
 }

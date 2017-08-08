@@ -83,12 +83,13 @@ jQuery(function() {
             uid: 123
         },
         //分片
-        chunked: false,
+        chunked: true,
+        chunkSize:20 * 1024 * 1024,
         // server: 'http://webuploader.duapp.com/server/fileupload.php',
         server: '/admin/train/uploadFilePost',
         fileNumLimit: 300,
-        fileSizeLimit: 200 * 1024 * 1024,    // 200 M
-        fileSingleSizeLimit: 15 * 1024 * 1024    // 50 M
+        fileSizeLimit: 2100 * 1024 * 1024,    // 2100 M
+        fileSingleSizeLimit: 700 * 1024 * 1024    // 700 M
     });
 
     // 添加“添加文件”的按钮，

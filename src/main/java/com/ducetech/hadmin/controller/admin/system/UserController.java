@@ -41,7 +41,7 @@ import java.util.Set;
 @Controller
 @RequestMapping("/admin/user")
 public class UserController extends BaseController {
-    private static Logger logger = LoggerFactory.getLogger(Application.class);
+    private static Logger logger = LoggerFactory.getLogger(UserController.class);
 	private final IUserService userService;
 	private final IRoleService roleService;
 
