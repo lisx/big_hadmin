@@ -98,17 +98,17 @@ public class TrainController  extends BaseController {
         for (int i =0; i< files.size(); ++i) {
             file = files.get(i);
             String type = null;
-
             String filePath=BigConstant.TRAIN_PATH+file.getOriginalFilename();
             if (!file.isEmpty()) {
                 try {
-                    byte[] bytes = file.getBytes();
-                    stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
-                    stream.write(bytes);
-                    stream.close();
+
                     String suffix=StringUtil.suffix(filePath);
                     if(suffix.equals(docx)||suffix.equals(doc)||suffix.equals(xlsx)||suffix.equals(xls)||suffix.equals(ppt)) {
-
+                        filePath=BigConstant.TRAIN_OFFICE_PATH+file.getOriginalFilename();
+                        byte[] bytes = file.getBytes();
+                        stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
+                        stream.write(bytes);
+                        stream.close();
                         PdfUtil.office2PDF(filePath, filePath + pdf);
                         filePath = filePath+pdf;
                         type="office";
@@ -118,10 +118,17 @@ public class TrainController  extends BaseController {
                         bf.setFileName(file.getOriginalFilename());
                         bf.setFileSize(""+Math.round(file.getSize()/1024));
                         bf.setCreateTime(new Date());
+
                         bf.setFileUrl(filePath);
                         bf.setCreateId(user.getId()+"");
+                        bf.setStation(user.getStation());
                         bigFileService.saveOrUpdate(bf);
                     }else if(suffix.equals(png)||suffix.equals(jpeg)||suffix.equals(jpg)){
+                        filePath=BigConstant.TRAIN_IMAGE_PATH+file.getOriginalFilename();
+                        byte[] bytes = file.getBytes();
+                        stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
+                        stream.write(bytes);
+                        stream.close();
                         type="image";
                         BigFile bf=new BigFile();
                         bf.setMenuType("3");
@@ -129,12 +136,17 @@ public class TrainController  extends BaseController {
                         bf.setFileName(file.getOriginalFilename());
                         bf.setFileSize(""+Math.round(file.getSize()/1024));
                         bf.setCreateTime(new Date());
+
                         bf.setFileUrl(filePath);
                         bf.setCreateId(user.getId()+"");
+                        bf.setStation(user.getStation());
                         bigFileService.saveOrUpdate(bf);
                     }else{
                         try {
-
+                            byte[] bytes = file.getBytes();
+                            stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
+                            stream.write(bytes);
+                            stream.close();
                             //拿到文件对象
                             //第一个参数是目标文件的完整路径
                             //第二参数是webupload分片传过来的文件
@@ -156,10 +168,12 @@ public class TrainController  extends BaseController {
                                     bf.setMenuType("3");
                                     bf.setFileType(type);
                                     bf.setFileName(file.getOriginalFilename());
-                                    bf.setFileSize(""+Math.round(file.getSize()/1024));
+                                    bf.setFileSize(""+Math.round(Integer.parseInt(size)/1024/1024));
                                     bf.setCreateTime(new Date());
+
                                     bf.setFileUrl(filePath);
                                     bf.setCreateId(user.getId()+"");
+                                    bf.setStation(user.getStation());
                                     bigFileService.saveOrUpdate(bf);
                                 } else {
                                     logger.debug("上传中" + file.getOriginalFilename() + " chunk:" + chunk, "");

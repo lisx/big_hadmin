@@ -2,6 +2,7 @@ package com.ducetech.hadmin.bigInterfacel;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.ValueFilter;
+import com.ducetech.hadmin.common.utils.BigConstant;
 import com.ducetech.hadmin.common.utils.MD5Utils;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IUserDao;
@@ -26,15 +27,7 @@ import java.util.*;
 @RequestMapping("/interface/user")
 public class UserInterface extends BaseController {
     private static Logger logger = LoggerFactory.getLogger(UserInterface.class);
-    private ValueFilter filter = new ValueFilter() {
-        @Override
-        public Object process(Object obj, String s, Object v) {
-            if(v==null||v.equals(null)){
-                return "";
-            }
-            return v;
-        }
-    };
+
     int state=0;
     String msg;
     JSONObject obj;
@@ -63,7 +56,7 @@ public class UserInterface extends BaseController {
         obj.put("state",state);
         obj.put("msg",msg);
         obj.put("data",user);
-        return JSONObject.parseObject(JSONObject.toJSONString(obj, filter));
+        return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
     static Map<Long, User> users = Collections.synchronizedMap(new HashMap<Long, User>());
     @ApiOperation(value="获取用户列表", notes="根据站点站区或线路获取用户")
@@ -72,15 +65,13 @@ public class UserInterface extends BaseController {
     public JSONObject getUserList(String station) {
         logger.debug("进入获取用户列表接口==station:{}"+station);
         obj=new JSONObject();
-        int state=0;
+        int state=1;
         String msg;
         List<User> r = userDao.findAllByStation(station);
         obj.put("state",state);
-        if(r!=null)
         obj.put("msg","查询成功！");
         obj.put("data",r);
-        String json=JSONObject.toJSONString(obj,filter);
-        return JSONObject.parseObject(json);
+        return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
     @ApiOperation(value="获取用户详细信息", notes="根据url的id来获取用户详细信息")
     @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "Integer")
@@ -89,10 +80,10 @@ public class UserInterface extends BaseController {
         logger.debug("进入获取用户详情接口=={}"+id);
         obj=new JSONObject();
         User user=userDao.findOne(id);
-        obj.put("state",state);
+        obj.put("state",1);
         obj.put("msg",msg);
         obj.put("data",user);
-        return obj;
+        return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
 
 

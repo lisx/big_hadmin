@@ -65,7 +65,7 @@ public class StationServiceImpl extends BaseServiceImpl<Station, Integer>
     }
     public List<Station> querySubNodesByCode(String parentCode){
         List<Station> all = stationDao.findAll();
-        return stationDao.querySubNodesByCode(all,parentCode);
+        return stationDao.querySubNodesByCode(parentCode,3);
     }
     @Override
     public void saveOrUpdate(Station station) {

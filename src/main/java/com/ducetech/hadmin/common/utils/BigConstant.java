@@ -1,5 +1,7 @@
 package com.ducetech.hadmin.common.utils;
 
+import com.alibaba.fastjson.serializer.ValueFilter;
+
 /**
  * 项目常量
  *
@@ -11,7 +13,7 @@ public class BigConstant {
     public static final String OFFICE_PATH="src/main/resources/static/upload/office/";
     public static final String TRAIN_PATH="src/main/resources/static/upload/train/";
     public static final String USER_PATH="src/main/resources/static/upload/users/";
-    public static final String SERVICE_URL="http://192.168.4.30:8080/upload/uses/";
+    public static final String SERVICE_URL="http://192.168.4.30:8080/upload/users/";
     public static final String docx=".docx";
     public static final String doc=".doc";
     public static final String xlsx=".xlsx";
@@ -27,4 +29,15 @@ public class BigConstant {
     }
 
     public static final String TRAIN_VIDEO_PATH ="src/main/resources/static/upload/train/video/";
+    public static final String TRAIN_IMAGE_PATH ="src/main/resources/static/upload/train/image/";
+    public static final String TRAIN_OFFICE_PATH ="src/main/resources/static/upload/train/office/";
+    public static ValueFilter filter = new ValueFilter() {
+        @Override
+        public Object process(Object obj, String s, Object v) {
+            if(v==null||v.equals(null)){
+                return "";
+            }
+            return v;
+        }
+    };
 }
