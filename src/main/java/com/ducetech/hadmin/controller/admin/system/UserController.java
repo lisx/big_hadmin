@@ -180,7 +180,7 @@ public class UserController extends BaseController {
 		try {
 		    user.setIfUse(0);
 		    user.setCreateTime(new Date());
-		    user.setCreateId(getUser().getId()+"");
+		    user.setCreateId(getUser().getId());
 			userService.saveOrUpdate(user);
             // 插入缓存
 		} catch (Exception e) {

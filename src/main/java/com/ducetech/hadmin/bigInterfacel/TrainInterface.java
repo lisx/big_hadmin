@@ -47,5 +47,18 @@ public class TrainInterface {
         obj.put("state","1");
         return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
+    @ApiOperation(value="获取站点文件夹全部数据",notes="获取站点文件夹全部数据")
+    @RequestMapping(value="/findFolderByStation",method = RequestMethod.GET)
+    @ApiImplicitParam(name="station",value="线路，站点，站区",dataType="string", paramType = "query")
+    public JSONObject findFolderByStation(String station) {
+        logger.debug("获取站点文件全部数据");
+        obj = new JSONObject();
+        //Station str = stationDao.findByNodeName(station);
+        List<BigFile> stations = trainDao.findByStationBetween(station, null);
+        obj.put("data", stations);
+        obj.put("msg","查询成功");
+        obj.put("state","1");
+        return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
+    }
 
 }

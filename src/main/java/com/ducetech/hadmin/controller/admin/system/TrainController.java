@@ -17,24 +17,20 @@ import com.ducetech.hadmin.service.specification.SpecificationOperator;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * 培训资料
@@ -146,7 +142,7 @@ public class TrainController  extends BaseController {
                         bf.setCreateTime(new Date());
                         bf.setFolder(folder);
                         bf.setFileUrl(filePath);
-                        bf.setCreateId(user.getId()+"");
+                        bf.setCreateId(user.getId());
                         bf.setStation(user.getStation());
                         bigFileService.saveOrUpdate(bf);
                     }else if(suffix.equals(png)||suffix.equals(jpeg)||suffix.equals(jpg)){
@@ -164,7 +160,7 @@ public class TrainController  extends BaseController {
                         bf.setCreateTime(new Date());
                         bf.setFolder(folder);
                         bf.setFileUrl(filePath);
-                        bf.setCreateId(user.getId()+"");
+                        bf.setCreateId(user.getId());
                         bf.setStation(user.getStation());
                         bigFileService.saveOrUpdate(bf);
                     }else{
@@ -198,7 +194,7 @@ public class TrainController  extends BaseController {
                                     bf.setCreateTime(new Date());
                                     bf.setFolder(folder);
                                     bf.setFileUrl(filePath);
-                                    bf.setCreateId(user.getId()+"");
+                                    bf.setCreateId(user.getId());
                                     bf.setStation(user.getStation());
                                     bigFileService.saveOrUpdate(bf);
                                 } else {

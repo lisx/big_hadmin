@@ -59,6 +59,7 @@ public class ShiroConfig {
 
 		filterChainDefinitionMap.put("/admin/login", "anon");
         filterChainDefinitionMap.put("/interface/**", "anon");
+        filterChainDefinitionMap.put("/admin/**", "anon");
 
 		filterChainDefinitionMap.put("/admin/user/index", "perms[system:user:index]");
 		filterChainDefinitionMap.put("/admin/user/add", "perms[system:user:add]");

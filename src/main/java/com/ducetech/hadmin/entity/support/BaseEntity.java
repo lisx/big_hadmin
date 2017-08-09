@@ -22,12 +22,12 @@ public abstract class BaseEntity implements Serializable{
      */
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
-    private String createId;
+    private Integer createId;
     /**
      * 更新时间
      */
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
-    private String updateId;
+    private Integer updateId;
 
 }

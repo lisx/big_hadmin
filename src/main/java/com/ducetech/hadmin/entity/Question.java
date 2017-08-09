@@ -12,7 +12,7 @@ import javax.persistence.*;
  * @create 2017-08-04 13:54
  **/
 @Entity
-@Table(name = "big_file")
+@Table(name = "big_question")
 @Data
 public class Question extends BaseEntity {
     private static final long serialVersionUID=1L;

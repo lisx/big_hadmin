@@ -8,6 +8,8 @@ import com.ducetech.hadmin.entity.Question;
 import com.ducetech.hadmin.service.IQuestionService;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -32,6 +34,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin/question")
 public class QuestionController extends BaseController {
+
     @Autowired
     IQuestionService questionService;
     @Autowired

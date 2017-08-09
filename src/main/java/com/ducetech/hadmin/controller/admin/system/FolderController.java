@@ -58,7 +58,7 @@ public class FolderController extends BaseController{
                 }else{
                     folder.setStation("");
                 }
-                folder.setCreateId(user.getId()+"");
+                folder.setCreateId(user.getId());
             folderDao.saveAndFlush(folder);
         } catch (Exception e) {
             return JsonResult.failure(e.getMessage());

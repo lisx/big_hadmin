@@ -6,13 +6,13 @@ import lombok.Data;
 import javax.persistence.*;
 
 /**
- * 问题管理
+ * 试卷管理
  *
  * @author lisx
  * @create 2017-08-04 13:54
  **/
 @Entity
-@Table(name = "big_file")
+@Table(name = "big_exam")
 @Data
 public class Exam extends BaseEntity {
     private static final long serialVersionUID=1L;
@@ -20,17 +20,24 @@ public class Exam extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id",nullable = false)
     private Integer id;
-    //文件名字
-    private String title;
-    //文件地址
-    private String proper;
-    //文件大小
-    private String answer;
-    //1单选，2多选，3判断，4排序
-    private String menuType;
-    //是否使用
-    private String ifUse;
-    //归属问题库
-    private String bankId;
+    //试卷名称
+    private String examName;
+    //单选题
+    private String singleNum;
+    //单选分
+    private String singleScore;
+    //多选题
+    private String multipleNum;
+    //多选分
+    private String multipleScore;
+    //判断题
+    private String judgeNum;
+    //判断分
+    private String judgeScore;
+    //排序提
+    private String rankNum;
+    //排序分
+    private String rankScore;
+
 
 }

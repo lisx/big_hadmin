@@ -30,6 +30,8 @@
                                 </li>
                                 <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">练习/考试</a>
                                 </li>
+                                <li class=""><a data-toggle="tab" href="#tab-3" aria-expanded="false">考试类型</a>
+                                </li>
                             </ul>
                             <div class="tab-content">
                                 <div id="tab-1" class="tab-pane active">
@@ -68,7 +70,28 @@
                                                 <!-- Example Card View -->
                                                 <div class="example-wrap">
                                                     <div class="example">
-                                                        <table id="table_list2"></table>
+                                                        <table id="table_question_list"></table>
+                                                    </div>
+                                                </div>
+                                                <!-- End Example Card View -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="tab-3" class="tab-pane">
+                                    <div class="panel-body">
+                                        <p>
+                                        <@shiro.hasPermission name="system:resource:add">
+                                            <button class="btn btn-success " type="button" onclick="configExam();"><i class="fa fa-plus"></i>&nbsp;配置考试类型</button>
+                                        </@shiro.hasPermission>
+                                        </p>
+                                        <hr>
+                                        <div class="row row-lg">
+                                            <div class="col-sm-12">
+                                                <!-- Example Card View -->
+                                                <div class="example-wrap">
+                                                    <div class="example">
+                                                        <table id="table_exam_list"></table>
                                                     </div>
                                                 </div>
                                                 <!-- End Example Card View -->
@@ -151,7 +174,129 @@
                     }
 			    }]
 			});
+            $("#table_exam_list").bootstrapTable({
+                //使用get请求到服务器获取数据
+                method: "GET",
+                //必须设置，不然request.getParameter获取不到请求参数
+                contentType: "application/x-www-form-urlencoded",
+                //获取数据的Servlet地址
+                url: "${ctx!}/admin/exam/list",
+                //表格显示条纹
+                striped: true,
+                //启动分页
+                pagination: true,
+                //每页显示的记录数
+                pageSize: 10,
+                //当前第几页
+                pageNumber: 1,
+                //记录数可选列表
+                pageList: [5, 10, 15, 20, 25],
+                //是否启用查询
+                search: true,
+                //是否启用详细信息视图
+                // detailView:true,
+                // detailFormatter:detailFormatter,
+                //表示服务端请求
+                sidePagination: "server",
+                //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
+                //设置为limit可以获取limit, offset, search, sort, order
+                queryParamsType: "undefined",
+                //json数据解析
+                responseHandler: function(res) {
+                    return {
+                        "rows": res.content,
+                        "total": res.totalElements
+                    };
+                },
+                //数据列
+                columns: [{
+                    title: "ID",
+                    field: "id",
+                    sortable: true
+                },{
+                    title: "试卷名称",
+                    field: "examName",
+                },{
+                    title: "单选题",
+                    field: "singleNum",
+                },{
+                    title: "分数",
+                    field: "singleScore",
+                },{
+                    title: "多选题",
+                    field: "multipleNum",
+                },{
+                    title: "分数",
+                    field: "multipleScore",
+                },{
+                    title: "判断题",
+                    field: "judgeNum",
+                },{
+                    title: "分数",
+                    field: "judgeScore",
+                },{
+                    title: "排序提",
+                    field: "rankNum",
+                },{
+                    title: "分数",
+                    field: "rankScore",
+                },{
+                    title: "创建时间",
+                    field: "createTime",
+                    sortable: true
+                },{
+                    title: "操作",
+                    field: "empty",
+                    formatter: function (value, row, index) {
+                        var operateHtml = '<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="examEdit(\''+row.id+'\')"><i class="fa fa-edit"></i>&nbsp;编辑</button> &nbsp;</@shiro.hasPermission>';
+                        operateHtml = operateHtml + '<@shiro.hasPermission name="system:resource:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="examDel(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button></@shiro.hasPermission>';
+                        return operateHtml;
+                    }
+                }]
+            });
         });
+        function configExam(){
+            layer.open({
+                type: 2,
+                title: '配置考试类型',
+                shadeClose: true,
+                shade: false,
+                area: ['600px', '600px'],
+                content: '${ctx!}/admin/exam/index',
+                end: function(index){
+                    $('#table_exam_list').bootstrapTable("refresh");
+                }
+            });
+        }
+        function examEdit(id){
+            layer.open({
+                type: 2,
+                title: '配置考试类型',
+                shadeClose: true,
+                shade: false,
+                area: ['600px', '600px'],
+                content: '${ctx!}/admin/exam/examEdit?id='+id,
+                end: function(index){
+                    $('#table_exam_list').bootstrapTable("refresh");
+                }
+            });
+        }
+
+        function examDel(id){
+            layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
+                $.ajax({
+                    type: "DELETE",
+                    dataType: "json",
+                    url: "${ctx!}/admin/exam/delete/" + id,
+                    success: function(msg){
+                        layer.msg(msg.message, {time: 2000},function(){
+                            $('#table_exam_list').bootstrapTable("refresh");
+                            layer.close(index);
+                        });
+                    }
+                });
+            });
+        }
         function uploadFile(){
             layer.open({
                 type: 2,
