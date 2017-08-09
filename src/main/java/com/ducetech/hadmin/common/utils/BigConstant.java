@@ -13,7 +13,7 @@ public class BigConstant {
     public static final String OFFICE_PATH="src/main/resources/static/upload/office/";
     public static final String TRAIN_PATH="src/main/resources/static/upload/train/";
     public static final String USER_PATH="src/main/resources/static/upload/users/";
-    public static final String SERVICE_URL="http://192.168.4.30:8080/upload/users/";
+    public static final String SERVICE_URL="http://192.168.4.30:8080/upload/";
     public static final String docx=".docx";
     public static final String doc=".doc";
     public static final String xlsx=".xlsx";
@@ -25,9 +25,17 @@ public class BigConstant {
     public static final String png=".png";
 
     public static String getImageUrl(String name){
-        return SERVICE_URL+name+jpg;
+        return SERVICE_URL+"users"+name+jpg;
     }
-
+    public static String getTrainVideoPathUrl(String name){
+        return SERVICE_URL+"train/video/"+name;
+    }
+    public static String getTrainImagePathUrl(String name){
+        return SERVICE_URL+"train/image/"+name;
+    }
+    public static String getTrainOfficePathUrl(String name){
+        return SERVICE_URL+"trian/office/"+name;
+    }
     public static final String TRAIN_VIDEO_PATH ="src/main/resources/static/upload/train/video/";
     public static final String TRAIN_IMAGE_PATH ="src/main/resources/static/upload/train/image/";
     public static final String TRAIN_OFFICE_PATH ="src/main/resources/static/upload/train/office/";

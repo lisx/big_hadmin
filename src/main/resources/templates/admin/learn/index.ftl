@@ -358,8 +358,8 @@
                 title: '上传题库',
                 shadeClose: true,
                 shade: false,
-                area: ['893px', '600px'],
-                content: '${ctx!}/admin/learn/uploadQuestion',
+                area: ['400px', '400px'],
+                content: '${ctx!}/admin/question/uploadQuestion',
                 end: function(index){
                     $('#table_list').bootstrapTable("refresh");
                 }

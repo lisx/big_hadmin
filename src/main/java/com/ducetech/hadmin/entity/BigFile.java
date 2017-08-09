@@ -44,4 +44,7 @@ public class BigFile extends BaseEntity {
     //审核ID
     private String checkId;
 
+    public String getFileUrl() {
+        return fileUrl;
+    }
 }

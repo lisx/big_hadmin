@@ -97,7 +97,6 @@ public class TrainController  extends BaseController {
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult uploadFilePost(MultipartHttpServletRequest request,String chunk,String chunks,String size,String folder){
-        System.out.println((String) request.getAttribute("folder"));
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
         MultipartFile file;
@@ -108,15 +107,6 @@ public class TrainController  extends BaseController {
 
         }
         BufferedOutputStream stream;
-        String docx=".docx";
-        String doc=".doc";
-        String xlsx=".xlsx";
-        String xls=".xls";
-        String ppt=".ppt";
-        String pdf=".pdf";
-        String jpeg=".jepg";
-        String jpg=".jpg";
-        String png=".png";
         for (int i =0; i< files.size(); ++i) {
             file = files.get(i);
             String type = null;
@@ -125,38 +115,39 @@ public class TrainController  extends BaseController {
                 try {
 
                     String suffix=StringUtil.suffix(filePath);
-                    if(suffix.equals(docx)||suffix.equals(doc)||suffix.equals(xlsx)||suffix.equals(xls)||suffix.equals(ppt)) {
+                    if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)) {
                         filePath=BigConstant.TRAIN_OFFICE_PATH+file.getOriginalFilename();
                         byte[] bytes = file.getBytes();
                         stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
                         stream.write(bytes);
                         stream.close();
-                        PdfUtil.office2PDF(filePath, filePath + pdf);
-                        filePath = filePath+pdf;
+                        PdfUtil.office2PDF(filePath, filePath + BigConstant.pdf);
+                        filePath=BigConstant.getTrainOfficePathUrl(file.getOriginalFilename()+BigConstant.pdf);
                         type="office";
                         BigFile bf=new BigFile();
+                        bf.setFileSize(""+Math.round(file.getSize()/1024));
                         bf.setMenuType("3");
                         bf.setFileType(type);
                         bf.setFileName(file.getOriginalFilename());
-                        bf.setFileSize(""+Math.round(file.getSize()/1024));
                         bf.setCreateTime(new Date());
                         bf.setFolder(folder);
                         bf.setFileUrl(filePath);
                         bf.setCreateId(user.getId());
                         bf.setStation(user.getStation());
                         bigFileService.saveOrUpdate(bf);
-                    }else if(suffix.equals(png)||suffix.equals(jpeg)||suffix.equals(jpg)){
+                    }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
                         filePath=BigConstant.TRAIN_IMAGE_PATH+file.getOriginalFilename();
                         byte[] bytes = file.getBytes();
                         stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
                         stream.write(bytes);
                         stream.close();
                         type="image";
+                        filePath=BigConstant.getTrainImagePathUrl(file.getOriginalFilename());
                         BigFile bf=new BigFile();
+                        bf.setFileSize(""+Math.round(file.getSize()/1024));
                         bf.setMenuType("3");
                         bf.setFileType(type);
                         bf.setFileName(file.getOriginalFilename());
-                        bf.setFileSize(""+Math.round(file.getSize()/1024));
                         bf.setCreateTime(new Date());
                         bf.setFolder(folder);
                         bf.setFileUrl(filePath);
@@ -178,6 +169,19 @@ public class TrainController  extends BaseController {
                             //5M的这个阈值是在upload3.js中的chunkSize属性决定的，超过chunkSize设置的大小才会进行分片，否则就不分片，不分片的话，webupload传到后台的chunk参数值就是null
                             if(StringUtils.isEmpty(chunk)){
                                 //不分片的情况
+                                type="video";
+                                filePath=BigConstant.getTrainVideoPathUrl(file.getOriginalFilename());
+                                BigFile bf=new BigFile();
+                                bf.setFileSize(""+Math.round(Integer.parseInt(size)/1024/1024));
+                                bf.setMenuType("3");
+                                bf.setFileType(type);
+                                bf.setFileName(file.getOriginalFilename());
+                                bf.setCreateTime(new Date());
+                                bf.setFolder(folder);
+                                bf.setFileUrl(filePath);
+                                bf.setCreateId(user.getId());
+                                bf.setStation(user.getStation());
+                                bigFileService.saveOrUpdate(bf);
                                 logger.debug("success");
                             }else{
                                 //分片的情况
@@ -185,12 +189,13 @@ public class TrainController  extends BaseController {
                                 //chunks 总分片数
                                 if (Integer.valueOf(chunk) == (Integer.valueOf(chunks) - 1)) {
                                     type="video";
+                                    filePath=BigConstant.getTrainVideoPathUrl(file.getOriginalFilename());
                                     logger.debug("上传成功");
                                     BigFile bf=new BigFile();
+                                    bf.setFileSize(""+Math.round(Integer.parseInt(size)/1024/1024));
                                     bf.setMenuType("3");
                                     bf.setFileType(type);
                                     bf.setFileName(file.getOriginalFilename());
-                                    bf.setFileSize(""+Math.round(Integer.parseInt(size)/1024/1024));
                                     bf.setCreateTime(new Date());
                                     bf.setFolder(folder);
                                     bf.setFileUrl(filePath);
@@ -204,8 +209,6 @@ public class TrainController  extends BaseController {
                         } catch (Exception e) {
                             logger.debug("上传失败{}",e.getMessage());
                         }
-
-
                     }
 
                 } catch (Exception e) {
