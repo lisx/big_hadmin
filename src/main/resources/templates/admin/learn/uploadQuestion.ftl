@@ -14,12 +14,11 @@
                 </div>
                 <div class="form-group">
                     <label>站区：</label>
-                <@my.select id="questionType" class="form-control" datas=["单选","多选","判断","排序"] defaultValue="请选择"/>
+                <@my.select id="area" class="form-control" datas=["单选","多选","判断","排序"] defaultValue="请选择"/>
                 </div>
                 <div class="form-group">
-                    <label>站点
-                        ：</label>
-                <@my.select id="questionType" class="form-control" datas=["单选","多选","判断","排序"] defaultValue="请选择"/>
+                    <label>站点：</label>
+                <@my.select id="station" class="form-control" datas=["单选","多选","判断","排序"] defaultValue="请选择"/>
                 </div>
                 <div class="form-group">
                     <input type="file" class="form-control" name="fileUpload" />

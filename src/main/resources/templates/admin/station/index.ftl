@@ -58,9 +58,14 @@
         /*删除节点*/
         function onRemove(e, treeId, treeNode) {
             var nodeId = treeNode.id;
-            $.post("/admin/station/del/"+nodeId+"?x-http-method-override=DELETE",null,function(data){
-
+            $.ajax({
+                url: '/admin/station/del/'+nodeId,
+                type: 'DELETE',
+                data: {}
             });
+//            $.post("/admin/station/del/"+nodeId,null,function(data){
+//
+//            });
         }
 
         function beforeRename(treeId, treeNode, newName) {

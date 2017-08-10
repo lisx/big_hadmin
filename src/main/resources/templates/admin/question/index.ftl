@@ -105,26 +105,12 @@
 			});
         });
 
-        function edit(id){
-        	layer.open({
-        	      type: 2,
-        	      title: '用户修改',
-        	      shadeClose: true,
-        	      shade: false,
-        	      area: ['893px', '600px'],
-        	      content: '${ctx!}/admin/user/edit/' + id,
-        	      end: function(index){
-        	    	  $('#table_list').bootstrapTable("refresh");
-       	    	  }
-        	    });
-        }
-
         function del(id){
         	layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
         		$.ajax({
     	    		   type: "POST",
     	    		   dataType: "json",
-    	    		   url: "${ctx!}/admin/user/delete/" + id,
+    	    		   url: "${ctx!}/admin/question/delete/" + id,
     	    		   success: function(msg){
 	 	   	    			layer.msg(msg.message, {time: 2000},function(){
 	 	   	    				$('#table_question_list').bootstrapTable("refresh");

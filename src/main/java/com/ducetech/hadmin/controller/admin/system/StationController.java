@@ -59,8 +59,8 @@ public class StationController extends BaseController {
      */
     @RequestMapping(value = "/del/{nodeId}",method = RequestMethod.DELETE)
     @ResponseBody
-    public JsonResult delete(String nodeId){
-        System.out.println("||||||"+nodeId);
+    public JsonResult delete(@PathVariable String nodeId){
+        logger.debug("进入删除节点nodeId{}",nodeId);
         Station station = stationService.findByNodeCode(nodeId);
         stationService.delete(station);
         return JsonResult.success();
@@ -71,10 +71,13 @@ public class StationController extends BaseController {
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public Station save(String name, String pId){
+        logger.debug("进入新增节点name{}||pId{}",name,pId);
         String pcode =StringUtil.trim(pId);
-        List<Station> stations = stationService.findAll();
+        List<Station> stations = stationService.querySubNodesByCode(pcode+"___",pcode.length()+3);
         String nodeCode = Station.getNodeCode(stations,pcode);
         Station node = new Station();
+        node.setNodeCode(nodeCode);
+        node.setNodeName(name);
         stationService.save(node);
         return (node);
     }

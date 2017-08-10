@@ -7,10 +7,8 @@ import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IProperDao;
 import com.ducetech.hadmin.dao.IQuestionBankDao;
-import com.ducetech.hadmin.entity.Proper;
-import com.ducetech.hadmin.entity.Question;
-import com.ducetech.hadmin.entity.QuestionBank;
-import com.ducetech.hadmin.entity.User;
+import com.ducetech.hadmin.dao.IStationDao;
+import com.ducetech.hadmin.entity.*;
 import com.ducetech.hadmin.service.IQuestionService;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator;
@@ -19,10 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -51,6 +46,8 @@ public class QuestionController extends BaseController {
     IProperDao properDao;
     @Autowired
     IQuestionBankDao questionBankDao;
+    @Autowired
+    IStationDao stationDao;
 
     @RequestMapping("/index")
     public String index() {
@@ -101,8 +98,15 @@ public class QuestionController extends BaseController {
 
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(@RequestParam("fileUpload") MultipartFile file,String questionType,String bankName){
+    public JsonResult uploadFilePost(@RequestParam("fileUpload") MultipartFile file,String questionType,String bankName,String area,String station){
         User user=getUser();
+        Station s=null;
+        if(null!=station){
+            s=stationDao.findByNodeName(station);
+        }else if(null!=area){
+            s=stationDao.findByNodeName(area);
+        }
+
         if (file.isEmpty()) {
             return success("文件为空");
         }else{
@@ -112,6 +116,7 @@ public class QuestionController extends BaseController {
                 bank.setName(bankName);
                 bank.setCreateId(user.getId());
                 bank.setCreateTime(new Date());
+                bank.setStation(s);
                 questionBankDao.save(bank);
             }
             List<List<List<String>>> data = PoiUtil.readExcelToList(file, 1);
@@ -244,5 +249,15 @@ public class QuestionController extends BaseController {
         }
         return JsonResult.success("上传成功！");
     }
-
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public JsonResult delete(@PathVariable Integer id) {
+        try {
+            questionService.delete(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return JsonResult.failure(e.getMessage());
+        }
+        return JsonResult.success();
+    }
 }
