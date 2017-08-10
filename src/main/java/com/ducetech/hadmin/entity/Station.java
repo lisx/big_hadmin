@@ -2,6 +2,7 @@ package com.ducetech.hadmin.entity;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.entity.support.BaseEntity;
 import lombok.Data;
@@ -40,11 +41,9 @@ public class Station extends BaseEntity {
     private boolean ifUse;
     //排序
     private String sorting;
-    public Station(){}
-    public Station(String name, String nodeCode) {
-        this.nodeName=name;
-        this.nodeCode=nodeCode;
-    }
+
+    @OneToMany
+    private List<QuestionBank> banks;
 
     /**
      * 构造知识树
@@ -72,9 +71,9 @@ public class Station extends BaseEntity {
      * @return
      */
     public static JSONObject createRoot(String name){
-        name = StringUtil.trim("车站管理系统");
+        name = StringUtil.trim("线路站区站点");
         JSONObject obj = new JSONObject();
-        obj.put("id", "000");
+        obj.put("id", "");
         obj.put("pId", "-1");
         obj.put("name", name);
         return obj;
@@ -98,4 +97,5 @@ public class Station extends BaseEntity {
         }
         return parentCode+newCode;
     }
+
 }

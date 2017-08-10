@@ -12,6 +12,7 @@ public class BigConstant {
     public static final String IMAGE_PATH="src/main/resources/static/upload/images/";
     public static final String OFFICE_PATH="src/main/resources/static/upload/office/";
     public static final String TRAIN_PATH="src/main/resources/static/upload/train/";
+    public static final String QUESTION_PATH="src/main/resources/static/upload/question/";
     public static final String USER_PATH="src/main/resources/static/upload/users/";
     public static final String SERVICE_URL="http://192.168.4.30:8080/upload/";
     public static final String docx=".docx";

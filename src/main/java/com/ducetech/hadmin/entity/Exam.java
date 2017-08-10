@@ -23,21 +23,19 @@ public class Exam extends BaseEntity {
     //试卷名称
     private String examName;
     //单选题
-    private String singleNum;
+    private Integer singleNum;
     //单选分
-    private String singleScore;
+    private Integer singleScore;
     //多选题
-    private String multipleNum;
+    private Integer multipleNum;
     //多选分
-    private String multipleScore;
+    private Integer multipleScore;
     //判断题
-    private String judgeNum;
+    private Integer judgeNum;
     //判断分
-    private String judgeScore;
+    private Integer judgeScore;
     //排序提
-    private String rankNum;
+    private Integer rankNum;
     //排序分
-    private String rankScore;
-
-
+    private Integer rankScore;
 }

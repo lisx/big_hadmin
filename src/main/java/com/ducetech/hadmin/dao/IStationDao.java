@@ -26,11 +26,14 @@ public interface IStationDao extends IBaseDao<Station,Integer> {
 
     Station findByNodeCode(String nodeCode);
 
+    Station findByNodeName(String nodeName);
+
     List<Station> findByNodeCodeLike(String nodeCode);
+
+    Station save(Station station);
 
     @Query(value = "SELECT a from Station a where length(a.nodeCode)=:nodeLength order by a.nodeCode")
     List <Station> findByStationArea(@Param("nodeLength") int nodeLength);
-    Station findByNodeName(String name);
 
     @Query(value = "SELECT a from Station a where a.nodeCode like :parentCode and length(a.nodeCode)=:nodeLength order by a.nodeCode")
     List<Station> querySubNodesByCode(@Param("parentCode") String parentCode,@Param("nodeLength") int nodeLength);

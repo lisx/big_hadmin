@@ -1,9 +1,11 @@
 package com.ducetech.hadmin.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.ducetech.hadmin.entity.support.BaseEntity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * 问题管理
@@ -20,11 +22,11 @@ public class Question extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id",nullable = false)
     private Integer id;
-    //文件名字
+    //问题
     private String title;
-    //文件地址
+    //正确答案
     private String proper;
-    //文件大小
+    //答案
     private String answer;
     //1单选，2多选，3判断，4排序
     private String menuType;
@@ -33,4 +35,8 @@ public class Question extends BaseEntity {
     //归属问题库
     private String bankId;
 
+    @OneToMany
+    private List<Proper> propers;
+    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.LAZY)
+    private QuestionBank questionBank;
 }

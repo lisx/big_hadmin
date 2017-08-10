@@ -31,11 +31,10 @@ public class StationInterface {
     @Autowired
     IStationDao stationDao;
 
-    @ApiOperation(value="获取站区全部数据",notes="获取站区全部数据")
-    @RequestMapping(value="/findAll",method = RequestMethod.GET)
-    @ApiImplicitParam(name="station",value="线路，站点，站区",dataType="string", paramType = "query")
-    public JSONObject findAll(){
-        logger.debug("获取站区全部数据");
+    @ApiOperation(value="获取线路全部数据",notes="获取线路全部数据")
+    @RequestMapping(value="/findLineAll",method = RequestMethod.GET)
+    public JSONObject findLineALl(){
+        logger.debug("获取线路全部数据");
         obj=new JSONObject();
         List<Station> stations = stationDao.findByStationArea(3);
         obj.put("data", stations);
@@ -44,15 +43,32 @@ public class StationInterface {
         return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
 
-    @ApiOperation(value="根据站区获取站点全部数据",notes="根据站区获取站点全部数据")
-    @RequestMapping(value="/findByStationArea",method = RequestMethod.GET)
-    @ApiImplicitParam(name="station",value="线路，站点，站区",dataType="string", paramType = "query")
-    public JSONObject findByStationArea(String station){
-        logger.debug("进入根据站区获取站点全部数据{}",station);
+    @ApiOperation(value="根据线路获取站区全部数据",notes="根据线路获取站区全部数据")
+    @RequestMapping(value="/findByLine",method = RequestMethod.GET)
+    @ApiImplicitParam(name="line",value="线路",dataType="string", paramType = "query")
+    public JSONObject findByLine(String line){
+        logger.debug("进入根据站区获取站点全部数据{}",line);
         obj=new JSONObject();
-        Station str=stationDao.findByNodeName(station);
+        Station str=stationDao.findByNodeName(line);
         if(null!=str) {
             List<Station> stations = stationDao.querySubNodesByCode(str.getNodeCode()+"%", 6);
+            obj.put("data", stations);
+        }else{
+            obj.put("data","");
+        }
+        obj.put("msg","查询成功");
+        obj.put("state","1");
+        return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
+    }
+    @ApiOperation(value="根据站区获取站点全部数据",notes="根据站区获取站点全部数据")
+    @RequestMapping(value="/findByArea",method = RequestMethod.GET)
+    @ApiImplicitParam(name="area",value="站区",dataType="string", paramType = "query")
+    public JSONObject findByArea(String area){
+        logger.debug("进入根据站区获取站点全部数据{}",area);
+        obj=new JSONObject();
+        Station str=stationDao.findByNodeName(area);
+        if(null!=str) {
+            List<Station> stations = stationDao.querySubNodesByCode(str.getNodeCode()+"%", 9);
             obj.put("data", stations);
         }else{
             obj.put("data","");

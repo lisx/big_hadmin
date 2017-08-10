@@ -75,7 +75,6 @@
 	<#include "/admin/common/common.ftl">
 <script>
     $(document).ready(function () {
-
         $("#frm").validate({
             rules: {
                 name: {

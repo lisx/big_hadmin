@@ -1,11 +1,11 @@
 package com.ducetech.hadmin.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.ducetech.hadmin.entity.support.BaseEntity;
+import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * 问题库管理
@@ -13,6 +13,9 @@ import javax.persistence.Id;
  * @author lisx
  * @create 2017-08-04 14:52
  **/
+@Entity
+@Table(name = "big_question_bank")
+@Data
 public class QuestionBank  extends BaseEntity {
     private static final long serialVersionUID=1L;
     @Id
@@ -21,5 +24,9 @@ public class QuestionBank  extends BaseEntity {
     private Integer id;
     //问题库名称
     private String name;
+    @OneToMany
+    private List<Question> questionList;
+    @ManyToOne
+    private Station station;
 
 }

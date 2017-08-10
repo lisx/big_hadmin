@@ -7,7 +7,6 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import com.ducetech.hadmin.dao.support.IBaseDao;
-import com.ducetech.hadmin.entity.BigFile;
 import com.ducetech.hadmin.service.support.IBaseService;
 import com.ducetech.hadmin.entity.support.BaseEntity;
 

@@ -1,21 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>车站信息列表</title>
-    <meta name="keywords" content="">
-    <meta name="description" content="">
-    <link rel="shortcut icon" href="favicon.ico"> <link href="${ctx!}/hadmin/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
-    <link href="${ctx!}/hadmin/css/font-awesome.css?v=4.4.0" rel="stylesheet">
-    <link href="${ctx!}/hadmin/css/animate.css" rel="stylesheet">
-    <link href="${ctx!}/hadmin/css/style.css?v=4.1.0" rel="stylesheet">
+<!-- 全局js -->
+<#include "/admin/common/common.ftl">
+<#include "/admin/common/form.ftl">
     <link rel="stylesheet" href="${ctx!}/hadmin/js/plugins/zTree/css/demo.css" type="text/css">
     <link rel="stylesheet" href="${ctx!}/hadmin/js/plugins/zTree/css/metroStyle/metroStyle.css" type="text/css">
     <script type="text/javascript" src="${ctx!}/hadmin/js/plugins/zTree/js/jquery-1.4.4.min.js"></script>
     <script type="text/javascript" src="${ctx!}/hadmin/js/plugins/zTree/js/jquery.ztree.core.js"></script>
     <script type="text/javascript" src="${ctx!}/hadmin/js/plugins/zTree/js/jquery.ztree.exedit.js"></script>
-    <SCRIPT type="text/javascript">
+    <script type="text/javascript">
         <!--
         var setting = {
             view: {
@@ -23,88 +14,117 @@
                 removeHoverDom: removeHoverDom,
                 selectedMulti: false
             },
-            check: {
-                enable: true
+            edit: {
+                enable: true,
+                editNameSelectAll: false,
+                removeTitle: '删除',
+                renameTitle: '编辑'
+
             },
             data: {
                 simpleData: {
                     enable: true
                 }
             },
-            edit: {
-                enable: true
+            callback: {
+                beforeDrag: beforeDrag,
+                beforeEditName: beforeEditName,
+                beforeRemove: beforeRemove,
+                beforeRename: beforeRename,
+                onRemove: onRemove,
+                onRename: onRename,
+               // onClick: onClick
             }
         };
 
-        var zNodes =[
-            { id:1, pId:0, name:"父节点1", open:true},
-            { id:11, pId:1, name:"父节点11"},
-            { id:111, pId:11, name:"叶子节点111"},
-            { id:112, pId:11, name:"叶子节点112"},
-            { id:113, pId:11, name:"叶子节点113"},
-            { id:114, pId:11, name:"叶子节点114"},
-            { id:12, pId:1, name:"父节点12"},
-            { id:121, pId:12, name:"叶子节点121"},
-            { id:122, pId:12, name:"叶子节点122"},
-            { id:123, pId:12, name:"叶子节点123"},
-            { id:124, pId:12, name:"叶子节点124"},
-            { id:13, pId:1, name:"父节点13", isParent:true},
-            { id:2, pId:0, name:"父节点2"},
-            { id:21, pId:2, name:"父节点21", open:true},
-            { id:211, pId:21, name:"叶子节点211"},
-            { id:212, pId:21, name:"叶子节点212"},
-            { id:213, pId:21, name:"叶子节点213"},
-            { id:214, pId:21, name:"叶子节点214"},
-            { id:22, pId:2, name:"父节点22"},
-            { id:221, pId:22, name:"叶子节点221"},
-            { id:222, pId:22, name:"叶子节点222"},
-            { id:223, pId:22, name:"叶子节点223"},
-            { id:224, pId:22, name:"叶子节点224"},
-            { id:23, pId:2, name:"父节点23"},
-            { id:231, pId:23, name:"叶子节点231"},
-            { id:232, pId:23, name:"叶子节点232"},
-            { id:233, pId:23, name:"叶子节点233"},
-            { id:234, pId:23, name:"叶子节点234"},
-            { id:3, pId:0, name:"父节点3", isParent:true}
-        ];
-
         $(document).ready(function(){
-            $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+            $.get("/admin/station/tree",function(data){
+                var zNodes =eval(data);
+                $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+            })
         });
 
-        var newCount = 1;
+        function beforeDrag(treeId, treeNodes) {
+            return false;
+        }
+        function beforeEditName(treeId, treeNode) {
+            //return confirm("确认编辑节点 " + treeNode.name +" 吗？");
+        }
+        function beforeRemove(treeId, treeNode) {
+            var zTree = getTree();
+            zTree.selectNode(treeNode);
+            return confirm("确认删除节点 " + treeNode.name + " 吗？");
+        }
+        /*删除节点*/
+        function onRemove(e, treeId, treeNode) {
+            var nodeId = treeNode.id;
+            $.post("/admin/station/del/"+nodeId+"?x-http-method-override=DELETE",null,function(data){
+
+            });
+        }
+
+        function beforeRename(treeId, treeNode, newName) {
+            newName = $.trim(newName);
+            if (newName.length == 0) {
+                alert("节点名称不能为空.");
+                var zTree = getTree();
+                setTimeout(function(){zTree.editName(treeNode)}, 10);
+                return false;
+            }
+            return true;
+        }
+        /*修改节点*/
+        function onRename(e,treeId,treeNode){
+            $.post("/admin/station/update/"+treeNode.id,treeNode,function(data){
+
+            });
+        }
+
+        /*点击新增增加节点*/
         function addHoverDom(treeId, treeNode) {
             var sObj = $("#" + treeNode.tId + "_span");
-            if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
-            var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
-                    + "' title='add node' onfocus='this.blur();'></span>";
+            if (treeNode.editNameFlag || $("#addBtn_"+treeNode.id).length>0) return;
+            var addStr = "<span class='button add' id='addBtn_" + treeNode.id
+                    + "' title='新增' ></span>";
             sObj.after(addStr);
-            var btn = $("#addBtn_"+treeNode.tId);
+            var btn = $("#addBtn_"+treeNode.id);
             if (btn) btn.bind("click", function(){
-//                var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-//                zTree.addNodes(treeNode, {id:(100 + newCount), pId:treeNode.id, name:"new node" + (newCount++)});
                 saveNode(treeNode);
                 return false;
             });
         };
+
+        function removeHoverDom(treeId, treeNode) {
+            $("#addBtn_"+treeNode.id).unbind().remove();
+        };
+
         /*保存新的节点*/
         function saveNode(parentNode){
             var zTree = getTree();
             var _nodeName="新节点";
-            $.post('/admin/station/tree',{pId:parentNode.id,name:_nodeName},function(data){
+            $.post('/admin/station/save',{pId:parentNode.id,name:_nodeName},function(data){
                 var newCode = {id:data.nodeCode,pId:parentNode.id,name:_nodeName};
                 zTree.addNodes(parentNode,newCode);
             },"json");
         }
+
         function getTree(){
             return $.fn.zTree.getZTreeObj("treeDemo");
         }
-        function removeHoverDom(treeId, treeNode) {
-            $("#addBtn_"+treeNode.tId).unbind().remove();
-        };
-        //-->
-    </SCRIPT>
-</head>
+        function upload(){
+            layer.open({
+                type: 2,
+                title: '上传',
+                shadeClose: true,
+                shade: false,
+                area: ['600px', '600px'],
+                content: '${ctx!}/admin/station/upload',
+                end: function(index){
+                    $('#table_list').bootstrapTable("refresh");
+                }
+            });
+        }
+    </script>
 
 <body class="gray-bg">
     <div class="wrapper wrapper-content  animated fadeInRight">
@@ -118,6 +138,7 @@
                         <p>
                         	<@shiro.hasPermission name="system:resource:add">
                         		<button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;添加</button>
+                                <button class="btn btn-success " type="button" onclick="upload();"><i class="fa fa-plus"></i>&nbsp;上传</button>
                                 <button class="btn btn-success " type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传文件</button>
                         	</@shiro.hasPermission>
                         </p>
@@ -141,11 +162,3 @@
             </div>
         </div>
     </div>
-
-
-
-
-
-</body>
-
-</html>

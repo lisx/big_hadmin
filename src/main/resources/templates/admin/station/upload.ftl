@@ -1,27 +1,16 @@
 <#include "/admin/common/form.ftl">
-<#import "/admin/common/select.ftl" as my />
+
 <div class="ibox-content">
     <div class="row">
         <div class="col-sm-12">
-            <form role="form" id="uploadForm" action="/admin/question/uploadFilePost" method="POST" enctype="multipart/form-data">
+            <form role="form" id="uploadForm" action="/admin/station/fileUploadStation" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label>题库名称：</label>
-                    <input type="text"  name="bankName" class="form-control">
+                    <label>第一步 请下载模板并根据示例填写需要导入的员工信息，上传会根据工号查找头像；三证号找对应三证图片。</label>
+                    <button class="btn btn-sm btn-primary m-t-n-xs" onclick="downUploadUser()" type="button"><strong>模版下载</strong>
+                    </button>
                 </div>
                 <div class="form-group">
-                    <label>题目类型：</label>
-                    <@my.select id="questionType" class="form-control" datas=["单选","多选","判断","排序"] defaultValue="请选择"/>
-                </div>
-                <div class="form-group">
-                    <label>站区：</label>
-                <@my.select id="questionType" class="form-control" datas=["单选","多选","判断","排序"] defaultValue="请选择"/>
-                </div>
-                <div class="form-group">
-                    <label>站点
-                        ：</label>
-                <@my.select id="questionType" class="form-control" datas=["单选","多选","判断","排序"] defaultValue="请选择"/>
-                </div>
-                <div class="form-group">
+                    <label>第二步 选择已经填写完成的员工信息模板点击上传（仅支持.xls/.xlsx格式,且文件大小不能超过2M ）。</label>
                     <input type="file" class="form-control" name="fileUpload" />
                 </div>
                 <div>
@@ -37,7 +26,7 @@
 <script>
     function uploadUserClose(){
         $.ajax({
-            url: '/admin/question/uploadFilePost',
+            url: '/admin/station/fileUploadStation',
             type: 'POST',
             cache: false,
             data: new FormData($('#uploadForm')[0]),

@@ -7,13 +7,12 @@ import com.ducetech.hadmin.dao.support.IBaseDao;
 import com.ducetech.hadmin.entity.Station;
 import com.ducetech.hadmin.service.IStationService;
 import com.ducetech.hadmin.service.support.impl.BaseServiceImpl;
-import com.ducetech.hadmin.vo.ZtreeView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -56,6 +55,19 @@ public class StationServiceImpl extends BaseServiceImpl<Station, Integer>
         }
         return array;
     }
+
+    @Override
+    public Station findByNodeCode(String nodeCode) {
+        return stationDao.findByNodeCode(nodeCode);
+    }
+    @Override
+    public Station findByNodeName(String nodeName){
+	    return stationDao.findByNodeName(nodeName);
+    }
+    @Override
+    public List <Station> findByStationArea(int nodeLength){
+        return stationDao.findByStationArea(nodeLength);
+    }
     public static JSONObject createRoot(String name){
         JSONObject obj = new JSONObject();
         obj.put("id", "000");
@@ -67,8 +79,11 @@ public class StationServiceImpl extends BaseServiceImpl<Station, Integer>
         List<Station> all = stationDao.findAll();
         return stationDao.querySubNodesByCode(parentCode,3);
     }
+    public List<Station> querySubNodesByCode(String parentCode, int nodeLength){
+        return stationDao.querySubNodesByCode(parentCode,nodeLength);
+    }
     @Override
-    public void saveOrUpdate(Station station) {
-
+    public Station saveOrUpdate(Station station) {
+        return stationDao.saveAndFlush(station);
     }
 }

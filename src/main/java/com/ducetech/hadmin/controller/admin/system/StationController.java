@@ -1,7 +1,9 @@
 package com.ducetech.hadmin.controller.admin.system;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.ducetech.hadmin.common.JsonResult;
+import com.ducetech.hadmin.common.utils.PoiUtil;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IBigFileDao;
@@ -11,14 +13,13 @@ import com.ducetech.hadmin.service.IStationService;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator.Operator;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -35,6 +36,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin/station")
 public class StationController extends BaseController {
+    private static Logger logger = LoggerFactory.getLogger(StationController.class);
 	@Autowired
 	private IStationService stationService;
     @Autowired
@@ -49,26 +51,111 @@ public class StationController extends BaseController {
         List<Station> stations = stationService.findAll();
         return Station.createTree(stations);
 	}
+
+    /**
+     * 删除
+     * @param nodeId
+     * @return
+     */
+    @RequestMapping(value = "/del/{nodeId}",method = RequestMethod.DELETE)
+    @ResponseBody
+    public JsonResult delete(String nodeId){
+        System.out.println("||||||"+nodeId);
+        Station station = stationService.findByNodeCode(nodeId);
+        stationService.delete(station);
+        return JsonResult.success();
+    }
+
     /**
      * 增加节点
      */
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
     public Station save(String name, String pId){
         String pcode =StringUtil.trim(pId);
         List<Station> stations = stationService.findAll();
         String nodeCode = Station.getNodeCode(stations,pcode);
-        Station node = new Station(name,nodeCode);
+        Station node = new Station();
         stationService.save(node);
         return (node);
+    }
+    /**
+     * 编辑节点
+     */
+    @RequestMapping(value = "/update/{nodeCode}", method = RequestMethod.POST)
+    public JSONObject update(@PathVariable String nodeCode, String name){
+        logger.debug("进入编辑节点nodeCode{}||name{}",nodeCode,name);
+        nodeCode = StringUtil.trim(nodeCode);
+        String nodeName = StringUtil.trim(name);
+        Station node = stationService.findByNodeCode(nodeCode);
+        node.setNodeName(nodeName);
+        node.setUpdateTime(new Date());
+        stationService.saveOrUpdate(node);
+        JSONObject obj=new JSONObject();
+        obj.put("node",node);
+        return obj;
     }
 	@RequestMapping("/index")
 	public String index() {
 		return "admin/station/index";
 	}
 
-    @RequestMapping("/file")
+    @RequestMapping("/upload")
     public String file() {
-        return "admin/station/file";
+        return "admin/station/upload";
     }
+
+    @RequestMapping(value = "/fileUploadStation", method = RequestMethod.POST)
+    @ResponseBody
+    public JsonResult uploadStationExcel(@RequestParam("fileUpload") MultipartFile fileUpload) {
+        try {
+            if (fileUpload != null && !fileUpload.isEmpty()) {
+                List<List<List<String>>> data = PoiUtil.readExcelToList(fileUpload, 1);
+                if (null != data && !data.isEmpty()) {
+                    for (List<List<String>> sheet : data) {
+                        if (null != sheet && !sheet.isEmpty()) {
+                            for (List<String> row : sheet) {
+                                String line = StringUtil.trim(row.get(0));
+                                String area = StringUtil.trim(row.get(1));
+                                String station = StringUtil.trim(row.get(2));
+                                Station lineObj = stationService.findByNodeName(line);
+                                Station areaObj = stationService.findByNodeName(area+"站区");
+                                Station stationObj = stationService.findByNodeName(station);
+                                String nodeCode;
+                                if(null==lineObj) {
+                                    List<Station> objs=stationService.findByStationArea(3);
+                                    nodeCode=Station.getNodeCode(objs, "");
+                                    lineObj = new Station();
+                                    lineObj.setNodeName(line);
+                                    lineObj.setNodeCode(nodeCode);
+                                    stationService.saveOrUpdate(lineObj);
+                                }
+                                if(null==areaObj) {
+                                    List<Station> objs=stationService.querySubNodesByCode(lineObj.getNodeCode()+"___",6);
+                                    nodeCode=Station.getNodeCode(objs, lineObj.getNodeCode());
+                                    areaObj = new Station();
+                                    areaObj.setNodeName(area+"站区");
+                                    areaObj.setNodeCode(nodeCode);
+                                    stationService.saveOrUpdate(areaObj);
+                                }
+                                if(null==stationObj) {
+                                    List<Station> objs=stationService.querySubNodesByCode(areaObj.getNodeCode()+"___",9);
+                                    nodeCode=Station.getNodeCode(objs, areaObj.getNodeCode());
+                                    stationObj = new Station();
+                                    stationObj.setNodeName(station);
+                                    stationObj.setNodeCode(nodeCode);
+                                    stationService.saveOrUpdate(stationObj);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            return JsonResult.failure(e.getMessage());
+        }
+        return JsonResult.success("上传成功！");
+    }
+
     @RequestMapping(value = "/uploadFile", method = RequestMethod.GET)
     public String uploadFile() {
         return "admin/station/file";
@@ -150,15 +237,5 @@ public class StationController extends BaseController {
 		return JsonResult.success();
 	}
 
-	@RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
-	@ResponseBody
-	public JsonResult delete(@PathVariable Integer id,ModelMap map) {
-		try {
-			stationService.delete(id);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return JsonResult.failure(e.getMessage());
-		}
-		return JsonResult.success();
-	}
+
 }
