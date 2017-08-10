@@ -69,7 +69,7 @@ public class MyRealm extends AuthorizingRealm {
 
 		// 账号不存在
 		if (user == null) {
-			throw new UnknownAccountException("账号或密码不正确");
+			throw new UnknownAccountException("账号不正确");
 		}
 		// 密码错误
 		if (!MD5Utils.md5(password).equals(user.getPassword())) {

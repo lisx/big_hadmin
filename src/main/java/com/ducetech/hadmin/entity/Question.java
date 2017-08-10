@@ -37,6 +37,7 @@ public class Question extends BaseEntity {
 
     @OneToMany
     private List<Proper> propers;
-    @ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.LAZY)
+    @JSONField(serialize = false)
+    @ManyToOne
     private QuestionBank questionBank;
 }

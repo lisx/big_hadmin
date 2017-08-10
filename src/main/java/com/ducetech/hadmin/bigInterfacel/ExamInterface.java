@@ -80,6 +80,7 @@ public class ExamInterface  extends BaseController {
                 singles = questionDao.findByQuestionBankAndMenuType(bank,"单选");
                 for(int i=0;i<exam.getSingleNum();i++) {
                     int l = rand.nextInt(exam.getSingleNum());
+                    logger.debug(singles.get(l).getPropers().size()+"|||");
                     questions.add(singles.get(l));
                 }
             }
@@ -94,6 +95,7 @@ public class ExamInterface  extends BaseController {
                 judges = questionDao.findByQuestionBankAndMenuType(bank,"判断");
                 for(int i=0;i<exam.getJudgeNum();i++) {
                     int l = rand.nextInt(exam.getJudgeNum());
+                    logger.debug(judges.get(l).getPropers().size()+"|||");
                     questions.add(judges.get(l));
                 }
             }
