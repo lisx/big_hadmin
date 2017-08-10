@@ -4,9 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.ducetech.hadmin.common.utils.BigConstant;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IExamDao;
+import com.ducetech.hadmin.dao.IProperDao;
 import com.ducetech.hadmin.dao.IQuestionBankDao;
 import com.ducetech.hadmin.dao.IQuestionDao;
 import com.ducetech.hadmin.entity.Exam;
+import com.ducetech.hadmin.entity.Proper;
 import com.ducetech.hadmin.entity.Question;
 import com.ducetech.hadmin.entity.QuestionBank;
 import io.swagger.annotations.ApiImplicitParam;
@@ -43,6 +45,8 @@ public class ExamInterface  extends BaseController {
     IQuestionBankDao questionBankDao;
     @Autowired
     IQuestionDao questionDao;
+    @Autowired
+    IProperDao properDao;
 
     @ApiOperation(value="获取试卷题库", notes="获取试卷题库")
     @RequestMapping(value="/findQuestionBankAll", method = RequestMethod.GET)
@@ -112,6 +116,20 @@ public class ExamInterface  extends BaseController {
         obj.put("state",state);
         obj.put("msg",msg);
         obj.put("data",questions);
+        return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
+    }
+
+    @ApiOperation(value="获取试题答案", notes="获取试题答案")
+    @RequestMapping(value="/findProperById", method = RequestMethod.GET)
+    @ApiImplicitParam(name="questionId",value="试题id",dataType="Integer", paramType = "query")
+    public JSONObject findProperById(Integer questionId) {
+        logger.debug("获取试题答案");
+        Question question=questionDao.findOne(questionId);
+        List<Proper> propers=properDao.findByQuestion(question);
+        obj=new JSONObject();
+        obj.put("state",state);
+        obj.put("msg",msg);
+        obj.put("data",propers);
         return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
 }

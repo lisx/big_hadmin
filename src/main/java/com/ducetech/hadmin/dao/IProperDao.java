@@ -5,6 +5,8 @@ import com.ducetech.hadmin.entity.Proper;
 import com.ducetech.hadmin.entity.Question;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * 文件管理
  *
@@ -13,5 +15,5 @@ import org.springframework.stereotype.Repository;
  **/
 @Repository
 public interface IProperDao extends IBaseDao<Proper,Integer> {
-
+    List<Proper> findByQuestion(Question question);
 }

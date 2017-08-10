@@ -1,5 +1,6 @@
 package com.ducetech.hadmin.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.ducetech.hadmin.entity.support.BaseEntity;
 import lombok.Data;
 
@@ -25,6 +26,7 @@ public class Proper extends BaseEntity {
     @Column(name = "id", nullable = false)
     private Integer id;
     private String name;
+    @JSONField(serialize = false)
     @ManyToOne(fetch=FetchType.LAZY)
     private Question question;
 }

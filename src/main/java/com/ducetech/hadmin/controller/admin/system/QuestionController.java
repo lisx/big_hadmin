@@ -25,6 +25,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -132,7 +133,7 @@ public class QuestionController extends BaseController {
                                 if(xlength>0){
                                     proper="错";
                                     Question question = new Question();
-                                    question.setTitle(title.substring(0,xlength).trim());
+                                    question.setTitle(title.substring(0,xlength).replaceAll("[\\u00A0]+", "").trim());
                                     question.setMenuType("判断");
                                     question.setProper(proper);
                                     question.setBankId(bankName);
@@ -141,7 +142,7 @@ public class QuestionController extends BaseController {
                                 }else if(ylength>0){
                                     proper="对";
                                     Question question = new Question();
-                                    question.setTitle(title.substring(0,ylength).trim());
+                                    question.setTitle(title.substring(0,ylength).replaceAll("[\\u00A0]+", "").trim());
                                     question.setMenuType("判断");
                                     question.setProper(proper);
                                     question.setBankId(bankName);
@@ -154,42 +155,42 @@ public class QuestionController extends BaseController {
                                 if(title.indexOf("A.")==0||title.indexOf("B.")==0||title.indexOf("C.")==0||title.indexOf("D.")==0){
                                     if(title.indexOf("A.")==0){
                                         if(title.indexOf("B.")>0){
-                                            A=title.substring(2,title.indexOf("B.")).trim();
+                                            A=title.substring(2,title.indexOf("B.")).replaceAll("[\\u00A0]+", "").trim();
                                             if(title.indexOf("C.")>0){
-                                                B=title.substring(title.indexOf("B.")+2,title.indexOf("C.")).trim();
+                                                B=title.substring(title.indexOf("B.")+2,title.indexOf("C.")).replaceAll("[\\u00A0]+", "").trim();
                                                 if(title.indexOf("D.")>0){
-                                                    C=title.substring(title.indexOf("C.")+2,title.indexOf("D.")).trim();
-                                                    D=title.substring(title.indexOf("D.")+2).trim();
+                                                    C=title.substring(title.indexOf("C.")+2,title.indexOf("D.")).replaceAll("[\\u00A0]+", "").trim();
+                                                    D=title.substring(title.indexOf("D.")+2).replaceAll("[\\u00A0]+", "").trim();
                                                 }else{
-                                                    C=title.substring(title.indexOf("C.")+2).trim();
+                                                    C=title.substring(title.indexOf("C.")+2).replaceAll("[\\u00A0]+", "").trim();
                                                 }
                                             }else{
-                                                B=title.substring(title.indexOf("B.")+2).trim();
+                                                B=title.substring(title.indexOf("B.")+2).replaceAll("[\\u00A0]+", "").trim();
                                             }
                                         }else{
-                                            A=title.substring(2).trim();
+                                            A=title.substring(2).replaceAll("[\\u00A0]+", "").trim();
                                         }
                                     }else if(title.indexOf("B.")==0){
                                         if(title.indexOf("C.")>0){
-                                            B=title.substring(2,title.indexOf("C.")).trim();
+                                            B=title.substring(2,title.indexOf("C.")).replaceAll("[\\u00A0]+", "").trim();
                                             if(title.indexOf("D.")>0){
-                                                C=title.substring(title.indexOf("C.")+2,title.indexOf("D.")).trim();
-                                                D=title.substring(title.indexOf("D.")+2).trim();
+                                                C=title.substring(title.indexOf("C.")+2,title.indexOf("D.")).replaceAll("[\\u00A0]+", "").trim();
+                                                D=title.substring(title.indexOf("D.")+2).replaceAll("[\\u00A0]+", "").trim();
                                             }else{
-                                                C=title.substring(title.indexOf("C.")+2).trim();
+                                                C=title.substring(title.indexOf("C.")+2).replaceAll("[\\u00A0]+", "").trim();
                                             }
                                         }else{
-                                            B=title.substring(2).trim();
+                                            B=title.substring(2).replaceAll("[\\u00A0]+", "").trim();
                                         }
                                     }else if(title.indexOf("C.")==0){
                                         if(title.indexOf("D.")>0){
-                                            C=title.substring(2,title.indexOf("D.")).trim();
-                                            D=title.substring(title.indexOf("D.")+2).trim();
+                                            C=title.substring(2,title.indexOf("D.")).replaceAll("[\\u00A0]+", "").trim();
+                                            D=title.substring(title.indexOf("D.")+2).replaceAll("[\\u00A0]+", "").trim();
                                         }else{
-                                            C=title.substring(2).trim();
+                                            C=title.substring(2).replaceAll("[\\u00A0]+", "").trim();
                                         }
                                     }else if(title.indexOf("D.")==0){
-                                        D=title.substring(2).trim();
+                                        D=title.substring(2).replaceAll("[\\u00A0]+", "").trim();
                                     }
                                 }else{
 
@@ -210,35 +211,42 @@ public class QuestionController extends BaseController {
                                 }
                                 if(null!=A&&null!=B&&null!=C&&null!=D&&null!=proper){
                                     Question question = new Question();
-                                    question.setTitle(tit.trim());
+                                    question.setTitle(tit.replaceAll("[\\u00A0]+", "").trim());
                                     question.setMenuType("单选");
                                     if(proper.equals("A"))
-                                        question.setProper(A.trim());
+                                        question.setProper(A.replaceAll("[\\u00A0]+", "").trim());
                                     else if(proper.equals("B"))
-                                        question.setProper(B.trim());
+                                        question.setProper(B.replaceAll("[\\u00A0]+", "").trim());
                                     else if(proper.equals("C"))
-                                        question.setProper(C.trim());
+                                        question.setProper(C.replaceAll("[\\u00A0]+", "").trim());
                                     else
-                                        question.setProper(D.trim());
+                                        question.setProper(D.replaceAll("[\\u00A0]+", "").trim());
                                     question.setBankId(bankName);
                                     question.setQuestionBank(bank);
                                     questionService.saveOrUpdate(question);
+                                    List<Proper> propers=new ArrayList<>();
                                     Proper pro = new Proper();
                                     pro.setName(A);
                                     pro.setQuestion(question);
                                     properDao.save(pro);
+                                    propers.add(pro);
                                     pro = new Proper();
                                     pro.setName(B);
                                     pro.setQuestion(question);
                                     properDao.save(pro);
+                                    propers.add(pro);
                                     pro = new Proper();
                                     pro.setName(C);
                                     pro.setQuestion(question);
                                     properDao.save(pro);
+                                    propers.add(pro);
                                     pro = new Proper();
                                     pro.setName(D);
                                     pro.setQuestion(question);
                                     properDao.save(pro);
+                                    propers.add(pro);
+                                    question.setPropers(propers);
+                                    questionService.saveOrUpdate(question);
                                     A = null;B = null;C = null;D = null;proper = null;tit=null;
                                 }
                             }
