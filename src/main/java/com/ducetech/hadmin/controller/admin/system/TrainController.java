@@ -1,6 +1,7 @@
 package com.ducetech.hadmin.controller.admin.system;
 
 import com.alibaba.druid.util.StringUtils;
+import com.alibaba.fastjson.JSONObject;
 import com.ducetech.hadmin.common.JsonResult;
 import com.ducetech.hadmin.common.utils.BigConstant;
 import com.ducetech.hadmin.common.utils.FileUtil;
@@ -47,10 +48,19 @@ public class TrainController  extends BaseController {
     @Autowired
     IFolderDao folderDao;
 
+    /**
+     * 培训资料首页
+     * @return
+     */
     @RequestMapping("/index")
-    public String index() {
+    public String index(String station) {
+        logger.debug("获取站点文件全部数据");
+        //Station str = stationDao.findByNodeName(station);
+        List<Folder> Folders = folderDao.findByStation(station);
         return "admin/learn/index";
     }
+
+
     @RequestMapping("/toFolder")
     public String tofolder(String folder,Model map) {
         System.out.println("folder+++"+folder);

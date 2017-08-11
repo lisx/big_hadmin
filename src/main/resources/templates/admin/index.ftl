@@ -80,27 +80,32 @@
                                 <a class="J_menuItem" href="${ctx!}/admin/train/index">学习园地</a>
                             </li>
                         </@shiro.hasPermission>
-                        <@shiro.hasPermission name="system:article:index">
+                        <@shiro.hasPermission name="system:article:sort:index">
+                            <li>
+                                <a class="J_menuItem" href="${ctx!}/admin/examlog/index">考试记录</a>
+                            </li>
+                        </@shiro.hasPermission>
+                        <@shiro.hasPermission name="system:article:sort:index">
                             <li>
                                 <a class="J_menuItem" href="${ctx!}/admin/station/file">车站文件</a>
                             </li>
                         </@shiro.hasPermission>
-                        <@shiro.hasPermission name="system:article:index">
+                        <@shiro.hasPermission name="system:article:sort:index">
                             <li>
                                 <a class="J_menuItem" href="${ctx!}/admin/operation/index">运营图管理</a>
                             </li>
                         </@shiro.hasPermission>
-                        <@shiro.hasPermission name="system:article:index">
+                        <@shiro.hasPermission name="system:article:sort:index">
                             <li>
                                 <a class="J_menuItem" href="${ctx!}/admin/article/index">通知管理</a>
                             </li>
                         </@shiro.hasPermission>
-                        <@shiro.hasPermission name="system:article:index">
+                        <@shiro.hasPermission name="system:article:sort:index">
                             <li>
                                 <a class="J_menuItem" href="${ctx!}/admin/article/index">消防安全文件</a>
                             </li>
                         </@shiro.hasPermission>
-                        <@shiro.hasPermission name="system:article:index">
+                        <@shiro.hasPermission name="system:article:sort:index">
                             <li>
                                 <a class="J_menuItem" href="${ctx!}/admin/article/index">首页滚波图</a>
                             </li>

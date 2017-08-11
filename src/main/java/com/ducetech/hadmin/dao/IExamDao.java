@@ -13,4 +13,5 @@ import org.springframework.stereotype.Repository;
  **/
 @Repository
 public interface IExamDao extends IBaseDao<Exam,Integer> {
+    Exam findByExamName(String examName);
 }

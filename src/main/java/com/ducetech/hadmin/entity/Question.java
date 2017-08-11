@@ -35,6 +35,8 @@ public class Question extends BaseEntity {
     //归属问题库
     private String bankId;
 
+    private String url;
+
     @OneToMany
     private List<Proper> propers;
     @JSONField(serialize = false)
