@@ -11,6 +11,7 @@ import com.ducetech.hadmin.dao.IBigFileDao;
 import com.ducetech.hadmin.dao.IStationDao;
 import com.ducetech.hadmin.entity.BigFile;
 import com.ducetech.hadmin.entity.Station;
+import com.ducetech.hadmin.entity.User;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator.Operator;
 import org.apache.commons.lang3.StringUtils;
@@ -51,8 +52,18 @@ public class StationController extends BaseController {
 	@RequestMapping("/tree")
 	@ResponseBody
 	public JSONArray tree(){
-        List<Station> stations = stationService.findAll();
-        return Station.createTree(stations);
+	    logger.debug("获取tree数据");
+        User user=getUser();
+        Station s=stationService.findByNodeName(user.getStationArea());
+        String station=s.getNodeCode();
+        logger.debug("station:::"+station);
+        List<Station> stations = stationService.findByNodeCodeStartingWith(station);
+        logger.debug("stations："+stations.size());
+        if(!user.getStationArea().equals("运三分公司")) {
+            return Station.createTree(stations);
+        }else{
+            return Station.createRootTree(stations);
+        }
 	}
 
     /**

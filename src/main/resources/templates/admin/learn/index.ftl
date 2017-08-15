@@ -27,7 +27,8 @@
                                             <p>
                                             <@shiro.hasPermission name="system:resource:add">
                                                 <button class="btn btn-success " type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传</button>
-                                                <button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;新建文件夹</button>
+                                                <button class="btn btn-success " type="button" onclick="addFolder();"><i class="fa fa-plus"></i>&nbsp;新建文件夹</button>
+                                                <input type="hidden" name="station" class="nodeCodeTrain">
                                             </@shiro.hasPermission>
                                             </p>
                                             <hr>
@@ -100,24 +101,11 @@
             </div>
         </div>
     </div>
-    <!-- 全局js -->
-	<#include "/admin/common/common.ftl">
-    <!-- 自定义js -->
-    <script src="${ctx!}/hadmin/js/content.js?v=${version!}"></script>
     <script type="text/javascript">
         <!--
         var setting = {
-            view: {
-                addHoverDom: addHoverDom,
-                removeHoverDom: removeHoverDom,
-                selectedMulti: false
-            },
-            edit: {
-                enable: true,
-                editNameSelectAll: false,
-                removeTitle: '删除',
-                renameTitle: '编辑'
-
+            check: {
+                enable: true
             },
             data: {
                 simpleData: {
@@ -125,89 +113,10 @@
                 }
             },
             callback: {
-                beforeDrag: beforeDrag,
-                beforeEditName: beforeEditName,
-                beforeRemove: beforeRemove,
-                beforeRename: beforeRename,
-                onRemove: onRemove,
-                onRename: onRename,
                 onClick: onClick
             }
         };
 
-        $(document).ready(function(){
-            $.get("/admin/station/tree",function(data){
-                var zNodes =eval(data);
-                $.fn.zTree.init($("#treeDemo"), setting, zNodes);
-            })
-        });
-
-        function beforeDrag(treeId, treeNodes) {
-            return false;
-        }
-        function beforeEditName(treeId, treeNode) {
-            //return confirm("确认编辑节点 " + treeNode.name +" 吗？");
-        }
-        function beforeRemove(treeId, treeNode) {
-            var zTree = getTree();
-            zTree.selectNode(treeNode);
-            return confirm("确认删除节点 " + treeNode.name + " 吗？");
-        }
-        /*删除节点*/
-        function onRemove(e, treeId, treeNode) {
-            var nodeId = treeNode.id;
-            $.ajax({
-                url: '/admin/station/del/'+nodeId,
-                type: 'DELETE',
-                data: {}
-            });
-        }
-
-        function beforeRename(treeId, treeNode, newName) {
-            newName = $.trim(newName);
-            if (newName.length == 0) {
-                alert("节点名称不能为空.");
-                var zTree = getTree();
-                setTimeout(function(){zTree.editName(treeNode)}, 10);
-                return false;
-            }
-            return true;
-        }
-        /*修改节点*/
-        function onRename(e,treeId,treeNode){
-            console.log("treeId:"+treeId);
-            $.post("/admin/station/update/"+treeNode.id,treeNode,function(data){
-
-            });
-        }
-
-        /*点击新增增加节点*/
-        function addHoverDom(treeId, treeNode) {
-            var sObj = $("#" + treeNode.tId + "_span");
-            if (treeNode.editNameFlag || $("#addBtn_"+treeNode.id).length>0) return;
-            var addStr = "<span class='button add' id='addBtn_" + treeNode.id
-                    + "' title='新增' ></span>";
-            sObj.after(addStr);
-            var btn = $("#addBtn_"+treeNode.id);
-            if (btn) btn.bind("click", function(){
-                saveNode(treeNode);
-                return false;
-            });
-        };
-
-        function removeHoverDom(treeId, treeNode) {
-            $("#addBtn_"+treeNode.id).unbind().remove();
-        };
-
-        /*保存新的节点*/
-        function saveNode(parentNode){
-            var zTree = getTree();
-            var _nodeName="新节点";
-            $.post('/admin/station/save',{pId:parentNode.id,name:_nodeName},function(data){
-                var newCode = {id:data.nodeCode,pId:parentNode.id,name:_nodeName};
-                zTree.addNodes(parentNode,newCode);
-            },"json");
-        }
         /*单击节点显示节点详情*/
         function onClick(e,treeId,treeNode){
             console.log("|||"+treeNode.id+"|||"+treeNode.name)
@@ -219,8 +128,9 @@
                     nodeCode:treeNode.id
                 }
             };
-
+            $(".nodeCodeTrain").val(treeNode.id);
             $("#table_train_list").bootstrapTable('refresh', opt);
+
         }
 
         function getTree(){
@@ -276,6 +186,9 @@
                     title: "文件夹",
                     field: "name",
                 },{
+                    title: "归属",
+                    field: "station"
+                },{
 			        title: "创建时间",
 			        field: "createTime",
 			        sortable: true
@@ -283,12 +196,16 @@
 			        title: "操作",
 			        field: "empty",
                     formatter: function (value, row, index) {
-                    	var operateHtml = '<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="show(\''+row.name+'\')"><i class="fa fa-edit"></i>&nbsp;查看</button> &nbsp;</@shiro.hasPermission>';
-                    	operateHtml = operateHtml + '<@shiro.hasPermission name="system:resource:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button></@shiro.hasPermission>';
+                    	var operateHtml = '<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="showFolder(\''+row.name+'\')"><i class="fa fa-edit"></i>&nbsp;查看</button> &nbsp;</@shiro.hasPermission>';
+                    	operateHtml = operateHtml + '<@shiro.hasPermission name="system:resource:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="delFolder(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button></@shiro.hasPermission>';
                         return operateHtml;
                     }
 			    }]
 			});
+            $.get("/admin/station/tree",function(data){
+                var zNodes =eval(data);
+                $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+            })
             //初始化表格,动态从服务器加载数据
             $("#table_bank_list").bootstrapTable({
                 //使用get请求到服务器获取数据
@@ -495,47 +412,49 @@
                 }
             });
         }
-        function show(station){
+        function showFolder(station){
             layer.open({
                 type: 2,
-                //title: '培训资料',
+                title: '查看文件夹',
                 shadeClose: true,
                 shade: false,
-                area: ['1654px', '800px'],
+                area: ['98%', '98%'],
                 content: '${ctx!}/admin/train/toFolder?folder='+station,
                 end: function(index){
                     $('#table_train_list').bootstrapTable("refresh");
                 }
             });
         }
-        function add(){
+        function delFolder(id){
+            layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
+                $.ajax({
+                    type: "DELETE",
+                    dataType: "json",
+                    url: "${ctx!}/admin/folder/delete/" + id,
+                    success: function(msg){
+                        layer.msg(msg.message, {time: 2000},function(){
+                            $('#table_train_list').bootstrapTable("refresh");
+                            layer.close(index);
+                        });
+                    }
+                });
+            });
+        }
+        function addFolder(){
+            var nodeCode=$(".nodeCodeTrain").val();
         	layer.open({
         	      type: 2,
         	      title: '新建文件夹',
         	      shadeClose: true,
         	      shade: false,
         	      area: ['400px', '400px'],
-        	      content: '${ctx!}/admin/folder/edit/1',
+        	      content: '${ctx!}/admin/folder/edit/1?station='+nodeCode,
         	      end: function(index){
         	    	  $('#table_train_list').bootstrapTable("refresh");
        	    	  }
         	    });
         }
-        function del(id){
-        	layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
-        		$.ajax({
-    	    		   type: "DELETE",
-    	    		   dataType: "json",
-    	    		   url: "${ctx!}/admin/train/delete/" + id,
-    	    		   success: function(msg){
-	 	   	    			layer.msg(msg.message, {time: 2000},function(){
-	 	   	    				$('#table_train_list').bootstrapTable("refresh");
-	 	   	    				layer.close(index);
-	 	   					});
-    	    		   }
-    	    	});
-       		});
-        }
+
 
         function uploadQuestion(){
             layer.open({

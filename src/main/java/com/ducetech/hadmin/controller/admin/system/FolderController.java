@@ -1,10 +1,11 @@
 package com.ducetech.hadmin.controller.admin.system;
 
-import com.alibaba.fastjson.JSONArray;
 import com.ducetech.hadmin.common.JsonResult;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IFolderDao;
+import com.ducetech.hadmin.dao.IStationDao;
 import com.ducetech.hadmin.entity.Folder;
+import com.ducetech.hadmin.entity.Station;
 import com.ducetech.hadmin.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,36 +29,51 @@ import java.util.List;
 public class FolderController extends BaseController{
     @Autowired
     IFolderDao folderDao;
+    @Autowired
+    IStationDao stationDao;
     @RequestMapping("/list")
     @ResponseBody
     public List index(){
         List list = folderDao.findAll();
-        System.out.println("||||||||"+list.size());
         return list;
     }
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public String edit(@PathVariable Integer id, ModelMap map) {
+    public String edit(@PathVariable Integer id,String station, ModelMap map) {
         Folder folder = folderDao.findOne(id);
         map.put("folder", folder);
+        map.put("station",station);
         return "admin/learn/form";
     }
-
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public JsonResult delete(@PathVariable Integer id) {
+        try {
+            folderDao.delete(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return JsonResult.failure(e.getMessage());
+        }
+        return JsonResult.success();
+    }
     @RequestMapping(value= {"/saveAndFlush"} ,method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult edit(Folder folder){
+    public JsonResult edit(Folder folder,String station){
         User user=getUser();
+        Station area=stationDao.findByNodeCode(station);
         try {
             folder.setCreateTime(new Date());
-            if(null!=user)
-                if(null!=user.getStation()) {
-                    folder.setStation(user.getStation());
-                }else if(null!=user.getStationArea()){
-                    folder.setStation(user.getStationArea());
-                }else if(null!=user.getLine()){
-                    folder.setStation(user.getLine());
-                }else{
-                    folder.setStation("");
-                }
+            folder.setStation(station);
+            folder.setArea(area);
+//            if(null!=user)
+//                if(null!=user.getStation()) {
+//                    folder.setStation(user.getStation());
+//                }else if(null!=user.getStationArea()){
+//                    folder.setStation(user.getStationArea());
+//                }else if(null!=user.getLine()){
+//                    folder.setStation(user.getLine());
+//                }else{
+//                    folder.setStation("");
+//                }
                 folder.setCreateId(user.getId());
             folderDao.saveAndFlush(folder);
         } catch (Exception e) {

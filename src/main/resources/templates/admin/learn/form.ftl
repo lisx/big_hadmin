@@ -34,7 +34,7 @@
     	    	$.ajax({
    	    		   type: "POST",
    	    		   dataType: "json",
-   	    		   url: "${ctx!}/admin/folder/saveAndFlush",
+   	    		   url: "${ctx!}/admin/folder/saveAndFlush?station=${station}",
    	    		   data: $(form).serialize(),
    	    		   success: function(msg){
 	   	    			layer.msg(msg.message, {time: 2000},function(){

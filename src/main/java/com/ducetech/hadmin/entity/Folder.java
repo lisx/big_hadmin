@@ -27,5 +27,7 @@ public class Folder extends BaseEntity {
     private String name;
     private String menu;
     private String station;
+    @ManyToOne
+    private Station area;
 
 }

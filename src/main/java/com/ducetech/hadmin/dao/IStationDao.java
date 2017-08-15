@@ -28,7 +28,7 @@ public interface IStationDao extends IBaseDao<Station,Integer> {
 
     Station findByNodeName(String nodeName);
 
-    List<Station> findByNodeCodeLike(String nodeCode);
+    List<Station> findByNodeCodeStartingWith(String nodeCode);
 
     Station save(Station station);
 

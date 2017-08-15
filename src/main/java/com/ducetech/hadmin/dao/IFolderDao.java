@@ -13,5 +13,5 @@ import java.util.List;
  **/
 public interface IFolderDao extends IBaseDao<Folder,Integer> {
     List<Folder> findByStation(String station);
-
+    Folder findByName(String name);
 }

@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.validation.constraints.Null;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -56,16 +57,15 @@ public class TrainController  extends BaseController {
      * @return
      */
     @RequestMapping("/index")
-    public String index(String station) {
+    public String index() {
         logger.debug("获取站点文件全部数据");
-        //Station str = stationDao.findByNodeName(station);
-        List<Folder> Folders = folderDao.findByStation(station);
         return "admin/learn/index";
     }
 
 
     @RequestMapping("/toFolder")
-    public String tofolder(String folder,Model map) {
+    public String toFolder(String folder,Model map) {
+        logger.debug("进入培训资料文件夹");
         System.out.println("folder+++"+folder);
         map.addAttribute("folder",folder);
         return "admin/learn/folder";
@@ -86,16 +86,38 @@ public class TrainController  extends BaseController {
         }
         return bigFileService.findAll(builder.generateSpecification(), getPageRequest());
     }
+
+    /**
+     * 培训资料文件夹
+     * @return
+     */
     @RequestMapping(value = { "/folder" })
     @ResponseBody
     public Page<Folder> folder() {
+        User user=getUser();
+        Station s=stationDao.findByNodeName(user.getStationArea());
+        String station=s.getNodeCode();
         SimpleSpecificationBuilder<Folder> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
         if(!StringUtil.isBlank(searchText)){
             builder.add("name", SpecificationOperator.Operator.likeAll.name(), searchText);
         }
+        if(!StringUtil.isBlank(station)){
+            if(user.getStationArea().equals("运三分公司")) {
+                builder.add("station", SpecificationOperator.Join.or.name(), station, null);
+            }else{
+                builder.add("station", SpecificationOperator.Operator.likeAll.name(), station);
+            }
+        }
         return folderDao.findAll(builder.generateSpecification(), getPageRequest());
     }
+
+    /**
+     * 进入培训上传页面
+     * @param map
+     * @param folder
+     * @return
+     */
     @RequestMapping(value = "/uploadFile", method = RequestMethod.GET)
     public String uploadFile(Model map,String folder) {
         System.out.println("++++++"+folder);
@@ -103,13 +125,19 @@ public class TrainController  extends BaseController {
         return "admin/learn/uploadTrain";
     }
 
+
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String add() {
         return "admin/learn/form";
     }
+    /**
+     * 培训资料上传文件
+     * @return
+     */
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult uploadFilePost(MultipartHttpServletRequest request,String chunk,String chunks,String size,String folder){
+        logger.debug("进入培训资料上传文件");
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
         MultipartFile file;
@@ -126,7 +154,6 @@ public class TrainController  extends BaseController {
             String filePath=BigConstant.TRAIN_PATH+file.getOriginalFilename();
             if (!file.isEmpty()) {
                 try {
-
                     String suffix=StringUtil.suffix(filePath);
                     if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)) {
                         filePath=BigConstant.TRAIN_OFFICE_PATH+file.getOriginalFilename();
@@ -139,16 +166,19 @@ public class TrainController  extends BaseController {
                         type="office";
                         BigFile bf=new BigFile();
                         bf.setFileSize(""+Math.round(file.getSize()/1024));
-                        bf.setMenuType("3");
+                        bf.setMenuType("培训资料");
                         bf.setFileType(type);
                         bf.setFileName(file.getOriginalFilename());
                         bf.setCreateTime(new Date());
                         bf.setFolder(folder);
                         bf.setFileUrl(filePath);
                         bf.setCreateId(user.getId());
-                        Station station=stationDao.findByNodeName(user.getStation());
-                        if(null!=station)
-                        //bf.setStation(station);
+                        Folder folder1=folderDao.findByName(folder);
+                        Station station = stationDao.findByNodeCode(folder1.getStation());
+                        if (null != station){
+                            bf.setStationFile(station);
+                            bf.setNodeCode(station.getNodeCode());
+                        }
                         bigFileService.saveOrUpdate(bf);
                     }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
                         filePath=BigConstant.TRAIN_IMAGE_PATH+file.getOriginalFilename();
@@ -160,16 +190,19 @@ public class TrainController  extends BaseController {
                         filePath=BigConstant.getTrainImagePathUrl(file.getOriginalFilename());
                         BigFile bf=new BigFile();
                         bf.setFileSize(""+Math.round(file.getSize()/1024));
-                        bf.setMenuType("3");
+                        bf.setMenuType("培训资料");
                         bf.setFileType(type);
                         bf.setFileName(file.getOriginalFilename());
                         bf.setCreateTime(new Date());
                         bf.setFolder(folder);
                         bf.setFileUrl(filePath);
                         bf.setCreateId(user.getId());
-                        Station station=stationDao.findByNodeName(user.getStation());
-                        if(null!=station)
-                            //bf.setStation(station);
+                        Folder folder1=folderDao.findByName(folder);
+                        Station station = stationDao.findByNodeCode(folder1.getStation());
+                        if (null != station){
+                            bf.setStationFile(station);
+                            bf.setNodeCode(station.getNodeCode());
+                        }
                         bigFileService.saveOrUpdate(bf);
                     }else{
                         try {
@@ -184,22 +217,25 @@ public class TrainController  extends BaseController {
                             FileUtil.randomAccessFile(BigConstant.TRAIN_VIDEO_PATH+file.getOriginalFilename(), file);
                             //如果文件小与5M的话，分片参数chunk的值是null
                             //5M的这个阈值是在upload3.js中的chunkSize属性决定的，超过chunkSize设置的大小才会进行分片，否则就不分片，不分片的话，webupload传到后台的chunk参数值就是null
-                            if(StringUtils.isEmpty(chunk)){
+                            if(StringUtils.isEmpty(chunk)) {
                                 //不分片的情况
-                                type="video";
-                                filePath=BigConstant.getTrainVideoPathUrl(file.getOriginalFilename());
-                                BigFile bf=new BigFile();
-                                bf.setFileSize(""+Math.round(Integer.parseInt(size)/1024/1024));
-                                bf.setMenuType("3");
+                                type = "video";
+                                filePath = BigConstant.getTrainVideoPathUrl(file.getOriginalFilename());
+                                BigFile bf = new BigFile();
+                                bf.setFileSize("" + Math.round(Integer.parseInt(size) / 1024 / 1024));
+                                bf.setMenuType("培训资料");
                                 bf.setFileType(type);
                                 bf.setFileName(file.getOriginalFilename());
                                 bf.setCreateTime(new Date());
                                 bf.setFolder(folder);
                                 bf.setFileUrl(filePath);
                                 bf.setCreateId(user.getId());
-                                Station station=stationDao.findByNodeName(user.getStation());
-                                if(null!=station)
-                                    //bf.setStation(station);
+                                Folder folder1=folderDao.findByName(folder);
+                                Station station = stationDao.findByNodeCode(folder1.getStation());
+                                if (null != station){
+                                    bf.setStationFile(station);
+                                    bf.setNodeCode(station.getNodeCode());
+                                }
                                 bigFileService.saveOrUpdate(bf);
                                 logger.debug("success");
                             }else{

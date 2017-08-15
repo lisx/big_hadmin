@@ -2,13 +2,11 @@ package com.ducetech.hadmin.entity;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.annotation.JSONField;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.entity.support.BaseEntity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -56,13 +54,25 @@ public class Station extends BaseEntity {
         JSONArray array = new JSONArray();
         JSONObject obj = null;
         Station node = null;
-        obj = createRoot(null);
-        array.add(obj);
         for(int i=0;i<nodes.size();i++){
             node = nodes.get(i);
             obj = new JSONObject();
             obj.put("id", node.nodeCode);
             obj.put("pId",node.nodeCode.substring(0, node.nodeCode.length()-3));
+            obj.put("name", node.nodeName);
+            array.add(obj);
+        }
+        return array;
+    }
+    public static JSONArray createRootTree(List<Station> nodes ){
+        JSONArray array = new JSONArray();
+        JSONObject obj = null;
+        obj = createRoot(null);
+        array.add(obj);
+        for (Station node : nodes) {
+            obj = new JSONObject();
+            obj.put("id", node.nodeCode);
+            obj.put("pId", node.nodeCode.substring(0, node.nodeCode.length() - 3));
             obj.put("name", node.nodeName);
             array.add(obj);
         }
@@ -74,7 +84,7 @@ public class Station extends BaseEntity {
      * @return
      */
     public static JSONObject createRoot(String name){
-        name = StringUtil.trim("线路站区站点");
+        name = StringUtil.trim("运三分公司");
         JSONObject obj = new JSONObject();
         obj.put("id", "");
         obj.put("pId", "-1");
