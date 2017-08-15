@@ -77,9 +77,10 @@ jQuery(function() {
 
         // swf文件路径
         swf: BASE_URL + '/Uploader.swf',
-
+        // formData:{
+        //     nodeCode:$("#fileNodeCode").val()
+        // },
         disableGlobalDnd: true,
-
         chunked: true,
         // server: 'http://webuploader.duapp.com/server/fileupload.php',
         server: '/admin/station/uploadFilePost',
@@ -88,6 +89,7 @@ jQuery(function() {
         fileSingleSizeLimit: 15 * 1024 * 1024    // 50 M
     });
 
+    uploader.options.formData.nodeCode = $("#fileNodeCode").val();
     // 添加“添加文件”的按钮，
     uploader.addButton({
         id: '#filePicker2',
@@ -342,6 +344,7 @@ jQuery(function() {
                 stats = uploader.getStats();
                 if ( stats.successNum ) {
                     alert( '上传成功' );
+                    $('#table_station_list').bootstrapTable("refresh");
                 } else {
                     // 没有成功的图片，重设
                     state = 'done';

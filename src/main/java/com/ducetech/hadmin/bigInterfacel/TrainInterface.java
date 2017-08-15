@@ -2,9 +2,11 @@ package com.ducetech.hadmin.bigInterfacel;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ducetech.hadmin.common.utils.BigConstant;
+import com.ducetech.hadmin.dao.IBigFileDao;
 import com.ducetech.hadmin.dao.IStationDao;
 import com.ducetech.hadmin.dao.ITrainDao;
 import com.ducetech.hadmin.entity.BigFile;
+import com.ducetech.hadmin.entity.Station;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -34,14 +36,16 @@ public class TrainInterface {
     IStationDao stationDao;
     @Autowired
     ITrainDao trainDao;
+    @Autowired
+    IBigFileDao bigFileDao;
     @ApiOperation(value="获取站点文件全部数据",notes="获取站点文件全部数据")
     @RequestMapping(value="/findByStation",method = RequestMethod.GET)
     @ApiImplicitParam(name="station",value="线路，站点，站区",dataType="string", paramType = "query")
     public JSONObject findAll(String station) {
         logger.debug("获取站点文件全部数据");
         obj = new JSONObject();
-        //Station str = stationDao.findByNodeName(station);
-        List<BigFile> stations = trainDao.findByStationBetween(station, null);
+        Station str = stationDao.findByNodeName(station);
+        List<BigFile> stations = bigFileDao.findByStation(str);
         obj.put("data", stations);
         obj.put("msg","查询成功");
         obj.put("state","1");
@@ -53,8 +57,8 @@ public class TrainInterface {
     public JSONObject findFolderByStation(String station) {
         logger.debug("获取站点文件全部数据");
         obj = new JSONObject();
-        //Station str = stationDao.findByNodeName(station);
-        List<BigFile> stations = trainDao.findByStationBetween(station, null);
+        Station str = stationDao.findByNodeName(station);
+        List<BigFile> stations = bigFileDao.findByStation(str);
         obj.put("data", stations);
         obj.put("msg","查询成功");
         obj.put("state","1");

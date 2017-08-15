@@ -43,6 +43,9 @@ public class Station extends BaseEntity {
     private String sorting;
 
     @OneToMany
+    private List<BigFile> files;
+
+    @OneToMany
     private List<QuestionBank> banks;
 
     /**

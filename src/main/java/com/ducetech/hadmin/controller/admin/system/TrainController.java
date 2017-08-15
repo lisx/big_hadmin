@@ -9,8 +9,10 @@ import com.ducetech.hadmin.common.utils.PdfUtil;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IFolderDao;
+import com.ducetech.hadmin.dao.IStationDao;
 import com.ducetech.hadmin.entity.BigFile;
 import com.ducetech.hadmin.entity.Folder;
+import com.ducetech.hadmin.entity.Station;
 import com.ducetech.hadmin.entity.User;
 import com.ducetech.hadmin.service.IBigFileService;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
@@ -47,7 +49,8 @@ public class TrainController  extends BaseController {
     IBigFileService bigFileService;
     @Autowired
     IFolderDao folderDao;
-
+    @Autowired
+    IStationDao stationDao;
     /**
      * 培训资料首页
      * @return
@@ -143,7 +146,9 @@ public class TrainController  extends BaseController {
                         bf.setFolder(folder);
                         bf.setFileUrl(filePath);
                         bf.setCreateId(user.getId());
-                        bf.setStation(user.getStation());
+                        Station station=stationDao.findByNodeName(user.getStation());
+                        if(null!=station)
+                        //bf.setStation(station);
                         bigFileService.saveOrUpdate(bf);
                     }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
                         filePath=BigConstant.TRAIN_IMAGE_PATH+file.getOriginalFilename();
@@ -162,7 +167,9 @@ public class TrainController  extends BaseController {
                         bf.setFolder(folder);
                         bf.setFileUrl(filePath);
                         bf.setCreateId(user.getId());
-                        bf.setStation(user.getStation());
+                        Station station=stationDao.findByNodeName(user.getStation());
+                        if(null!=station)
+                            //bf.setStation(station);
                         bigFileService.saveOrUpdate(bf);
                     }else{
                         try {
@@ -190,7 +197,9 @@ public class TrainController  extends BaseController {
                                 bf.setFolder(folder);
                                 bf.setFileUrl(filePath);
                                 bf.setCreateId(user.getId());
-                                bf.setStation(user.getStation());
+                                Station station=stationDao.findByNodeName(user.getStation());
+                                if(null!=station)
+                                    //bf.setStation(station);
                                 bigFileService.saveOrUpdate(bf);
                                 logger.debug("success");
                             }else{
@@ -210,7 +219,9 @@ public class TrainController  extends BaseController {
                                     bf.setFolder(folder);
                                     bf.setFileUrl(filePath);
                                     bf.setCreateId(user.getId());
-                                    bf.setStation(user.getStation());
+                                    Station station=stationDao.findByNodeName(user.getStation());
+                                    if(null!=station)
+                                        //bf.setStation(station);
                                     bigFileService.saveOrUpdate(bf);
                                 } else {
                                     logger.debug("上传中" + file.getOriginalFilename() + " chunk:" + chunk, "");

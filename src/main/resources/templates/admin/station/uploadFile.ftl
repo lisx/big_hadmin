@@ -17,13 +17,31 @@
     <link rel="stylesheet" type="text/css" href="${ctx!}/hadmin/css/plugins/webuploader/webuploader.css">
     <link rel="stylesheet" type="text/css" href="${ctx!}/hadmin/css/demo/webuploader-demo.css">
     <link href="${ctx!}/hadmin/css/style.css?v=4.1.0" rel="stylesheet">
+    <!-- 全局js -->
+    <script src="${ctx!}/hadmin/js/jquery.min.js?v=2.1.4"></script>
+    <script src="${ctx!}/hadmin/js/bootstrap.min.js?v=3.3.6"></script>
+
+
+
+    <!-- 自定义js -->
+    <script src="${ctx!}/hadmin/js/content.js?v=1.0.0"></script>
+
+
+    <!-- Web Uploader -->
+    <script type="text/javascript">
+        // 添加全局站点信息
+        var BASE_URL = '${ctx!}/hadmin/js/plugins/webuploader';
+    </script>
+    <script src="${ctx!}/hadmin/js/plugins/webuploader/webuploader.min.js"></script>
+
+    <script src="${ctx!}/hadmin/js/demo/webuploader-station-demo.js"></script>
 
 
 </head>
 
 <div class="ibox-content">
     <div class="page-container">
-        <input type="hidden" name="id" class="fileStationId">
+        <input type="hidden" name="nodeCode" id="fileNodeCode" value="${nodeCode}" >
         <p>您可以尝试文件拖拽，使用QQ截屏工具，然后激活窗口后粘贴，或者点击添加图片按钮，来体验此demo.</p>
         <div id="uploader" class="wu-example">
             <div class="queueList">
@@ -46,29 +64,3 @@
         </div>
     </div>
 </div>
-
-<!-- 全局js -->
-<script src="${ctx!}/hadmin/js/jquery.min.js?v=2.1.4"></script>
-<script src="${ctx!}/hadmin/js/bootstrap.min.js?v=3.3.6"></script>
-
-
-
-<!-- 自定义js -->
-<script src="${ctx!}/hadmin/js/content.js?v=1.0.0"></script>
-
-
-<!-- Web Uploader -->
-<script type="text/javascript">
-    // 添加全局站点信息
-    var BASE_URL = '${ctx!}/hadmin/js/plugins/webuploader';
-</script>
-<script src="${ctx!}/hadmin/js/plugins/webuploader/webuploader.min.js"></script>
-
-<script src="${ctx!}/hadmin/js/demo/webuploader-station-demo.js"></script>
-
-
-
-
-</body>
-
-</html>

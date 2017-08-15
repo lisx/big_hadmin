@@ -17,6 +17,5 @@ import java.util.List;
  **/
 @Repository
 public interface ITrainDao extends IBaseDao<Train,Integer> {
-    @Query(value = "select o from BigFile o where o.station =:station or o.station=:area")
-    List<BigFile> findByStationBetween(@Param("station") String station,@Param("area") String area);
+
 }

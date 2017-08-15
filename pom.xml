@@ -172,7 +172,16 @@
             <version>2.2.2</version>
         </dependency>
     </dependencies>
-
+    <resources>
+        <resource>
+            <directory>${project.sources}</directory>
+            <filtering>false</filtering>
+            <includes>
+                <include>**/*.woff</include>
+                <include>**/*.ttf</include>
+            </includes>
+        </resource>
+    </resources>
 	<build>
 		<plugins>
 			<plugin>

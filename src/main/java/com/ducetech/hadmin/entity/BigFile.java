@@ -32,8 +32,6 @@ public class BigFile extends BaseEntity {
     private String folder;
     //归属类型 1站点 2站区 3线路 4总公司
     private String affiliation;
-    //归属具体值
-    private String station;
     //归属菜单类型
     //1人员文件 2车站文件 3培训文件 4练习考试 5规章制度 6运行图 7通知 8消防安全 9首页滚动
     private String menuType;
@@ -43,8 +41,8 @@ public class BigFile extends BaseEntity {
     private String checkStatus;
     //审核ID
     private String checkId;
+    @ManyToOne
+    private Station stationFile;
+    private String nodeCode;
 
-    public String getFileUrl() {
-        return fileUrl;
-    }
 }

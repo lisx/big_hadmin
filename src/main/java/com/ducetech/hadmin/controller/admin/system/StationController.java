@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -60,7 +62,7 @@ public class StationController extends BaseController {
      */
     @RequestMapping(value = "/del/{nodeId}",method = RequestMethod.DELETE)
     @ResponseBody
-    public JsonResult delete(@PathVariable String nodeId){
+    public JsonResult del(@PathVariable String nodeId){
         logger.debug("进入删除节点nodeId{}",nodeId);
         Station station = stationService.findByNodeCode(nodeId);
         stationService.delete(station);
@@ -161,15 +163,16 @@ public class StationController extends BaseController {
     }
 
     @RequestMapping(value = "/uploadFile", method = RequestMethod.GET)
-    public String uploadFile() {
+    public String uploadFile(String nodeCode,Model map) {
+        map.addAttribute("nodeCode",nodeCode);
         return "admin/station/uploadFile";
     }
 
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(HttpServletRequest request,Integer id){
-        List<MultipartFile> files =((MultipartHttpServletRequest)request).getFiles("file");
-        Station s=stationService.findOne(id);
+    public JsonResult uploadFilePost(MultipartHttpServletRequest request,String nodeCode){
+        List<MultipartFile> files =request.getFiles("file");
+        Station s=stationService.findByNodeCode(nodeCode);
         MultipartFile file;
         //创建临时文件夹
         File dirTempFile = new File(BigConstant.STATION_PATH);
@@ -188,10 +191,12 @@ public class StationController extends BaseController {
                     stream.close();
                     station=new BigFile();
                     station.setMenuType("车站文件");
-                    station.setStation(s.getNodeName());
                     station.setFileName(file.getOriginalFilename());
                     station.setFileSize(""+file.getSize()/1000);
                     station.setCreateTime(new Date());
+                    station.setFileUrl(BigConstant.SERVICE_URL+"station/"+file.getOriginalFilename());
+                    station.setStationFile(s);
+                    station.setNodeCode(s.getNodeCode());
                     fileDao.save(station);
                 } catch (Exception e) {
                     //stream =  null;
@@ -205,15 +210,31 @@ public class StationController extends BaseController {
     }
 	@RequestMapping("/list")
 	@ResponseBody
-	public Page<Station> list() {
-		SimpleSpecificationBuilder<Station> builder = new SimpleSpecificationBuilder<Station>();
+	public Page<BigFile> list(String nodeCode) {
+		SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<BigFile>();
 		String searchText = request.getParameter("searchText");
 		if(StringUtils.isNotBlank(searchText)){
 			builder.add("name", Operator.likeAll.name(), searchText);
 		}
-		Page<Station> page = stationService.findAll(builder.generateSpecification(),getPageRequest());
+        if(StringUtils.isNotBlank(nodeCode)){
+            builder.add("nodeCode", Operator.likeAll.name(), nodeCode);
+        }
+		Page<BigFile> page = fileDao.findAll(builder.generateSpecification(),getPageRequest());
 		return page;
 	}
+
+    /**
+     * 删除
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/delete/{id}",method = RequestMethod.DELETE)
+    @ResponseBody
+    public JsonResult delete(@PathVariable Integer id){
+        logger.debug("进入删除节点Id{}",id);
+        fileDao.delete(id);
+        return JsonResult.success();
+    }
 
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public String add(ModelMap map) {
