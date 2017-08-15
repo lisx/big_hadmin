@@ -29,7 +29,7 @@ import java.util.Random;
 @RestController
 @RequestMapping("/interface/exam")
 public class ExamInterface  extends BaseController {
-    private static Logger logger = LoggerFactory.getLogger(UserInterface.class);
+    private static Logger logger = LoggerFactory.getLogger(ExamInterface.class);
 
     int state=1;
     String msg;
@@ -41,9 +41,11 @@ public class ExamInterface  extends BaseController {
     @Autowired
     IQuestionDao questionDao;
     @Autowired
-    IProperDao properDao;
+    IQuestionLogDao questionLogDao;
     @Autowired
     IUserDao userDao;
+    @Autowired
+    IProperDao properDao;
     @Autowired
     IExamLogDao examLogDao;
 
@@ -109,35 +111,38 @@ public class ExamInterface  extends BaseController {
                 if(null!=exam.getSingleNum()&&exam.getSingleNum()>0){
                     singles = questionDao.findByQuestionBankAndMenuType(bank,"单选");
                     for(int i=0;i<exam.getSingleNum();i++) {
-                        int l = rand.nextInt(exam.getSingleNum());
+                        int l = rand.nextInt(singles.size());
                         Question q=singles.get(l);
-                        if(null!=q) {
-                            questions.add(q);
-                        }else{
-                            l = rand.nextInt(exam.getSingleNum());
-                            q=singles.get(l);
-                            questions.add(q);
+                        System.out.println(singles.size()+"|||||空"+q.getId());
+                        if(null==q){
+                            System.out.println(singles.size()+"|||||空"+l);
                         }
+                        questions.add(q);
                     }
                 }
                 if(null!=exam.getMultipleNum()&&exam.getMultipleNum()>0){
                     multiples = questionDao.findByQuestionBankAndMenuType(bank,"多选");
                     for(int i=0;i<exam.getMultipleNum();i++) {
-                        int l = rand.nextInt(exam.getMultipleNum());
+                        int l = rand.nextInt(multiples.size());
                         questions.add(multiples.get(l));
                     }
                 }
                 if(null!=exam.getJudgeNum()&&exam.getJudgeNum()>0){
                     judges = questionDao.findByQuestionBankAndMenuType(bank,"判断");
                     for(int i=0;i<exam.getJudgeNum();i++) {
-                        int l = rand.nextInt(exam.getJudgeNum());
-                        questions.add(judges.get(l));
+                        int l = rand.nextInt(judges.size());
+                        Question q=judges.get(l);
+                        System.out.println(judges.size()+"|||||空"+q.getId());
+                        if(null==q){
+                            System.out.println(judges.size()+"|||||空"+l);
+                        }
+                        questions.add(q);
                     }
                 }
                 if(null!=exam.getRankNum()&&exam.getRankNum()>0){
                     ranks = questionDao.findByQuestionBankAndMenuType(bank,"排序");
                     for(int i=0;i<exam.getRankNum();i++) {
-                        int l = rand.nextInt(exam.getRankNum());
+                        int l = rand.nextInt(ranks.size());
                         questions.add(ranks.get(l));
                     }
                 }
@@ -196,5 +201,27 @@ public class ExamInterface  extends BaseController {
         obj.put("msg",msg);
         obj.put("data",exam);
         return obj;
+    }
+
+    @ApiOperation(value="设置考试记录", notes="设置考试记录")
+    @RequestMapping(value="/questionExamLog", method = RequestMethod.GET)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "logId", value = "考试记录Id", dataType = "Integer", paramType = "query"),
+            @ApiImplicitParam(name = "questionId", value = "问题Id", dataType = "Integer", paramType = "query"),
+            @ApiImplicitParam(name = "properId", value = "答案Id", dataType = "Integer", paramType = "query")
+    })
+    public JSONObject questionExamLog(Integer logId,Integer questionId,Integer properId){
+        logger.debug("获取练习题");
+        ExamLog examLog=examLogDao.findOne(logId);
+        Question question=questionDao.findOne(questionId);
+        Proper proper=properDao.findOne(properId);
+        QuestionLog log=new QuestionLog();
+        log.setQuestion(question);
+        log.setSelectProper(proper);
+        obj=new JSONObject();
+        obj.put("state",state);
+        obj.put("msg",msg);
+        obj.put("data","");
+        return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
 }

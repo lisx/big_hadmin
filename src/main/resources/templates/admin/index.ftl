@@ -87,12 +87,7 @@
                         </@shiro.hasPermission>
                         <@shiro.hasPermission name="system:article:sort:index">
                             <li>
-                                <a class="J_menuItem" href="${ctx!}/admin/station/file">车站文件</a>
-                            </li>
-                        </@shiro.hasPermission>
-                        <@shiro.hasPermission name="system:article:sort:index">
-                            <li>
-                                <a class="J_menuItem" href="${ctx!}/admin/operation/index">运营图管理</a>
+                                <a class="J_menuItem" href="${ctx!}/admin/emergency/index">应急预案</a>
                             </li>
                         </@shiro.hasPermission>
                         <@shiro.hasPermission name="system:article:sort:index">

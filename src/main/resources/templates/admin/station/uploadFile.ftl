@@ -23,6 +23,7 @@
 
 <div class="ibox-content">
     <div class="page-container">
+        <input type="hidden" name="id" class="fileStationId">
         <p>您可以尝试文件拖拽，使用QQ截屏工具，然后激活窗口后粘贴，或者点击添加图片按钮，来体验此demo.</p>
         <div id="uploader" class="wu-example">
             <div class="queueList">

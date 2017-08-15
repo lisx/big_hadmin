@@ -22,9 +22,9 @@ public class QuestionLog extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id",nullable = false)
     private Integer id;
-
+    //问题
     private Question question;
     //已选答案
-    private String selectProper;
+    private Proper selectProper;
 
 }

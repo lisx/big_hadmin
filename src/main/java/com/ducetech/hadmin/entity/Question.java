@@ -26,7 +26,7 @@ public class Question extends BaseEntity {
     private String title;
     //正确答案
     private String proper;
-    //答案
+    //已选答案
     private String answer;
     //1单选，2多选，3判断，4排序
     private String menuType;
@@ -42,4 +42,20 @@ public class Question extends BaseEntity {
     @JSONField(serialize = false)
     @ManyToOne
     private QuestionBank questionBank;
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", proper='" + proper + '\'' +
+                ", answer='" + answer + '\'' +
+                ", menuType='" + menuType + '\'' +
+                ", ifUse='" + ifUse + '\'' +
+                ", bankId='" + bankId + '\'' +
+                ", url='" + url + '\'' +
+                ", propers=" + propers +
+                ", questionBank=" + questionBank +
+                '}';
+    }
 }

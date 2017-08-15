@@ -3,13 +3,14 @@ package com.ducetech.hadmin.controller.admin.system;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ducetech.hadmin.common.JsonResult;
+import com.ducetech.hadmin.common.utils.BigConstant;
 import com.ducetech.hadmin.common.utils.PoiUtil;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IBigFileDao;
+import com.ducetech.hadmin.dao.IStationDao;
 import com.ducetech.hadmin.entity.BigFile;
 import com.ducetech.hadmin.entity.Station;
-import com.ducetech.hadmin.service.IStationService;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator.Operator;
 import org.apache.commons.lang3.StringUtils;
@@ -38,7 +39,7 @@ import java.util.List;
 public class StationController extends BaseController {
     private static Logger logger = LoggerFactory.getLogger(StationController.class);
 	@Autowired
-	private IStationService stationService;
+	private IStationDao stationService;
     @Autowired
     IBigFileDao fileDao;
     /**
@@ -92,7 +93,7 @@ public class StationController extends BaseController {
         Station node = stationService.findByNodeCode(nodeCode);
         node.setNodeName(nodeName);
         node.setUpdateTime(new Date());
-        stationService.saveOrUpdate(node);
+        stationService.saveAndFlush(node);
         JSONObject obj=new JSONObject();
         obj.put("node",node);
         return obj;
@@ -130,7 +131,7 @@ public class StationController extends BaseController {
                                     lineObj = new Station();
                                     lineObj.setNodeName(line);
                                     lineObj.setNodeCode(nodeCode);
-                                    stationService.saveOrUpdate(lineObj);
+                                    stationService.saveAndFlush(lineObj);
                                 }
                                 if(null==areaObj) {
                                     List<Station> objs=stationService.querySubNodesByCode(lineObj.getNodeCode()+"___",6);
@@ -138,7 +139,7 @@ public class StationController extends BaseController {
                                     areaObj = new Station();
                                     areaObj.setNodeName(area+"站区");
                                     areaObj.setNodeCode(nodeCode);
-                                    stationService.saveOrUpdate(areaObj);
+                                    stationService.saveAndFlush(areaObj);
                                 }
                                 if(null==stationObj) {
                                     List<Station> objs=stationService.querySubNodesByCode(areaObj.getNodeCode()+"___",9);
@@ -146,7 +147,7 @@ public class StationController extends BaseController {
                                     stationObj = new Station();
                                     stationObj.setNodeName(station);
                                     stationObj.setNodeCode(nodeCode);
-                                    stationService.saveOrUpdate(stationObj);
+                                    stationService.saveAndFlush(stationObj);
                                 }
                             }
                         }
@@ -161,20 +162,21 @@ public class StationController extends BaseController {
 
     @RequestMapping(value = "/uploadFile", method = RequestMethod.GET)
     public String uploadFile() {
-        return "admin/station/file";
+        return "admin/station/uploadFile";
     }
 
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(HttpServletRequest request){
+    public JsonResult uploadFilePost(HttpServletRequest request,Integer id){
         List<MultipartFile> files =((MultipartHttpServletRequest)request).getFiles("file");
+        Station s=stationService.findOne(id);
         MultipartFile file;
         //创建临时文件夹
-        File dirTempFile = new File("/Users/lisx/Ducetech/logs/");
+        File dirTempFile = new File(BigConstant.STATION_PATH);
         if (!dirTempFile.exists()) {
             dirTempFile.mkdirs();
         }
-        BigFile learn;
+        BigFile station;
         BufferedOutputStream stream;
         for (int i =0; i< files.size(); ++i) {
             file = files.get(i);
@@ -184,11 +186,13 @@ public class StationController extends BaseController {
                     stream = new BufferedOutputStream(new FileOutputStream(new File(dirTempFile.getAbsolutePath()+"/"+file.getOriginalFilename())));
                     stream.write(bytes);
                     stream.close();
-                    learn=new BigFile();
-                    learn.setFileName(file.getOriginalFilename());
-                    learn.setFileSize(""+file.getSize()/1000);
-                    learn.setCreateTime(new Date());
-                    fileDao.save(learn);
+                    station=new BigFile();
+                    station.setMenuType("车站文件");
+                    station.setStation(s.getNodeName());
+                    station.setFileName(file.getOriginalFilename());
+                    station.setFileSize(""+file.getSize()/1000);
+                    station.setCreateTime(new Date());
+                    fileDao.save(station);
                 } catch (Exception e) {
                     //stream =  null;
                     return JsonResult.success("You failed to upload " + i + " =>" + e.getMessage());
@@ -221,7 +225,7 @@ public class StationController extends BaseController {
 
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable Integer id,ModelMap map) {
-		Station station = stationService.find(id);
+		Station station = stationService.findOne(id);
 		map.put("station", station);
 
 		List<Station> list = stationService.findAll();
@@ -233,7 +237,7 @@ public class StationController extends BaseController {
 	@ResponseBody
 	public JsonResult edit(Station station, ModelMap map){
 		try {
-			stationService.saveOrUpdate(station);
+			stationService.saveAndFlush(station);
 		} catch (Exception e) {
 			return JsonResult.failure(e.getMessage());
 		}
