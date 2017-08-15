@@ -1,23 +1,6 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-    <title> - 表单验证 jQuery Validation</title>
-    <meta name="keywords" content="">
-    <meta name="description" content="">
-
-    <link rel="shortcut icon" href="favicon.ico">
-    <link href="${ctx!}/hadmin/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
-    <link href="${ctx!}/hadmin/css/font-awesome.css?v=4.4.0" rel="stylesheet">
-    <link href="${ctx!}/hadmin/css/animate.css" rel="stylesheet">
-    <link href="${ctx!}/hadmin/css/style.css?v=4.1.0" rel="stylesheet">
-
-</head>
+    <!-- 全局js -->
+<#include "/admin/common/js.ftl">
+<#include "/admin/common/css.ftl">
 
 <body class="gray-bg">
     <div class="wrapper wrapper-content animated fadeInRight">
@@ -69,8 +52,7 @@
         </div>
 
     </div>
-    <!-- 全局js -->
-    <#include "/admin/common/common.ftl">
+
     <script type="text/javascript">
     $(document).ready(function () {
 	    $("#frm").validate({
@@ -96,4 +78,3 @@
 
 </body>
 
-</html>

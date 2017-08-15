@@ -1,19 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>车站信息列表</title>
-    <meta name="keywords" content="">
-    <meta name="description" content="">
-    <link rel="shortcut icon" href="favicon.ico">
-    <link href="${ctx!}/hadmin/css/bootstrap.min.css?v=${version!}" rel="stylesheet">
-    <link href="${ctx!}/hadmin/css/font-awesome.css?v=${version!}" rel="stylesheet">
-    <link href="${ctx!}/hadmin/css/plugins/bootstrap-table/bootstrap-table.min.css?v=${version!}" rel="stylesheet">
-    <link href="${ctx!}/hadmin/css/animate.css?v=${version!}" rel="stylesheet">
-    <link href="${ctx!}/hadmin/css/style.css?v=${version!}" rel="stylesheet">
-
-</head>
+<!-- 全局js -->
+<#include "/admin/common/js.ftl">
+<#include "/admin/common/css.ftl">
 
 <body class="gray-bg">
     <div class="wrapper wrapper-content  animated fadeInRight">
@@ -54,10 +41,6 @@
             </div>
         </div>
     </div>
-    <!-- 全局js -->
-	<#include "/admin/common/common.ftl">
-    <!-- 自定义js -->
-    <script src="${ctx!}/hadmin/js/content.js?v=${version!}"></script>
     <!-- Page-Level Scripts -->
     <script>
         $(document).ready(function () {

@@ -1,4 +1,6 @@
-<#include "/admin/common/form.ftl">
+<!-- 全局js -->
+<#include "/admin/common/js.ftl">
+<#include "/admin/common/css.ftl">
 <div class="ibox-content">
     <form class="form-horizontal m-t" id="frm" method="post" action="${ctx!}/admin/user/edit">
         <input type="hidden" id="id" name="id" value="${user.id}">
@@ -73,8 +75,6 @@
         </div>
     </form>
 </div>
-    <!-- 全局js -->
-    <#include "/admin/common/common.ftl">
     <script type="text/javascript">
     $(document).ready(function () {
 	  	//外部js调用

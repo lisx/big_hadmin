@@ -1,10 +1,7 @@
 <!-- 全局js -->
-<#include "/admin/common/common.ftl">
-<#include "/admin/common/form.ftl">
-    <link rel="stylesheet" href="${ctx!}/hadmin/js/plugins/zTree/css/demo.css" type="text/css">
-    <link rel="stylesheet" href="${ctx!}/hadmin/js/plugins/zTree/css/metroStyle/metroStyle.css" type="text/css">
-    <script type="text/javascript" src="${ctx!}/hadmin/js/plugins/zTree/js/jquery.ztree.core.js"></script>
-    <script type="text/javascript" src="${ctx!}/hadmin/js/plugins/zTree/js/jquery.ztree.exedit.js"></script>
+<#include "/admin/common/css.ftl">
+<#include "/admin/common/js.ftl">
+<#include "/admin/common/ztree.ftl">
     <script type="text/javascript">
         $(document).ready(function () {
             //初始化表格,动态从服务器加载数据

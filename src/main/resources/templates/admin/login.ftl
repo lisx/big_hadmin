@@ -1,17 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<#include "/admin/common/css.ftl" >
+<#include "/admin/common/js.ftl" >
 
-    <title> - 登录</title>
-    <meta name="keywords" content="">
-    <meta name="description" content="">
-    <link href="${ctx!}/hadmin/css/bootstrap.min.css" rel="stylesheet">
-    <link href="${ctx!}/hadmin/css/font-awesome.css?v=4.4.0" rel="stylesheet">
-    <link href="${ctx!}/hadmin/css/animate.css" rel="stylesheet">
-    <link href="${ctx!}/hadmin/css/style.css" rel="stylesheet">
     <link href="${ctx!}/hadmin/css/login.css" rel="stylesheet">
     <!--[if lt IE 9]>
     <meta http-equiv="refresh" content="0;ie.html" />
@@ -50,16 +40,6 @@
         </div>
     </div>
 
-     <!-- 全局js -->
-    <script src="${ctx!}/hadmin/js/jquery.min.js?v=2.1.4"></script>
-    <script src="${ctx!}/hadmin/js/bootstrap.min.js?v=3.3.6"></script>
-
-    <!-- 自定义js -->
-    <script src="${ctx!}/hadmin/js/content.js?v=1.0.0"></script>
-
-    <!-- jQuery Validation plugin javascript-->
-    <script src="${ctx!}/hadmin/js/plugins/validate/jquery.validate.min.js"></script>
-    <script src="${ctx!}/hadmin/js/plugins/validate/messages_zh.min.js"></script>
 	<script type="text/javascript">
     $().ready(function() {
     	// 在键盘按下并释放及提交后验证提交表单
@@ -91,6 +71,3 @@
     });
 
     </script>
-</body>
-
-</html>

@@ -1,20 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> - 表单验证 jQuery Validation</title>
-    <meta name="keywords" content="">
-    <meta name="description" content="">
-    <link rel="shortcut icon" href="favicon.ico">
-    <link href="${ctx!}/hadmin/css/bootstrap.min.css?v=${version!}" rel="stylesheet">
-    <link href="${ctx!}/hadmin/css/font-awesome.css?v=${version!}" rel="stylesheet">
-    <link href="${ctx!}/hadmin/css/animate.css?v=${version!}" rel="stylesheet">
-    <link href="${ctx!}/hadmin/css/style.css?v=${version!}" rel="stylesheet">
-    <link href="${ctx!}/hadmin/css/plugins/zTree/zTreeStyle/zTreeStyle.css?v=${version!}" rel="stylesheet">
-
-</head>
-
+<!-- 全局js -->
+<#include "/admin/common/js.ftl">
+<#include "/admin/common/css.ftl">
+<#include "/admin/common/ztree.ftl">
 <body class="gray-bg">
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
@@ -46,16 +33,6 @@
         </div>
 
     </div>
-    <!-- 全局js -->
-    <script src="${ctx!}/hadmin/js/jquery.min.js"></script>
-    <script src="${ctx!}/hadmin/js/bootstrap.min.js"></script>
-    <script src="${ctx!}/hadmin/js/content.js?v=${version!}"></script>
-    <script src="${ctx!}/hadmin/js/plugins/validate/jquery.validate.min.js"></script>
-    <script src="${ctx!}/hadmin/js/plugins/validate/messages_zh.min.js"></script>
-    <script src="${ctx!}/hadmin/js/plugins/layer/layer.min.js"></script>
-    <script src="${ctx!}/hadmin/js/plugins/layer/laydate/laydate.js"></script>
-    <script src="${ctx!}/hadmin/js/plugins/zTree/jquery.ztree.all.min.js"></script>
-
 	<script type = "text/javascript">
 	var setting = {
 		check : {
@@ -108,5 +85,3 @@
 	});
 
 	</script>
-</body>
-</html>

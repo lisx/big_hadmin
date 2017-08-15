@@ -1,4 +1,4 @@
-<#include "/admin/common/form.ftl">
+<#include "/admin/common/css.ftl">
 
 <div class="ibox-content">
     <div class="row">
@@ -22,7 +22,7 @@
     </div>
 </div>
 <!-- 全局js -->
-<#include "/admin/common/common.ftl">
+<#include "/admin/common/js.ftl">
 <script>
     function uploadUserClose(){
         $.ajax({
