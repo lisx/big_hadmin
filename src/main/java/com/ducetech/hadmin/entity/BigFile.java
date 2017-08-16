@@ -4,6 +4,7 @@ import com.ducetech.hadmin.entity.support.BaseEntity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.text.DecimalFormat;
 
 /**
  * 文件管理
@@ -24,14 +25,33 @@ public class BigFile extends BaseEntity {
     private String fileName;
     //文件地址
     private String fileUrl;
+
+    public void setFileSize(String fileSize) {
+        Double size=Double.parseDouble(fileSize);
+        DecimalFormat df = new DecimalFormat("#.00");
+        if(size>1024){
+            Double m=size/1024;
+            if(m>1024){
+                this.fileSize=df.format(m/1024)+"G";
+            }else {
+                this.fileSize = df.format(m)+ "M";
+            }
+        }else{
+            this.fileSize = fileSize+"KB";
+        }
+
+    }
+
     //文件大小
     private String fileSize;
     //文件类型
     private String fileType;
     //归属文件夹
     @ManyToOne
-    private Folder folderFile;
+    private BigFile folderFile;
     private String folderName;
+    //是否为文件夹 1是 0否
+    private Integer ifFolder;
     //归属类型 1站点 2站区 3线路 4总公司
     private String affiliation;
     //归属菜单类型

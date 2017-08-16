@@ -20,4 +20,6 @@ import java.util.List;
 public interface IBigFileDao extends IBaseDao<BigFile,Integer> {
     @Query(value="select o from BigFile o where o.stationFile=:station ")
     List<BigFile> findByStation(@Param("station") Station station);
+
+    BigFile findByFileName(String folder);
 }

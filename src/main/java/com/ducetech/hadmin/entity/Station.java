@@ -40,8 +40,12 @@ public class Station extends BaseEntity {
     //排序
     private String sorting;
 
-    @OneToMany
-    private List<BigFile> files;
+    private String nodeUrl;
+    private String nodeSize;
+    //1人员文件 2车站文件 3培训文件 4练习考试 5规章制度 6运行图 7通知 8消防安全 9首页滚动
+    private String menuType;
+
+    private String nodeType;
 
     @OneToMany
     private List<QuestionBank> banks;

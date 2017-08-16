@@ -89,8 +89,8 @@
                     title: "文件名",
                     field: "fileName",
                 },{
-                    title: "文件夹",
-                    field: "folder",
+                    title: "大小",
+                    field: "fileSize",
                 },{
 			        title: "创建时间",
 			        field: "createTime",
@@ -99,7 +99,7 @@
 			        title: "操作",
 			        field: "empty",
                     formatter: function (value, row, index) {
-                    	var operateHtml = '<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="down(\'http://127.0.0.1:8080/upload/train/'+row.fileType+'/'+row.fileName+'\')"><i class="fa fa-edit"></i>&nbsp;下载</button> &nbsp;</@shiro.hasPermission>';
+                    	var operateHtml = '<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="down(\'http://127.0.0.1:8080/upload/train/'+row.fileType+'/'+row.fileName+'\',\''+row.fileName+'\')"><i class="fa fa-edit"></i>&nbsp;下载</button> &nbsp;</@shiro.hasPermission>';
                     	operateHtml = operateHtml + '<@shiro.hasPermission name="system:resource:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button></@shiro.hasPermission>';
                         return operateHtml;
                     }
@@ -116,18 +116,23 @@
                 content: '${ctx!}/admin/emergency/uploadFile?folder=${folder}',
                 end: function(index){
                     $('#table_folder_emergency_list').bootstrapTable("refresh");
+                    layer.close(index);
                 }
             });
         }
-        function down(url){
-            window.location.href=url;
+        function down(url,name){
+            //window.location.href=url;
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = name;
+            a.click();
         }
         function del(id){
         	layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
         		$.ajax({
     	    		   type: "DELETE",
     	    		   dataType: "json",
-    	    		   url: "${ctx!}/admin/train/delete/" + id,
+    	    		   url: "${ctx!}/admin/emergency/delete/" + id,
     	    		   success: function(msg){
 	 	   	    			layer.msg(msg.message, {time: 2000},function(){
 	 	   	    				$('#table_folder_emergency_list').bootstrapTable("refresh");

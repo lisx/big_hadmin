@@ -5,13 +5,13 @@
     <script type="text/javascript">
         $(document).ready(function () {
             //初始化表格,动态从服务器加载数据
-            $("#table_folder_list").bootstrapTable({
+            $("#table_emergency_list").bootstrapTable({
                 //使用get请求到服务器获取数据
                 method: "GET",
                 //必须设置，不然request.getParameter获取不到请求参数
                 contentType: "application/x-www-form-urlencoded",
                 //获取数据的Servlet地址
-                url: "${ctx!}/admin/emergency/folder",
+                url: "${ctx!}/admin/emergency/list",
                 //表格显示条纹
                 striped: true,
                 //启动分页
@@ -46,11 +46,22 @@
                     field: "id",
                     sortable: true
                 },{
-                    title: "文件夹",
-                    field: "name"
+                    title: "文件名",
+                    field: "empty",
+                    formatter: function(value ,row,index) {
+                        if (row.ifFolder == 1) {
+                            return '<a href="javascript:void(0);" onclick="showFolder(\''+row.fileName+'\')"><i class="fa fa-folder-o"></i>' + row.fileName + '</a>';
+                        }else{
+                            return row.fileName;
+                        }
+
+                    }
                 },{
                     title: "归属",
-                    field: "area.nodeName"
+                    field: "stationFile.nodeName"
+                },{
+                    title: "大小",
+                    field: "fileSize"
                 },{
                     title: "创建时间",
                     field: "createTime"
@@ -58,8 +69,14 @@
                     title: "操作",
                     field: "empty",
                     formatter: function (value, row, index) {
-                        var operateHtml = '<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="showFolder(\''+row.name+'\')"><i class="fa fa-edit"></i>&nbsp;查看</button> &nbsp;</@shiro.hasPermission>';
-                        operateHtml = operateHtml + '<@shiro.hasPermission name="system:resource:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="delFolder(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button></@shiro.hasPermission>';
+                        var operateHtml ='';
+                            if(row.ifFolder==1){
+                                operateHtml='<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="showFolder(\''+row.fileName+'\')"><i class="fa fa-edit"></i>&nbsp;查看</button> &nbsp;</@shiro.hasPermission>';
+                            }else{
+                                operateHtml='<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="down(\''+row.fileUrl+'\')"><i class="fa fa-edit"></i>&nbsp;下载</button> &nbsp;</@shiro.hasPermission>';
+                            }
+
+                        operateHtml = operateHtml + '<@shiro.hasPermission name="system:resource:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button></@shiro.hasPermission>';
                         return operateHtml;
                     }
                 }],
@@ -76,24 +93,21 @@
                     $("#table_emergency_list").bootstrapTable('refresh', opt);
                 }
             });
-
+            var setting = {
+                data: {
+                    simpleData: {
+                        enable: true
+                    }
+                },
+                callback: {
+                    onClick: onClick
+                }
+            };
             $.get("/admin/emergency/tree",function(data){
-                console.log("|||"+data);
                 var zNodes =eval(data);
                 $.fn.zTree.init($("#treeDemo"), setting, zNodes);
             })
         });
-        var setting = {
-            data: {
-                simpleData: {
-                    enable: true
-                }
-            },
-            callback: {
-                onClick: onClick
-            }
-        };
-
 
         /*单击节点显示节点详情*/
         function onClick(e,treeId,treeNode){
@@ -102,29 +116,29 @@
             $(".addFolder").attr("dataid",treeNode.id);
             $(".spanStation").html(treeNode.name);
             var opt = {
-                url: "${ctx!}/admin/emergency/folder",
+                url: "${ctx!}/admin/emergency/list",
                 silent: true,
                 query:{
                     nodeCode:treeNode.id
                 }
             };
-            $("#table_folder_list").bootstrapTable('refresh', opt);
+            $("#table_emergency_list").bootstrapTable('refresh', opt);
         };
-
-        function showFolder(station){
+        //进入文件夹
+        function showFolder(folder){
             layer.open({
                 type: 2,
                 title: '文件列表',
                 shadeClose: true,
                 shade: false,
                 area: ['600px', '600px'],
-                content: '${ctx!}/admin/emergency/toFolder?folder='+station,
+                content: '${ctx!}/admin/emergency/toFolder?folder='+folder,
                 end: function(index){
-                    $('#table_list').bootstrapTable("refresh");
+                    $('#table_emergency_list').bootstrapTable("refresh");
                 }
             });
         };
-
+        //上传文件
         function uploadFile(){
             var id=$(".addFolder").attr("dataid");
             console.log("id:++"+id);
@@ -136,11 +150,11 @@
                 area: ['600px', '600px'],
                 content: '${ctx!}/admin/emergency/uploadFile?nodeCode='+id,
                 end: function(index){
-                    $('#table_list').bootstrapTable("refresh");
+                    $('#table_emergency_list').bootstrapTable("refresh");
                 }
             });
         };
-
+        //添加文件夹
         function addFolder(){
             var nodeCode=$(".addFolder").attr("dataid");
             layer.open({
@@ -149,16 +163,20 @@
                 shadeClose: true,
                 shade: false,
                 area: ['400px', '400px'],
-                content: '${ctx!}/admin/folder/add?station='+nodeCode+'&menu=应急预案',
+                content: '${ctx!}/admin/emergency/add?nodeCode='+nodeCode+'&menu=应急预案',
                 end: function(index){
                     $('#table_emergency_list').bootstrapTable("refresh");
                 }
             });
         }
+        //下载文件
         function down(url){
-            window.open(url);
-            //window.location.href=url;
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = "proposed_file_name";
+            a.click();
         }
+        //删除文件夹或文件
         function del(id){
             layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
                 $.ajax({
@@ -188,7 +206,7 @@
                         <p>
                         	<@shiro.hasPermission name="system:resource:add">
                                 <button class="btn btn-success uploadFile" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传</button>
-                                <button class="btn btn-success addFolder" type="button" onclick="addFolder();"><i class="fa fa-plus"></i>&nbsp;新建文件夹></button>
+                                <button class="btn btn-success addFolder" type="button" onclick="addFolder();"><i class="fa fa-plus"></i>&nbsp;新建文件夹</button>
                                 <span class="spanStation"></span>
                         	</@shiro.hasPermission>
                         </p>
@@ -201,7 +219,7 @@
                                 <!-- Example Card View -->
                                 <div class="example-wrap">
                                     <div class="example">
-                                        <table id="table_folder_list"></table>
+                                        <table id="table_emergency_list"></table>
                                     </div>
                                 </div>
                                 <!-- End Example Card View -->

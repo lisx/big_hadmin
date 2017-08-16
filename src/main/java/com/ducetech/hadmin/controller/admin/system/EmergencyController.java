@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -52,8 +53,6 @@ public class EmergencyController  extends BaseController {
     IBigFileDao fileDao;
     @Autowired
     IFolderDao folderDao;
-    @Autowired
-    IBigFileService bigFileService;
     /**
      * 树形菜单
      * @return
@@ -84,42 +83,83 @@ public class EmergencyController  extends BaseController {
         return "admin/emergency/index";
     }
 
-
-    /**
-     * 应急预案文件夹
-     * @return
-     */
-    @RequestMapping(value = { "/folder" })
-    @ResponseBody
-    public Page<Folder> folder(String station) {
-        User user=getUser();
-        Station s=stationDao.findByNodeName(user.getStationArea());
-        if(!StringUtil.isBlank(station)){
-
-        }else {
-            station = s.getNodeCode();
-        }
-        SimpleSpecificationBuilder<Folder> builder = new SimpleSpecificationBuilder<>();
-        String searchText = request.getParameter("searchText");
-        builder.add("menu", SpecificationOperator.Operator.likeAll.name(), "应急预案");
-        if(!StringUtil.isBlank(searchText)){
-            builder.add("name", SpecificationOperator.Operator.likeAll.name(), searchText);
-        }
-        if(!StringUtil.isBlank(station)){
-            logger.debug("|||"+station);
-            if(user.getStationArea().equals("运三分公司")) {
-                builder.add("station", SpecificationOperator.Join.or.name(), station, null);
-            }else{
-                builder.add("station", SpecificationOperator.Operator.likeAll.name(), station);
-            }
-        }
-        return folderDao.findAll(builder.generateSpecification(), getPageRequest());
+    @RequestMapping("/add")
+    public String add(String nodeCode,Model map) {
+        logger.debug("进入应急预案添加文件夹");
+        map.addAttribute("nodeCode",nodeCode);
+        map.addAttribute("menu","应急预案");
+        return "admin/emergency/form";
     }
 
+    /**
+     * 应急预案新增文件夹
+     * @return
+     */
+    @RequestMapping(value= {"/saveFolder"} ,method = RequestMethod.POST)
+    @ResponseBody
+    public JsonResult edit(BigFile folder,String nodeCode,String menu){
+        logger.debug("新增应急预案文件夹nodeCode{},menu{}",nodeCode,menu);
+        User user=getUser();
+        Station area;
+        if(null!=nodeCode&&!nodeCode.equals("undefined")){
+            area=stationDao.findByNodeCode(nodeCode);
+        }else{
+            area=stationDao.findByNodeName(user.getStationArea());
+            nodeCode=area.getNodeCode();
+        }
+        try {
+            folder.setIfFolder(1);
+            folder.setCreateTime(new Date());
+            folder.setCreateId(user.getId());
+            folder.setStationFile(area);
+            folder.setNodeCode(nodeCode);
+            folder.setMenuType(menu);
+            fileDao.saveAndFlush(folder);
+        } catch (Exception e) {
+            return JsonResult.failure(e.getMessage());
+        }
+        return JsonResult.success();
+    }
+//    /**
+//     * 应急预案文件夹列表
+//     * @return
+//     */
+//    @RequestMapping(value = { "/folder" })
+//    @ResponseBody
+//    public Page<Folder> folder(String station) {
+//        User user=getUser();
+//        Station s=stationDao.findByNodeName(user.getStationArea());
+//        if(!StringUtil.isBlank(station)){
+//
+//        }else {
+//            station = s.getNodeCode();
+//        }
+//        SimpleSpecificationBuilder<Folder> builder = new SimpleSpecificationBuilder<>();
+//        String searchText = request.getParameter("searchText");
+//        builder.add("menu", SpecificationOperator.Operator.likeAll.name(), "应急预案");
+//        if(!StringUtil.isBlank(searchText)){
+//            builder.add("name", SpecificationOperator.Operator.likeAll.name(), searchText);
+//        }
+//        if(!StringUtil.isBlank(station)){
+//            logger.debug("|||"+station);
+//            if(user.getStationArea().equals("运三分公司")) {
+//                builder.add("station", SpecificationOperator.Join.or.name(), station, null);
+//            }else{
+//                builder.add("station", SpecificationOperator.Operator.likeAll.name(), station);
+//            }
+//        }
+//        return folderDao.findAll(builder.generateSpecification(), getPageRequest());
+//    }
+
+    /**
+     * 进入文件夹
+     * @param folder
+     * @param map
+     * @return
+     */
     @RequestMapping("/toFolder")
     public String toFolder(String folder,Model map) {
-        logger.debug("进入应急预案文件夹");
-        System.out.println("folder+++"+folder);
+        logger.debug("进入应急预案文件夹folder{}",folder);
         map.addAttribute("folder",folder);
         return "admin/emergency/folder";
     }
@@ -130,19 +170,34 @@ public class EmergencyController  extends BaseController {
      */
     @RequestMapping(value = { "/list" })
     @ResponseBody
-    public Page<BigFile> list(String folder) {
+    public Page<BigFile> list(String folder,String nodeCode) {
         logger.debug("list:folder"+folder);
         SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
         if(null!=folder&&!StringUtil.isBlank(folder)) {
             builder.add("folderName", SpecificationOperator.Operator.likeAll.name(), folder);
+        }else {
+            builder.add("folderName", SpecificationOperator.Operator.isNull.name(),null);
+        }
+        if(!StringUtil.isBlank(nodeCode)){
+            builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
         }
         if(!StringUtil.isBlank(searchText)){
             builder.add("fileName", SpecificationOperator.Operator.likeAll.name(), searchText);
         }
-        return bigFileService.findAll(builder.generateSpecification(), getPageRequest());
+        return fileDao.findAll(builder.generateSpecification(), getPageRequest());
     }
-
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public JsonResult delete(@PathVariable Integer id) {
+        try {
+            fileDao.delete(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return JsonResult.failure(e.getMessage());
+        }
+        return JsonResult.success();
+    }
     /**
      * 进入培训上传页面
      * @param map
@@ -168,7 +223,6 @@ public class EmergencyController  extends BaseController {
         File dirTempFile = new File(BigConstant.TRAIN_PATH);
         if (!dirTempFile.exists()) {
             dirTempFile.mkdirs();
-
         }
         BufferedOutputStream stream;
         for (int i =0; i< files.size(); ++i) {
@@ -195,8 +249,8 @@ public class EmergencyController  extends BaseController {
                         bf.setCreateTime(new Date());
                         bf.setFileUrl(filePath);
                         bf.setCreateId(user.getId());
-                        stationFolder(folder, nodeCode, bf);
-                        bigFileService.saveOrUpdate(bf);
+                        stationFolder(folder, nodeCode, bf,user);
+                        fileDao.saveAndFlush(bf);
                     }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
                         filePath=BigConstant.TRAIN_IMAGE_PATH+file.getOriginalFilename();
                         byte[] bytes = file.getBytes();
@@ -213,8 +267,8 @@ public class EmergencyController  extends BaseController {
                         bf.setCreateTime(new Date());
                         bf.setFileUrl(filePath);
                         bf.setCreateId(user.getId());
-                        stationFolder(folder, nodeCode, bf);
-                        bigFileService.saveOrUpdate(bf);
+                        stationFolder(folder, nodeCode, bf,user);
+                        fileDao.saveAndFlush(bf);
                     }else{
                         try {
                             byte[] bytes = file.getBytes();
@@ -233,15 +287,15 @@ public class EmergencyController  extends BaseController {
                                 type = "video";
                                 filePath = BigConstant.getTrainVideoPathUrl(file.getOriginalFilename());
                                 BigFile bf = new BigFile();
-                                bf.setFileSize("" + Math.round(Integer.parseInt(size) / 1024 / 1024));
+                                bf.setFileSize("" + Math.round(Integer.parseInt(size) / 1024));
                                 bf.setMenuType("应急预案");
                                 bf.setFileType(type);
                                 bf.setFileName(file.getOriginalFilename());
                                 bf.setCreateTime(new Date());
                                 bf.setFileUrl(filePath);
                                 bf.setCreateId(user.getId());
-                                stationFolder(folder, nodeCode, bf);
-                                bigFileService.saveOrUpdate(bf);
+                                stationFolder(folder, nodeCode, bf,user);
+                                fileDao.saveAndFlush(bf);
                                 logger.debug("success");
                             }else{
                                 //分片的情况
@@ -252,7 +306,7 @@ public class EmergencyController  extends BaseController {
                                     filePath=BigConstant.getTrainVideoPathUrl(file.getOriginalFilename());
                                     logger.debug("上传成功");
                                     BigFile bf=new BigFile();
-                                    bf.setFileSize(""+Math.round(Integer.parseInt(size)/1024/1024));
+                                    bf.setFileSize(""+Math.round(Integer.parseInt(size)/1024));
                                     bf.setMenuType("3");
                                     bf.setFileType(type);
                                     bf.setFileName(file.getOriginalFilename());
@@ -260,8 +314,8 @@ public class EmergencyController  extends BaseController {
                                     bf.setFolderName(folder);
                                     bf.setFileUrl(filePath);
                                     bf.setCreateId(user.getId());
-                                    stationFolder(folder, nodeCode, bf);
-                                    bigFileService.saveOrUpdate(bf);
+                                    stationFolder(folder, nodeCode, bf,user);
+                                    fileDao.saveAndFlush(bf);
                                 } else {
                                     logger.debug("上传中" + file.getOriginalFilename() + " chunk:" + chunk, "");
                                 }
@@ -282,17 +336,23 @@ public class EmergencyController  extends BaseController {
         return JsonResult.success();
     }
 
-    private void stationFolder(String folder, String nodeCode, BigFile bf) {
+    private void stationFolder(String folder, String nodeCode, BigFile bf,User user) {
         if(null==folder) {
-            bf.setFolderName(folder);
+            Station area;
+            if(null!=nodeCode&&!nodeCode.equals("undefined")){
+                area=stationDao.findByNodeCode(nodeCode);
+            }else{
+                area=stationDao.findByNodeName(user.getStationArea());
+                nodeCode=area.getNodeCode();
+            }
             bf.setNodeCode(nodeCode);
-            Station station = stationDao.findByNodeCode(nodeCode);
-            if (null != station)
-                bf.setStationFile(station);
+            if (null != area)
+                bf.setStationFile(area);
         }else{
             bf.setFolderName(folder);
-            Folder folder1=folderDao.findByName(folder);
-            Station station = stationDao.findByNodeCode(folder1.getStation());
+            BigFile folder1=fileDao.findByFileName(folder);
+            bf.setFolderFile(folder1);
+            Station station = folder1.getStationFile();
             if (null != station){
                 bf.setStationFile(station);
                 bf.setNodeCode(station.getNodeCode());
