@@ -14,6 +14,9 @@
                 url: "${ctx!}/admin/emergency/list",
                 //表格显示条纹
                 striped: true,
+                sortable: true, //是否启用排序
+                sortOrder: "desc", //排序方式
+                sortName:"ifFolder,id",
                 //启动分页
                 pagination: true,
                 //每页显示的记录数
@@ -131,7 +134,7 @@
                 title: '文件列表',
                 shadeClose: true,
                 shade: false,
-                area: ['600px', '600px'],
+                area: ['100%', '100%'],
                 content: '${ctx!}/admin/emergency/toFolder?folder='+folder,
                 end: function(index){
                     $('#table_emergency_list').bootstrapTable("refresh");
@@ -147,7 +150,7 @@
                 title: '上传文件',
                 shadeClose: true,
                 shade: false,
-                area: ['600px', '600px'],
+                area: ['100%', '100%'],
                 content: '${ctx!}/admin/emergency/uploadFile?nodeCode='+id,
                 end: function(index){
                     $('#table_emergency_list').bootstrapTable("refresh");

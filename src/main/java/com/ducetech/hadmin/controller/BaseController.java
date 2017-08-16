@@ -78,7 +78,12 @@ public class BaseController {
     		String sortOrder = request.getParameter("sortOrder");
     		if(StringUtils.isNoneBlank(sortName) && StringUtils.isNoneBlank(sortOrder)){
     			if(sortOrder.equalsIgnoreCase("desc")){
-    				sort = new Sort(Direction.DESC, sortName);
+    			    String[] arr=sortName.split(",");
+    			    if(arr.length>0){
+                        sort = new Sort(Direction.DESC, arr[0]).and(new Sort(Direction.DESC,arr[1]));
+                    }else {
+                        sort = new Sort(Direction.DESC, sortName);
+                    }
     			}else{
     				sort = new Sort(Direction.ASC, sortName);
     			}
