@@ -58,7 +58,7 @@ public class StationController extends BaseController {
         String station=s.getNodeCode();
         logger.debug("station:::"+station);
         List<Station> stations = stationService.findByNodeCodeStartingWith(station);
-        logger.debug("stations："+stations.size());
+        logger.debug("stations：{}，userArea{}"+stations.size(),user.getStationArea());
         if(!user.getStationArea().equals("运三分公司")) {
             return Station.createTree(stations);
         }else{

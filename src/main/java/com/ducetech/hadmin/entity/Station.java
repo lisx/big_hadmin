@@ -39,13 +39,8 @@ public class Station extends BaseEntity {
     private boolean ifUse;
     //排序
     private String sorting;
-
-    private String nodeUrl;
-    private String nodeSize;
     //1人员文件 2车站文件 3培训文件 4练习考试 5规章制度 6运行图 7通知 8消防安全 9首页滚动
     private String menuType;
-
-    private String nodeType;
 
     @OneToMany
     private List<QuestionBank> banks;
@@ -62,6 +57,7 @@ public class Station extends BaseEntity {
             node = nodes.get(i);
             obj = new JSONObject();
             obj.put("id", node.nodeCode);
+            if(null!=node.nodeCode)
             obj.put("pId",node.nodeCode.substring(0, node.nodeCode.length()-3));
             obj.put("name", node.nodeName);
             array.add(obj);

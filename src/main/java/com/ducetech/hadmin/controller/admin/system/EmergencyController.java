@@ -62,14 +62,19 @@ public class EmergencyController  extends BaseController {
     public JSONArray tree(){
         logger.debug("获取tree数据");
         User user=getUser();
-        Station s=stationDao.findByNodeName(user.getStationArea());
-        String station=s.getNodeCode();
-        logger.debug("station:::"+station);
-        List<Station> stations = stationDao.findByNodeCodeStartingWith(station);
-        logger.debug("stations："+stations.size());
+        List<Station> stations=null;
+        if(user.getStationArea().equals("运三分公司")){
+            stations=stationDao.findAll();
+        }else{
+            Station s=stationDao.findByNodeName(user.getStationArea());
+            String station=s.getNodeCode();
+            stations= stationDao.findByNodeCodeStartingWith(station);
+        }
+        logger.debug("stations"+stations.size());
         if(!user.getStationArea().equals("运三分公司")) {
             return Station.createTree(stations);
         }else{
+            //return Station.createTree(stations);
             return Station.createRootTree(stations);
         }
     }
@@ -120,36 +125,6 @@ public class EmergencyController  extends BaseController {
         }
         return JsonResult.success();
     }
-//    /**
-//     * 应急预案文件夹列表
-//     * @return
-//     */
-//    @RequestMapping(value = { "/folder" })
-//    @ResponseBody
-//    public Page<Folder> folder(String station) {
-//        User user=getUser();
-//        Station s=stationDao.findByNodeName(user.getStationArea());
-//        if(!StringUtil.isBlank(station)){
-//
-//        }else {
-//            station = s.getNodeCode();
-//        }
-//        SimpleSpecificationBuilder<Folder> builder = new SimpleSpecificationBuilder<>();
-//        String searchText = request.getParameter("searchText");
-//        builder.add("menu", SpecificationOperator.Operator.likeAll.name(), "应急预案");
-//        if(!StringUtil.isBlank(searchText)){
-//            builder.add("name", SpecificationOperator.Operator.likeAll.name(), searchText);
-//        }
-//        if(!StringUtil.isBlank(station)){
-//            logger.debug("|||"+station);
-//            if(user.getStationArea().equals("运三分公司")) {
-//                builder.add("station", SpecificationOperator.Join.or.name(), station, null);
-//            }else{
-//                builder.add("station", SpecificationOperator.Operator.likeAll.name(), station);
-//            }
-//        }
-//        return folderDao.findAll(builder.generateSpecification(), getPageRequest());
-//    }
 
     /**
      * 进入文件夹
@@ -179,13 +154,17 @@ public class EmergencyController  extends BaseController {
         }else {
             builder.add("folderName", SpecificationOperator.Operator.isNull.name(),null);
         }
-        if(!StringUtil.isBlank(nodeCode)){
+        User user=getUser();
+        if (!StringUtil.isBlank(nodeCode)&&!nodeCode.equals("undefined")) {
             builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
+        }else{
+
         }
         if(!StringUtil.isBlank(searchText)){
             builder.add("fileName", SpecificationOperator.Operator.likeAll.name(), searchText);
         }
-        return fileDao.findAll(builder.generateSpecification(), getPageRequest());
+        Page<BigFile> bigFilePage=fileDao.findAll(builder.generateSpecification(), getPageRequest());
+        return bigFilePage;
     }
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     @ResponseBody
@@ -343,11 +322,14 @@ public class EmergencyController  extends BaseController {
                 area=stationDao.findByNodeCode(nodeCode);
             }else{
                 area=stationDao.findByNodeName(user.getStationArea());
-                nodeCode=area.getNodeCode();
             }
-            bf.setNodeCode(nodeCode);
-            if (null != area)
+            if (null != area) {
+                nodeCode = area.getNodeCode();
+                bf.setNodeCode(nodeCode);
                 bf.setStationFile(area);
+            }else{
+                bf.setNodeCode("0");
+            }
         }else{
             bf.setFolderName(folder);
             BigFile folder1=fileDao.findByFileName(folder);

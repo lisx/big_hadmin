@@ -57,11 +57,17 @@
                         }else{
                             return row.fileName;
                         }
-
                     }
                 },{
                     title: "归属",
-                    field: "stationFile.nodeName"
+                    field: "stationFile",
+                    formatter: function(value ,row,index) {
+                        if (value!=null) {
+                            return value.nodeName;
+                        }else{
+                            return "运三分公司";
+                        }
+                    }
                 },{
                     title: "大小",
                     field: "fileSize"
