@@ -37,12 +37,33 @@ public class FolderController extends BaseController{
         List list = folderDao.findAll();
         return list;
     }
+
+    /**
+     * 新增文件夹
+     * @param station
+     * @param map
+     * @return
+     */
+    @RequestMapping(value = "/add", method = RequestMethod.GET)
+    public String add(String station,String menu, ModelMap map) {
+        map.put("menu", menu);
+        map.put("station",station);
+        return "admin/folder/form";
+    }
+
+    /**
+     * 新增文件夹
+     * @param id
+     * @param station
+     * @param map
+     * @return
+     */
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public String edit(@PathVariable Integer id,String station, ModelMap map) {
+    public String edit(@PathVariable Integer id,String station,String menu, ModelMap map) {
         Folder folder = folderDao.findOne(id);
         map.put("folder", folder);
         map.put("station",station);
-        return "admin/learn/form";
+        return "admin/folder/form";
     }
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     @ResponseBody
@@ -57,24 +78,15 @@ public class FolderController extends BaseController{
     }
     @RequestMapping(value= {"/saveAndFlush"} ,method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult edit(Folder folder,String station){
+    public JsonResult edit(Folder folder,String station,String menu){
         User user=getUser();
         Station area=stationDao.findByNodeCode(station);
         try {
             folder.setCreateTime(new Date());
             folder.setStation(station);
             folder.setArea(area);
-//            if(null!=user)
-//                if(null!=user.getStation()) {
-//                    folder.setStation(user.getStation());
-//                }else if(null!=user.getStationArea()){
-//                    folder.setStation(user.getStationArea());
-//                }else if(null!=user.getLine()){
-//                    folder.setStation(user.getLine());
-//                }else{
-//                    folder.setStation("");
-//                }
-                folder.setCreateId(user.getId());
+            folder.setMenu(menu);
+            folder.setCreateId(user.getId());
             folderDao.saveAndFlush(folder);
         } catch (Exception e) {
             return JsonResult.failure(e.getMessage());

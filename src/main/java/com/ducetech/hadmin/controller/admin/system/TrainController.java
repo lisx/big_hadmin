@@ -170,7 +170,7 @@ public class TrainController  extends BaseController {
                         bf.setFileType(type);
                         bf.setFileName(file.getOriginalFilename());
                         bf.setCreateTime(new Date());
-                        bf.setFolder(folder);
+                        bf.setFolderName(folder);
                         bf.setFileUrl(filePath);
                         bf.setCreateId(user.getId());
                         Folder folder1=folderDao.findByName(folder);
@@ -194,7 +194,7 @@ public class TrainController  extends BaseController {
                         bf.setFileType(type);
                         bf.setFileName(file.getOriginalFilename());
                         bf.setCreateTime(new Date());
-                        bf.setFolder(folder);
+                        bf.setFolderName(folder);
                         bf.setFileUrl(filePath);
                         bf.setCreateId(user.getId());
                         Folder folder1=folderDao.findByName(folder);
@@ -227,7 +227,7 @@ public class TrainController  extends BaseController {
                                 bf.setFileType(type);
                                 bf.setFileName(file.getOriginalFilename());
                                 bf.setCreateTime(new Date());
-                                bf.setFolder(folder);
+                                bf.setFolderName(folder);
                                 bf.setFileUrl(filePath);
                                 bf.setCreateId(user.getId());
                                 Folder folder1=folderDao.findByName(folder);
@@ -252,7 +252,7 @@ public class TrainController  extends BaseController {
                                     bf.setFileType(type);
                                     bf.setFileName(file.getOriginalFilename());
                                     bf.setCreateTime(new Date());
-                                    bf.setFolder(folder);
+                                    bf.setFolderName(folder);
                                     bf.setFileUrl(filePath);
                                     bf.setCreateId(user.getId());
                                     Station station=stationDao.findByNodeName(user.getStation());

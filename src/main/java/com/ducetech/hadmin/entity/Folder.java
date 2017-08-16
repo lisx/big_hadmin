@@ -25,9 +25,9 @@ public class Folder extends BaseEntity {
     @Column(name = "id", nullable = false)
     private Integer id;
     private String name;
+    //菜单类型
     private String menu;
     private String station;
     @ManyToOne
     private Station area;
-
 }

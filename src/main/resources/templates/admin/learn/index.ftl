@@ -187,7 +187,7 @@
                     field: "name",
                 },{
                     title: "归属",
-                    field: "station"
+                    field: "area.nodeName"
                 },{
 			        title: "创建时间",
 			        field: "createTime",
@@ -448,7 +448,7 @@
         	      shadeClose: true,
         	      shade: false,
         	      area: ['400px', '400px'],
-        	      content: '${ctx!}/admin/folder/edit/1?station='+nodeCode,
+        	      content: '${ctx!}/admin/folder/edit/1?station='+nodeCode+'&menu="培训资料"',
         	      end: function(index){
         	    	  $('#table_train_list').bootstrapTable("refresh");
        	    	  }

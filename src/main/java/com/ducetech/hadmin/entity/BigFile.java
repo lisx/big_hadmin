@@ -29,7 +29,9 @@ public class BigFile extends BaseEntity {
     //文件类型
     private String fileType;
     //归属文件夹
-    private String folder;
+    @ManyToOne
+    private Folder folderFile;
+    private String folderName;
     //归属类型 1站点 2站区 3线路 4总公司
     private String affiliation;
     //归属菜单类型
