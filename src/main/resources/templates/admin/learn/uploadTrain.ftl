@@ -9,6 +9,7 @@
         <div class="col-md-12">
             <div class="form-group">
                 <input type="hidden" id="folder" name="folder" value="${folder}">
+                <input type="hidden" id="nodeCode" name="nodeCode" value="${nodeCode}">
             </div>
         </div>
 

@@ -42,29 +42,33 @@ import java.util.List;
 public class StationController extends BaseController {
     private static Logger logger = LoggerFactory.getLogger(StationController.class);
 	@Autowired
-	private IStationDao stationService;
+	private IStationDao stationDao;
     @Autowired
     IBigFileDao fileDao;
     /**
      * 树形菜单
      * @return
      */
-	@RequestMapping("/tree")
-	@ResponseBody
-	public JSONArray tree(){
-	    logger.debug("获取tree数据");
+    @RequestMapping("/tree")
+    @ResponseBody
+    public JSONArray tree(){
+        logger.debug("获取tree数据");
         User user=getUser();
-        Station s=stationService.findByNodeName(user.getStationArea());
-        String station=s.getNodeCode();
-        logger.debug("station:::"+station);
-        List<Station> stations = stationService.findByNodeCodeStartingWith(station);
-        logger.debug("stations：{}，userArea{}"+stations.size(),user.getStationArea());
+        List<Station> stations=null;
+        if(user.getStationArea().equals("运三分公司")){
+            stations=stationDao.findAll();
+        }else{
+            Station s=stationDao.findByNodeName(user.getStationArea());
+            String station=s.getNodeCode();
+            stations= stationDao.findByNodeCodeStartingWith(station);
+        }
+        logger.debug("stations"+stations.size());
         if(!user.getStationArea().equals("运三分公司")) {
             return Station.createTree(stations);
         }else{
             return Station.createRootTree(stations);
         }
-	}
+    }
 
     /**
      * 删除
@@ -75,8 +79,8 @@ public class StationController extends BaseController {
     @ResponseBody
     public JsonResult del(@PathVariable String nodeId){
         logger.debug("进入删除节点nodeId{}",nodeId);
-        Station station = stationService.findByNodeCode(nodeId);
-        stationService.delete(station);
+        Station station = stationDao.findByNodeCode(nodeId);
+        stationDao.delete(station);
         return JsonResult.success();
     }
 
@@ -87,12 +91,12 @@ public class StationController extends BaseController {
     public Station save(String name, String pId){
         logger.debug("进入新增节点name{}||pId{}",name,pId);
         String pcode =StringUtil.trim(pId);
-        List<Station> stations = stationService.querySubNodesByCode(pcode+"___",pcode.length()+3);
+        List<Station> stations = stationDao.querySubNodesByCode(pcode+"___",pcode.length()+3);
         String nodeCode = Station.getNodeCode(stations,pcode);
         Station node = new Station();
         node.setNodeCode(nodeCode);
         node.setNodeName(name);
-        stationService.save(node);
+        stationDao.save(node);
         return (node);
     }
     /**
@@ -103,10 +107,10 @@ public class StationController extends BaseController {
         logger.debug("进入编辑节点nodeCode{}||name{}",nodeCode,name);
         nodeCode = StringUtil.trim(nodeCode);
         String nodeName = StringUtil.trim(name);
-        Station node = stationService.findByNodeCode(nodeCode);
+        Station node = stationDao.findByNodeCode(nodeCode);
         node.setNodeName(nodeName);
         node.setUpdateTime(new Date());
-        stationService.saveAndFlush(node);
+        stationDao.saveAndFlush(node);
         JSONObject obj=new JSONObject();
         obj.put("node",node);
         return obj;
@@ -134,33 +138,33 @@ public class StationController extends BaseController {
                                 String line = StringUtil.trim(row.get(0));
                                 String area = StringUtil.trim(row.get(1));
                                 String station = StringUtil.trim(row.get(2));
-                                Station lineObj = stationService.findByNodeName(line);
-                                Station areaObj = stationService.findByNodeName(area+"站区");
-                                Station stationObj = stationService.findByNodeName(station);
+                                Station lineObj = stationDao.findByNodeName(line);
+                                Station areaObj = stationDao.findByNodeName(area+"站区");
+                                Station stationObj = stationDao.findByNodeName(station);
                                 String nodeCode;
                                 if(null==lineObj) {
-                                    List<Station> objs=stationService.findByStationArea(3);
+                                    List<Station> objs=stationDao.findByStationArea(3);
                                     nodeCode=Station.getNodeCode(objs, "");
                                     lineObj = new Station();
                                     lineObj.setNodeName(line);
                                     lineObj.setNodeCode(nodeCode);
-                                    stationService.saveAndFlush(lineObj);
+                                    stationDao.saveAndFlush(lineObj);
                                 }
                                 if(null==areaObj) {
-                                    List<Station> objs=stationService.querySubNodesByCode(lineObj.getNodeCode()+"___",6);
+                                    List<Station> objs=stationDao.querySubNodesByCode(lineObj.getNodeCode()+"___",6);
                                     nodeCode=Station.getNodeCode(objs, lineObj.getNodeCode());
                                     areaObj = new Station();
                                     areaObj.setNodeName(area+"站区");
                                     areaObj.setNodeCode(nodeCode);
-                                    stationService.saveAndFlush(areaObj);
+                                    stationDao.saveAndFlush(areaObj);
                                 }
                                 if(null==stationObj) {
-                                    List<Station> objs=stationService.querySubNodesByCode(areaObj.getNodeCode()+"___",9);
+                                    List<Station> objs=stationDao.querySubNodesByCode(areaObj.getNodeCode()+"___",9);
                                     nodeCode=Station.getNodeCode(objs, areaObj.getNodeCode());
                                     stationObj = new Station();
                                     stationObj.setNodeName(station);
                                     stationObj.setNodeCode(nodeCode);
-                                    stationService.saveAndFlush(stationObj);
+                                    stationDao.saveAndFlush(stationObj);
                                 }
                             }
                         }
@@ -183,7 +187,7 @@ public class StationController extends BaseController {
     @ResponseBody
     public JsonResult uploadFilePost(MultipartHttpServletRequest request,String nodeCode){
         List<MultipartFile> files =request.getFiles("file");
-        Station s=stationService.findByNodeCode(nodeCode);
+        Station s=stationDao.findByNodeCode(nodeCode);
         MultipartFile file;
         //创建临时文件夹
         File dirTempFile = new File(BigConstant.STATION_PATH);
@@ -249,7 +253,7 @@ public class StationController extends BaseController {
 
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public String add(ModelMap map) {
-		List<Station> list = stationService.findAll();
+		List<Station> list = stationDao.findAll();
 		map.put("list", list);
 		return "admin/station/form";
 	}
@@ -257,10 +261,10 @@ public class StationController extends BaseController {
 
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable Integer id,ModelMap map) {
-		Station station = stationService.findOne(id);
+		Station station = stationDao.findOne(id);
 		map.put("station", station);
 
-		List<Station> list = stationService.findAll();
+		List<Station> list = stationDao.findAll();
 		map.put("list", list);
 		return "admin/station/form";
 	}
@@ -269,7 +273,7 @@ public class StationController extends BaseController {
 	@ResponseBody
 	public JsonResult edit(Station station, ModelMap map){
 		try {
-			stationService.saveAndFlush(station);
+			stationDao.saveAndFlush(station);
 		} catch (Exception e) {
 			return JsonResult.failure(e.getMessage());
 		}

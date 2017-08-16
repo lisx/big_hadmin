@@ -122,6 +122,7 @@
         function onClick(e,treeId,treeNode){
             console.log("|||"+treeNode.id+"|||"+treeNode.name)
             //初始化表格,动态从服务器加载数据
+            $(".uploadFile").attr("dataid",treeNode.id);
             $(".addFolder").attr("dataid",treeNode.id);
             $(".spanStation").html(treeNode.name);
             var opt = {

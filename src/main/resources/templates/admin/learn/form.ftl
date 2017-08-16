@@ -6,7 +6,7 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">文件夹名：</label>
                                 <div class="col-sm-8">
-                                    <input id="name" name="name" class="form-control">
+                                    <input id="name" name="fileName" class="form-control">
                                 </div>
                             </div>
 
@@ -21,7 +21,6 @@
     <script type="text/javascript">
 
     $(document).ready(function () {
-
 	    $("#frm").validate({
     	    rules: {
     	      	name: {
@@ -34,7 +33,7 @@
     	    	$.ajax({
    	    		   type: "POST",
    	    		   dataType: "json",
-   	    		   url: "${ctx!}/admin/folder/saveAndFlush?station=${station}",
+   	    		   url: "${ctx!}/admin/train/saveFolder?nodeCode=${nodeCode}&menu=${menu}",
    	    		   data: $(form).serialize(),
    	    		   success: function(msg){
 	   	    			layer.msg(msg.message, {time: 2000},function(){

@@ -26,9 +26,9 @@
                                     <div class="panel-body">
                                             <p>
                                             <@shiro.hasPermission name="system:resource:add">
-                                                <button class="btn btn-success " type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传</button>
-                                                <button class="btn btn-success " type="button" onclick="addFolder();"><i class="fa fa-plus"></i>&nbsp;新建文件夹</button>
-                                                <input type="hidden" name="station" class="nodeCodeTrain">
+                                                <button class="btn btn-success uploadFile" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传</button>
+                                                <button class="btn btn-success addFolder" type="button" onclick="addFolder();"><i class="fa fa-plus"></i>&nbsp;新建文件夹</button>
+                                                <span class="spanStation"></span>
                                             </@shiro.hasPermission>
                                             </p>
                                             <hr>
@@ -102,11 +102,7 @@
         </div>
     </div>
     <script type="text/javascript">
-        <!--
         var setting = {
-            check: {
-                enable: true
-            },
             data: {
                 simpleData: {
                     enable: true
@@ -121,8 +117,11 @@
         function onClick(e,treeId,treeNode){
             console.log("|||"+treeNode.id+"|||"+treeNode.name)
             //初始化表格,动态从服务器加载数据
+            $(".uploadFile").attr("dataid",treeNode.id);
+            $(".addFolder").attr("dataid",treeNode.id);
+            $(".spanStation").html(treeNode.name);
             var opt = {
-                url: "${ctx!}/admin/train/folder",
+                url: "${ctx!}/admin/train/list",
                 silent: true,
                 query:{
                     nodeCode:treeNode.id
@@ -132,11 +131,6 @@
             $("#table_train_list").bootstrapTable('refresh', opt);
 
         }
-
-        function getTree(){
-            return $.fn.zTree.getZTreeObj("treeDemo");
-        }
-
     </script>
     <!-- Page-Level Scripts -->
     <script>
@@ -149,9 +143,12 @@
 			    //必须设置，不然request.getParameter获取不到请求参数
 			    contentType: "application/x-www-form-urlencoded",
 			    //获取数据的Servlet地址
-			    url: "${ctx!}/admin/train/folder",
+			    url: "${ctx!}/admin/train/list",
 			    //表格显示条纹
 			    striped: true,
+                sortable: true, //是否启用排序
+                sortOrder: "desc", //排序方式
+                sortName:"ifFolder,id",
 			    //启动分页
 			    pagination: true,
 			    //每页显示的记录数
@@ -177,22 +174,38 @@
 			            "total": res.totalElements
 			        };
 			    },
-			    //数据列
-			    columns: [{
-			        title: "ID",
-			        field: "id",
-			        sortable: true
-			    },{
-                    title: "文件夹",
-                    field: "name",
+                //数据列
+                columns: [{
+                    title: "ID",
+                    field: "id",
+                    sortable: true
+                },{
+                    title: "文件名",
+                    field: "empty",
+                    formatter: function(value ,row,index) {
+                        if (row.ifFolder == 1) {
+                            return '<a href="javascript:void(0);" onclick="showFolder(\''+row.fileName+'\')"><i class="fa fa-folder-o"></i>' + row.fileName + '</a>';
+                        }else{
+                            return row.fileName;
+                        }
+                    }
                 },{
                     title: "归属",
-                    field: "area.nodeName"
+                    field: "stationFile",
+                    formatter: function(value ,row,index) {
+                        if (value!=null) {
+                            return value.nodeName;
+                        }else{
+                            return "运三分公司";
+                        }
+                    }
                 },{
-			        title: "创建时间",
-			        field: "createTime",
-			        sortable: true
-			    },{
+                    title: "大小",
+                    field: "fileSize"
+                },{
+                    title: "创建时间",
+                    field: "createTime"
+                },{
 			        title: "操作",
 			        field: "empty",
                     formatter: function (value, row, index) {
@@ -344,6 +357,66 @@
                 }]
             });
         });
+        //上传培训资料
+        function uploadFile(){
+            var id=$(".addFolder").attr("dataid");
+            console.log("id:++"+id);
+            layer.open({
+                type: 2,
+                title: '批量上传资料',
+                shadeClose: true,
+                shade: false,
+                area: ['600px', '600px'],
+                content: '${ctx!}/admin/train/uploadFile?nodeCode='+id,
+                end: function(index){
+                    $('#table_train_list').bootstrapTable("refresh");
+                }
+            });
+        }
+        function addFolder(){
+            var nodeCode=$(".addFolder").val();
+            layer.open({
+                type: 2,
+                title: '新建文件夹',
+                shadeClose: true,
+                shade: false,
+                area: ['400px', '400px'],
+                content: '${ctx!}/admin/train/add?nodeCode='+nodeCode+'&menu="培训资料"',
+                end: function(index){
+                    $('#table_train_list').bootstrapTable("refresh");
+                }
+            });
+        }
+        function showFolder(station){
+            layer.open({
+                type: 2,
+                title: '查看文件夹',
+                shadeClose: true,
+                shade: false,
+                area: ['98%', '98%'],
+                content: '${ctx!}/admin/train/toFolder?folder='+station,
+                end: function(index){
+                    $('#table_train_list').bootstrapTable("refresh");
+                }
+            });
+        }
+        function delFolder(id){
+            layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
+                $.ajax({
+                    type: "DELETE",
+                    dataType: "json",
+                    url: "${ctx!}/admin/train/delete/" + id,
+                    success: function(msg){
+                        layer.msg(msg.message, {time: 2000},function(){
+                            $('#table_train_list').bootstrapTable("refresh");
+                            layer.close(index);
+                        });
+                    }
+                });
+            });
+        }
+
+
         function bankShow(id){
             layer.open({
                 type: 2,
@@ -399,61 +472,7 @@
                 });
             });
         }
-        function uploadFile(){
-            layer.open({
-                type: 2,
-                title: '批量上传资料',
-                shadeClose: true,
-                shade: false,
-                area: ['600px', '600px'],
-                content: '${ctx!}/admin/train/uploadFile',
-                end: function(index){
-                    $('#table_train_list').bootstrapTable("refresh");
-                }
-            });
-        }
-        function showFolder(station){
-            layer.open({
-                type: 2,
-                title: '查看文件夹',
-                shadeClose: true,
-                shade: false,
-                area: ['98%', '98%'],
-                content: '${ctx!}/admin/train/toFolder?folder='+station,
-                end: function(index){
-                    $('#table_train_list').bootstrapTable("refresh");
-                }
-            });
-        }
-        function delFolder(id){
-            layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
-                $.ajax({
-                    type: "DELETE",
-                    dataType: "json",
-                    url: "${ctx!}/admin/folder/delete/" + id,
-                    success: function(msg){
-                        layer.msg(msg.message, {time: 2000},function(){
-                            $('#table_train_list').bootstrapTable("refresh");
-                            layer.close(index);
-                        });
-                    }
-                });
-            });
-        }
-        function addFolder(){
-            var nodeCode=$(".nodeCodeTrain").val();
-        	layer.open({
-        	      type: 2,
-        	      title: '新建文件夹',
-        	      shadeClose: true,
-        	      shade: false,
-        	      area: ['400px', '400px'],
-        	      content: '${ctx!}/admin/folder/edit/1?station='+nodeCode+'&menu="培训资料"',
-        	      end: function(index){
-        	    	  $('#table_train_list').bootstrapTable("refresh");
-       	    	  }
-        	    });
-        }
+
 
 
         function uploadQuestion(){

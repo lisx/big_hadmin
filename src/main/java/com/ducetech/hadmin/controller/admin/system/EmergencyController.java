@@ -74,7 +74,6 @@ public class EmergencyController  extends BaseController {
         if(!user.getStationArea().equals("运三分公司")) {
             return Station.createTree(stations);
         }else{
-            //return Station.createTree(stations);
             return Station.createRootTree(stations);
         }
     }
@@ -154,6 +153,7 @@ public class EmergencyController  extends BaseController {
         }else {
             builder.add("folderName", SpecificationOperator.Operator.isNull.name(),null);
         }
+        builder.add("menuType", SpecificationOperator.Operator.likeAll.name(), "应急预案");
         User user=getUser();
         if (!StringUtil.isBlank(nodeCode)&&!nodeCode.equals("undefined")) {
             builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
@@ -225,9 +225,7 @@ public class EmergencyController  extends BaseController {
                         bf.setMenuType("应急预案");
                         bf.setFileType(type);
                         bf.setFileName(file.getOriginalFilename());
-                        bf.setCreateTime(new Date());
                         bf.setFileUrl(filePath);
-                        bf.setCreateId(user.getId());
                         stationFolder(folder, nodeCode, bf,user);
                         fileDao.saveAndFlush(bf);
                     }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
@@ -243,9 +241,7 @@ public class EmergencyController  extends BaseController {
                         bf.setMenuType("应急预案");
                         bf.setFileType(type);
                         bf.setFileName(file.getOriginalFilename());
-                        bf.setCreateTime(new Date());
                         bf.setFileUrl(filePath);
-                        bf.setCreateId(user.getId());
                         stationFolder(folder, nodeCode, bf,user);
                         fileDao.saveAndFlush(bf);
                     }else{
@@ -270,9 +266,7 @@ public class EmergencyController  extends BaseController {
                                 bf.setMenuType("应急预案");
                                 bf.setFileType(type);
                                 bf.setFileName(file.getOriginalFilename());
-                                bf.setCreateTime(new Date());
                                 bf.setFileUrl(filePath);
-                                bf.setCreateId(user.getId());
                                 stationFolder(folder, nodeCode, bf,user);
                                 fileDao.saveAndFlush(bf);
                                 logger.debug("success");
@@ -286,13 +280,11 @@ public class EmergencyController  extends BaseController {
                                     logger.debug("上传成功");
                                     BigFile bf=new BigFile();
                                     bf.setFileSize(""+Math.round(Integer.parseInt(size)/1024));
-                                    bf.setMenuType("3");
+                                    bf.setMenuType("应急预案");
                                     bf.setFileType(type);
                                     bf.setFileName(file.getOriginalFilename());
-                                    bf.setCreateTime(new Date());
                                     bf.setFolderName(folder);
                                     bf.setFileUrl(filePath);
-                                    bf.setCreateId(user.getId());
                                     stationFolder(folder, nodeCode, bf,user);
                                     fileDao.saveAndFlush(bf);
                                 } else {
@@ -340,5 +332,7 @@ public class EmergencyController  extends BaseController {
                 bf.setNodeCode(station.getNodeCode());
             }
         }
+        bf.setCreateTime(new Date());
+        bf.setCreateId(user.getId());
     }
 }
