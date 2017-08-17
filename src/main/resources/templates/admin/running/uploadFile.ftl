@@ -3,6 +3,7 @@
 <#include "/admin/common/css.ftl">
 <#import "/admin/common/select.ftl" as my />
 <link href="${ctx!}/hadmin/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+<!-- Data picker -->
 <script src="${ctx!}/hadmin/js/plugins/datapicker/bootstrap-datepicker.js"></script>
 <div class="ibox-content">
     <form class="form-horizontal m-t" id="frm" method="post" action="${ctx!}/admin/running/uploadFilePost" enctype="multipart/form-data">
@@ -24,25 +25,12 @@
             <@my.select id="dateType" class="form-control" datas=["工作日","双休日","节假日"] defaultValue="请选择"/>
             </div>
         </div>
-
-        <div class="form-group">
-            <label class="col-sm-3 control-label">选择开始时间：</label>
-            <!--指定 date标记-->
-            <div class='input-group date col-sm-8' id='datetimepicker1'>
-                <input type='text' class="form-control" />
-                <span class="input-group-addon">
-            <span class="glyphicon glyphicon-calendar"></span>
-        </span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">选择结束时间：</label>
-            <!--指定 date标记-->
-            <div class='input-group date col-sm-8' id='datetimepicker2'>
-                <input type='text' class="form-control" />
-                <span class="input-group-addon">
-            <span class="glyphicon glyphicon-calendar"></span>
-        </span>
+        <div class="form-group" id="data_5">
+            <label class="font-noraml">运行时间：</label>
+            <div class="input-daterange input-group" id="datepicker">
+                <input type="text" class="input-sm form-control" name="startTime" value="2014-11-11">
+                <span class="input-group-addon">到</span>
+                <input type="text" class="input-sm form-control" name="endTime" value="2014-11-17">
             </div>
         </div>
         <div class="form-group">
@@ -61,9 +49,9 @@
     </form>
 </div>
 <script>
-//    $('#datetimepicker1').datetimepicker({
-//        format: 'yyyy-mm-dd hh:ii'
-//    });
+    $('#datepicker').datetimepicker({
+        format: 'yyyy-mm-dd'
+    });
     function imgPreview(fileDom){
         //判断是否支持FileReader
         if (window.FileReader) {

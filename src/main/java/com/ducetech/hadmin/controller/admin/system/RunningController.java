@@ -115,6 +115,7 @@ public class RunningController extends BaseController {
             stream.close();
             running.setCreateId(user.getId());
             running.setCreateTime(new Date());
+            running.setFileSize(""+Math.round(file.getSize()/1024));
             fileDao.save(running);
             return JsonResult.success();
         } catch (IllegalStateException e) {
