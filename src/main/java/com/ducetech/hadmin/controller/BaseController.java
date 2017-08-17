@@ -79,7 +79,7 @@ public class BaseController {
     		if(StringUtils.isNoneBlank(sortName) && StringUtils.isNoneBlank(sortOrder)){
     			if(sortOrder.equalsIgnoreCase("desc")){
     			    String[] arr=sortName.split(",");
-    			    if(arr.length>0){
+    			    if(arr.length>1){
                         sort = new Sort(Direction.DESC, arr[0]).and(new Sort(Direction.DESC,arr[1]));
                     }else {
                         sort = new Sort(Direction.DESC, sortName);

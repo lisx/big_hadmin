@@ -36,15 +36,15 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 应急预案管理
+ * 消防安全管理
  *  fire safety
  * @author lisx
  * @create 2017-08-15 08:47
  **/
 @Controller
-@RequestMapping("/admin/emergency")
-public class EmergencyController  extends BaseController {
-    private static Logger logger = LoggerFactory.getLogger(EmergencyController.class);
+@RequestMapping("/admin/fire")
+public class FireSafetyController extends BaseController {
+    private static Logger logger = LoggerFactory.getLogger(FireSafetyController.class);
     @Autowired
     private IStationDao stationDao;
     @Autowired
@@ -76,31 +76,31 @@ public class EmergencyController  extends BaseController {
         }
     }
     /**
-     * 应急预案首页
+     * 消防安全首页
      * @return
      */
     @RequestMapping("/index")
     public String index() {
         logger.debug("获取站点文件全部数据");
-        return "admin/emergency/index";
+        return "admin/fire/index";
     }
 
     @RequestMapping("/add")
     public String add(String nodeCode,Model map) {
-        logger.debug("进入应急预案添加文件夹");
+        logger.debug("进入消防安全添加文件夹");
         map.addAttribute("nodeCode",nodeCode);
-        map.addAttribute("menu","应急预案");
-        return "admin/emergency/form";
+        map.addAttribute("menu","消防安全");
+        return "admin/fire/form";
     }
 
     /**
-     * 应急预案新增文件夹
+     * 消防安全新增文件夹
      * @return
      */
     @RequestMapping(value= {"/saveFolder"} ,method = RequestMethod.POST)
     @ResponseBody
     public JsonResult edit(BigFile folder,String nodeCode,String menu){
-        logger.debug("新增应急预案文件夹nodeCode{},menu{}",nodeCode,menu);
+        logger.debug("新增消防安全文件夹nodeCode{},menu{}",nodeCode,menu);
         User user=getUser();
         Station area;
         if(null!=nodeCode&&!nodeCode.equals("undefined")){
@@ -132,9 +132,9 @@ public class EmergencyController  extends BaseController {
      */
     @RequestMapping("/toFolder")
     public String toFolder(String folder,Model map) {
-        logger.debug("进入应急预案文件夹folder{}",folder);
+        logger.debug("进入消防安全文件夹folder{}",folder);
         map.addAttribute("folder",folder);
-        return "admin/emergency/folder";
+        return "admin/fire/folder";
     }
 
     /**
@@ -152,7 +152,7 @@ public class EmergencyController  extends BaseController {
         }else {
             builder.add("folderName", SpecificationOperator.Operator.isNull.name(),null);
         }
-        builder.add("menuType", SpecificationOperator.Operator.likeAll.name(), "应急预案");
+        builder.add("menuType", SpecificationOperator.Operator.likeAll.name(), "消防安全");
         User user=getUser();
         if (!StringUtil.isBlank(nodeCode)&&!nodeCode.equals("undefined")) {
             builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
@@ -187,13 +187,13 @@ public class EmergencyController  extends BaseController {
         System.out.println("++++++"+folder);
         map.addAttribute("folder",folder);
         map.addAttribute("nodeCode",nodeCode);
-        return "admin/emergency/uploadFile";
+        return "admin/fire/uploadFile";
     }
 
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult uploadFilePost(MultipartHttpServletRequest request, String chunk, String chunks, String size, String folder,String nodeCode){
-        logger.debug("进入应急预案上传文件");
+        logger.debug("进入消防安全上传文件");
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
         MultipartFile file;
@@ -221,7 +221,7 @@ public class EmergencyController  extends BaseController {
                         type="office";
                         BigFile bf=new BigFile();
                         bf.setFileSize(""+Math.round(file.getSize()/1024));
-                        bf.setMenuType("应急预案");
+                        bf.setMenuType("消防安全");
                         bf.setFileType(type);
                         bf.setFileName(file.getOriginalFilename());
                         bf.setFileUrl(filePath);
@@ -237,7 +237,7 @@ public class EmergencyController  extends BaseController {
                         filePath=BigConstant.getTrainImagePathUrl(file.getOriginalFilename());
                         BigFile bf=new BigFile();
                         bf.setFileSize(""+Math.round(file.getSize()/1024));
-                        bf.setMenuType("应急预案");
+                        bf.setMenuType("消防安全");
                         bf.setFileType(type);
                         bf.setFileName(file.getOriginalFilename());
                         bf.setFileUrl(filePath);
@@ -262,7 +262,7 @@ public class EmergencyController  extends BaseController {
                                 filePath = BigConstant.getTrainVideoPathUrl(file.getOriginalFilename());
                                 BigFile bf = new BigFile();
                                 bf.setFileSize("" + Math.round(Integer.parseInt(size) / 1024));
-                                bf.setMenuType("应急预案");
+                                bf.setMenuType("消防安全");
                                 bf.setFileType(type);
                                 bf.setFileName(file.getOriginalFilename());
                                 bf.setFileUrl(filePath);
@@ -279,7 +279,7 @@ public class EmergencyController  extends BaseController {
                                     logger.debug("上传成功");
                                     BigFile bf=new BigFile();
                                     bf.setFileSize(""+Math.round(Integer.parseInt(size)/1024));
-                                    bf.setMenuType("应急预案");
+                                    bf.setMenuType("消防安全");
                                     bf.setFileType(type);
                                     bf.setFileName(file.getOriginalFilename());
                                     bf.setFolderName(folder);

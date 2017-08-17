@@ -92,17 +92,28 @@
                         </@shiro.hasPermission>
                         <@shiro.hasPermission name="system:article:sort:index">
                             <li>
+                                <a class="J_menuItem" href="${ctx!}/admin/rules/index">规章制度</a>
+                            </li>
+                        </@shiro.hasPermission>
+                        <@shiro.hasPermission name="system:article:sort:index">
+                            <li>
+                                <a class="J_menuItem" href="${ctx!}/admin/fire/index">消防安全文件</a>
+                            </li>
+                        </@shiro.hasPermission>
+                        <@shiro.hasPermission name="system:article:sort:index">
+                            <li>
+                                <a class="J_menuItem" href="${ctx!}/admin/running/index">运行图管理</a>
+                            </li>
+                        </@shiro.hasPermission>
+                        <@shiro.hasPermission name="system:article:sort:index">
+                            <li>
                                 <a class="J_menuItem" href="${ctx!}/admin/article/index">通知管理</a>
                             </li>
                         </@shiro.hasPermission>
+
                         <@shiro.hasPermission name="system:article:sort:index">
                             <li>
-                                <a class="J_menuItem" href="${ctx!}/admin/article/index">消防安全文件</a>
-                            </li>
-                        </@shiro.hasPermission>
-                        <@shiro.hasPermission name="system:article:sort:index">
-                            <li>
-                                <a class="J_menuItem" href="${ctx!}/admin/article/index">首页滚波图</a>
+                                <a class="J_menuItem" href="${ctx!}/admin/article/index">前端版本更新</a>
                             </li>
                         </@shiro.hasPermission>
                         </ul>
