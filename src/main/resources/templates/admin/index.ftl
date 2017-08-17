@@ -1,21 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="renderer" content="webkit">
-    <title> HAdmin- 主页</title>
-    <meta name="keywords" content="">
-    <meta name="description" content="">
-    <!--[if lt IE 9]>
-    <meta http-equiv="refresh" content="0;ie.html" />
-    <![endif]-->
-    <link rel="shortcut icon" href="favicon.ico">
-    <link href="${ctx!}/hadmin/css/bootstrap.min.css?v=${version!}" rel="stylesheet">
-    <link href="${ctx!}/hadmin/css/font-awesome.min.css?v=${version!}" rel="stylesheet">
-    <link href="${ctx!}/hadmin/css/animate.css?v=${version!}" rel="stylesheet">
-    <link href="${ctx!}/hadmin/css/style.css?v=${version!}" rel="stylesheet">
-</head>
+<!-- 全局js -->
+<#include "/admin/common/js.ftl">
+<#include "/admin/common/css.ftl">
 <body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
     <div id="wrapper">
         <!--左侧导航开始-->
@@ -107,7 +92,7 @@
                         </@shiro.hasPermission>
                         <@shiro.hasPermission name="system:article:sort:index">
                             <li>
-                                <a class="J_menuItem" href="${ctx!}/admin/article/index">通知管理</a>
+                                <a class="J_menuItem" href="${ctx!}/admin/notice/index">通知管理</a>
                             </li>
                         </@shiro.hasPermission>
 
@@ -155,12 +140,6 @@
         <!--右侧部分结束-->
     </div>
 
-    <!-- 全局js -->
-    <script src="${ctx!}/hadmin/js/jquery.min.js"></script>
-    <script src="${ctx!}/hadmin/js/bootstrap.min.js"></script>
-    <script src="${ctx!}/hadmin/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="${ctx!}/hadmin/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-    <script src="${ctx!}/hadmin/js/plugins/layer/layer.min.js?v=${version!}"></script>
 
     <!-- 自定义js -->
     <script src="${ctx!}/hadmin/js/hAdmin.js"></script>
