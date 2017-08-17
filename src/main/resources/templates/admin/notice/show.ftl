@@ -23,9 +23,9 @@
 </div>
 <script>
     $(document).ready(function () {
-        var text="${notice.content}";
-        console.log("||"+text.raw());
-        $('.noticeContent').html(text.raw());
+        var text='${notice.content}';
+        console.log("||"+text);
+        $('.noticeContent').html(text);
     });
 
 </script>

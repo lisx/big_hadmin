@@ -437,7 +437,7 @@
                 shadeClose: true,
                 shade: false,
                 area: ['600px', '600px'],
-                content: '${ctx!}/admin/exam/index',
+                content: '${ctx!}/admin/exam/edit',
                 end: function(index){
                     $('#table_exam_list').bootstrapTable("refresh");
                 }

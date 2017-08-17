@@ -29,21 +29,23 @@ import java.util.Date;
 @Controller
 @RequestMapping("/admin/exam")
 public class ExamController extends BaseController {
-    Logger logeer= LoggerFactory.getLogger(ExamController.class);
+    Logger logger= LoggerFactory.getLogger(ExamController.class);
     @Autowired
     IExamDao examService;
     @Autowired
 
-    @RequestMapping("/index")
+    @RequestMapping("/add")
     public String index() {
-        logeer.debug("测试进入exam首页");
-        return "admin/exam/form";
+        logger.debug("测试进入exam配置试卷页");
+        return "admin/learn/examForm";
     }
-    @RequestMapping("/examEdit")
-    public String examEdit(Integer id,Model model) {
-        Exam exam=examService.findOne(id);
-        model.addAttribute("exam",exam);
-        return "admin/exam/form";
+    @RequestMapping("/edit")
+    public String edit(Integer id,Model model) {
+        if(null!=id) {
+            Exam exam = examService.findOne(id);
+            model.addAttribute("exam", exam);
+        }
+        return "admin/learn/examForm";
     }
     /**
      * 查询集合
@@ -60,11 +62,16 @@ public class ExamController extends BaseController {
         return examService.findAll(builder.generateSpecification(), getPageRequest());
     }
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public JsonResult add(Exam exam) {
-        exam.setCreateId(getUser().getId());
-        exam.setCreateTime(new Date());
-        examService.saveAndFlush(exam);
+    @RequestMapping(value = "/saveExam", method = RequestMethod.POST)
+    @ResponseBody
+    public JsonResult save(Exam exam) {
+        try {
+            exam.setCreateId(getUser().getId());
+            exam.setCreateTime(new Date());
+            examService.saveAndFlush(exam);
+        }catch(Exception e){
+            logger.debug(e.getMessage());
+        }
         return JsonResult.success();
     }
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
