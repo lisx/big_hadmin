@@ -22,14 +22,6 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">选择运营图：</label>
-            <div class="col-sm-8">
-                <img id="preview" />
-                <br />
-                <input type="file" name="file" onchange="imgPreview(this)" />
-            </div>
-        </div>
-        <div class="form-group">
             <div class="col-sm-8 col-sm-offset-3">
                 <button class="btn btn-primary" type="button" onclick="uploadClose()" >保存</button>
             </div>

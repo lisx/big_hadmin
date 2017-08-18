@@ -16,7 +16,7 @@
                 </div>
                 <div class="form-group">
                     <label>站区：</label>
-                <@my.select id="area" class="form-control" datas=["单选","多选","判断","排序"] defaultValue="请选择"/>
+                <@my.select id="area" class="form-control" datas=areas defaultValue="请选择"/>
                 </div>
                 <div class="form-group">
                     <label>站点：</label>
@@ -50,6 +50,19 @@
             });
         }).fail(function(res) {});
     }
+    $("#area").change(function(){
+        var area=$("#area").val();
+        console.log("||||"+area);
+        $.ajax({
+            url: '/admin/station/getStation?area='+area,
+            type: 'GET',
+            cache: false,
+            processData: false,
+            contentType: false
+        }).done(function(stations) {
+            console.log(stations);
+        });
+    });
     function downUploadUser(){
         window.open("/uploadUser.xls");
     }

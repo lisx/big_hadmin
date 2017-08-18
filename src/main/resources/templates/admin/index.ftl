@@ -95,10 +95,14 @@
                                 <a class="J_menuItem" href="${ctx!}/admin/notice/index">通知管理</a>
                             </li>
                         </@shiro.hasPermission>
-
                         <@shiro.hasPermission name="system:article:sort:index">
                             <li>
-                                <a class="J_menuItem" href="${ctx!}/admin/article/index">前端版本更新</a>
+                                <a class="J_menuItem" href="${ctx!}/admin/rollPlay/index">首页滚播图</a>
+                            </li>
+                        </@shiro.hasPermission>
+                        <@shiro.hasPermission name="system:article:sort:index">
+                            <li>
+                                <a class="J_menuItem" href="${ctx!}/admin/edition/index">前端版本更新</a>
                             </li>
                         </@shiro.hasPermission>
                         </ul>

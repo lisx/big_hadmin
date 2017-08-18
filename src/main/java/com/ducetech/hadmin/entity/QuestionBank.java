@@ -21,7 +21,7 @@ public class QuestionBank  extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id",nullable = false)
-    private Integer id;
+    private int id;
     //问题库名称
     private String name;
     @OneToMany

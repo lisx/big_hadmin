@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -92,7 +93,9 @@ public class QuestionController extends BaseController {
      * @return
      */
     @RequestMapping(value="/uploadQuestion",method=RequestMethod.GET)
-    public String uploadQuestion(){
+    public String uploadQuestion(Model model){
+        List<String> areas=stationDao.findLines(3);
+        model.addAttribute("areas",areas);
         return "admin/learn/uploadQuestion";
     }
 

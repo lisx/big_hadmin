@@ -239,9 +239,6 @@
                 pageList: [5, 10, 15, 20, 25],
                 //是否启用查询
                 search: true,
-                //是否启用详细信息视图
-                // detailView:true,
-                // detailFormatter:detailFormatter,
                 //表示服务端请求
                 sidePagination: "server",
                 //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
@@ -295,9 +292,6 @@
                 pageList: [5, 10, 15, 20, 25],
                 //是否启用查询
                 search: true,
-                //是否启用详细信息视图
-                // detailView:true,
-                // detailFormatter:detailFormatter,
                 //表示服务端请求
                 sidePagination: "server",
                 //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
@@ -437,7 +431,7 @@
                 shadeClose: true,
                 shade: false,
                 area: ['600px', '600px'],
-                content: '${ctx!}/admin/exam/edit',
+                content: '${ctx!}/admin/exam/add',
                 end: function(index){
                     $('#table_exam_list').bootstrapTable("refresh");
                 }
@@ -484,7 +478,7 @@
                 area: ['400px', '600px'],
                 content: '${ctx!}/admin/question/uploadQuestion',
                 end: function(index){
-                    $('#table_list').bootstrapTable("refresh");
+                    $('#table_bank_list').bootstrapTable("refresh");
                 }
             });
         }
@@ -497,7 +491,7 @@
                 area: ['400px', '400px'],
                 content: '${ctx!}/admin/folder/edit/1',
                 end: function(index){
-                    $('#table_list').bootstrapTable("refresh");
+                    $('#table_bank_list').bootstrapTable("refresh");
                 }
             });
         }

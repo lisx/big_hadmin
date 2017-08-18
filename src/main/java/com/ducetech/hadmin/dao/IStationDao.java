@@ -39,4 +39,6 @@ public interface IStationDao extends IBaseDao<Station,Integer> {
     List<Station> querySubNodesByCode(@Param("parentCode") String parentCode,@Param("nodeLength") int nodeLength);
     @Query(value = "SELECT a.nodeName from Station a where length(a.nodeCode)=:nodeLength order by a.nodeCode")
     List<String> findLines(@Param("nodeLength") int nodeLength);
+    @Query(value = "SELECT a.nodeName from Station a where length(a.nodeCode)=:nodeLength and a.nodeCode like :nodeCode order by a.nodeCode")
+    List<String> findStations(@Param("nodeLength") int nodeLength,@Param("nodeCode")String nodeCode);
 }

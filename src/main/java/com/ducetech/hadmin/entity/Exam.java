@@ -38,4 +38,8 @@ public class Exam extends BaseEntity {
     private Integer rankNum;
     //排序分
     private Integer rankScore;
+    //归属站区
+    private String areaName;
+    //归属站点
+    private String stationName;
 }

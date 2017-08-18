@@ -4,6 +4,7 @@ import com.ducetech.hadmin.common.JsonResult;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IExamDao;
+import com.ducetech.hadmin.dao.IStationDao;
 import com.ducetech.hadmin.entity.Exam;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 配置考试类型
@@ -33,17 +35,32 @@ public class ExamController extends BaseController {
     @Autowired
     IExamDao examService;
     @Autowired
+    IStationDao stationDao;
 
+    /**
+     * 添加配置试卷
+     * @param model
+     * @return
+     */
     @RequestMapping("/add")
-    public String index() {
+    public String index(Model model) {
         logger.debug("测试进入exam配置试卷页");
         return "admin/learn/examForm";
     }
+
+    /**
+     * 编辑配置试卷
+     * @param id
+     * @param model
+     * @return
+     */
     @RequestMapping("/edit")
     public String edit(Integer id,Model model) {
         if(null!=id) {
             Exam exam = examService.findOne(id);
             model.addAttribute("exam", exam);
+            List<String> areas=stationDao.findLines(3);
+            model.addAttribute("areas",areas);
         }
         return "admin/learn/examForm";
     }

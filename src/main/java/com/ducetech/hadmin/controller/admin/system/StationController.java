@@ -26,11 +26,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -69,7 +67,12 @@ public class StationController extends BaseController {
             return Station.createRootTree(stations);
         }
     }
-
+    @RequestMapping("/getStation")
+    @ResponseBody
+    public List<String> getStation(String area){
+        Station station=stationDao.findByNodeName(area);
+        return stationDao.findStations(station.getNodeCode().length()+3,station.getNodeCode());
+    }
     /**
      * 删除
      * @param nodeId

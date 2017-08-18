@@ -24,7 +24,6 @@
 <script>
     $(document).ready(function () {
         var text='${notice.content}';
-        console.log("||"+text);
         $('.noticeContent').html(text);
     });
 

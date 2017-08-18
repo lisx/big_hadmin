@@ -1,7 +1,9 @@
 package com.ducetech.hadmin.bigInterfacel;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.ValueFilter;
 import com.ducetech.hadmin.common.utils.BigConstant;
+import com.ducetech.hadmin.common.utils.DateUtil;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.*;
 import com.ducetech.hadmin.entity.*;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -56,14 +60,32 @@ public class ExamInterface  extends BaseController {
         List<QuestionBank> banks=questionBankDao.findAll();
         List<Exam> exams=examDao.findAll();
         obj=new JSONObject();
+        ValueFilter filter = new ValueFilter() {
+            @Override
+            public Object process(Object obj, String s, Object v) {
+                if(v==null){
+                    return 0;
+                }
+                if(s.equals("createTime")||s.equals("updateTime")){
+//                    try {
+//                        Date date = (Date) v;//DateUtil.stringToDate(v.toString(), "yyyy-MM-dd HH:mm:ss");
+//                    } catch (ParseException e) {
+//                        e.printStackTrace();
+//                    }
+                    return ((Date) v).getTime();
+                }
+                return v;
+            }
+        };
         JSONObject o=new JSONObject();
         o.put("banks",banks);
         o.put("exams",exams);
         obj.put("state",state);
         obj.put("msg",msg);
         obj.put("data",o);
-        return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
+        return JSONObject.parseObject(JSONObject.toJSONString(obj, filter));
     }
+
 
     @ApiOperation(value="获取练习题", notes="获取练习题")
     @RequestMapping(value="/findExamQuestion", method = RequestMethod.GET)

@@ -7,6 +7,7 @@ import com.ducetech.hadmin.common.utils.MD5Utils;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IUserDao;
 import com.ducetech.hadmin.entity.User;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
