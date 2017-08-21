@@ -260,6 +260,9 @@
                     title: "问题库",
                     field: "name",
                 },{
+                    title: "归属",
+                    field: "station.nodeName",
+                },{
                     title: "创建时间",
                     field: "createTime",
                     sortable: true

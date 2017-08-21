@@ -1,6 +1,7 @@
 package com.ducetech.hadmin.controller.admin.system;
 
 import com.ducetech.hadmin.common.JsonResult;
+import com.ducetech.hadmin.common.utils.BigConstant;
 import com.ducetech.hadmin.common.utils.PoiUtil;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
@@ -97,13 +98,7 @@ public class QuestionController extends BaseController {
     @ResponseBody
     public JsonResult uploadFilePost(@RequestParam("fileUpload") MultipartFile file,String questionType,String bankName,String area,String station){
         User user=getUser();
-        Station s=null;
-        if(null!=station){
-            s=stationDao.findByNodeName(station);
-        }else if(null!=area){
-            s=stationDao.findByNodeName(area);
-        }
-
+        Station s;
         if (file.isEmpty()) {
             return success("文件为空");
         }else{
@@ -113,104 +108,139 @@ public class QuestionController extends BaseController {
                 bank.setName(bankName);
                 bank.setCreateId(user.getId());
                 bank.setCreateTime(new Date());
-                bank.setStation(s);
+                if(null!=area&&!area.equals("请选择")){
+                    s=stationDao.findByNodeName(area);
+                    bank.setStation(s);
+                }else{
+                    s=stationDao.findByNodeName(user.getStationArea());
+                    if(null!=s)
+                    bank.setStation(s);
+                }
+                if(null!=station&&!station.equals("请选择")){
+                    s=stationDao.findByNodeName(station);
+                    bank.setStation(s);
+                }
                 questionBankDao.save(bank);
             }
-            List<List<List<String>>> data = PoiUtil.readExcelToList(file, 1);
+
+            List<List<List<String>>> data = PoiUtil.readExcelToList(file, 2);
             if (null != data && !data.isEmpty()) {
-                String A = null,B = null,C = null,D = null,proper = null,tit=null;
+                String A = null,B = null,C = null,D = null,title=null,imgUrl=null;
                 for (List<List<String>> sheet : data) {
                     if (null != sheet && !sheet.isEmpty()) {
                         for (List<String> row : sheet) {
                             if(questionType.equals("判断")){
-                                String title = StringUtil.trim(row.get(0));
-                                String imgUrl = StringUtil.trim(row.get(1));
-                                String a = StringUtil.trim(row.get(2));
-                                Question question = new Question();
-                                question.setTitle(title);
-                                question.setProper(a);
-                                question.setImgUrl(imgUrl);
-                                question.setQuestionBank(bank);
-                                question.setCreateId(user.getId());
-                                question.setCreateTime(new Date());
-                                questionService.saveOrUpdate(question);
+                                if(row.size()==3) {
+                                    title = StringUtil.trim(row.get(0));
+                                    imgUrl = StringUtil.trim(row.get(1));
+                                    A = StringUtil.trim(row.get(2));
+                                    Question question = new Question();
+                                    question.setTitle(title);
+                                    question.setProper(A);
+                                    question.setImgUrl(imgUrl);
+                                    question.setQuestionBank(bank);
+                                    question.setCreateId(user.getId());
+                                    question.setCreateTime(new Date());
+                                    question.setMenuType("判断");
+                                    questionService.saveOrUpdate(question);
+                                }
                             }else if(questionType.equals("单选")){
-                                String title = StringUtil.trim(row.get(0));
-                                String imgUrl = StringUtil.trim(row.get(1));
-                                String a = StringUtil.trim(row.get(2));
-                                String b = StringUtil.trim(row.get(3));
-                                String c = StringUtil.trim(row.get(4));
-                                String d = StringUtil.trim(row.get(5));
-                                Question question = new Question();
-                                question.setTitle(title);
-                                question.setProper(a);
-                                question.setImgUrl(imgUrl);
-                                question.setQuestionBank(bank);
-                                question.setCreateId(user.getId());
-                                question.setCreateTime(new Date());
-                                questionService.saveOrUpdate(question);
-                                Proper p=new Proper();
-                                p.setQuestion(question);
-                                p.setName(a);
-                                properDao.save(p);
-                                p=new Proper();
-                                p.setQuestion(question);
-                                p.setName(b);
-                                properDao.save(p);
-                                p=new Proper();
-                                p.setQuestion(question);
-                                p.setName(c);
-                                properDao.save(p);
-                                p=new Proper();
-                                p.setQuestion(question);
-                                p.setName(d);
-                                properDao.save(p);
-                            }else if(questionType.equals("多选")){
-                                String title = StringUtil.trim(row.get(0));
-                                String imgUrl = StringUtil.trim(row.get(1));
-                                String a = StringUtil.trim(row.get(2));
-                                Question question = new Question();
-                                question.setTitle(title);
-                                question.setProper(a);
-                                question.setImgUrl(imgUrl);
-                                question.setQuestionBank(bank);
-                                question.setCreateId(user.getId());
-                                question.setCreateTime(new Date());
-                                questionService.saveOrUpdate(question);
-                                Proper p=new Proper();
-                                p.setQuestion(question);
-                                p.setName(a);
-                                properDao.save(p);
-                                for(int i=3;i<row.size();i++){
-                                    p=new Proper();
+                                if(row.size()==6) {
+                                    title = StringUtil.trim(row.get(0));
+                                    imgUrl = StringUtil.trim(row.get(1));
+                                    A = StringUtil.trim(row.get(2));
+                                    B = StringUtil.trim(row.get(3));
+                                    C = StringUtil.trim(row.get(4));
+                                    D = StringUtil.trim(row.get(5));
+                                    if (StringUtil.isBlank(title)) {
+                                        break;
+                                    }
+                                    Question question = new Question();
+                                    question.setTitle(title);
+                                    question.setProper(A);
+                                    question.setImgUrl(imgUrl);
+                                    question.setQuestionBank(bank);
+                                    question.setCreateId(user.getId());
+                                    question.setCreateTime(new Date());
+                                    question.setMenuType("单选");
+                                    questionService.saveOrUpdate(question);
+                                    Proper p = new Proper();
                                     p.setQuestion(question);
-                                    p.setName(a);
+                                    p.setName(A);
                                     properDao.save(p);
+                                    p = new Proper();
+                                    p.setQuestion(question);
+                                    p.setName(B);
+                                    properDao.save(p);
+                                    p = new Proper();
+                                    p.setQuestion(question);
+                                    p.setName(C);
+                                    properDao.save(p);
+                                    p = new Proper();
+                                    p.setQuestion(question);
+                                    p.setName(D);
+                                    properDao.save(p);
+                                }
+                            }else if(questionType.equals("多选")){
+                                if(row.size()>3) {
+                                    title = StringUtil.trim(row.get(0));
+                                    imgUrl = StringUtil.trim(row.get(1));
+                                    A = StringUtil.trim(row.get(2));
+                                    Question question = new Question();
+                                    question.setTitle(title);
+                                    question.setProper(A);
+                                    question.setImgUrl(imgUrl);
+                                    question.setQuestionBank(bank);
+                                    question.setCreateId(user.getId());
+                                    question.setCreateTime(new Date());
+                                    question.setMenuType("多选");
+                                    questionService.saveOrUpdate(question);
+                                    String [] arr=A.split("/");
+                                    Proper p = null;
+                                    for(int i=0;i<arr.length;i++) {
+                                        if(!StringUtil.isBlank(arr[i])) {
+                                            p = new Proper();
+                                            p.setQuestion(question);
+                                            p.setName(arr[i]);
+                                            properDao.save(p);
+                                        }
+                                    }
+                                    for (int i = 3; i < row.size(); i++) {
+                                        if(!StringUtil.isBlank(row.get(i))) {
+                                            p = new Proper();
+                                            p.setQuestion(question);
+                                            p.setName(row.get(i));
+                                            properDao.save(p);
+                                        }
+                                    }
                                 }
                             }else if(questionType.equals("排序")){
-                                String title = StringUtil.trim(row.get(0));
-                                String imgUrl = StringUtil.trim(row.get(1));
-                                String a = StringUtil.trim(row.get(2));
-                                Question question = new Question();
-                                question.setTitle(title);
-                                question.setProper(a);
-                                question.setImgUrl(imgUrl);
-                                question.setQuestionBank(bank);
-                                question.setCreateId(user.getId());
-                                question.setCreateTime(new Date());
-                                questionService.saveOrUpdate(question);
-                                Proper p=new Proper();
-                                p.setQuestion(question);
-                                p.setName(a);
-                                properDao.save(p);
-                                String [] arr=a.split("/");
-                                for(int i=0;i<arr.length;i++){
-                                    p=new Proper();
-                                    p.setQuestion(question);
-                                    p.setName(a);
-                                    properDao.save(p);
+                                if(row.size()==3) {
+                                    title = StringUtil.trim(row.get(0));
+                                    imgUrl = StringUtil.trim(row.get(1));
+                                    A = StringUtil.trim(row.get(2));
+                                    Question question = new Question();
+                                    question.setTitle(title);
+                                    question.setProper(A);
+                                    question.setImgUrl(imgUrl);
+                                    question.setQuestionBank(bank);
+                                    question.setCreateId(user.getId());
+                                    question.setCreateTime(new Date());
+                                    question.setMenuType("排序");
+                                    questionService.saveOrUpdate(question);
+                                    Proper p = null;
+                                    String[] arr = A.split("/");
+                                    for (int i = 0; i < arr.length; i++) {
+                                        if(!StringUtil.isBlank(arr[i])) {
+                                            p = new Proper();
+                                            p.setQuestion(question);
+                                            p.setName(arr[i]);
+                                            properDao.save(p);
+                                        }
+                                    }
                                 }
                             }
+                            A = null;B = null;C = null;D = null;title=null;imgUrl=null;
                         }
                     }
                 }

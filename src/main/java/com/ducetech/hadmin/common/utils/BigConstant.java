@@ -50,4 +50,6 @@ public class BigConstant {
             return v;
         }
     };
+
+    public static final String ADMIN ="运三分公司";
 }

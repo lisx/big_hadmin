@@ -19,10 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * 试卷接口
@@ -67,11 +64,6 @@ public class ExamInterface  extends BaseController {
                     return 0;
                 }
                 if(s.equals("createTime")||s.equals("updateTime")){
-//                    try {
-//                        Date date = (Date) v;//DateUtil.stringToDate(v.toString(), "yyyy-MM-dd HH:mm:ss");
-//                    } catch (ParseException e) {
-//                        e.printStackTrace();
-//                    }
                     return ((Date) v).getTime();
                 }
                 return v;
@@ -135,18 +127,25 @@ public class ExamInterface  extends BaseController {
                     for(int i=0;i<exam.getSingleNum();i++) {
                         int l = rand.nextInt(singles.size());
                         Question q=singles.get(l);
-                        System.out.println(singles.size()+"|||||空"+q.getId());
-                        if(null==q){
-                            System.out.println(singles.size()+"|||||空"+l);
+                        if(!questions.contains(q)&&null!=q){
+                            logger.debug(q.getPropers().size()+"单选");
+                            questions.add(q);
+                        }else{
+                            i--;
                         }
-                        questions.add(q);
                     }
                 }
                 if(null!=exam.getMultipleNum()&&exam.getMultipleNum()>0){
                     multiples = questionDao.findByQuestionBankAndMenuType(bank,"多选");
                     for(int i=0;i<exam.getMultipleNum();i++) {
                         int l = rand.nextInt(multiples.size());
-                        questions.add(multiples.get(l));
+                        Question q=multiples.get(l);
+                        if(!questions.contains(q)&&null!=q){
+                            logger.debug(q.getPropers().size()+"多选");
+                            questions.add(q);
+                        }else{
+                            i--;
+                        }
                     }
                 }
                 if(null!=exam.getJudgeNum()&&exam.getJudgeNum()>0){
@@ -154,22 +153,29 @@ public class ExamInterface  extends BaseController {
                     for(int i=0;i<exam.getJudgeNum();i++) {
                         int l = rand.nextInt(judges.size());
                         Question q=judges.get(l);
-                        System.out.println(judges.size()+"|||||空"+q.getId());
-                        if(null==q){
-                            System.out.println(judges.size()+"|||||空"+l);
+                        if(!questions.contains(q)&&null!=q){
+                            questions.add(q);
+                        }else{
+                            i--;
                         }
-                        questions.add(q);
                     }
                 }
                 if(null!=exam.getRankNum()&&exam.getRankNum()>0){
                     ranks = questionDao.findByQuestionBankAndMenuType(bank,"排序");
                     for(int i=0;i<exam.getRankNum();i++) {
                         int l = rand.nextInt(ranks.size());
-                        questions.add(ranks.get(l));
+                        Question q=ranks.get(l);
+                        if(!questions.contains(q)&&null!=q){
+                            logger.debug(q.getPropers().size()+"排序");
+                            questions.add(q);
+                        }else{
+                            i--;
+                        }
                     }
                 }
             }
             logger.debug("|+|+|"+questions.size());
+            questions.removeAll(Collections.singleton(null));
             log.setExamTime(new Date());
             log.setQuestions(questions);
             log.setBank(bank);

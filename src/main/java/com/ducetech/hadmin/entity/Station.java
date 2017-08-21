@@ -67,14 +67,21 @@ public class Station extends BaseEntity {
     public static JSONArray createRootTree(List<Station> nodes ){
         JSONArray array = new JSONArray();
         JSONObject obj = null;
-        obj = createRoot(null);
-        array.add(obj);
+//        obj = createRoot(null);
+//        array.add(obj);
         for (Station node : nodes) {
-            obj = new JSONObject();
-            obj.put("id", node.nodeCode);
-            obj.put("pId", node.nodeCode.substring(0, node.nodeCode.length() - 3));
-            obj.put("name", node.nodeName);
-            array.add(obj);
+            if(null==node.nodeCode){
+                obj = new JSONObject();
+                obj.put("id", "");
+                obj.put("pId", "-1");
+                obj.put("name", "运三分公司");
+            }else {
+                obj = new JSONObject();
+                obj.put("id", node.nodeCode);
+                obj.put("pId", node.nodeCode.substring(0, node.nodeCode.length() - 3));
+                obj.put("name", node.nodeName);
+                array.add(obj);
+            }
         }
         return array;
     }

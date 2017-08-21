@@ -39,6 +39,7 @@ public class Question extends BaseEntity {
 
     @OneToMany
     private List<Proper> propers;
+
     @JSONField(serialize = false)
     @ManyToOne
     private QuestionBank questionBank;
