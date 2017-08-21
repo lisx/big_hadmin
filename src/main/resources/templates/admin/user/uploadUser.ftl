@@ -40,6 +40,9 @@
         }).fail(function(res) {});
     }
     function downUploadUser(){
-        window.open("/upload/人员信息模版.xls");
+        var a = document.createElement('a');
+            a.href = "/upload/usr.xls";
+            a.download = "人员信息模版.xls";
+            a.click();
     }
 </script>

@@ -475,7 +475,7 @@
                 title: '上传题库',
                 shadeClose: true,
                 shade: false,
-                area: ['400px', '600px'],
+                area: ['500px', '600px'],
                 content: '${ctx!}/admin/question/uploadQuestion',
                 end: function(index){
                     $('#table_bank_list').bootstrapTable("refresh");
