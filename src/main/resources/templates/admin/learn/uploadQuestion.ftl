@@ -20,7 +20,9 @@
                 </div>
                 <div class="form-group">
                     <label>站点：</label>
-                <@my.select id="station" class="form-control" datas=["单选","多选","判断","排序"] defaultValue="请选择"/>
+                    <select id="station" name="station" class="form-control" >
+                        <option value="请选择">请选择</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <input type="file" class="form-control" name="fileUpload" />
@@ -62,11 +64,15 @@
         $.ajax({
             url: '/admin/station/getStation?area='+area,
             type: 'GET',
+            dataType: 'json',
             cache: false,
             processData: false,
             contentType: false
         }).done(function(stations) {
             console.log(stations);
+            for(var i in stations){
+                $("#station").append("<option>"+stations[i]+"</option>");
+            };
         });
     });
     function downUpload(obj){

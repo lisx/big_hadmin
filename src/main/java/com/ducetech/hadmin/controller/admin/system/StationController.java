@@ -30,7 +30,9 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 车站信息
@@ -71,7 +73,10 @@ public class StationController extends BaseController {
     @ResponseBody
     public List<String> getStation(String area){
         Station station=stationDao.findByNodeName(area);
-        return stationDao.findStations(station.getNodeCode().length()+3,station.getNodeCode());
+        List<String> list=stationDao.findStations(station.getNodeCode().length()+3,station.getNodeCode()+"___");
+        logger.debug(list.size()+"||||");
+        return list;
+
     }
     /**
      * 删除
