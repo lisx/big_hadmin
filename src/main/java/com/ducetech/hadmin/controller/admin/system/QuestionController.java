@@ -1,7 +1,6 @@
 package com.ducetech.hadmin.controller.admin.system;
 
 import com.ducetech.hadmin.common.JsonResult;
-import com.ducetech.hadmin.common.utils.BigConstant;
 import com.ducetech.hadmin.common.utils.PoiUtil;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
@@ -12,7 +11,6 @@ import com.ducetech.hadmin.entity.*;
 import com.ducetech.hadmin.service.IQuestionService;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,12 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -131,126 +124,91 @@ public class QuestionController extends BaseController {
                         for (List<String> row : sheet) {
                             if(questionType.equals("判断")){
                                 String title = StringUtil.trim(row.get(0));
-                                int xlength=title.indexOf("（×）");
-                                int ylength=title.indexOf("（√）");
-                                if(xlength>0){
-                                    proper="错";
-                                    Question question = new Question();
-                                    question.setTitle(title.substring(0,xlength).replaceAll("[\\u00A0]+", "").trim());
-                                    question.setMenuType("判断");
-                                    question.setProper(proper);
-                                    question.setBankId(bankName);
-                                    question.setQuestionBank(bank);
-                                    questionService.saveOrUpdate(question);
-                                }else if(ylength>0){
-                                    proper="对";
-                                    Question question = new Question();
-                                    question.setTitle(title.substring(0,ylength).replaceAll("[\\u00A0]+", "").trim());
-                                    question.setMenuType("判断");
-                                    question.setProper(proper);
-                                    question.setBankId(bankName);
-                                    question.setQuestionBank(bank);
-                                    questionService.saveOrUpdate(question);
-                                }
+                                String imgUrl = StringUtil.trim(row.get(1));
+                                String a = StringUtil.trim(row.get(2));
+                                Question question = new Question();
+                                question.setTitle(title);
+                                question.setProper(a);
+                                question.setImgUrl(imgUrl);
+                                question.setQuestionBank(bank);
+                                question.setCreateId(user.getId());
+                                question.setCreateTime(new Date());
+                                questionService.saveOrUpdate(question);
                             }else if(questionType.equals("单选")){
                                 String title = StringUtil.trim(row.get(0));
-
-                                if(title.indexOf("A.")==0||title.indexOf("B.")==0||title.indexOf("C.")==0||title.indexOf("D.")==0){
-                                    if(title.indexOf("A.")==0){
-                                        if(title.indexOf("B.")>0){
-                                            A=title.substring(2,title.indexOf("B.")).replaceAll("[\\u00A0]+", "").trim();
-                                            if(title.indexOf("C.")>0){
-                                                B=title.substring(title.indexOf("B.")+2,title.indexOf("C.")).replaceAll("[\\u00A0]+", "").trim();
-                                                if(title.indexOf("D.")>0){
-                                                    C=title.substring(title.indexOf("C.")+2,title.indexOf("D.")).replaceAll("[\\u00A0]+", "").trim();
-                                                    D=title.substring(title.indexOf("D.")+2).replaceAll("[\\u00A0]+", "").trim();
-                                                }else{
-                                                    C=title.substring(title.indexOf("C.")+2).replaceAll("[\\u00A0]+", "").trim();
-                                                }
-                                            }else{
-                                                B=title.substring(title.indexOf("B.")+2).replaceAll("[\\u00A0]+", "").trim();
-                                            }
-                                        }else{
-                                            A=title.substring(2).replaceAll("[\\u00A0]+", "").trim();
-                                        }
-                                    }else if(title.indexOf("B.")==0){
-                                        if(title.indexOf("C.")>0){
-                                            B=title.substring(2,title.indexOf("C.")).replaceAll("[\\u00A0]+", "").trim();
-                                            if(title.indexOf("D.")>0){
-                                                C=title.substring(title.indexOf("C.")+2,title.indexOf("D.")).replaceAll("[\\u00A0]+", "").trim();
-                                                D=title.substring(title.indexOf("D.")+2).replaceAll("[\\u00A0]+", "").trim();
-                                            }else{
-                                                C=title.substring(title.indexOf("C.")+2).replaceAll("[\\u00A0]+", "").trim();
-                                            }
-                                        }else{
-                                            B=title.substring(2).replaceAll("[\\u00A0]+", "").trim();
-                                        }
-                                    }else if(title.indexOf("C.")==0){
-                                        if(title.indexOf("D.")>0){
-                                            C=title.substring(2,title.indexOf("D.")).replaceAll("[\\u00A0]+", "").trim();
-                                            D=title.substring(title.indexOf("D.")+2).replaceAll("[\\u00A0]+", "").trim();
-                                        }else{
-                                            C=title.substring(2).replaceAll("[\\u00A0]+", "").trim();
-                                        }
-                                    }else if(title.indexOf("D.")==0){
-                                        D=title.substring(2).replaceAll("[\\u00A0]+", "").trim();
-                                    }
-                                }else{
-
-                                    if(title.indexOf("（A）")>-1){
-                                        title=title.replace("（A）","（ ）");
-                                        proper="A";
-                                    }else if(title.indexOf("（B）")>-1){
-                                        title=title.replace("（B）","（ ）");
-                                        proper="B";
-                                    }else if(title.indexOf("（C）")>-1){
-                                        title=title.replace("（C）","（ ）");
-                                        proper="C";
-                                    }else if(title.indexOf("（D）")>-1){
-                                        title=title.replace("（D）","（ ）");
-                                        proper="D";
-                                    }
-                                    tit=title;
+                                String imgUrl = StringUtil.trim(row.get(1));
+                                String a = StringUtil.trim(row.get(2));
+                                String b = StringUtil.trim(row.get(3));
+                                String c = StringUtil.trim(row.get(4));
+                                String d = StringUtil.trim(row.get(5));
+                                Question question = new Question();
+                                question.setTitle(title);
+                                question.setProper(a);
+                                question.setImgUrl(imgUrl);
+                                question.setQuestionBank(bank);
+                                question.setCreateId(user.getId());
+                                question.setCreateTime(new Date());
+                                questionService.saveOrUpdate(question);
+                                Proper p=new Proper();
+                                p.setQuestion(question);
+                                p.setName(a);
+                                properDao.save(p);
+                                p=new Proper();
+                                p.setQuestion(question);
+                                p.setName(b);
+                                properDao.save(p);
+                                p=new Proper();
+                                p.setQuestion(question);
+                                p.setName(c);
+                                properDao.save(p);
+                                p=new Proper();
+                                p.setQuestion(question);
+                                p.setName(d);
+                                properDao.save(p);
+                            }else if(questionType.equals("多选")){
+                                String title = StringUtil.trim(row.get(0));
+                                String imgUrl = StringUtil.trim(row.get(1));
+                                String a = StringUtil.trim(row.get(2));
+                                Question question = new Question();
+                                question.setTitle(title);
+                                question.setProper(a);
+                                question.setImgUrl(imgUrl);
+                                question.setQuestionBank(bank);
+                                question.setCreateId(user.getId());
+                                question.setCreateTime(new Date());
+                                questionService.saveOrUpdate(question);
+                                Proper p=new Proper();
+                                p.setQuestion(question);
+                                p.setName(a);
+                                properDao.save(p);
+                                for(int i=3;i<row.size();i++){
+                                    p=new Proper();
+                                    p.setQuestion(question);
+                                    p.setName(a);
+                                    properDao.save(p);
                                 }
-                                if(null!=A&&null!=B&&null!=C&&null!=D&&null!=proper){
-                                    Question question = new Question();
-                                    question.setTitle(tit.replaceAll("[\\u00A0]+", "").trim());
-                                    question.setMenuType("单选");
-                                    if(proper.equals("A"))
-                                        question.setProper(A.replaceAll("[\\u00A0]+", "").trim());
-                                    else if(proper.equals("B"))
-                                        question.setProper(B.replaceAll("[\\u00A0]+", "").trim());
-                                    else if(proper.equals("C"))
-                                        question.setProper(C.replaceAll("[\\u00A0]+", "").trim());
-                                    else
-                                        question.setProper(D.replaceAll("[\\u00A0]+", "").trim());
-                                    question.setBankId(bankName);
-                                    question.setQuestionBank(bank);
-                                    questionService.saveOrUpdate(question);
-                                    List<Proper> propers=new ArrayList<>();
-                                    Proper pro = new Proper();
-                                    pro.setName(A);
-                                    pro.setQuestion(question);
-                                    properDao.save(pro);
-                                    propers.add(pro);
-                                    pro = new Proper();
-                                    pro.setName(B);
-                                    pro.setQuestion(question);
-                                    properDao.save(pro);
-                                    propers.add(pro);
-                                    pro = new Proper();
-                                    pro.setName(C);
-                                    pro.setQuestion(question);
-                                    properDao.save(pro);
-                                    propers.add(pro);
-                                    pro = new Proper();
-                                    pro.setName(D);
-                                    pro.setQuestion(question);
-                                    properDao.save(pro);
-                                    propers.add(pro);
-                                    question.setPropers(propers);
-                                    questionService.saveOrUpdate(question);
-                                    A = null;B = null;C = null;D = null;proper = null;tit=null;
+                            }else if(questionType.equals("排序")){
+                                String title = StringUtil.trim(row.get(0));
+                                String imgUrl = StringUtil.trim(row.get(1));
+                                String a = StringUtil.trim(row.get(2));
+                                Question question = new Question();
+                                question.setTitle(title);
+                                question.setProper(a);
+                                question.setImgUrl(imgUrl);
+                                question.setQuestionBank(bank);
+                                question.setCreateId(user.getId());
+                                question.setCreateTime(new Date());
+                                questionService.saveOrUpdate(question);
+                                Proper p=new Proper();
+                                p.setQuestion(question);
+                                p.setName(a);
+                                properDao.save(p);
+                                String [] arr=a.split("/");
+                                for(int i=0;i<arr.length;i++){
+                                    p=new Proper();
+                                    p.setQuestion(question);
+                                    p.setName(a);
+                                    properDao.save(p);
                                 }
                             }
                         }
@@ -260,6 +218,32 @@ public class QuestionController extends BaseController {
         }
         return JsonResult.success("上传成功！");
     }
+
+    private void panduan(String bankName, QuestionBank bank, String title) {
+        String proper;
+        int xlength=title.indexOf("（×）");
+        int ylength=title.indexOf("（√）");
+        if(xlength>0){
+            proper="错";
+            Question question = new Question();
+            question.setTitle(title.substring(0,xlength).replaceAll("[\\u00A0]+", "").trim());
+            question.setMenuType("判断");
+            question.setProper(proper);
+            question.setBankId(bankName);
+            question.setQuestionBank(bank);
+            questionService.saveOrUpdate(question);
+        }else if(ylength>0){
+            proper="对";
+            Question question = new Question();
+            question.setTitle(title.substring(0,ylength).replaceAll("[\\u00A0]+", "").trim());
+            question.setMenuType("判断");
+            question.setProper(proper);
+            question.setBankId(bankName);
+            question.setQuestionBank(bank);
+            questionService.saveOrUpdate(question);
+        }
+    }
+
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public JsonResult delete(@PathVariable Integer id) {
@@ -270,5 +254,157 @@ public class QuestionController extends BaseController {
             return JsonResult.failure(e.getMessage());
         }
         return JsonResult.success();
+    }
+
+    private class Danxuan {
+        private String bankName;
+        private QuestionBank bank;
+        private String a;
+        private String b;
+        private String c;
+        private String d;
+        private String proper;
+        private String tit;
+        private String title;
+
+        public Danxuan(String bankName, QuestionBank bank, String a, String b, String c, String d, String proper, String tit, String title) {
+            this.bankName = bankName;
+            this.bank = bank;
+            this.a = a;
+            this.b = b;
+            this.c = c;
+            this.d = d;
+            this.proper = proper;
+            this.tit = tit;
+            this.title = title;
+        }
+
+        public String getA() {
+            return a;
+        }
+
+        public String getB() {
+            return b;
+        }
+
+        public String getC() {
+            return c;
+        }
+
+        public String getD() {
+            return d;
+        }
+
+        public String getProper() {
+            return proper;
+        }
+
+        public String getTit() {
+            return tit;
+        }
+
+        public Danxuan invoke() {
+            if(title.indexOf("A.")==0||title.indexOf("B.")==0||title.indexOf("C.")==0||title.indexOf("D.")==0){
+                if(title.indexOf("A.")==0){
+                    if(title.indexOf("B.")>0){
+                        a =title.substring(2,title.indexOf("B.")).replaceAll("[\\u00A0]+", "").trim();
+                        if(title.indexOf("C.")>0){
+                            b =title.substring(title.indexOf("B.")+2,title.indexOf("C.")).replaceAll("[\\u00A0]+", "").trim();
+                            if(title.indexOf("D.")>0){
+                                c =title.substring(title.indexOf("C.")+2,title.indexOf("D.")).replaceAll("[\\u00A0]+", "").trim();
+                                d =title.substring(title.indexOf("D.")+2).replaceAll("[\\u00A0]+", "").trim();
+                            }else{
+                                c =title.substring(title.indexOf("C.")+2).replaceAll("[\\u00A0]+", "").trim();
+                            }
+                        }else{
+                            b =title.substring(title.indexOf("B.")+2).replaceAll("[\\u00A0]+", "").trim();
+                        }
+                    }else{
+                        a =title.substring(2).replaceAll("[\\u00A0]+", "").trim();
+                    }
+                }else if(title.indexOf("B.")==0){
+                    if(title.indexOf("C.")>0){
+                        b =title.substring(2,title.indexOf("C.")).replaceAll("[\\u00A0]+", "").trim();
+                        if(title.indexOf("D.")>0){
+                            c =title.substring(title.indexOf("C.")+2,title.indexOf("D.")).replaceAll("[\\u00A0]+", "").trim();
+                            d =title.substring(title.indexOf("D.")+2).replaceAll("[\\u00A0]+", "").trim();
+                        }else{
+                            c =title.substring(title.indexOf("C.")+2).replaceAll("[\\u00A0]+", "").trim();
+                        }
+                    }else{
+                        b =title.substring(2).replaceAll("[\\u00A0]+", "").trim();
+                    }
+                }else if(title.indexOf("C.")==0){
+                    if(title.indexOf("D.")>0){
+                        c =title.substring(2,title.indexOf("D.")).replaceAll("[\\u00A0]+", "").trim();
+                        d =title.substring(title.indexOf("D.")+2).replaceAll("[\\u00A0]+", "").trim();
+                    }else{
+                        c =title.substring(2).replaceAll("[\\u00A0]+", "").trim();
+                    }
+                }else if(title.indexOf("D.")==0){
+                    d =title.substring(2).replaceAll("[\\u00A0]+", "").trim();
+                }
+            }else{
+
+                if(title.indexOf("（A）")>-1){
+                    title=title.replace("（A）","（ ）");
+                    proper="A";
+                }else if(title.indexOf("（B）")>-1){
+                    title=title.replace("（B）","（ ）");
+                    proper="B";
+                }else if(title.indexOf("（C）")>-1){
+                    title=title.replace("（C）","（ ）");
+                    proper="C";
+                }else if(title.indexOf("（D）")>-1){
+                    title=title.replace("（D）","（ ）");
+                    proper="D";
+                }
+                tit=title;
+            }
+            if(null!= a &&null!= b &&null!= c &&null!= d &&null!=proper){
+                Question question = new Question();
+                question.setTitle(tit.replaceAll("[\\u00A0]+", "").trim());
+                question.setMenuType("单选");
+                if(proper.equals("A"))
+                    question.setProper(a.replaceAll("[\\u00A0]+", "").trim());
+                else if(proper.equals("B"))
+                    question.setProper(b.replaceAll("[\\u00A0]+", "").trim());
+                else if(proper.equals("C"))
+                    question.setProper(c.replaceAll("[\\u00A0]+", "").trim());
+                else
+                    question.setProper(d.replaceAll("[\\u00A0]+", "").trim());
+                question.setBankId(bankName);
+                question.setQuestionBank(bank);
+                questionService.saveOrUpdate(question);
+                List<Proper> propers=new ArrayList<>();
+                Proper pro = new Proper();
+                pro.setName(a);
+                pro.setQuestion(question);
+                properDao.save(pro);
+                propers.add(pro);
+                pro = new Proper();
+                pro.setName(b);
+                pro.setQuestion(question);
+                properDao.save(pro);
+                propers.add(pro);
+                pro = new Proper();
+                pro.setName(c);
+                pro.setQuestion(question);
+                properDao.save(pro);
+                propers.add(pro);
+                pro = new Proper();
+                pro.setName(d);
+                pro.setQuestion(question);
+                properDao.save(pro);
+                propers.add(pro);
+                question.setPropers(propers);
+                questionService.saveOrUpdate(question);
+                a = null;
+                b = null;
+                c = null;
+                d = null;proper = null;tit=null;
+            }
+            return this;
+        }
     }
 }

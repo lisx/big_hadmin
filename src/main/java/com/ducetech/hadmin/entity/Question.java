@@ -35,7 +35,7 @@ public class Question extends BaseEntity {
     //归属问题库
     private String bankId;
 
-    private String url;
+    private String imgUrl;
 
     @OneToMany
     private List<Proper> propers;
@@ -53,7 +53,7 @@ public class Question extends BaseEntity {
                 ", menuType='" + menuType + '\'' +
                 ", ifUse='" + ifUse + '\'' +
                 ", bankId='" + bankId + '\'' +
-                ", url='" + url + '\'' +
+                ", url='" + imgUrl + '\'' +
                 ", propers=" + propers +
                 ", questionBank=" + questionBank +
                 '}';

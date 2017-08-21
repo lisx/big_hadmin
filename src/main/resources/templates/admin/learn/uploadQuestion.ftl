@@ -64,6 +64,6 @@
         });
     });
     function downUploadUser(){
-        window.open("/uploadUser.xls");
+        window.open("/upload/人员信息模版.xls");
     }
 </script>
