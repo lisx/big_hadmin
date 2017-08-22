@@ -136,7 +136,7 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult uploadFilePost(HttpServletRequest request){
-        logger.debug("进入上传方法");
+        logger.info("进入上传方法");
         List<MultipartFile> files =((MultipartHttpServletRequest)request).getFiles("file");
         MultipartFile file;
         //创建临时文件夹

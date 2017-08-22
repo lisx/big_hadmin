@@ -58,7 +58,7 @@ public class FireSafetyController extends BaseController {
     @RequestMapping("/tree")
     @ResponseBody
     public JSONArray tree(){
-        logger.debug("获取tree数据");
+        logger.info("获取tree数据");
         User user=getUser();
         List<Station> stations=null;
         if(user.getStationArea().equals("运三分公司")){
@@ -68,7 +68,7 @@ public class FireSafetyController extends BaseController {
             String station=s.getNodeCode();
             stations= stationDao.findByNodeCodeStartingWith(station);
         }
-        logger.debug("stations"+stations.size());
+        logger.info("stations"+stations.size());
         if(!user.getStationArea().equals("运三分公司")) {
             return Station.createTree(stations);
         }else{
@@ -81,13 +81,13 @@ public class FireSafetyController extends BaseController {
      */
     @RequestMapping("/index")
     public String index() {
-        logger.debug("获取站点文件全部数据");
+        logger.info("获取站点文件全部数据");
         return "admin/fire/index";
     }
 
     @RequestMapping("/add")
     public String add(String nodeCode,Model map) {
-        logger.debug("进入消防安全添加文件夹");
+        logger.info("进入消防安全添加文件夹");
         map.addAttribute("nodeCode",nodeCode);
         map.addAttribute("menu","消防安全");
         return "admin/fire/form";
@@ -100,7 +100,7 @@ public class FireSafetyController extends BaseController {
     @RequestMapping(value= {"/saveFolder"} ,method = RequestMethod.POST)
     @ResponseBody
     public JsonResult edit(BigFile folder,String nodeCode,String menu){
-        logger.debug("新增消防安全文件夹nodeCode{},menu{}",nodeCode,menu);
+        logger.info("新增消防安全文件夹nodeCode{},menu{}",nodeCode,menu);
         User user=getUser();
         Station area;
         if(null!=nodeCode&&!nodeCode.equals("undefined")){
@@ -132,7 +132,7 @@ public class FireSafetyController extends BaseController {
      */
     @RequestMapping("/toFolder")
     public String toFolder(String folder,Model map) {
-        logger.debug("进入消防安全文件夹folder{}",folder);
+        logger.info("进入消防安全文件夹folder{}",folder);
         map.addAttribute("folder",folder);
         return "admin/fire/folder";
     }
@@ -144,7 +144,7 @@ public class FireSafetyController extends BaseController {
     @RequestMapping(value = { "/list" })
     @ResponseBody
     public Page<BigFile> list(String folder,String nodeCode) {
-        logger.debug("list:folder"+folder);
+        logger.info("list:folder"+folder);
         SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
         if(null!=folder&&!StringUtil.isBlank(folder)) {
@@ -193,7 +193,7 @@ public class FireSafetyController extends BaseController {
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult uploadFilePost(MultipartHttpServletRequest request, String chunk, String chunks, String size, String folder,String nodeCode){
-        logger.debug("进入消防安全上传文件");
+        logger.info("进入消防安全上传文件");
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
         MultipartFile file;
@@ -264,14 +264,14 @@ public class FireSafetyController extends BaseController {
                                 bf.setFileUrl(filePath);
                                 stationFolder(folder, nodeCode, bf,user);
                                 fileDao.saveAndFlush(bf);
-                                logger.debug("success");
+                                logger.info("success");
                             }else{
                                 //分片的情况
                                 //chunk 分片索引，下标从0开始
                                 //chunks 总分片数
                                 if (Integer.valueOf(chunk) == (Integer.valueOf(chunks) - 1)) {
                                     type="video";
-                                    logger.debug("上传成功");
+                                    logger.info("上传成功");
                                     BigFile bf=new BigFile();
                                     bf.setFileSize(""+Math.round(Integer.parseInt(size)/1024));
                                     bf.setMenuType("消防安全");
@@ -282,11 +282,11 @@ public class FireSafetyController extends BaseController {
                                     stationFolder(folder, nodeCode, bf,user);
                                     fileDao.saveAndFlush(bf);
                                 } else {
-                                    logger.debug("上传中" + file.getOriginalFilename() + " chunk:" + chunk, "");
+                                    logger.info("上传中" + file.getOriginalFilename() + " chunk:" + chunk, "");
                                 }
                             }
                         } catch (Exception e) {
-                            logger.debug("上传失败{}",e.getMessage());
+                            logger.info("上传失败{}",e.getMessage());
                         }
                     }
 

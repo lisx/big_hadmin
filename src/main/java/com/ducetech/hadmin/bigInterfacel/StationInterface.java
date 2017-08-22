@@ -34,7 +34,7 @@ public class StationInterface {
     @ApiOperation(value="获取线路全部数据",notes="获取线路全部数据")
     @RequestMapping(value="/findLineAll",method = RequestMethod.GET)
     public JSONObject findLineALl(){
-        logger.debug("获取线路全部数据");
+        logger.info("获取线路全部数据");
         obj=new JSONObject();
         List<Station> stations = stationDao.findByStationArea(3);
         obj.put("data", stations);
@@ -47,7 +47,7 @@ public class StationInterface {
     @RequestMapping(value="/findByLine",method = RequestMethod.GET)
     @ApiImplicitParam(name="line",value="线路",dataType="string", paramType = "query")
     public JSONObject findByLine(String line){
-        logger.debug("进入根据站区获取站点全部数据{}",line);
+        logger.info("进入根据站区获取站点全部数据{}",line);
         obj=new JSONObject();
         Station str=stationDao.findByNodeName(line);
         if(null!=str) {
@@ -64,7 +64,7 @@ public class StationInterface {
     @RequestMapping(value="/findByArea",method = RequestMethod.GET)
     @ApiImplicitParam(name="area",value="站区",dataType="string", paramType = "query")
     public JSONObject findByArea(String area){
-        logger.debug("进入根据站区获取站点全部数据{}",area);
+        logger.info("进入根据站区获取站点全部数据{}",area);
         obj=new JSONObject();
         Station str=stationDao.findByNodeName(area);
         if(null!=str) {

@@ -60,14 +60,14 @@ public class TrainController  extends BaseController {
      */
     @RequestMapping("/index")
     public String index() {
-        logger.debug("获取站点文件全部数据");
+        logger.info("获取站点文件全部数据");
         return "admin/learn/index";
     }
 
 
     @RequestMapping("/toFolder")
     public String toFolder(String folder,Model map) {
-        logger.debug("进入培训资料文件夹");
+        logger.info("进入培训资料文件夹");
         System.out.println("folder+++"+folder);
         map.addAttribute("folder",folder);
         return "admin/learn/folder";
@@ -80,7 +80,7 @@ public class TrainController  extends BaseController {
     @RequestMapping(value = { "/list" })
     @ResponseBody
     public Page<BigFile> list(String folder,String nodeCode) {
-        logger.debug("list:folder"+folder);
+        logger.info("list:folder"+folder);
         SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
         if(null!=folder&&!StringUtil.isBlank(folder)) {
@@ -139,7 +139,7 @@ public class TrainController  extends BaseController {
 
     @RequestMapping(value="/add", method = RequestMethod.GET)
     public String add(String nodeCode,Model map) {
-        logger.debug("进入培训资料添加文件夹");
+        logger.info("进入培训资料添加文件夹");
         map.addAttribute("nodeCode",nodeCode);
         map.addAttribute("menu","培训资料");
         return "admin/learn/form";
@@ -152,7 +152,7 @@ public class TrainController  extends BaseController {
     @RequestMapping(value= {"/saveFolder"} ,method = RequestMethod.POST)
     @ResponseBody
     public JsonResult edit(BigFile folder,String nodeCode,String menu){
-        logger.debug("新增培训资料文件夹nodeCode{},menu{}",nodeCode,menu);
+        logger.info("新增培训资料文件夹nodeCode{},menu{}",nodeCode,menu);
         User user=getUser();
         Station area;
         if(null!=nodeCode&&!nodeCode.equals("undefined")){
@@ -184,15 +184,10 @@ public class TrainController  extends BaseController {
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult uploadFilePost(MultipartHttpServletRequest request, String chunk, String chunks, String size, String folder,String nodeCode){
-        logger.debug("进入培训资料上传文件");
+        logger.info("进入培训资料上传文件");
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
         MultipartFile file;
-        //创建临时文件夹
-//        File dirTempFile = new File(BigConstant.upload);
-//        if (!dirTempFile.exists()) {
-//            dirTempFile.mkdirs();
-//        }
         BufferedOutputStream stream;
         for (int i =0; i< files.size(); ++i) {
             long flag=new Date().getTime();
@@ -202,9 +197,9 @@ public class TrainController  extends BaseController {
                 try {
                     String suffix=StringUtil.suffix(filePath);
                     if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)) {
-                        saveFile(folder, nodeCode, user, file,BigConstant.office,BigConstant.TRAIN,flag);
+                        BigFile.saveFile(folder, nodeCode, user, file,BigConstant.office,BigConstant.TRAIN,flag,fileDao,stationDao);
                     }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
-                        saveFile(folder, nodeCode, user, file,BigConstant.image,BigConstant.TRAIN,flag);
+                        BigFile.saveFile(folder, nodeCode, user, file,BigConstant.image,BigConstant.TRAIN,flag,fileDao,stationDao);
                     }else{
                         try {
                             byte[] bytes = file.getBytes();
@@ -213,25 +208,23 @@ public class TrainController  extends BaseController {
                             stream.close();
                             if(StringUtils.isEmpty(chunk)) {
                                 //不分片的情况
-                                saveFile(folder, nodeCode, user, file,BigConstant.video,BigConstant.TRAIN,flag);
+                                BigFile.saveFile(folder, nodeCode, user, file,BigConstant.video,BigConstant.TRAIN,flag,fileDao,stationDao);
                             }else{
                                 FileUtil.randomAccessFile(BigConstant.upload+"chunk/"+file.getOriginalFilename(), file);
                                 //分片的情况
-                                //chunk 分片索引，下标从0开始
-                                //chunks 总分片数
                                 if (Integer.valueOf(chunk) == (Integer.valueOf(chunks) - 1)) {
-                                    saveFile(folder, nodeCode, user, file,BigConstant.video,BigConstant.TRAIN,flag);
+                                    BigFile.saveFile(folder, nodeCode, user, file,BigConstant.video,BigConstant.TRAIN,flag,fileDao,stationDao);
                                 } else {
-                                    logger.debug("上传中" + file.getOriginalFilename() + " chunk:" + chunk, "");
+                                    logger.info("上传中" + file.getOriginalFilename() + " chunk:" + chunk, "");
                                 }
                             }
                         } catch (Exception e) {
-                            logger.debug("上传失败{}",e.getMessage());
+                            logger.info("上传失败{}",e.getMessage());
                         }
                     }
 
                 } catch (Exception e) {
-                    logger.debug(e.getMessage());
+                    logger.info(e.getMessage());
                 }
             } else {
                 return JsonResult.failure("You failed to upload " + i + " becausethe file was empty.");
@@ -251,59 +244,5 @@ public class TrainController  extends BaseController {
         }
         return JsonResult.success();
     }
-    private boolean saveFile(String folder, String nodeCode, User user, MultipartFile file,String fileType,String menuType,long flag) throws IOException {
-        String filePath;
-        BufferedOutputStream stream;
-        try {
-            filePath = BigConstant.upload + flag + file.getOriginalFilename();
-            byte[] bytes = file.getBytes();
-            stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
-            stream.write(bytes);
-            stream.close();
-            if (fileType.equals(BigConstant.office)) {
-                PdfUtil.office2PDF(filePath, filePath + BigConstant.pdf);
-            }
-            BigFile bf = new BigFile();
-            bf.setFileSize("" + Math.round(file.getSize() / 1024));
-            bf.setMenuType(menuType);
-            bf.setFileType(fileType);
-            bf.setFileName(file.getOriginalFilename());
-            bf.setFileUrl(filePath);
-            stationFolder(folder, nodeCode, bf, user);
-            fileDao.saveAndFlush(bf);
-        }catch (Exception e){
-            logger.debug(e.getMessage());
-            return false;
-        }
-        return true;
-    }
 
-    private void stationFolder(String folder, String nodeCode, BigFile bf,User user) {
-        if(null==folder) {
-            Station area;
-            if(null!=nodeCode&&!nodeCode.equals("undefined")){
-                area=stationDao.findByNodeCode(nodeCode);
-            }else{
-                area=stationDao.findByNodeName(user.getStationArea());
-            }
-            if (null != area) {
-                nodeCode = area.getNodeCode();
-                bf.setNodeCode(nodeCode);
-                bf.setStationFile(area);
-            }else{
-                bf.setNodeCode("000");
-            }
-        }else{
-            bf.setFolderName(folder);
-            BigFile folderd=fileDao.findByFileName(folder);
-            bf.setFolderFile(folderd);
-            Station station = folderd.getStationFile();
-            if (null != station){
-                bf.setStationFile(station);
-                bf.setNodeCode(station.getNodeCode());
-            }
-        }
-        bf.setCreateTime(new Date());
-        bf.setCreateId(user.getId());
-    }
 }

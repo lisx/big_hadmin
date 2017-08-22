@@ -44,7 +44,7 @@ public class ExamController extends BaseController {
      */
     @RequestMapping("/add")
     public String index(Model model) {
-        logger.debug("测试进入exam配置试卷页");
+        logger.info("测试进入exam配置试卷页");
         return "admin/learn/examForm";
     }
 
@@ -87,7 +87,7 @@ public class ExamController extends BaseController {
             exam.setCreateTime(new Date());
             examService.saveAndFlush(exam);
         }catch(Exception e){
-            logger.debug(e.getMessage());
+            logger.info(e.getMessage());
         }
         return JsonResult.success();
     }

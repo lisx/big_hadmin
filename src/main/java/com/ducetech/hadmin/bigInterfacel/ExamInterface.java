@@ -53,7 +53,7 @@ public class ExamInterface  extends BaseController {
     @ApiOperation(value="获取试卷题库", notes="获取试卷题库")
     @RequestMapping(value="/findQuestionBankAll", method = RequestMethod.GET)
     public JSONObject findQuestionBankAll(){
-        logger.debug("获取试卷题库");
+        logger.info("获取试卷题库");
         List<QuestionBank> banks=questionBankDao.findAll();
         List<Exam> exams=examDao.findAll();
         obj=new JSONObject();
@@ -86,7 +86,7 @@ public class ExamInterface  extends BaseController {
             @ApiImplicitParam(name = "type", value = "试题类型", dataType = "String", paramType = "query")
     })
     public JSONObject findExamQuestion(Integer bankId,String type){
-        logger.debug("获取练习题");
+        logger.info("获取练习题");
         QuestionBank bank=questionBankDao.findOne(bankId);
         List<Question> questions=questionDao.findByQuestionBankAndMenuType(bank,type);
         obj.put("state",state);
@@ -104,14 +104,14 @@ public class ExamInterface  extends BaseController {
             @ApiImplicitParam(name="userId",value="用户id",dataType="Integer", paramType = "query")
     })
     public JSONObject findQuestionById(Integer examId,Integer bankId,Integer userId){
-        logger.debug("获取试卷类型examId{}||bankId{}||userId{}",examId,bankId,userId);
+        logger.info("获取试卷类型examId{}||bankId{}||userId{}",examId,bankId,userId);
         User user=null;
         ExamLog log=new ExamLog();
         if(null!=userId){
             user=userDao.findOne(userId);
             if(null!=user){
                 log.setUser(user);
-                logger.debug("user{}",user.getUserCode());
+                logger.info("user{}",user.getUserCode());
             }
             QuestionBank bank=questionBankDao.findOne(bankId);
             Exam exam=examDao.findOne(examId);
@@ -128,7 +128,7 @@ public class ExamInterface  extends BaseController {
                         int l = rand.nextInt(singles.size());
                         Question q=singles.get(l);
                         if(!questions.contains(q)&&null!=q){
-                            logger.debug(q.getPropers().size()+"单选");
+                            logger.info(q.getPropers().size()+"单选");
                             questions.add(q);
                         }else{
                             i--;
@@ -141,7 +141,7 @@ public class ExamInterface  extends BaseController {
                         int l = rand.nextInt(multiples.size());
                         Question q=multiples.get(l);
                         if(!questions.contains(q)&&null!=q){
-                            logger.debug(q.getPropers().size()+"多选");
+                            logger.info(q.getPropers().size()+"多选");
                             questions.add(q);
                         }else{
                             i--;
@@ -166,7 +166,7 @@ public class ExamInterface  extends BaseController {
                         int l = rand.nextInt(ranks.size());
                         Question q=ranks.get(l);
                         if(!questions.contains(q)&&null!=q){
-                            logger.debug(q.getPropers().size()+"排序");
+                            logger.info(q.getPropers().size()+"排序");
                             questions.add(q);
                         }else{
                             i--;
@@ -174,7 +174,7 @@ public class ExamInterface  extends BaseController {
                     }
                 }
             }
-            logger.debug("|+|+|"+questions.size());
+            logger.info("|+|+|"+questions.size());
             questions.removeAll(Collections.singleton(null));
             log.setExamTime(new Date());
             log.setQuestions(questions);
@@ -209,7 +209,7 @@ public class ExamInterface  extends BaseController {
     })
     public JSONObject setExam(String examName,Integer singleNum,Integer singleScore,Integer multipleNum,
             Integer multipleScore,Integer judgeNum,Integer judgeScore,Integer rankNum,Integer rankScore){
-        logger.debug("进入设置试卷");
+        logger.info("进入设置试卷");
         Exam exam=examDao.findByExamName(examName);
         if(null==exam) {
             exam = new Exam();
@@ -239,7 +239,7 @@ public class ExamInterface  extends BaseController {
             @ApiImplicitParam(name = "properId", value = "答案Id", dataType = "Integer", paramType = "query")
     })
     public JSONObject questionExamLog(Integer logId,Integer questionId,Integer properId){
-        logger.debug("获取练习题");
+        logger.info("获取练习题");
         ExamLog examLog=examLogDao.findOne(logId);
         Question question=questionDao.findOne(questionId);
         Proper proper=properDao.findOne(properId);

@@ -57,7 +57,7 @@ public class QuestionController extends BaseController {
     @RequestMapping(value = { "/bank" })
     @ResponseBody
     public Page<QuestionBank> bank() {
-        logger.debug("进入bank");
+        logger.info("进入bank");
         SimpleSpecificationBuilder<QuestionBank> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
         if(!StringUtil.isBlank(searchText)){

@@ -40,7 +40,7 @@ public class UserInterface extends BaseController {
             @ApiImplicitParam(name="code",value="用户工号",dataType="string", paramType = "query"),
             @ApiImplicitParam(name="password",value="用户密码",dataType="string", paramType = "query")})
     public JSONObject login(String code,String password){
-        logger.debug("进入登录接口==code:{}|password:{}",code,password);
+        logger.info("进入登录接口==code:{}|password:{}",code,password);
         User user=userDao.findByUserCode(code);
         obj=new JSONObject();
         if(null!=user){
@@ -64,7 +64,7 @@ public class UserInterface extends BaseController {
     @RequestMapping(value={"/list"}, method=RequestMethod.GET)
     @ApiImplicitParam(name="station",value="线路，站点，站区",dataType="string", paramType = "query")
     public JSONObject getUserList(String station) {
-        logger.debug("进入获取用户列表接口==station:{}"+station);
+        logger.info("进入获取用户列表接口==station:{}"+station);
         obj=new JSONObject();
         int state=1;
         String msg;
@@ -78,7 +78,7 @@ public class UserInterface extends BaseController {
     @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "Integer")
     @RequestMapping(value="/{id}", method=RequestMethod.GET)
     public JSONObject getUser(@PathVariable Integer id) {
-        logger.debug("进入获取用户详情接口=={}"+id);
+        logger.info("进入获取用户详情接口=={}"+id);
         obj=new JSONObject();
         User user=userDao.findOne(id);
         obj.put("state",1);

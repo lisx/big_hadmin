@@ -52,7 +52,7 @@ public class StationController extends BaseController {
     @RequestMapping("/tree")
     @ResponseBody
     public JSONArray tree(){
-        logger.debug("获取tree数据");
+        logger.info("获取tree数据");
         User user=getUser();
         List<Station> stations=null;
         if(user.getStationArea().equals("运三分公司")){
@@ -62,7 +62,7 @@ public class StationController extends BaseController {
             String station=s.getNodeCode();
             stations= stationDao.findByNodeCodeStartingWith(station);
         }
-        logger.debug("stations"+stations.size());
+        logger.info("stations"+stations.size());
         if(!user.getStationArea().equals("运三分公司")) {
             return Station.createTree(stations);
         }else{
@@ -74,7 +74,7 @@ public class StationController extends BaseController {
     public List<String> getStation(String area){
         Station station=stationDao.findByNodeName(area);
         List<String> list=stationDao.findStations(station.getNodeCode().length()+3,station.getNodeCode()+"___");
-        logger.debug(list.size()+"||||");
+        logger.info(list.size()+"||||");
         return list;
 
     }
@@ -86,7 +86,7 @@ public class StationController extends BaseController {
     @RequestMapping(value = "/del/{nodeId}",method = RequestMethod.DELETE)
     @ResponseBody
     public JsonResult del(@PathVariable String nodeId){
-        logger.debug("进入删除节点nodeId{}",nodeId);
+        logger.info("进入删除节点nodeId{}",nodeId);
         Station station = stationDao.findByNodeCode(nodeId);
         stationDao.delete(station);
         return JsonResult.success();
@@ -97,7 +97,7 @@ public class StationController extends BaseController {
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public Station save(String name, String pId){
-        logger.debug("进入新增节点name{}||pId{}",name,pId);
+        logger.info("进入新增节点name{}||pId{}",name,pId);
         String pcode =StringUtil.trim(pId);
         List<Station> stations = stationDao.querySubNodesByCode(pcode+"___",pcode.length()+3);
         String nodeCode = Station.getNodeCode(stations,pcode);
@@ -112,7 +112,7 @@ public class StationController extends BaseController {
      */
     @RequestMapping(value = "/update/{nodeCode}", method = RequestMethod.POST)
     public JSONObject update(@PathVariable String nodeCode, String name){
-        logger.debug("进入编辑节点nodeCode{}||name{}",nodeCode,name);
+        logger.info("进入编辑节点nodeCode{}||name{}",nodeCode,name);
         nodeCode = StringUtil.trim(nodeCode);
         String nodeName = StringUtil.trim(name);
         Station node = stationDao.findByNodeCode(nodeCode);
@@ -254,7 +254,7 @@ public class StationController extends BaseController {
     @RequestMapping(value = "/delete/{id}",method = RequestMethod.DELETE)
     @ResponseBody
     public JsonResult delete(@PathVariable Integer id){
-        logger.debug("进入删除节点Id{}",id);
+        logger.info("进入删除节点Id{}",id);
         fileDao.delete(id);
         return JsonResult.success();
     }

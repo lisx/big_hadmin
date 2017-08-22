@@ -42,7 +42,7 @@ public class TrainInterface {
     @RequestMapping(value="/findByStation",method = RequestMethod.GET)
     @ApiImplicitParam(name="station",value="线路，站点，站区",dataType="string", paramType = "query")
     public JSONObject findAll(String station) {
-        logger.debug("获取站点文件全部数据");
+        logger.info("获取站点文件全部数据");
         obj = new JSONObject();
         Station str = stationDao.findByNodeName(station);
         List<BigFile> stations = bigFileDao.findByStation(str);
@@ -55,7 +55,7 @@ public class TrainInterface {
     @RequestMapping(value="/findFolderByStation",method = RequestMethod.GET)
     @ApiImplicitParam(name="station",value="线路，站点，站区",dataType="string", paramType = "query")
     public JSONObject findFolderByStation(String station) {
-        logger.debug("获取站点文件全部数据");
+        logger.info("获取站点文件全部数据");
         obj = new JSONObject();
         Station str = stationDao.findByNodeName(station);
         List<BigFile> stations = bigFileDao.findByStation(str);
