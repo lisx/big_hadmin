@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class LoginController extends BaseController {
     @Autowired
     IUserService userService;
-	@RequestMapping(value = { "/admin/login" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "/admin/login","/" }, method = RequestMethod.GET)
 	public String login() {
         User user=userService.findByUserName("admin");
         if(null==user){
