@@ -3,14 +3,15 @@ package com.ducetech.hadmin.controller.admin.system;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IBigFileDao;
 import com.ducetech.hadmin.entity.BigFile;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 
 /**
@@ -25,7 +26,8 @@ public class DownloadController extends BaseController {
     @Autowired
     IBigFileDao fileDao;
     //文件下载相关代码
-    @RequestMapping("/download/{id}")
+    @ApiOperation(value="获取文件", notes="根据id获取文件")
+    @RequestMapping(value="/download/{id}", method = RequestMethod.GET)
     public void download(@PathVariable Integer id) throws IOException {
         BigFile file=fileDao.findOne(id);
         response.setCharacterEncoding("utf-8");
@@ -38,10 +40,14 @@ public class DownloadController extends BaseController {
 
     public static void returnFile(String filename, OutputStream out) throws FileNotFoundException, IOException {
         // A FileInputStream is for bytes
+        System.out.println("||||||||"+filename);
         FileInputStream fis = null;
         try {
             fis = new FileInputStream(filename);
-            byte[] buf = new byte[4 * 1024]; // 4K buffer
+            if(null==fis){
+                System.out.println("||null||");
+            }
+            byte[] buf = new byte[1024]; // 4K buffer
             int bytesRead;
             while ((bytesRead = fis.read(buf)) != -1) {
                 out.write(buf, 0, bytesRead);

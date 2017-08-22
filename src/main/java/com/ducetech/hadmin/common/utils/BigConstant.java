@@ -31,8 +31,13 @@ public class BigConstant {
     };
 
     public static final String ADMIN ="运三分公司";
+    public static final String office="office";
+    public static final String video="video";
+    public static final String image="image";
+    public static final String TRAIN="培训资料";
 
     public static String getImageUrl(String file) {
         return  upload+file+".jpg";
     }
+
 }
