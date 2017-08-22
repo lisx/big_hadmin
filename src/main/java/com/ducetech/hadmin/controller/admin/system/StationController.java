@@ -198,7 +198,7 @@ public class StationController extends BaseController {
         Station s=stationDao.findByNodeCode(nodeCode);
         MultipartFile file;
         //创建临时文件夹
-        File dirTempFile = new File(BigConstant.STATION_PATH);
+        File dirTempFile = new File(BigConstant.upload);
         if (!dirTempFile.exists()) {
             dirTempFile.mkdirs();
         }
@@ -217,7 +217,7 @@ public class StationController extends BaseController {
                     station.setFileName(file.getOriginalFilename());
                     station.setFileSize(""+file.getSize()/1000);
                     station.setCreateTime(new Date());
-                    station.setFileUrl(BigConstant.SERVICE_URL+"station/"+file.getOriginalFilename());
+                    station.setFileUrl(BigConstant.upload+file.getOriginalFilename());
                     station.setStationFile(s);
                     station.setNodeCode(s.getNodeCode());
                     fileDao.save(station);

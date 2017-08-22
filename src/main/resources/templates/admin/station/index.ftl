@@ -63,7 +63,7 @@
                     }
                 }]
             });
-            $.get("/admin/station/tree",function(data){
+            $.get("${ctx!}/admin/station/tree",function(data){
                 console.log("|||"+data);
                 var zNodes =eval(data);
                 $.fn.zTree.init($("#treeDemo"), setting, zNodes);

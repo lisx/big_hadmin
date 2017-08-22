@@ -140,7 +140,7 @@ public class UserController extends BaseController {
         List<MultipartFile> files =((MultipartHttpServletRequest)request).getFiles("file");
         MultipartFile file;
         //创建临时文件夹
-        File dirTempFile = new File(BigConstant.USER_PATH);
+        File dirTempFile = new File(BigConstant.upload);
         if (!dirTempFile.exists()) {
             dirTempFile.mkdirs();
         }

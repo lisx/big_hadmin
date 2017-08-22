@@ -103,7 +103,7 @@ public class RunningController extends BaseController {
         User user=getUser();
         ;
         //创建临时文件夹
-        File dest = new File(BigConstant.TRAIN_IMAGE_PATH+running.getFileName()+".jpg");
+        File dest = new File(BigConstant.upload+running.getFileName()+".jpg");
         if (!dest.getParentFile().exists()) {
             dest.getParentFile().mkdirs();
         }

@@ -114,28 +114,6 @@ public class NoticeController extends BaseController {
         notice.setCreateId(user.getId());
         notice.setCreateTime(new Date());
         noticeDao.save(notice);
-//        MultipartFile file =request.getFile("file");
-//        //创建临时文件夹
-//        File dest = new File(BigConstant.TRAIN_IMAGE_PATH+notice.getFileName()+".jpg");
-//        if (!dest.getParentFile().exists()) {
-//            dest.getParentFile().mkdirs();
-//        }
-//        try {
-//            BufferedOutputStream stream;
-//            byte[] bytes = file.getBytes();
-//            stream = new BufferedOutputStream(new FileOutputStream(dest));
-//            stream.write(bytes);
-//            stream.close();
-//            notice.setCreateId(user.getId());
-//            notice.setCreateTime(new Date());
-//            notice.setFileSize(""+Math.round(file.getSize()/1024));
-//            noticeDao.save(notice);
-//            return JsonResult.success();
-//        } catch (IllegalStateException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
         return JsonResult.success();
     }
 

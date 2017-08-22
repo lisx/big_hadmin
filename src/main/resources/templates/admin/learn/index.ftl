@@ -209,13 +209,18 @@
 			        title: "操作",
 			        field: "empty",
                     formatter: function (value, row, index) {
-                    	var operateHtml = '<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="showFolder(\''+row.name+'\')"><i class="fa fa-edit"></i>&nbsp;查看</button> &nbsp;</@shiro.hasPermission>';
+                        var operateHtml ='';
+                        if(row.ifFolder==1){
+                            operateHtml='<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="showFolder(\''+row.fileName+'\')"><i class="fa fa-edit"></i>&nbsp;查看</button> &nbsp;</@shiro.hasPermission>';
+                        }else{
+                            operateHtml='<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="down(\''+row.id+'\',\''+row.fileName+'\')"><i class="fa fa-edit"></i>&nbsp;下载</button> &nbsp;</@shiro.hasPermission>';
+                        }
                     	operateHtml = operateHtml + '<@shiro.hasPermission name="system:resource:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="delFolder(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button></@shiro.hasPermission>';
                         return operateHtml;
                     }
 			    }]
 			});
-            $.get("/admin/station/tree",function(data){
+            $.get("${ctx!}/admin/station/tree",function(data){
                 var zNodes =eval(data);
                 $.fn.zTree.init($("#treeDemo"), setting, zNodes);
             })
@@ -354,6 +359,14 @@
                 }]
             });
         });
+        //下载文件
+        function down(id,name){
+            console.log(id);
+            var a = document.createElement('a');
+            a.href = "${ctx!}/admin/download/"+id;
+            a.download = name;
+            a.click();
+        }
         //上传培训资料
         function uploadFile(){
             var id=$(".addFolder").attr("dataid");

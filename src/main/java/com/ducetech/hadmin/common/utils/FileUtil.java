@@ -20,7 +20,7 @@ public class FileUtil {
     public static void randomAccessFile( String outPath,MultipartFile temp) throws IOException{
         RandomAccessFile raFile = null;
         BufferedInputStream inputStream=null;
-        File tempFile=new File(BigConstant.TRAIN_PATH+temp.getOriginalFilename());
+        File tempFile=new File(BigConstant.upload+temp.getOriginalFilename());
         try{
             File dirFile = new File(outPath);
             //以读写的方式打开目标文件

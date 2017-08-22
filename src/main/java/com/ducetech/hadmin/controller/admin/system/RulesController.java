@@ -195,7 +195,7 @@ public class RulesController extends BaseController {
         User user=getUser();
         MultipartFile file;
         //创建临时文件夹
-        File dirTempFile = new File(BigConstant.TRAIN_PATH);
+        File dirTempFile = new File(BigConstant.upload);
         if (!dirTempFile.exists()) {
             dirTempFile.mkdirs();
         }
@@ -203,18 +203,17 @@ public class RulesController extends BaseController {
         for (int i =0; i< files.size(); ++i) {
             file = files.get(i);
             String type = null;
-            String filePath=BigConstant.TRAIN_PATH+file.getOriginalFilename();
+            String filePath=BigConstant.upload+file.getOriginalFilename();
             if (!file.isEmpty()) {
                 try {
                     String suffix=StringUtil.suffix(filePath);
                     if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)) {
-                        filePath=BigConstant.TRAIN_OFFICE_PATH+file.getOriginalFilename();
+                        filePath=BigConstant.upload+file.getOriginalFilename();
                         byte[] bytes = file.getBytes();
                         stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
                         stream.write(bytes);
                         stream.close();
                         PdfUtil.office2PDF(filePath, filePath + BigConstant.pdf);
-                        filePath=BigConstant.getTrainOfficePathUrl(file.getOriginalFilename()+BigConstant.pdf);
                         type="office";
                         BigFile bf=new BigFile();
                         bf.setFileSize(""+Math.round(file.getSize()/1024));
@@ -225,13 +224,11 @@ public class RulesController extends BaseController {
                         stationFolder(folder, nodeCode, bf,user);
                         fileDao.saveAndFlush(bf);
                     }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
-                        filePath=BigConstant.TRAIN_IMAGE_PATH+file.getOriginalFilename();
                         byte[] bytes = file.getBytes();
                         stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
                         stream.write(bytes);
                         stream.close();
                         type="image";
-                        filePath=BigConstant.getTrainImagePathUrl(file.getOriginalFilename());
                         BigFile bf=new BigFile();
                         bf.setFileSize(""+Math.round(file.getSize()/1024));
                         bf.setMenuType("规章制度");
@@ -250,13 +247,12 @@ public class RulesController extends BaseController {
                             //第一个参数是目标文件的完整路径
                             //第二参数是webupload分片传过来的文件
                             //FileUtil的这个方法是把目标文件的指针，移到文件末尾，然后把分片文件追加进去，实现文件合并。简单说。就是每次最新的分片合到一个文件里面去。
-                            FileUtil.randomAccessFile(BigConstant.TRAIN_VIDEO_PATH+file.getOriginalFilename(), file);
+                            FileUtil.randomAccessFile(BigConstant.upload+file.getOriginalFilename(), file);
                             //如果文件小与5M的话，分片参数chunk的值是null
                             //5M的这个阈值是在upload3.js中的chunkSize属性决定的，超过chunkSize设置的大小才会进行分片，否则就不分片，不分片的话，webupload传到后台的chunk参数值就是null
                             if(StringUtils.isEmpty(chunk)) {
                                 //不分片的情况
                                 type = "video";
-                                filePath = BigConstant.getTrainVideoPathUrl(file.getOriginalFilename());
                                 BigFile bf = new BigFile();
                                 bf.setFileSize("" + Math.round(Integer.parseInt(size) / 1024));
                                 bf.setMenuType("规章制度");
@@ -272,7 +268,6 @@ public class RulesController extends BaseController {
                                 //chunks 总分片数
                                 if (Integer.valueOf(chunk) == (Integer.valueOf(chunks) - 1)) {
                                     type="video";
-                                    filePath=BigConstant.getTrainVideoPathUrl(file.getOriginalFilename());
                                     logger.debug("上传成功");
                                     BigFile bf=new BigFile();
                                     bf.setFileSize(""+Math.round(Integer.parseInt(size)/1024));
