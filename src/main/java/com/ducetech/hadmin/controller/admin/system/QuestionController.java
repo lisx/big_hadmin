@@ -58,6 +58,7 @@ public class QuestionController extends BaseController {
         logger.info("进入bank");
         SimpleSpecificationBuilder<QuestionBank> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
+        builder.add("ifUse", SpecificationOperator.Operator.eq.name(), 0);
         if(!StringUtil.isBlank(searchText)){
             builder.add("name", SpecificationOperator.Operator.likeAll.name(), searchText);
         }
@@ -73,9 +74,10 @@ public class QuestionController extends BaseController {
         SimpleSpecificationBuilder<Question> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
         String bank = request.getParameter("bank");
+        builder.add("ifUse", SpecificationOperator.Operator.eq.name(), 0);
         if(!StringUtil.isBlank(searchText)){
             builder.add("name", SpecificationOperator.Operator.likeAll.name(), searchText);
-            //builder.add("bankId", SpecificationOperator.Operator.likeAll.name(), bank);
+            builder.add("questionBank", SpecificationOperator.Operator.eq.name(), bank);
         }
 
         return questionService.findAll(builder.generateSpecification(), getPageRequest());
@@ -277,7 +279,9 @@ public class QuestionController extends BaseController {
     @ResponseBody
     public JsonResult delete(@PathVariable Integer id) {
         try {
-            questionService.delete(id);
+            Question question=questionService.find(id);
+            question.setIfUse(1);
+            questionService.saveOrUpdate(question);
         } catch (Exception e) {
             e.printStackTrace();
             return JsonResult.failure(e.getMessage());

@@ -29,6 +29,7 @@ public class QuestionBank  extends BaseEntity {
     private List<Question> questionList;
     @ManyToOne
     private Station station;
+    private int ifUse;
     /**
      * 创建时间
      */

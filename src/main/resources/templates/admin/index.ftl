@@ -59,51 +59,33 @@
                             <span class="fa arrow"></span>
                         </a>
                         <ul class="nav nav-second-level">
-                        <@shiro.hasPermission name="system:article:sort:index">
                             <li>
                                 <a class="J_menuItem" href="${ctx!}/admin/train/index">学习园地</a>
                             </li>
-                        </@shiro.hasPermission>
-                        <@shiro.hasPermission name="system:article:sort:index">
                             <li>
                                 <a class="J_menuItem" href="${ctx!}/admin/examlog/index">考试记录</a>
                             </li>
-                        </@shiro.hasPermission>
-                        <@shiro.hasPermission name="system:article:sort:index">
                             <li>
                                 <a class="J_menuItem" href="${ctx!}/admin/emergency/index">应急预案</a>
                             </li>
-                        </@shiro.hasPermission>
-                        <@shiro.hasPermission name="system:article:sort:index">
                             <li>
                                 <a class="J_menuItem" href="${ctx!}/admin/rules/index">规章制度</a>
                             </li>
-                        </@shiro.hasPermission>
-                        <@shiro.hasPermission name="system:article:sort:index">
                             <li>
                                 <a class="J_menuItem" href="${ctx!}/admin/fire/index">消防安全文件</a>
                             </li>
-                        </@shiro.hasPermission>
-                        <@shiro.hasPermission name="system:article:sort:index">
                             <li>
                                 <a class="J_menuItem" href="${ctx!}/admin/running/index">运行图管理</a>
                             </li>
-                        </@shiro.hasPermission>
-                        <@shiro.hasPermission name="system:article:sort:index">
                             <li>
                                 <a class="J_menuItem" href="${ctx!}/admin/notice/index">通知管理</a>
                             </li>
-                        </@shiro.hasPermission>
-                        <@shiro.hasPermission name="system:article:sort:index">
                             <li>
                                 <a class="J_menuItem" href="${ctx!}/admin/rollPlay/index">首页滚播图</a>
                             </li>
-                        </@shiro.hasPermission>
-                        <@shiro.hasPermission name="system:article:sort:index">
                             <li>
                                 <a class="J_menuItem" href="${ctx!}/admin/edition/index">前端版本更新</a>
                             </li>
-                        </@shiro.hasPermission>
                         </ul>
                     </li>
                     <li class="line dk"></li>

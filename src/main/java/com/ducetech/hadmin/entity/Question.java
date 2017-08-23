@@ -33,7 +33,7 @@ public class Question extends BaseEntity {
     //1单选，2多选，3判断，4排序
     private String menuType;
     //是否使用
-    private String ifUse;
+    private int ifUse;
     //归属问题库
     private String bankId;
 

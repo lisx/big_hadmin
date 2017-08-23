@@ -65,9 +65,12 @@
 			    columns: [{
 			        title: "编号",
 			        field: "id",
-                    width: "200",
-			        sortable: true
+                    width: "50"
 			    },{
+                    title: "类型",
+                    field: "menuType",
+                    width: "150"
+                },{
 			        title: "问题",
 			        field: "title"
 			    },{
@@ -93,7 +96,7 @@
         function del(id){
         	layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
         		$.ajax({
-    	    		   type: "POST",
+    	    		   type: "DELETE",
     	    		   dataType: "json",
     	    		   url: "${ctx!}/admin/question/delete/" + id,
     	    		   success: function(msg){
