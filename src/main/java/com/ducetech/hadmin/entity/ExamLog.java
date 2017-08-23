@@ -2,6 +2,7 @@ package com.ducetech.hadmin.entity;
 
 import com.ducetech.hadmin.entity.support.BaseEntity;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -22,6 +23,8 @@ public class ExamLog extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id",nullable = false)
     private Integer id;
+
+    private int ifUse;
     @ManyToOne
     private User user;
     //考试时间

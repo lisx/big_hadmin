@@ -116,7 +116,6 @@ public class ExamInterface  extends BaseController {
             QuestionBank bank=questionBankDao.findOne(bankId);
             Exam exam=examDao.findOne(examId);
             List<Question> questions=new ArrayList<Question>();
-
             if(null!=exam) {
                 List<Question> singles;
                 List<Question> multiples;
@@ -190,9 +189,10 @@ public class ExamInterface  extends BaseController {
             }
             logger.info("|+|+|"+questions.size());
             questions.removeAll(Collections.singleton(null));
-            log.setExamTime(new Date());
+            log.setCreateTime(new Date());
             log.setBank(bank);
             log.setExam(exam);
+            log.setIfUse(0);
             examLogDao.save(log);
             for(Question question:questions){
                 QuestionLog qlog=new QuestionLog();

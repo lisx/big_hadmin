@@ -75,56 +75,30 @@
 			        sortable: true
 			    },{
 			        title: "用户名",
-			        field: "user.userName",
-                    formatter: function(value, row, index) {
-                        var r = "";
-                        $(value).each(function (index,user){
-                            r = user.userName;
-                        });
-                        return r;
-                    }
+			        field: "user.userName"
 			    },{
-			        title: "创建时间",
-                    field: "examTime",
-                    formatter: function(value, row, index) {
-                        var r = "";
-                        $(value).each(function (index,user){
-                            r = user.createTime;
-                        });
-                        return r;
-                    }
+                    title: "分数",
+                    field: "score"
+                },{
+			        title: "考试时间",
+                    field: "createTime"
 			    },{
 			        title: "操作",
 			        field: "empty",
                     formatter: function (value, row, index) {
-                    	var operateHtml = '<@shiro.hasPermission name="system:user:edit"><button class="btn btn-primary btn-xs" type="button" onclick="examLogShow(\''+row.id+'\')"><i class="fa fa-edit"></i>&nbsp;查看</button> &nbsp;</@shiro.hasPermission>';
-                    	operateHtml = operateHtml + '<@shiro.hasPermission name="system:user:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="examLogDel(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button> &nbsp;</@shiro.hasPermission>';
+                    	var operateHtml = '<@shiro.hasPermission name="system:user:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="examLogDel(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button> &nbsp;</@shiro.hasPermission>';
                         return operateHtml;
                     }
 			    }]
 			});
         });
 
-        function add(){
-        	layer.open({
-        	      type: 2,
-        	      title: '用户添加',
-        	      shadeClose: true,
-        	      shade: false,
-        	      area: ['893px', '600px'],
-        	      content: '${ctx!}/admin/user/add',
-        	      end: function(index){
-        	    	  $('#table_list').bootstrapTable("refresh");
-       	    	  }
-            });
-        }
-
-        function del(id){
+        function examLogDel(id){
         	layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
         		$.ajax({
-    	    		   type: "POST",
+    	    		   type: "DELETE",
     	    		   dataType: "json",
-    	    		   url: "${ctx!}/admin/user/delete/" + id,
+    	    		   url: "${ctx!}/admin/examlog/delete/" + id,
     	    		   success: function(msg){
 	 	   	    			layer.msg(msg.message, {time: 2000},function(){
 	 	   	    				$('#table_list').bootstrapTable("refresh");

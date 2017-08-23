@@ -13,7 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
@@ -50,6 +52,7 @@ public class ExamLogController extends BaseController {
         if(!StringUtil.isBlank(searchText)){
             builder.add("score", SpecificationOperator.Operator.likeAll.name(), searchText);
         }
+        builder.add("ifUse", SpecificationOperator.Operator.eq.name(), 0);
         try {
             Page<ExamLog> list = examLogDao.findAll(builder.generateSpecification(), getPageRequest());
             return list;
@@ -57,5 +60,18 @@ public class ExamLogController extends BaseController {
             logger.debug(e.getMessage());
         }
         return null;
+    }
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public JsonResult delete(@PathVariable Integer id) {
+        try {
+            ExamLog log=examLogDao.findOne(id);
+            log.setIfUse(1);
+            examLogDao.saveAndFlush(log);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return JsonResult.failure(e.getMessage());
+        }
+        return JsonResult.success();
     }
 }
