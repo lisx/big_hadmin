@@ -1,7 +1,6 @@
 package com.ducetech.hadmin.entity.support;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.alibaba.fastjson.annotation.JSONType;
 import lombok.Data;
 
 import java.io.Serializable;

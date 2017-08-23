@@ -28,4 +28,12 @@ public class Proper extends BaseEntity {
     private String name;
     @ManyToOne
     private Question question;
+
+    @Override
+    public String toString() {
+        return "Proper{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
