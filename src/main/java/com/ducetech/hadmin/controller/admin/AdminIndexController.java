@@ -9,7 +9,6 @@ import com.ducetech.hadmin.controller.BaseController;
 public class AdminIndexController extends BaseController{
 	@RequestMapping(value ={"/admin/","/admin/index"})
 	public String index(){
-
 		return "admin/index";
 	}
 

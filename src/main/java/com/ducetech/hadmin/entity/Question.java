@@ -37,7 +37,7 @@ public class Question extends BaseEntity {
     private String bankId;
 
     private String imgUrl;
-
+    @JSONField(serialize = false)
     @OneToMany
     private List<Proper> propers;
 

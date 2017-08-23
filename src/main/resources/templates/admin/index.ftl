@@ -14,8 +14,7 @@
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <span class="clear">
                                     <span class="block m-t-xs" style="font-size:20px;">
-                                        <i class="fa fa-area-chart"></i>
-                                        <strong class="font-bold">HAdmin</strong>
+                                        <img src="${ctx!}/hadmin/img/logo.png" width="160" height="50">
                                     </span>
                                 </span>
                             </a>
@@ -28,7 +27,7 @@
                     </li>
                     <li>
                         <a href="#">
-                            <i class="fa fa fa-cog"></i>
+                            <i class="fa fa-cubes"></i>
                             <span class="nav-label">基础信息维护</span>
                             <span class="fa arrow"></span>
                         </a>
@@ -55,7 +54,7 @@
                     </li>
                     <li>
                         <a href="#">
-                            <i class="fa fa fa-cog"></i>
+                            <i class="fa fa-gears"></i>
                             <span class="nav-label">运营管理</span>
                             <span class="fa arrow"></span>
                         </a>

@@ -336,7 +336,7 @@
                     title: "分数",
                     field: "judgeScore",
                 },{
-                    title: "排序提",
+                    title: "排序题",
                     field: "rankNum",
                 },{
                     title: "分数",

@@ -196,7 +196,7 @@ public class TrainController  extends BaseController {
             if (!file.isEmpty()) {
                 try {
                     String suffix=StringUtil.suffix(filePath);
-                    if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)) {
+                    if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {
                         BigFile.saveFile(folder, nodeCode, user, file,BigConstant.office,BigConstant.TRAIN,flag,fileDao,stationDao);
                     }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
                         BigFile.saveFile(folder, nodeCode, user, file,BigConstant.image,BigConstant.TRAIN,flag,fileDao,stationDao);
