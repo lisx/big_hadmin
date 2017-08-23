@@ -16,7 +16,7 @@ import java.util.Date;
  * @since 2016-12-28
  */
 @Entity
-@Table(name = "tb_role")
+@Table(name = "big_role")
 @Data
 public class Role extends BaseEntity {
 
@@ -55,7 +55,7 @@ public class Role extends BaseEntity {
 
 
 	@ManyToMany(cascade = { CascadeType.REFRESH }, fetch = FetchType.LAZY)
-	@JoinTable(name = "tb_role_resource", joinColumns = { @JoinColumn(name = "role_id") }, inverseJoinColumns = { @JoinColumn(name = "resource_id") })
+	@JoinTable(name = "big_role_resource", joinColumns = { @JoinColumn(name = "role_id") }, inverseJoinColumns = { @JoinColumn(name = "resource_id") })
 	private java.util.Set<Resource> resources;
     /**
      * 创建时间

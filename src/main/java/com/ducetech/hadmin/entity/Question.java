@@ -48,13 +48,13 @@ public class Question extends BaseEntity {
     /**
      * 创建时间
      */
-    //@JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     private Integer createId;
     /**
      * 更新时间
      */
-    //@JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
     private Integer updateId;
 

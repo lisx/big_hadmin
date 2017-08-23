@@ -16,7 +16,7 @@ import java.util.Date;
  * @since 2016-12-28
  */
 @Entity
-@Table(name = "tb_resource")
+@Table(name = "big_resource")
 @Data
 public class Resource extends BaseEntity {
 

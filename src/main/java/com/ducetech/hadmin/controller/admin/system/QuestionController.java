@@ -75,8 +75,9 @@ public class QuestionController extends BaseController {
         String bank = request.getParameter("bank");
         if(!StringUtil.isBlank(searchText)){
             builder.add("name", SpecificationOperator.Operator.likeAll.name(), searchText);
-            builder.add("bankId", SpecificationOperator.Operator.likeAll.name(), bank);
+            //builder.add("bankId", SpecificationOperator.Operator.likeAll.name(), bank);
         }
+
         return questionService.findAll(builder.generateSpecification(), getPageRequest());
     }
 
