@@ -26,6 +26,9 @@ public class QuestionLog extends BaseEntity {
     private Question question;
     //已选答案
     @ManyToMany
+    @JoinTable(name = "big_exam_log_proper", joinColumns = { @JoinColumn(name = "log_id") }, inverseJoinColumns = { @JoinColumn(name = "proper_id") })
     private List<Proper> selectProper;
+
+    private ExamLog log;
 
 }

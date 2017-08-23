@@ -180,16 +180,16 @@
 
     </dependencies>
 	<build>
-        <resources>
-            <resource>
-                <directory>${project.sources}</directory>
-                <filtering>false</filtering>
-                <includes>
-                    <include>**/*.woff</include>
-                    <include>**/*.ttf</include>
-                </includes>
-            </resource>
-        </resources>
+        <!--<resources>-->
+            <!--<resource>-->
+                <!--<directory>${project.sources}</directory>-->
+                <!--<filtering>false</filtering>-->
+                <!--<includes>-->
+                    <!--<include>**/*.woff</include>-->
+                    <!--<include>**/*.ttf</include>-->
+                <!--</includes>-->
+            <!--</resource>-->
+        <!--</resources>-->
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

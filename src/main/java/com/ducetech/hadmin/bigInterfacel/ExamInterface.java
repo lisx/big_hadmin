@@ -248,16 +248,38 @@ public class ExamInterface  extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "logId", value = "考试记录Id", dataType = "Integer", paramType = "query"),
             @ApiImplicitParam(name = "questionId", value = "问题Id", dataType = "Integer", paramType = "query"),
-            @ApiImplicitParam(name = "properIds", value = "答案Id", dataType = "List<Integer>", paramType = "query")
+            @ApiImplicitParam(name = "properIds", value = "答案Id", dataType = "String", paramType = "query")
     })
-    public JSONObject questionExamLog(Integer logId,Integer questionId,List<Integer> properIds){
+    public JSONObject questionExamLog(Integer logId,Integer questionId,String properIds){
         logger.info("获取练习题");
         ExamLog examLog=examLogDao.findOne(logId);
         Question question=questionDao.findOne(questionId);
-        //Proper proper=properDao.findOne(properId);
-        QuestionLog log=new QuestionLog();
-        log.setQuestion(question);
-        //log.setSelectProper(proper);
+        List<Proper> propers=new ArrayList<>();
+        if(question.getMenuType().equals("判断")||question.getMenuType().equals("单选")){
+            Proper proper = properDao.findOne(Integer.parseInt(properIds));
+            propers.add(proper);
+            QuestionLog log=new QuestionLog();
+            log.setQuestion(question);
+            log.setSelectProper(propers);
+            log.setLog(examLog);
+            questionLogDao.save(log);
+        }else {
+            String[] ids = properIds.split(",");
+            if (ids.length > 0) {
+                for (String id : ids) {
+                    Proper proper = properDao.findOne(Integer.parseInt(id));
+                    propers.add(proper);
+                }
+                QuestionLog log=new QuestionLog();
+                log.setQuestion(question);
+                log.setSelectProper(propers);
+                log.setLog(examLog);
+                questionLogDao.save(log);
+            } else {
+                System.out.println("||||||||");
+            }
+        }
+
         obj=new JSONObject();
         obj.put("state",state);
         obj.put("msg",msg);
