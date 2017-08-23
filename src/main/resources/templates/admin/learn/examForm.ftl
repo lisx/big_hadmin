@@ -5,9 +5,6 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="ibox ">
-                    <div class="ibox-title">
-                        <h5>配置考试类型</h5>
-                    </div>
                     <div class="col-sm-13">
                         <div class="ibox-content">
                             <form class="form-inline m-t" id="frm" method="post" action="${ctx!}/admin/exam/save">
@@ -21,25 +18,26 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">单选题：</label>
                                     <div class="col-sm-8">
-                                        <input  name="singleNum" class="form-control" value="${exam.singleNum}">道 每道题<input  name="singleScore" class="form-control col-sm-3">分
+                                        <input  name="singleNum" class="form-control" style="margin-bottom: 10px;" value="${exam.singleNum}" placeholder="题数">
+                                        <input  name="singleScore" placeholder="每题分数" class="form-control col-sm-3">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">多选题：</label>
-                                    <div class="col-sm-8">
-                                        <input  name="multipleNum" class="form-control">道 每道题<input  name="multipleScore" class="form-control col-sm-3">分
+                                    <div class="col-sm-3">
+                                        <input  name="multipleNum" class="form-control" style="margin-bottom: 10px;"  placeholder="题数"> <input  name="multipleScore" placeholder="每题分数" class="form-control col-sm-3">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">判断题：</label>
                                     <div class="col-sm-8">
-                                        <input  name="judgeNum" class="form-control">道 每道题<input  name="judgeScore" class="form-control col-sm-3">分
+                                        <input  name="judgeNum" class="form-control" style="margin-bottom: 10px;"  placeholder="题数"> <input  name="judgeScore" placeholder="每题分数" class="form-control col-sm-3">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">排序题：</label>
                                     <div class="col-sm-8">
-                                        <input  name="rankNum" class="form-control">道 每道题<input  name="rankScore" class="form-control col-sm-3">分
+                                        <input  name="rankNum" class="form-control" style="margin-bottom: 10px;"  placeholder="题数"> <input  name="rankScore" placeholder="每题分数" class="form-control col-sm-3">
                                     </div>
                                 </div>
                                 <div class="form-group">

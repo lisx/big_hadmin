@@ -8,9 +8,6 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="ibox ">
-                    <div class="ibox-title">
-                        <h5>学习园地</h5>
-                    </div>
                     <div class="col-sm-13">
                         <div class="tabs-container">
                             <ul class="nav nav-tabs">
@@ -18,7 +15,7 @@
                                 </li>
                                 <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">练习/考试</a>
                                 </li>
-                                <li class=""><a data-toggle="tab" href="#tab-3" aria-expanded="false">考试类型</a>
+                                <li class=""><a data-toggle="tab" href="#tab-3" aria-expanded="false">试卷类型</a>
                                 </li>
                             </ul>
                             <div class="tab-content">
@@ -26,7 +23,7 @@
                                     <div class="panel-body">
                                             <p>
                                             <@shiro.hasPermission name="system:resource:add">
-                                                <button class="btn btn-success uploadFile" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传</button>
+                                                <button class="btn btn-success uploadFile" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传资料</button>
                                                 <button class="btn btn-success addFolder" type="button" onclick="addFolder();"><i class="fa fa-plus"></i>&nbsp;新建文件夹</button>
                                                 <span class="spanStation"></span>
                                             </@shiro.hasPermission>
@@ -52,7 +49,7 @@
                                     <div class="panel-body">
                                             <p>
                                             <@shiro.hasPermission name="system:resource:add">
-                                                <button class="btn btn-success " type="button" onclick="uploadQuestion();"><i class="fa fa-plus"></i>&nbsp;上传题库</button>
+                                                <button class="btn btn-success " type="button" onclick="uploadQuestion();"><i class="fa fa-plus"></i>&nbsp;创建题库</button>
                                                 <button class="btn btn-success " type="button" onclick="uploadImage();"><i class="fa fa-plus"></i>&nbsp;批量导入附件</button>
                                             </@shiro.hasPermission>
                                             </p>
@@ -74,7 +71,7 @@
                                     <div class="panel-body">
                                         <p>
                                         <@shiro.hasPermission name="system:resource:add">
-                                            <button class="btn btn-success " type="button" onclick="configExam();"><i class="fa fa-plus"></i>&nbsp;配置考试类型</button>
+                                            <button class="btn btn-success " type="button" onclick="configExam();"><i class="fa fa-plus"></i>&nbsp;配置试卷类型</button>
                                         </@shiro.hasPermission>
                                         </p>
                                         <hr>
@@ -176,7 +173,7 @@
 			    },
                 //数据列
                 columns: [{
-                    title: "ID",
+                    title: "编号",
                     field: "id",
                     sortable: true
                 },{
@@ -258,7 +255,7 @@
                 },
                 //数据列
                 columns: [{
-                    title: "ID",
+                    title: "编号",
                     field: "id",
                     sortable: true
                 },{
@@ -314,7 +311,7 @@
                 },
                 //数据列
                 columns: [{
-                    title: "ID",
+                    title: "编号",
                     field: "id",
                     sortable: true
                 },{
@@ -443,10 +440,10 @@
         function configExam(){
             layer.open({
                 type: 2,
-                title: '配置考试类型',
+                title: '配置试卷类型',
                 shadeClose: true,
                 shade: false,
-                area: ['600px', '600px'],
+                area: ['600px', '700px'],
                 content: '${ctx!}/admin/exam/add',
                 end: function(index){
                     $('#table_exam_list').bootstrapTable("refresh");
@@ -456,7 +453,7 @@
         function examEdit(id){
             layer.open({
                 type: 2,
-                title: '配置考试类型',
+                title: '配置试卷类型',
                 shadeClose: true,
                 shade: false,
                 area: ['600px', '600px'],
@@ -488,7 +485,7 @@
         function uploadQuestion(){
             layer.open({
                 type: 2,
-                title: '上传题库',
+                title: '创建题库',
                 shadeClose: true,
                 shade: false,
                 area: ['500px', '600px'],
@@ -505,7 +502,7 @@
                 shadeClose: true,
                 shade: false,
                 area: ['400px', '400px'],
-                content: '${ctx!}/admin/folder/edit/1',
+                content: '${ctx!}/admin/question/uploadImage',
                 end: function(index){
                     $('#table_bank_list').bootstrapTable("refresh");
                 }

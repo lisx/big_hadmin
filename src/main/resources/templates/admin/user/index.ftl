@@ -6,15 +6,12 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="ibox ">
-                    <div class="ibox-title">
-                        <h5>用户管理</h5>
-                    </div>
                     <div class="ibox-content">
                         <p>
                         	<@shiro.hasPermission name="system:user:add">
-                        		<button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;添加</button>
-                                <button class="btn btn-success " type="button" onclick="uploadUser();"><i class="fa fa-plus"></i>&nbsp;上传用户</button>
-                                <button class="btn btn-success " type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传文件</button>
+                        		<button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;添加人员</button>
+                                <button class="btn btn-success " type="button" onclick="uploadUser();"><i class="fa fa-plus"></i>&nbsp;批量导入人员</button>
+                                <button class="btn btn-success " type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;批量导入附件</button>
                         	</@shiro.hasPermission>
                         </p>
                         <hr>
@@ -75,14 +72,14 @@
 			    },
 			    //数据列
 			    columns: [{
-			        title: "ID",
+			        title: "编号",
 			        field: "id",
 			        sortable: true
 			    },{
 			        title: "用户名",
 			        field: "userName"
 			    },{
-			        title: "所属角色",
+			        title: "所属权限",
 			        field: "roles",
 			        formatter: function(value, row, index) {
                     	var r = "";
@@ -95,20 +92,12 @@
 			        title: "姓名",
 			        field: "nickName"
 			    },{
-			        title: "状态",
-			        field: "ifUse",
-			        formatter: function(value, row, index) {
-                        if (value == '0')
-                        	return '<span class="label label-warning">未删除</span>';
-                        return '<span class="label label-primary">已删除</span>';
-                    }
-			    },{
                     title: "站点",
                     field: "station",
 			    },{
-			        title: "电话",
-			        field: "telephone"
-			    },{
+                    title: "站区",
+                    field: "stationArea",
+                },{
 			        title: "创建时间",
 			        field: "createTime",
 			        sortable: true
@@ -118,7 +107,7 @@
                     formatter: function (value, row, index) {
                     	var operateHtml = '<@shiro.hasPermission name="system:user:edit"><button class="btn btn-primary btn-xs" type="button" onclick="edit(\''+row.id+'\')"><i class="fa fa-edit"></i>&nbsp;修改</button> &nbsp;</@shiro.hasPermission>';
                     	operateHtml = operateHtml + '<@shiro.hasPermission name="system:user:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button> &nbsp;</@shiro.hasPermission>';
-                    	operateHtml = operateHtml + '<@shiro.hasPermission name="system:user:grant"><button class="btn btn-info btn-xs" type="button" onclick="grant(\''+row.id+'\')"><i class="fa fa-arrows"></i>&nbsp;关联角色</button></@shiro.hasPermission>';
+                    	operateHtml = operateHtml + '<@shiro.hasPermission name="system:user:grant"><button class="btn btn-info btn-xs" type="button" onclick="grant(\''+row.id+'\')"><i class="fa fa-arrows"></i>&nbsp;选择权限</button></@shiro.hasPermission>';
                         return operateHtml;
                     }
 			    }]
@@ -180,7 +169,7 @@
         function grant(id){
         	layer.open({
         	      type: 2,
-        	      title: '关联角色',
+        	      title: '选择权限',
         	      shadeClose: true,
         	      shade: false,
         	      area: ['893px', '600px'],

@@ -45,7 +45,7 @@
                 },
                 //数据列
                 columns: [{
-                    title: "ID",
+                    title: "编号",
                     field: "id",
                     sortable: true
                 },{
@@ -208,13 +208,10 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="ibox ">
-                    <div class="ibox-title">
-                        <h5>消防安全管理</h5>
-                    </div>
                     <div class="ibox-content">
                         <p>
                         	<@shiro.hasPermission name="system:resource:add">
-                                <button class="btn btn-success uploadFile" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传</button>
+                                <button class="btn btn-success uploadFile" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传资料</button>
                                 <button class="btn btn-success addFolder" type="button" onclick="addFolder();"><i class="fa fa-plus"></i>&nbsp;新建文件夹</button>
                                 <span class="spanStation"></span>
                         	</@shiro.hasPermission>

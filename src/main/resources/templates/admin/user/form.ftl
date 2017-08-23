@@ -6,21 +6,15 @@
         <input type="hidden" id="id" name="id" value="${user.id}">
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">用户名：</label>
-            <div class="col-sm-8">
-                <input id="userName" name="userName" class="form-control" type="text" value="${user.userName}" <#if user?exists> readonly="readonly"</#if> >
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">密码：</label>
-            <div class="col-sm-8">
-                <input id="password" name="password" class="form-control" type="text" value="${user.password}" >
-            </div>
-        </div>
-        <div class="form-group">
             <label class="col-sm-3 control-label">员工编号：</label>
             <div class="col-sm-8">
                 <input id="userCode" name="userCode" class="form-control" type="text" value="${user.userName}" <#if user?exists> readonly="readonly"</#if> >
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">登录密码：</label>
+            <div class="col-sm-8">
+                <input id="password" name="password" class="form-control" type="text" value="123456" >
             </div>
         </div>
         <div class="form-group">
@@ -30,7 +24,21 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">单位：</label>
+            <label class="col-sm-3 control-label">职位：</label>
+            <div class="col-sm-8">
+                <select name="unitId" class="form-control">
+                    <option>站务员</option>
+                    <option>综控员</option>
+                    <option>值班站长</option>
+                    <option>副站长</option>
+                    <option>站长</option>
+                    <option>副站区长</option>
+                    <option>站区长</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">站区：</label>
             <div class="col-sm-8">
                 <select name="unitId" class="form-control">
                     <option value="0" <#if user.sex == 0>selected="selected"</#if>>女</option>
@@ -39,33 +47,30 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">电话：</label>
+            <label class="col-sm-3 control-label">站点：</label>
             <div class="col-sm-8">
-                <input id="telephone" name="telephone" class="form-control" value="${user.telephone}">
+                <select name="unitId" class="form-control">
+                    <option value="0" <#if user.sex == 0>selected="selected"</#if>>女</option>
+                    <option value="1" <#if user.sex == 1>selected="selected"</#if>>男</option>
+                </select>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">服务信息卡：</label>
+            <label class="col-sm-3 control-label">服务信息卡编号：</label>
             <div class="col-sm-8">
                 <input id="fwxxkUrl" name="fwxxkUrl" class="form-control" value="${user.email}">
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">综控员上岗证：</label>
+            <label class="col-sm-3 control-label">综控员上岗证编号：</label>
             <div class="col-sm-8">
                 <input id="zkysgzUrl" name="zkysgzUrl" class="form-control" value="${user.address}">
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">FAS证：</label>
+            <label class="col-sm-3 control-label">FAS证编号：</label>
             <div class="col-sm-8">
                 <input id="faszUrl" name="faszUrl" class="form-control" value="${user.address}">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">头像：</label>
-            <div class="col-sm-8">
-                <input id="photoUrl" name="photoUrl" class="form-control" value="${user.address}">
             </div>
         </div>
         <div class="form-group">

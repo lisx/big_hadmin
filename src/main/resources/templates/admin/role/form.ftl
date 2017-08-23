@@ -1,47 +1,23 @@
 <#include "/admin/common/css.ftl">
 <#include "/admin/common/js.ftl">
-<body class="gray-bg">
-    <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>jQuery Validate 简介</h5>
-                    </div>
-                    <div class="ibox-content">
-                        <p>jquery.validate.js 是一款优秀的jQuery表单验证插件。它具有如下特点：</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5>完整验证表单</h5>
                     </div>
                     <div class="ibox-content">
                         <form class="form-horizontal m-t" id="frm" method="post" action="${ctx!}/admin/role/edit">
                         	<input type="hidden" id="id" name="id" value="${role.id}">
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">角色key：</label>
+                                <label class="col-sm-3 control-label">权限key：</label>
                                 <div class="col-sm-8">
                                     <input id="roleKey" name="roleKey" class="form-control" type="text" value="${role.roleKey}" <#if role?exists> readonly="readonly"</#if> >
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">角色名称：</label>
+                                <label class="col-sm-3 control-label">权限名称：</label>
                                 <div class="col-sm-8">
                                     <input id="name" name="name" class="form-control" type="text" value="${role.name}">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">状态：</label>
-                                <div class="col-sm-8">
-                                	<select name="status" class="form-control">
-                                		<option value="0" <#if role.status == 0>selected="selected"</#if>>正常</option>
-                                		<option value="1" <#if role.status == 1>selected="selected"</#if>>禁用</option>
-                                	</select>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -60,7 +36,6 @@
                 </div>
             </div>
         </div>
-    </div>
     <script type="text/javascript">
     $(document).ready(function () {
 	    $("#frm").validate({

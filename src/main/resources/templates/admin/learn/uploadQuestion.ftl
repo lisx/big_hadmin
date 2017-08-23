@@ -25,16 +25,22 @@
                     </select>
                 </div>
                 <div class="form-group">
+                    <button class="btn btn-sm btn-primary m-t-n-xs" onclick="downUpload('单选')" type="button"><strong>单选模版下载</strong>
+                    </button>
+                    <button class="btn btn-sm btn-primary m-t-n-xs" onclick="downUpload('多选')" type="button"><strong>多选模版下载</strong>
+                    </button>
+                    <button class="btn btn-sm btn-primary m-t-n-xs" onclick="downUpload('判断')" type="button"><strong>判断模版下载</strong>
+                    </button>
+                    <button class="btn btn-sm btn-primary m-t-n-xs" onclick="downUpload('排序')" type="button"><strong>排序模版下载</strong>
+                    </button>
+                </div>
+                <div class="form-group">
+                    <label>上传试题：</label>
                     <input type="file" class="form-control" name="fileUpload" />
                 </div>
+
                 <div>
-                    <button class="btn btn-sm btn-primary m-t-n-xs" onclick="downUpload('单选')" type="button"><strong>单选模版下载</strong>
-                    <button class="btn btn-sm btn-primary m-t-n-xs" onclick="downUpload('多选')" type="button"><strong>多选模版下载</strong>
-                    <button class="btn btn-sm btn-primary m-t-n-xs" onclick="downUpload('判断')" type="button"><strong>判断模版下载</strong>
-                    <button class="btn btn-sm btn-primary m-t-n-xs" onclick="downUpload('排序')" type="button"><strong>排序模版下载</strong>
-                </div>
-                <div>
-                    <button class="btn btn-sm btn-primary pull-right m-t-n-xs" onclick="uploadUserClose()" type="button"><strong>上传文件</strong>
+                    <button class="btn btn-sm btn-primary pull-left m-t-n-xs" onclick="uploadUserClose()" type="button"><strong>完成创建</strong>
                     </button>
                 </div>
             </form>

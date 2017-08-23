@@ -5,9 +5,6 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="ibox ">
-                    <div class="ibox-title">
-                        <h5>试题管理</h5>
-                    </div>
                     <div class="ibox-content">
                         <div class="row row-lg">
 		                    <div class="col-sm-12">
@@ -66,8 +63,9 @@
 			    },
 			    //数据列
 			    columns: [{
-			        title: "ID",
+			        title: "编号",
 			        field: "id",
+                    width: "200",
 			        sortable: true
 			    },{
 			        title: "问题",
@@ -78,10 +76,12 @@
 			    },{
 			        title: "创建时间",
 			        field: "createTime",
+                    width: "300",
 			        sortable: true
 			    },{
 			        title: "操作",
 			        field: "empty",
+                    width: "150",
                     formatter: function (value, row, index) {
                     	var operateHtml = '<@shiro.hasPermission name="system:user:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button> &nbsp;</@shiro.hasPermission>';
                         return operateHtml;

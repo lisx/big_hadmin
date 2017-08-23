@@ -7,13 +7,10 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="ibox ">
-                    <div class="ibox-title">
-                        <h5>角色管理</h5>
-                    </div>
                     <div class="ibox-content">
                         <p>
                         <@shiro.hasPermission name="system:role:add">
-                        	<button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;添加</button>
+                        	<button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;添加权限</button>
                         </@shiro.hasPermission>
                         </p>
                         <hr>
@@ -72,34 +69,16 @@
 			        };
 			    },
 			    //数据列
-			    columns: [{
-                    checkbox: true
-                }, {
-			        title: "ID",
+			    columns: [ {
+			        title: "编号",
 			        field: "id",
 			        sortable: true
 			    },{
-			        title: "角色名称",
+			        title: "权限名称",
 			        field: "name"
-			    },{
-			        title: "角色KEY",
-			        field: "roleKey",
-                    sortable:true
-			    },{
-			        title: "状态",
-			        field: "status",
-			        formatter: function(value,row,index){
-			        	if (value == '0')
-                        	return '<span class="label label-primary">正常</span>';
-                        return '<span class="label label-danger">禁用</span>';
-			        }
 			    },{
 			        title: "创建时间",
 			        field: "createTime",
-			        sortable: true
-			    },{
-			        title: "更新时间",
-			        field: "updateTime",
 			        sortable: true
 			    },{
 			        title: "操作",
@@ -107,7 +86,7 @@
                     formatter: function (value, row, index) {
                     	var operateHtml = '<@shiro.hasPermission name="system:role:edit"><button class="btn btn-primary btn-xs" type="button" onclick="edit(\''+row.id+'\')"><i class="fa fa-edit"></i>&nbsp;修改</button> &nbsp;</@shiro.hasPermission>';
                     	operateHtml = operateHtml + '<@shiro.hasPermission name="system:role:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button> &nbsp;</@shiro.hasPermission>';
-                    	operateHtml = operateHtml + '<@shiro.hasPermission name="system:role:grant"><button class="btn btn-info btn-xs" type="button" onclick="grant(\''+row.id+'\')"><i class="fa fa-arrows"></i>&nbsp;分配资源</button></@shiro.hasPermission>';
+                    	operateHtml = operateHtml + '<@shiro.hasPermission name="system:role:grant"><button class="btn btn-info btn-xs" type="button" onclick="grant(\''+row.id+'\')"><i class="fa fa-arrows"></i>&nbsp;可使用功能</button></@shiro.hasPermission>';
                         return operateHtml;
                     }
 			    }]
@@ -117,7 +96,7 @@
         function edit(id){
         	layer.open({
         	      type: 2,
-        	      title: '角色修改',
+        	      title: '权限修改',
         	      shadeClose: true,
         	      shade: false,
         	      area: ['893px', '600px'],
@@ -130,7 +109,7 @@
         function add(){
         	layer.open({
         	      type: 2,
-        	      title: '用户添加',
+        	      title: '添加权限',
         	      shadeClose: true,
         	      shade: false,
         	      area: ['893px', '600px'],
@@ -143,7 +122,7 @@
         function grant(id){
         	layer.open({
         	      type: 2,
-        	      title: '分配资源',
+        	      title: '可使用功能',
         	      shadeClose: true,
         	      shade: false,
         	      area: ['893px', '600px'],

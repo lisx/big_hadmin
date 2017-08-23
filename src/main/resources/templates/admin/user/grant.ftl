@@ -19,26 +19,8 @@
 
 </head>
 
-<body class="gray-bg">
-<div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>jQuery Validate 简介</h5>
-                </div>
-                <div class="ibox-content">
-                    <p>为【${user.nickName}】分配角色</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>选择角色</h5>
-                </div>
                 <div class="ibox-content">
                     <form class="form-horizontal" id="frm" method="post" action="${ctx!}/admin/user/save">
                         <input type="hidden" id="id" name="id" value="${user.id}">
@@ -66,9 +48,6 @@
                 </div>
             </div>
         </div>
-    </div>
-
-</div>
 <!-- 全局js -->
 <!--jquery-->
 <script src="${ctx!}/hadmin/js/jquery.min.js"></script>
