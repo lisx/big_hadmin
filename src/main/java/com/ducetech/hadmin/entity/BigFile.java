@@ -1,5 +1,6 @@
 package com.ducetech.hadmin.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.ducetech.hadmin.common.utils.BigConstant;
 import com.ducetech.hadmin.common.utils.PdfUtil;
 import com.ducetech.hadmin.common.utils.StringUtil;
@@ -36,6 +37,18 @@ public class BigFile extends BaseEntity {
     private String fileName;
     //文件地址
     private String fileUrl;
+    /**
+     * 创建时间
+     */
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
+    private Integer createId;
+    /**
+     * 更新时间
+     */
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private Date updateTime;
+    private Integer updateId;
 
     public void setFileSize(String fileSize) {
         Double size=Double.parseDouble(fileSize);

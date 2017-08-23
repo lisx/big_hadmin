@@ -5,6 +5,7 @@ import com.ducetech.hadmin.entity.support.BaseEntity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,5 +29,17 @@ public class QuestionBank  extends BaseEntity {
     private List<Question> questionList;
     @ManyToOne
     private Station station;
+    /**
+     * 创建时间
+     */
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
+    private Integer createId;
+    /**
+     * 更新时间
+     */
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private Date updateTime;
+    private Integer updateId;
 
 }

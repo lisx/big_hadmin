@@ -1,5 +1,6 @@
 package com.ducetech.hadmin.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.ducetech.hadmin.entity.support.BaseEntity;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -39,5 +40,17 @@ public class ExamLog extends BaseEntity {
     private List<QuestionLog> questionLogs;
     //分数
     private Integer score;
+    /**
+     * 创建时间
+     */
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
+    private Integer createId;
+    /**
+     * 更新时间
+     */
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private Date updateTime;
+    private Integer updateId;
 
 }

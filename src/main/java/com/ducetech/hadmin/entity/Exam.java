@@ -1,9 +1,11 @@
 package com.ducetech.hadmin.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.ducetech.hadmin.entity.support.BaseEntity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * 试卷管理
@@ -42,4 +44,17 @@ public class Exam extends BaseEntity {
     private String areaName;
     //归属站点
     private String stationName;
+    /**
+     * 创建时间
+     */
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
+    private Integer createId;
+    /**
+     * 更新时间
+     */
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private Date updateTime;
+    private Integer updateId;
+
 }

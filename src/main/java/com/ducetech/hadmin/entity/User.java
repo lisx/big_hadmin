@@ -83,6 +83,19 @@ public class User extends BaseEntity {
 	 * 头像
 	 */
 	private String photoUrl;
+    /**
+     * 创建时间
+     */
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
+    private Integer createId;
+    /**
+     * 更新时间
+     */
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private Date updateTime;
+    private Integer updateId;
+
 
 	@OneToMany
     private List<ExamLog> logs;

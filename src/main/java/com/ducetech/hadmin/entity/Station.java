@@ -2,11 +2,13 @@ package com.ducetech.hadmin.entity;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.entity.support.BaseEntity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,6 +43,18 @@ public class Station extends BaseEntity {
     private String sorting;
     //1人员文件 2车站文件 3培训文件 4练习考试 5规章制度 6运行图 7通知 8消防安全 9首页滚动
     private String menuType;
+    /**
+     * 创建时间
+     */
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
+    private Integer createId;
+    /**
+     * 更新时间
+     */
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private Date updateTime;
+    private Integer updateId;
 
     @OneToMany
     private List<QuestionBank> banks;

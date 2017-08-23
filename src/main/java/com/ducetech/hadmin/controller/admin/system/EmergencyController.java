@@ -51,6 +51,7 @@ public class EmergencyController  extends BaseController {
     IBigFileDao fileDao;
     @Autowired
     IFolderDao folderDao;
+
     /**
      * 树形菜单
      * @return
