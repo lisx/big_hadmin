@@ -361,7 +361,7 @@
         });
         //下载文件
         function down(id,name){
-            console.log(id);
+            console.log(id+"|||||"+name);
             var a = document.createElement('a');
             a.href = "${ctx!}/admin/download/"+id;
             a.download = name;
