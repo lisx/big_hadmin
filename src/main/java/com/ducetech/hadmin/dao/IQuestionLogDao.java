@@ -1,9 +1,13 @@
 package com.ducetech.hadmin.dao;
 
 import com.ducetech.hadmin.dao.support.IBaseDao;
+import com.ducetech.hadmin.entity.ExamLog;
+import com.ducetech.hadmin.entity.Question;
 import com.ducetech.hadmin.entity.QuestionBank;
 import com.ducetech.hadmin.entity.QuestionLog;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * 文件管理
@@ -13,5 +17,5 @@ import org.springframework.stereotype.Repository;
  **/
 @Repository
 public interface IQuestionLogDao extends IBaseDao<QuestionLog,Integer> {
-
+    QuestionLog findByQuestionAndLog(Question question, ExamLog log);
 }

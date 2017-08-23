@@ -11,11 +11,6 @@
                     </div>
                     <div class="ibox-content">
                         <p>
-                        	<@shiro.hasPermission name="system:user:add">
-                        		<button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;添加</button>
-                                <button class="btn btn-success " type="button" onclick="uploadUser();"><i class="fa fa-plus"></i>&nbsp;上传用户</button>
-                                <button class="btn btn-success " type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传文件</button>
-                        	</@shiro.hasPermission>
                         </p>
                         <hr>
                         <div class="row row-lg">
@@ -41,7 +36,7 @@
         	//初始化表格,动态从服务器加载数据
 			$("#table_list").bootstrapTable({
 			    //使用get请求到服务器获取数据
-			    method: "POST",
+			    method: "GET",
 			    //必须设置，不然request.getParameter获取不到请求参数
 			    contentType: "application/x-www-form-urlencoded",
 			    //获取数据的Servlet地址
@@ -80,7 +75,7 @@
 			        sortable: true
 			    },{
 			        title: "用户名",
-			        field: "user",
+			        field: "user.userName",
                     formatter: function(value, row, index) {
                         var r = "";
                         $(value).each(function (index,user){
@@ -89,28 +84,8 @@
                         return r;
                     }
 			    },{
-                    title: "站点",
-                    field: "user",
-                    formatter: function(value, row, index) {
-                        var r = "";
-                        $(value).each(function (index,user){
-                            r = user.station;
-                        });
-                        return r;
-                    }
-			    },{
-			        title: "电话",
-                    field: "user",
-                    formatter: function(value, row, index) {
-                        var r = "";
-                        $(value).each(function (index,user){
-                            r = user.telephone;
-                        });
-                        return r;
-                    }
-			    },{
 			        title: "创建时间",
-                    field: "user",
+                    field: "examTime",
                     formatter: function(value, row, index) {
                         var r = "";
                         $(value).each(function (index,user){

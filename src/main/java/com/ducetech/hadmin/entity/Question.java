@@ -45,19 +45,4 @@ public class Question extends BaseEntity {
     @ManyToOne
     private QuestionBank questionBank;
 
-    @Override
-    public String toString() {
-        return "Question{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", proper='" + proper + '\'' +
-                ", answer='" + answer + '\'' +
-                ", menuType='" + menuType + '\'' +
-                ", ifUse='" + ifUse + '\'' +
-                ", bankId='" + bankId + '\'' +
-                ", url='" + imgUrl + '\'' +
-                ", propers=" + propers +
-                ", questionBank=" + questionBank +
-                '}';
-    }
 }

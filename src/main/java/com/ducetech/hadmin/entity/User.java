@@ -7,6 +7,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 用户表
@@ -82,6 +83,9 @@ public class User extends BaseEntity {
 	 * 头像
 	 */
 	private String photoUrl;
+
+	@OneToMany
+    private List<ExamLog> logs;
 
     @JSONField(serialize = false)
 	@ManyToMany(cascade = { CascadeType.REFRESH }, fetch = FetchType.LAZY)

@@ -3,8 +3,10 @@ package com.ducetech.hadmin.entity;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.ducetech.hadmin.entity.support.BaseEntity;
 import lombok.Data;
+import org.hibernate.EntityMode;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -23,12 +25,14 @@ public class QuestionLog extends BaseEntity {
     @Column(name = "id",nullable = false)
     private Integer id;
     //问题
+    @ManyToOne
     private Question question;
     //已选答案
     @ManyToMany
-    @JoinTable(name = "big_exam_log_proper", joinColumns = { @JoinColumn(name = "log_id") }, inverseJoinColumns = { @JoinColumn(name = "proper_id") })
+    @JoinTable(name = "big_question_log_select_proper", joinColumns = { @JoinColumn(name = "log_id") }, inverseJoinColumns = { @JoinColumn(name = "proper_id") })
     private List<Proper> selectProper;
 
+    @ManyToOne
     private ExamLog log;
 
 }

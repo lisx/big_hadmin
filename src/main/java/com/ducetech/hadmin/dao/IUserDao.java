@@ -18,4 +18,5 @@ public interface IUserDao extends IBaseDao<User, Integer> {
 
     @Query(value="select o from User o where o.station=:station or o.stationArea=:station or o.line=:station")
     List<User> findAllByStation(@Param("station") String station);
+
 }

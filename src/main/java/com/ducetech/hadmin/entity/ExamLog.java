@@ -29,12 +29,12 @@ public class ExamLog extends BaseEntity {
     //题库
     @ManyToOne
     private QuestionBank bank;
-    //试题
-    @ManyToMany
-    private List<Question> questions;
+    @ManyToOne
+    private Exam exam;
     //试题记录
     @OneToMany
     private List<QuestionLog> questionLogs;
     //分数
     private Integer score;
+
 }

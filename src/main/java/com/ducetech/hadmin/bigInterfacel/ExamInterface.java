@@ -116,6 +116,7 @@ public class ExamInterface  extends BaseController {
             QuestionBank bank=questionBankDao.findOne(bankId);
             Exam exam=examDao.findOne(examId);
             List<Question> questions=new ArrayList<Question>();
+
             if(null!=exam) {
                 List<Question> singles;
                 List<Question> multiples;
@@ -128,6 +129,7 @@ public class ExamInterface  extends BaseController {
                     for(int i=0;i<exam.getSingleNum();i++) {
                         int l = rand.nextInt(singles.size());
                         Question q=singles.get(l);
+
                         if(!questions.contains(q)&&null!=q){
                             logger.info(q.getPropers().size()+"单选");
                             List<Proper> pros=properDao.findByQuestion(q);
@@ -189,13 +191,22 @@ public class ExamInterface  extends BaseController {
             logger.info("|+|+|"+questions.size());
             questions.removeAll(Collections.singleton(null));
             log.setExamTime(new Date());
-            log.setQuestions(questions);
             log.setBank(bank);
+            log.setExam(exam);
             examLogDao.save(log);
+            for(Question question:questions){
+                QuestionLog qlog=new QuestionLog();
+                qlog.setQuestion(question);
+                qlog.setLog(log);
+                questionLogDao.save(qlog);
+            }
+            JSONObject o=new JSONObject();
+            o.put("log",log);
+            o.put("questions",questions);
             obj=new JSONObject();
             obj.put("state",state);
             obj.put("msg",msg);
-            obj.put("data",log);
+            obj.put("data",o);
         }else{
             obj=new JSONObject();
             obj.put("state",state);
@@ -255,31 +266,60 @@ public class ExamInterface  extends BaseController {
         ExamLog examLog=examLogDao.findOne(logId);
         Question question=questionDao.findOne(questionId);
         List<Proper> propers=new ArrayList<>();
-        if(question.getMenuType().equals("判断")||question.getMenuType().equals("单选")){
+        QuestionLog log=questionLogDao.findByQuestionAndLog(question,examLog);
+        Exam exam=examLog.getExam();
+        //分数
+        int score=0;
+        if(question.getMenuType().equals("判断")){
+            if(question.getProper().equals(properIds)){
+                score=exam.getJudgeScore();
+            }
+        }else if(question.getMenuType().equals("单选")){
             Proper proper = properDao.findOne(Integer.parseInt(properIds));
             propers.add(proper);
-            QuestionLog log=new QuestionLog();
-            log.setQuestion(question);
-            log.setSelectProper(propers);
-            log.setLog(examLog);
-            questionLogDao.save(log);
-        }else {
+            if(question.getProper().equals(proper.getName())){
+                score=exam.getSingleScore();
+            }
+        }else if(question.getMenuType().equals("排序")){
             String[] ids = properIds.split(",");
             if (ids.length > 0) {
+                String answer="";
                 for (String id : ids) {
                     Proper proper = properDao.findOne(Integer.parseInt(id));
                     propers.add(proper);
+                    answer=answer+proper+"/";
                 }
-                QuestionLog log=new QuestionLog();
-                log.setQuestion(question);
-                log.setSelectProper(propers);
-                log.setLog(examLog);
-                questionLogDao.save(log);
-            } else {
-                System.out.println("||||||||");
+                if(question.getProper().equals(answer)){
+                    score=exam.getRankScore();
+                }
+            }
+        }else{
+            String[] ids = properIds.split(",");
+            if (ids.length > 0) {
+                List<String> list=Arrays.asList(question.getProper().split("/"));
+                List<String> answers=new ArrayList<>(list);
+                for (String id : ids) {
+                    Proper proper = properDao.findOne(Integer.parseInt(id));
+                    propers.add(proper);
+                    String temp=proper.getName();
+                    for(int i=0;i<answers.size();i++) {
+                        if(answers.get(i).equals(temp)) {
+                            answers.remove(i);
+                        }
+                    }
+                }
+                if(answers.size()==0){
+                    score=exam.getMultipleScore();
+                }
             }
         }
-
+        log.setSelectProper(propers);
+        questionLogDao.save(log);
+        if(null!=examLog.getScore()) {
+            score = score + examLog.getScore();
+        }
+        examLog.setScore(score);
+        examLogDao.saveAndFlush(examLog);
         obj=new JSONObject();
         obj.put("state",state);
         obj.put("msg",msg);
