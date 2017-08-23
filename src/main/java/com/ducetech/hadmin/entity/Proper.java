@@ -26,7 +26,6 @@ public class Proper extends BaseEntity {
     @Column(name = "id", nullable = false)
     private Integer id;
     private String name;
-    @JSONField(serialize = false)
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne
     private Question question;
 }

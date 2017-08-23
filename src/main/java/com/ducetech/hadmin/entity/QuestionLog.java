@@ -25,6 +25,7 @@ public class QuestionLog extends BaseEntity {
     //问题
     private Question question;
     //已选答案
-    private Proper selectProper;
+    @ManyToMany
+    private List<Proper> selectProper;
 
 }

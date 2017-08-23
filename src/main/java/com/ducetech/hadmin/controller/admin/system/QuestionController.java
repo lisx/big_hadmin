@@ -20,9 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static com.ducetech.hadmin.common.JsonResult.*;
 
@@ -406,7 +404,7 @@ public class QuestionController extends BaseController {
                 question.setBankId(bankName);
                 question.setQuestionBank(bank);
                 questionService.saveOrUpdate(question);
-                List<Proper> propers=new ArrayList<>();
+                List<Proper> propers=new ArrayList();
                 Proper pro = new Proper();
                 pro.setName(a);
                 pro.setQuestion(question);

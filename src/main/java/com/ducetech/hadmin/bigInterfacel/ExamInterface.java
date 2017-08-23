@@ -124,11 +124,15 @@ public class ExamInterface  extends BaseController {
                 Random rand = new Random();
                 if(null!=exam.getSingleNum()&&exam.getSingleNum()>0){
                     singles = questionDao.findByQuestionBankAndMenuType(bank,"单选");
+                    if(singles.size()>0)
                     for(int i=0;i<exam.getSingleNum();i++) {
                         int l = rand.nextInt(singles.size());
                         Question q=singles.get(l);
                         if(!questions.contains(q)&&null!=q){
                             logger.info(q.getPropers().size()+"单选");
+                            List<Proper> pros=properDao.findByQuestion(q);
+                            logger.info("pros||||||{}|||||{}|||"+pros.size(),q.getId());
+                            q.setPropers(pros);
                             questions.add(q);
                         }else{
                             i--;
@@ -137,11 +141,14 @@ public class ExamInterface  extends BaseController {
                 }
                 if(null!=exam.getMultipleNum()&&exam.getMultipleNum()>0){
                     multiples = questionDao.findByQuestionBankAndMenuType(bank,"多选");
+                    if(multiples.size()>0)
                     for(int i=0;i<exam.getMultipleNum();i++) {
                         int l = rand.nextInt(multiples.size());
                         Question q=multiples.get(l);
                         if(!questions.contains(q)&&null!=q){
-                            logger.info(q.getPropers().size()+"多选");
+                            List<Proper> pros=properDao.findByQuestion(q);
+                            logger.info("pros||||||{}|||||{}|||"+pros.size(),q.getId());
+                            q.setPropers(pros);
                             questions.add(q);
                         }else{
                             i--;
@@ -150,6 +157,7 @@ public class ExamInterface  extends BaseController {
                 }
                 if(null!=exam.getJudgeNum()&&exam.getJudgeNum()>0){
                     judges = questionDao.findByQuestionBankAndMenuType(bank,"判断");
+                    if(judges.size()>0)
                     for(int i=0;i<exam.getJudgeNum();i++) {
                         int l = rand.nextInt(judges.size());
                         Question q=judges.get(l);
@@ -162,11 +170,15 @@ public class ExamInterface  extends BaseController {
                 }
                 if(null!=exam.getRankNum()&&exam.getRankNum()>0){
                     ranks = questionDao.findByQuestionBankAndMenuType(bank,"排序");
+                    if(ranks.size()>0)
                     for(int i=0;i<exam.getRankNum();i++) {
                         int l = rand.nextInt(ranks.size());
                         Question q=ranks.get(l);
                         if(!questions.contains(q)&&null!=q){
                             logger.info(q.getPropers().size()+"排序");
+                            List<Proper> pros=properDao.findByQuestion(q);
+                            logger.info("pros||||||{}|||||{}|||"+pros.size(),q.getId());
+                            q.setPropers(pros);
                             questions.add(q);
                         }else{
                             i--;
@@ -236,16 +248,16 @@ public class ExamInterface  extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "logId", value = "考试记录Id", dataType = "Integer", paramType = "query"),
             @ApiImplicitParam(name = "questionId", value = "问题Id", dataType = "Integer", paramType = "query"),
-            @ApiImplicitParam(name = "properId", value = "答案Id", dataType = "Integer", paramType = "query")
+            @ApiImplicitParam(name = "properIds", value = "答案Id", dataType = "List<Integer>", paramType = "query")
     })
-    public JSONObject questionExamLog(Integer logId,Integer questionId,Integer properId){
+    public JSONObject questionExamLog(Integer logId,Integer questionId,List<Integer> properIds){
         logger.info("获取练习题");
         ExamLog examLog=examLogDao.findOne(logId);
         Question question=questionDao.findOne(questionId);
-        Proper proper=properDao.findOne(properId);
+        //Proper proper=properDao.findOne(properId);
         QuestionLog log=new QuestionLog();
         log.setQuestion(question);
-        log.setSelectProper(proper);
+        //log.setSelectProper(proper);
         obj=new JSONObject();
         obj.put("state",state);
         obj.put("msg",msg);
