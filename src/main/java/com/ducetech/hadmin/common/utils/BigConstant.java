@@ -40,9 +40,10 @@ public class BigConstant {
     public static final String Roll="首页滚播图";
     public static final String Rules="规章制度";
     public static final String Emergency="应急预案";
+    public static final String User="人员信息";
 
     public static String getImageUrl(String file) {
-        return  upload+file+".jpg";
+        return  "http://192.168.4.30:8080/interface/userImg?code="+file;
     }
 
 }

@@ -4,6 +4,8 @@ import com.ducetech.hadmin.common.JsonResult;
 import com.ducetech.hadmin.common.utils.BigConstant;
 import com.ducetech.hadmin.common.utils.PoiUtil;
 import com.ducetech.hadmin.controller.BaseController;
+import com.ducetech.hadmin.dao.IBigFileDao;
+import com.ducetech.hadmin.entity.BigFile;
 import com.ducetech.hadmin.entity.Role;
 import com.ducetech.hadmin.entity.User;
 import com.ducetech.hadmin.service.IRoleService;
@@ -41,6 +43,8 @@ public class UserController extends BaseController {
     private static Logger logger = LoggerFactory.getLogger(UserController.class);
 	private final IUserService userService;
 	private final IRoleService roleService;
+	@Autowired
+    IBigFileDao fileDao;
 
     @Autowired
     public UserController(IUserService userService, IRoleService roleService) {
@@ -138,26 +142,29 @@ public class UserController extends BaseController {
         logger.info("进入上传方法");
         List<MultipartFile> files =((MultipartHttpServletRequest)request).getFiles("file");
         MultipartFile file;
-        //创建临时文件夹
-        File dirTempFile = new File(BigConstant.upload);
-        if (!dirTempFile.exists()) {
-            dirTempFile.mkdirs();
-        }
         BufferedOutputStream stream;
         for (int i =0; i< files.size(); ++i) {
             file = files.get(i);
             if (!file.isEmpty()) {
                 try {
                     byte[] bytes = file.getBytes();
-                    stream = new BufferedOutputStream(new FileOutputStream(new File(dirTempFile.getAbsolutePath()+"/"+file.getOriginalFilename())));
+                    String path=BigConstant.upload+file.getOriginalFilename();
+                    File f=new File(path);
+                    stream = new BufferedOutputStream(new FileOutputStream(f));
                     stream.write(bytes);
                     stream.close();
+                    BigFile bf = fileDao.findByFileName(file.getOriginalFilename());
+                    if(null==bf)
+                        bf=new BigFile();
+                    bf.setFileSize("" + Math.round(file.getSize() / 1024));
+                    bf.setMenuType(BigConstant.User);
+                    bf.setFileType(BigConstant.image);
+                    bf.setFileName(file.getOriginalFilename());
+                    bf.setFileUrl(path);
+                    fileDao.saveAndFlush(bf);
                 } catch (Exception e) {
-                    //stream =  null;
-                    return JsonResult.success("You failed to upload " + i + " =>" + e.getMessage());
+                    logger.debug(e.getMessage());
                 }
-            } else {
-                return JsonResult.success("You failed to upload " + i + " becausethe file was empty.");
             }
         }
         return JsonResult.success();

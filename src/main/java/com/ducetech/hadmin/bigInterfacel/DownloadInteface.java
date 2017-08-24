@@ -40,6 +40,24 @@ public class DownloadInteface extends BaseController {
         ServletOutputStream outputStream = response.getOutputStream();
         returnFile(path,outputStream);
     }
+    @ApiOperation(value="获取用户文件", notes="根据code获取文件")
+    @RequestMapping(value="/userImg", method = RequestMethod.GET)
+    @ApiImplicitParam(name="code",value="文件code",dataType="String", paramType = "query")
+    public void download( String code) throws IOException {
+        System.out.println("|||||"+code);
+        BigFile file=fileDao.findByFileName(code+".jpg");
+        if(null!=file) {
+            response.setCharacterEncoding("utf-8");
+            response.setContentType("application/force-download");// 设置强制下载不打开
+            response.addHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(file.getFileName(), "UTF-8"));// 设置文件名
+            request.setCharacterEncoding("utf-8");
+            String path = file.getFileUrl();
+            ServletOutputStream outputStream = response.getOutputStream();
+            returnFile(path, outputStream);
+        }else{
+            System.out.println("|||空|||");
+        }
+    }
 
     public static void returnFile(String path, OutputStream out) throws FileNotFoundException, IOException {
         // A FileInputStream is for bytes
