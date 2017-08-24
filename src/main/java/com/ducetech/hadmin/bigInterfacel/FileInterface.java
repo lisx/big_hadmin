@@ -48,8 +48,12 @@ public class FileInterface {
         logger.info("获取站点文件全部数据");
         obj = new JSONObject();
         Station str = stationDao.findByNodeName(station);
-        logger.debug("||||||"+str.getNodeCode());
-        List<BigFile> stations = bigFileDao.findByStationFileOrStationFileAndMenuType(str.getNodeCode()+"%","000",menuType);
+        String nodeCode=str.getNodeCode();
+        logger.debug("||||||"+nodeCode);
+        String area="";
+        if(nodeCode.length()==12)
+        area=nodeCode.substring(0,nodeCode.length()-3);
+        List<BigFile> stations = bigFileDao.findByStationFileOrStationFileAndMenuType(str.getNodeCode()+"%","000",area,menuType);
         obj.put("data", stations);
         obj.put("msg","查询成功");
         obj.put("state","1");
