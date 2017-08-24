@@ -9,7 +9,6 @@ import com.ducetech.hadmin.common.utils.PdfUtil;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IBigFileDao;
-import com.ducetech.hadmin.dao.IFolderDao;
 import com.ducetech.hadmin.dao.IStationDao;
 import com.ducetech.hadmin.entity.BigFile;
 import com.ducetech.hadmin.entity.Station;
@@ -73,7 +72,34 @@ public class EmergencyController  extends BaseController {
         logger.info("获取站点文件全部数据");
         return "admin/emergency/index";
     }
-
+    /**
+     * 查询集合
+     * @return Page<User>
+     */
+    @RequestMapping(value = { "/list" })
+    @ResponseBody
+    public Page<BigFile> list(String folder,String nodeCode) {
+        logger.info("list:folder"+folder);
+        SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<>();
+        String searchText = request.getParameter("searchText");
+        User user=getUser();
+        nodeCode = Station.getQueryNodeCode(nodeCode, user,stationDao);
+        if (!StringUtil.isBlank(nodeCode)&&!nodeCode.equals("undefined")) {
+            builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
+            builder.addOr("nodeCode", SpecificationOperator.Operator.eq.name(), "000");
+        }
+        if(null!=folder&&!StringUtil.isBlank(folder)) {
+            builder.add("folderName", SpecificationOperator.Operator.eq.name(), folder);
+        }else {
+            builder.add("folderName", SpecificationOperator.Operator.isNull.name(),null);
+        }
+        builder.add("menuType", SpecificationOperator.Operator.eq.name(), BigConstant.Emergency);
+        if(!StringUtil.isBlank(searchText)){
+            builder.add("fileName", SpecificationOperator.Operator.likeAll.name(), searchText);
+        }
+        Page<BigFile> bigFilePage=fileDao.findAll(builder.generateSpecification(), getPageRequest());
+        return bigFilePage;
+    }
     @RequestMapping("/add")
     public String add(String nodeCode,Model map) {
         logger.info("进入应急预案添加文件夹");
@@ -126,34 +152,7 @@ public class EmergencyController  extends BaseController {
         return "admin/emergency/folder";
     }
 
-    /**
-     * 查询集合
-     * @return Page<User>
-     */
-    @RequestMapping(value = { "/list" })
-    @ResponseBody
-    public Page<BigFile> list(String folder,String nodeCode) {
-        logger.info("list:folder"+folder);
-        SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<>();
-        String searchText = request.getParameter("searchText");
-        User user=getUser();
-        nodeCode = Station.getQueryNodeCode(nodeCode, user,stationDao);
-        if (!StringUtil.isBlank(nodeCode)&&!nodeCode.equals("undefined")) {
-            builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
-            builder.addOr("nodeCode", SpecificationOperator.Operator.eq.name(), "000");
-        }
-        if(null!=folder&&!StringUtil.isBlank(folder)) {
-            builder.add("folderName", SpecificationOperator.Operator.eq.name(), folder);
-        }else {
-            builder.add("folderName", SpecificationOperator.Operator.isNull.name(),null);
-        }
-        builder.add("menuType", SpecificationOperator.Operator.eq.name(), "应急预案");
-        if(!StringUtil.isBlank(searchText)){
-            builder.add("fileName", SpecificationOperator.Operator.likeAll.name(), searchText);
-        }
-        Page<BigFile> bigFilePage=fileDao.findAll(builder.generateSpecification(), getPageRequest());
-        return bigFilePage;
-    }
+
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public JsonResult delete(@PathVariable Integer id) {

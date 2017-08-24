@@ -35,6 +35,11 @@ public class BigConstant {
     public static final String video="video";
     public static final String image="image";
     public static final String TRAIN="培训资料";
+    public static final String Fire="消防安全";
+    public static final String ADMINCODE="000";
+    public static final String Roll="首页滚播图";
+    public static final String Rules="规章制度";
+    public static final String Emergency="应急预案";
 
     public static String getImageUrl(String file) {
         return  upload+file+".jpg";

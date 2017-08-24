@@ -9,7 +9,6 @@ import com.ducetech.hadmin.common.utils.PdfUtil;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IBigFileDao;
-import com.ducetech.hadmin.dao.IFolderDao;
 import com.ducetech.hadmin.dao.IStationDao;
 import com.ducetech.hadmin.entity.BigFile;
 import com.ducetech.hadmin.entity.Station;
@@ -49,8 +48,6 @@ public class FireSafetyController extends BaseController {
     private IStationDao stationDao;
     @Autowired
     IBigFileDao fileDao;
-    @Autowired
-    IFolderDao folderDao;
     /**
      * 树形菜单
      * @return
@@ -60,20 +57,34 @@ public class FireSafetyController extends BaseController {
     public JSONArray tree(){
         logger.info("获取tree数据");
         User user=getUser();
-        List<Station> stations=null;
-        if(user.getStationArea().equals("运三分公司")){
-            stations=stationDao.findAll();
-        }else{
-            Station s=stationDao.findByNodeName(user.getStationArea());
-            String station=s.getNodeCode();
-            stations= stationDao.findByNodeCodeStartingWith(station);
+        return Station.getZtrees(user,stationDao);
+    }
+    /**
+     * 查询集合
+     * @return Page<BigFile>
+     */
+    @RequestMapping(value = { "/list" })
+    @ResponseBody
+    public Page<BigFile> list(String folder,String nodeCode) {
+        User user=getUser();
+        SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<>();
+        String searchText = request.getParameter("searchText");
+        nodeCode = Station.getQueryNodeCode(nodeCode, user,stationDao);
+        if (!StringUtil.isBlank(nodeCode)&&!nodeCode.equals("undefined")) {
+            builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
+            builder.addOr("nodeCode", SpecificationOperator.Operator.eq.name(), BigConstant.ADMINCODE);
         }
-        logger.info("stations"+stations.size());
-        if(!user.getStationArea().equals("运三分公司")) {
-            return Station.createTree(stations);
-        }else{
-            return Station.createRootTree(stations);
+        if(null!=folder&&!StringUtil.isBlank(folder)) {
+            builder.add("folderName", SpecificationOperator.Operator.eq.name(), folder);
+        }else {
+            builder.add("folderName", SpecificationOperator.Operator.isNull.name(),null);
         }
+        builder.add("menuType", SpecificationOperator.Operator.eq.name(), BigConstant.Fire);
+        if(!StringUtil.isBlank(searchText)){
+            builder.add("fileName", SpecificationOperator.Operator.likeAll.name(), searchText);
+        }
+        Page<BigFile> bigFilePage=fileDao.findAll(builder.generateSpecification(), getPageRequest());
+        return bigFilePage;
     }
     /**
      * 消防安全首页
@@ -137,34 +148,7 @@ public class FireSafetyController extends BaseController {
         return "admin/fire/folder";
     }
 
-    /**
-     * 查询集合
-     * @return Page<User>
-     */
-    @RequestMapping(value = { "/list" })
-    @ResponseBody
-    public Page<BigFile> list(String folder,String nodeCode) {
-        logger.info("list:folder"+folder);
-        SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<>();
-        String searchText = request.getParameter("searchText");
-        if(null!=folder&&!StringUtil.isBlank(folder)) {
-            builder.add("folderName", SpecificationOperator.Operator.likeAll.name(), folder);
-        }else {
-            builder.add("folderName", SpecificationOperator.Operator.isNull.name(),null);
-        }
-        builder.add("menuType", SpecificationOperator.Operator.likeAll.name(), "消防安全");
-        User user=getUser();
-        if (!StringUtil.isBlank(nodeCode)&&!nodeCode.equals("undefined")) {
-            builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
-        }else{
 
-        }
-        if(!StringUtil.isBlank(searchText)){
-            builder.add("fileName", SpecificationOperator.Operator.likeAll.name(), searchText);
-        }
-        Page<BigFile> bigFilePage=fileDao.findAll(builder.generateSpecification(), getPageRequest());
-        return bigFilePage;
-    }
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public JsonResult delete(@PathVariable Integer id) {

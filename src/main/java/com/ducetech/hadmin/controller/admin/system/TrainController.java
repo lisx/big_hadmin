@@ -1,21 +1,16 @@
 package com.ducetech.hadmin.controller.admin.system;
 
 import com.alibaba.druid.util.StringUtils;
-import com.alibaba.fastjson.JSONObject;
 import com.ducetech.hadmin.common.JsonResult;
 import com.ducetech.hadmin.common.utils.BigConstant;
 import com.ducetech.hadmin.common.utils.FileUtil;
-import com.ducetech.hadmin.common.utils.PdfUtil;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IBigFileDao;
-import com.ducetech.hadmin.dao.IFolderDao;
 import com.ducetech.hadmin.dao.IStationDao;
 import com.ducetech.hadmin.entity.BigFile;
-import com.ducetech.hadmin.entity.Folder;
 import com.ducetech.hadmin.entity.Station;
 import com.ducetech.hadmin.entity.User;
-import com.ducetech.hadmin.service.IBigFileService;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator;
 import org.slf4j.LoggerFactory;
@@ -30,11 +25,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import javax.validation.constraints.Null;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -50,8 +43,6 @@ public class TrainController  extends BaseController {
     private static org.slf4j.Logger logger = LoggerFactory.getLogger(TrainController.class);
     @Autowired
     IBigFileDao fileDao;
-    @Autowired
-    IFolderDao folderDao;
     @Autowired
     IStationDao stationDao;
     /**
@@ -102,32 +93,6 @@ public class TrainController  extends BaseController {
         return bigFilePage;
     }
 
-
-
-    /**
-     * 培训资料文件夹
-     * @return
-     */
-    @RequestMapping(value = { "/folder" })
-    @ResponseBody
-    public Page<Folder> folder() {
-        User user=getUser();
-        Station s=stationDao.findByNodeName(user.getStationArea());
-        String station=s.getNodeCode();
-        SimpleSpecificationBuilder<Folder> builder = new SimpleSpecificationBuilder<>();
-        String searchText = request.getParameter("searchText");
-        if(!StringUtil.isBlank(searchText)){
-            builder.add("name", SpecificationOperator.Operator.likeAll.name(), searchText);
-        }
-        if(!StringUtil.isBlank(station)){
-            if(user.getStationArea().equals("运三分公司")) {
-                builder.add("station", SpecificationOperator.Join.or.name(), station, null);
-            }else{
-                builder.add("station", SpecificationOperator.Operator.likeAll.name(), station);
-            }
-        }
-        return folderDao.findAll(builder.generateSpecification(), getPageRequest());
-    }
 
     /**
      * 进入培训上传页面
