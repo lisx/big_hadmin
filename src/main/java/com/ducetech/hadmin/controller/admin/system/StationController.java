@@ -54,27 +54,19 @@ public class StationController extends BaseController {
     public JSONArray tree(){
         logger.info("获取tree数据");
         User user=getUser();
-        List<Station> stations=null;
-        if(user.getStationArea().equals("运三分公司")){
-            stations=stationDao.findAll();
-        }else{
-            Station s=stationDao.findByNodeName(user.getStationArea());
-            String station=s.getNodeCode();
-            stations= stationDao.findByNodeCodeStartingWith(station);
-        }
-        logger.info("stations"+stations.size());
-        if(!user.getStationArea().equals("运三分公司")) {
-            return Station.createTree(stations);
-        }else{
-            return Station.createRootTree(stations);
-        }
+        return Station.getZtrees(user,stationDao);
     }
+
+    /**
+     * 根据站区获取站点
+     * @param area
+     * @return
+     */
     @RequestMapping("/getStation")
     @ResponseBody
     public List<String> getStation(String area){
         Station station=stationDao.findByNodeName(area);
         List<String> list=stationDao.findStations(station.getNodeCode().length()+3,station.getNodeCode()+"___");
-        logger.info(list.size()+"||||");
         return list;
 
     }

@@ -49,8 +49,6 @@ public class EmergencyController  extends BaseController {
     private IStationDao stationDao;
     @Autowired
     IBigFileDao fileDao;
-    @Autowired
-    IFolderDao folderDao;
 
     /**
      * 树形菜单
@@ -61,21 +59,11 @@ public class EmergencyController  extends BaseController {
     public JSONArray tree(){
         logger.info("获取tree数据");
         User user=getUser();
-        List<Station> stations=null;
-        if(user.getStationArea().equals("运三分公司")){
-            stations=stationDao.findAll();
-        }else{
-            Station s=stationDao.findByNodeName(user.getStationArea());
-            String station=s.getNodeCode();
-            stations= stationDao.findByNodeCodeStartingWith(station);
-        }
-        logger.info("stations"+stations.size());
-        if(!user.getStationArea().equals("运三分公司")) {
-            return Station.createTree(stations);
-        }else{
-            return Station.createRootTree(stations);
-        }
+        return Station.getZtrees(user,stationDao);
     }
+
+
+
     /**
      * 应急预案首页
      * @return
@@ -148,18 +136,26 @@ public class EmergencyController  extends BaseController {
         logger.info("list:folder"+folder);
         SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
+        User user=getUser();
+        Station station;
+        if(null!=user&&!user.getStationArea().equals(BigConstant.ADMIN)) {
+            station = stationDao.findByNodeName(user.getStationArea());
+            if(null!=station){
+                if(StringUtil.isBlank(nodeCode)||nodeCode.equals("undefined")){
+                    nodeCode=station.getNodeCode();
+                }
+            }
+        }
+        if (!StringUtil.isBlank(nodeCode)&&!nodeCode.equals("undefined")) {
+            builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
+            builder.addOr("nodeCode", SpecificationOperator.Operator.eq.name(), "000");
+        }
         if(null!=folder&&!StringUtil.isBlank(folder)) {
-            builder.add("folderName", SpecificationOperator.Operator.likeAll.name(), folder);
+            builder.add("folderName", SpecificationOperator.Operator.eq.name(), folder);
         }else {
             builder.add("folderName", SpecificationOperator.Operator.isNull.name(),null);
         }
-        builder.add("menuType", SpecificationOperator.Operator.likeAll.name(), "应急预案");
-        User user=getUser();
-        if (!StringUtil.isBlank(nodeCode)&&!nodeCode.equals("undefined")) {
-            builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
-        }else{
-
-        }
+        builder.add("menuType", SpecificationOperator.Operator.eq.name(), "应急预案");
         if(!StringUtil.isBlank(searchText)){
             builder.add("fileName", SpecificationOperator.Operator.likeAll.name(), searchText);
         }

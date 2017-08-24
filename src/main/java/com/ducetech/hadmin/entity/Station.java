@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.ducetech.hadmin.common.utils.StringUtil;
+import com.ducetech.hadmin.dao.IStationDao;
 import com.ducetech.hadmin.entity.support.BaseEntity;
 import lombok.Data;
 
@@ -58,7 +59,21 @@ public class Station extends BaseEntity {
 
     @OneToMany
     private List<QuestionBank> banks;
-
+    public static JSONArray getZtrees(User user, IStationDao stationDao) {
+        List<Station> stations=null;
+        if(user.getStationArea().equals("运三分公司")){
+            stations=stationDao.findAll();
+        }else{
+            Station s=stationDao.findByNodeName(user.getStationArea());
+            String station=s.getNodeCode();
+            stations= stationDao.findByNodeCodeStartingWith(station);
+        }
+        if(!user.getStationArea().equals("运三分公司")) {
+            return Station.createTree(stations);
+        }else{
+            return Station.createRootTree(stations);
+        }
+    }
     /**
      * 构造知识树
      * @return

@@ -94,7 +94,7 @@ public class BigFile extends BaseEntity {
     @JSONField(serialize = false)
     private String checkId;
     @ManyToOne
-    @JSONField(serialize = false)
+    //@JSONField(serialize = false)
     private Station stationFile;
     @JSONField(serialize = false)
     private String nodeCode;
