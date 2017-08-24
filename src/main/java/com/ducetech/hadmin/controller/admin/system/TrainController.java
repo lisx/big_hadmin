@@ -13,6 +13,7 @@ import com.ducetech.hadmin.entity.Station;
 import com.ducetech.hadmin.entity.User;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator;
+import org.apache.el.stream.Stream;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -162,28 +163,31 @@ public class TrainController  extends BaseController {
         for (int i =0; i< files.size(); ++i) {
             long flag=new Date().getTime();
             file = files.get(i);
-            String filePath=BigConstant.upload+file.getOriginalFilename();
             if (!file.isEmpty()) {
                 try {
-                    String suffix=StringUtil.suffix(filePath);
+                    String suffix=StringUtil.suffix(file.getOriginalFilename());
                     if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {
                         BigFile.saveFile(folder, nodeCode, user, file,BigConstant.office,BigConstant.TRAIN,flag,fileDao,stationDao);
                     }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
                         BigFile.saveFile(folder, nodeCode, user, file,BigConstant.image,BigConstant.TRAIN,flag,fileDao,stationDao);
                     }else{
                         try {
-                            byte[] bytes = file.getBytes();
-                            stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
-                            stream.write(bytes);
-                            stream.close();
+
                             if(StringUtils.isEmpty(chunk)) {
                                 //不分片的情况
+                                logger.info("不分片的情况");
                                 BigFile.saveFile(folder, nodeCode, user, file,BigConstant.video,BigConstant.TRAIN,flag,fileDao,stationDao);
                             }else{
-                                FileUtil.randomAccessFile(BigConstant.upload+"chunk/"+file.getOriginalFilename(), file);
+                                logger.info("分片的情况");
+                                String filePath = BigConstant.upload + "chunk/" + file.getOriginalFilename();
+                                byte[] bytes = file.getBytes();
+                                stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
+                                stream.write(bytes);
+                                stream.close();
+                                FileUtil.randomAccessFile(BigConstant.upload+file.getOriginalFilename(), file);
                                 //分片的情况
                                 if (Integer.valueOf(chunk) == (Integer.valueOf(chunks) - 1)) {
-                                    BigFile.saveFile(folder, nodeCode, user, file,BigConstant.video,BigConstant.TRAIN,flag,fileDao,stationDao);
+                                    BigFile.saveFile(size,filePath,folder, nodeCode, user, file,BigConstant.video,BigConstant.TRAIN,flag,fileDao,stationDao);
                                 } else {
                                     logger.info("上传中" + file.getOriginalFilename() + " chunk:" + chunk, "");
                                 }
