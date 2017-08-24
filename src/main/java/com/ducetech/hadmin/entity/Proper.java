@@ -27,6 +27,7 @@ public class Proper extends BaseEntity {
     @Column(name = "id", nullable = false)
     private Integer id;
     private String name;
+    @JSONField(serialize = false)
     @ManyToOne
     private Question question;
     /**
@@ -38,9 +39,12 @@ public class Proper extends BaseEntity {
     /**
      * 更新时间
      */
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss",serialize = false)
     private Date updateTime;
     private Integer updateId;
 
-
+    @Override
+    public String toString() {
+        return "";
+    }
 }

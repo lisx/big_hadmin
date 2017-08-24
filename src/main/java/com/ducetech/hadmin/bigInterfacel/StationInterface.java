@@ -36,7 +36,7 @@ public class StationInterface {
     public JSONObject findLineALl(){
         logger.info("获取线路全部数据");
         obj=new JSONObject();
-        List<Station> stations = stationDao.findByStationArea(3);
+        List<Station> stations = stationDao.findByStationArea(6);
         obj.put("data", stations);
         obj.put("msg","查询成功");
         obj.put("state","1");
@@ -51,7 +51,7 @@ public class StationInterface {
         obj=new JSONObject();
         Station str=stationDao.findByNodeName(line);
         if(null!=str) {
-            List<Station> stations = stationDao.querySubNodesByCode(str.getNodeCode()+"%", 6);
+            List<Station> stations = stationDao.querySubNodesByCode(str.getNodeCode()+"___", 9);
             obj.put("data", stations);
         }else{
             obj.put("data","");
@@ -68,7 +68,7 @@ public class StationInterface {
         obj=new JSONObject();
         Station str=stationDao.findByNodeName(area);
         if(null!=str) {
-            List<Station> stations = stationDao.querySubNodesByCode(str.getNodeCode()+"%", 9);
+            List<Station> stations = stationDao.querySubNodesByCode(str.getNodeCode()+"___", 12);
             obj.put("data", stations);
         }else{
             obj.put("data","");

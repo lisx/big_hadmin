@@ -75,9 +75,9 @@ public class UserInterface extends BaseController {
         return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
     @ApiOperation(value="获取用户详细信息", notes="根据url的id来获取用户详细信息")
-    @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "Integer")
-    @RequestMapping(value="/{id}", method=RequestMethod.GET)
-    public JSONObject getUser(@PathVariable Integer id) {
+    @ApiImplicitParam(name = "id", value = "用户ID",  dataType = "Integer", paramType = "query")
+    @RequestMapping(value="/detail", method=RequestMethod.GET)
+    public JSONObject getUser(Integer id) {
         logger.info("进入获取用户详情接口=={}"+id);
         obj=new JSONObject();
         User user=userDao.findOne(id);

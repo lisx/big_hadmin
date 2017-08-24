@@ -24,8 +24,7 @@ public class LoginController extends BaseController {
         User user=userService.findByUserName("admin");
         if(null==user){
             user=new User();
-            user.setUserName("admin");
-            user.setNickName("管理员");
+            user.setUserName("管理员");
             userService.saveOrUpdate(user);
         }
 		return "admin/login";

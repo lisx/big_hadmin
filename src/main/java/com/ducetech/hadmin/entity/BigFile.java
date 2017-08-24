@@ -36,6 +36,7 @@ public class BigFile extends BaseEntity {
     //文件名字
     private String fileName;
     //文件地址
+    @JSONField(serialize = false)
     private String fileUrl;
     /**
      * 创建时间
@@ -46,8 +47,9 @@ public class BigFile extends BaseEntity {
     /**
      * 更新时间
      */
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss",serialize = false)
     private Date updateTime;
+    @JSONField(serialize = false)
     private Integer updateId;
 
     public void setFileSize(String fileSize) {
@@ -77,18 +79,24 @@ public class BigFile extends BaseEntity {
     //是否为文件夹 1是 0否
     private Integer ifFolder;
     //归属类型 1站点 2站区 3线路 4总公司
+    @JSONField(serialize = false)
     private String affiliation;
     //归属菜单类型
     //1人员文件 2车站文件 3培训文件 4练习考试 5规章制度 6运行图 7通知 8消防安全 9首页滚动
+    @JSONField(serialize = false)
     private String menuType;
     //是否使用
     private String ifUse;
     //审核状态
+    @JSONField(serialize = false)
     private String checkStatus;
     //审核ID
+    @JSONField(serialize = false)
     private String checkId;
     @ManyToOne
+    @JSONField(serialize = false)
     private Station stationFile;
+    @JSONField(serialize = false)
     private String nodeCode;
     public static boolean saveFile(String folder, String nodeCode, User user, MultipartFile file, String fileType, String menuType, long flag, IBigFileDao fileDao, IStationDao stationDao) throws IOException {
         String filePath;

@@ -54,7 +54,7 @@ public class Question extends BaseEntity {
     /**
      * 更新时间
      */
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss",serialize = false)
     private Date updateTime;
     private Integer updateId;
 

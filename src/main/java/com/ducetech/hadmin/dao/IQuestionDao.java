@@ -17,4 +17,5 @@ import java.util.List;
 @Repository
 public interface IQuestionDao extends IBaseDao<Question,Integer> {
     List<Question> findByQuestionBankAndMenuType(QuestionBank bank,String type);
+    List<Question> findByQuestionBank(QuestionBank bank);
 }

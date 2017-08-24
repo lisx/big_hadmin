@@ -102,14 +102,13 @@ public class UserController extends BaseController {
                             for (List<String> row : sheet) {
                                 String userCode = StringUtil.trim(row.get(0));
                                 String userName = StringUtil.trim(row.get(1));
-                                //String unit = StringUtil.trim(row.get(2));
+                                String unit = StringUtil.trim(row.get(2));
                                 String telphone = StringUtil.trim(row.get(3));
                                 String fwxxkUrl = StringUtil.trim(row.get(4));
                                 String zkysgzUrl = StringUtil.trim(row.get(5));
                                 String faszUrl = StringUtil.trim(row.get(6));
                                 User user = new User();
                                 //user.setUnitId(unit);
-                                user.setTelephone(telphone);
                                 user.setFwxxkUrl(fwxxkUrl);
                                 user.setZkysgzUrl(zkysgzUrl);
                                 user.setFaszUrl(faszUrl);

@@ -19,7 +19,7 @@
                                 </span>
                             </a>
                         </div>
-                        <div class="logo-element">HAdmin
+                        <div class="logo-element">Subway
                         </div>
                     </li>
                     <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">

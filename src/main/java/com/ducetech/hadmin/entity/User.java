@@ -36,10 +36,6 @@ public class User extends BaseEntity {
      * 员工工号
      */
     private String userCode;
-	/**
-	 * 姓名
-	 */
-	private String nickName;
 
 	/**
 	 * 用户密码
@@ -52,17 +48,12 @@ public class User extends BaseEntity {
 
 	private String station;
     private String stationArea;
-    private String line;
+    //private String line;
 
 	/**
 	 * 逻辑删除状态 0 未删除 1 删除
 	 */
 	private Integer ifUse=0;
-
-	/**
-	 * 电话
-	 */
-	private String telephone;
 
 	/**
 	 * 服务信息卡

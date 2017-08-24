@@ -89,6 +89,7 @@ public class ExamInterface  extends BaseController {
         logger.info("获取练习题");
         QuestionBank bank=questionBankDao.findOne(bankId);
         List<Question> questions=questionDao.findByQuestionBankAndMenuType(bank,type);
+        obj=new JSONObject();
         obj.put("state",state);
         obj.put("msg",msg);
         obj.put("data",questions);
@@ -286,9 +287,12 @@ public class ExamInterface  extends BaseController {
                 String answer="";
                 for (String id : ids) {
                     Proper proper = properDao.findOne(Integer.parseInt(id));
-                    propers.add(proper);
-                    answer=answer+proper+"/";
+                    if(null!=proper) {
+                        propers.add(proper);
+                        answer = answer + proper.getName() + "/";
+                    }
                 }
+                answer=answer.substring(0, answer.length()-1);
                 if(question.getProper().equals(answer)){
                     score=exam.getRankScore();
                 }
@@ -315,15 +319,25 @@ public class ExamInterface  extends BaseController {
         }
         log.setSelectProper(propers);
         questionLogDao.save(log);
+        JSONObject o=new JSONObject();
         if(null!=examLog.getScore()) {
-            score = score + examLog.getScore();
+            if(score!=0) {
+                o.put("score",score);
+                score = score + examLog.getScore();
+                o.put("total",score);
+                msg="答对";
+            }else{
+                msg="答错";
+                state=0;
+            }
         }
         examLog.setScore(score);
         examLogDao.saveAndFlush(examLog);
+
         obj=new JSONObject();
         obj.put("state",state);
         obj.put("msg",msg);
-        obj.put("data","");
+        obj.put("data",o);
         return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
 }

@@ -47,8 +47,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Integer> implements I
 	public void saveOrUpdate(User user) {
 		if(user.getId() != null){
 			User dbUser = find(user.getId());
-			dbUser.setNickName(user.getNickName());
-			dbUser.setTelephone(user.getTelephone());
+            dbUser.setPassword(MD5Utils.md5(user.getPassword()));
 			update(dbUser);
 		}else{
 			user.setPassword(MD5Utils.md5("123456"));
