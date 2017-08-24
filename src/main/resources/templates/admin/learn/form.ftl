@@ -30,10 +30,12 @@
     	    },
     	    messages: {},
     	    submitHandler:function(form){
+    	        var url="${ctx!}/admin/train/saveFolder?nodeCode=${nodeCode}&menu=${menu}";
+    	        console.log(url)
     	    	$.ajax({
    	    		   type: "POST",
    	    		   dataType: "json",
-   	    		   url: "${ctx!}/admin/train/saveFolder?nodeCode=${nodeCode}&menu=${menu}",
+   	    		   url: url,
    	    		   data: $(form).serialize(),
    	    		   success: function(msg){
 	   	    			layer.msg(msg.message, {time: 2000},function(){

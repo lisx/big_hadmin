@@ -139,14 +139,14 @@ public class TrainController  extends BaseController {
 
     @RequestMapping(value="/add", method = RequestMethod.GET)
     public String add(String nodeCode,Model map) {
-        logger.info("进入培训资料添加文件夹");
+        logger.info("进入培训资料添加文件夹{}",nodeCode);
         map.addAttribute("nodeCode",nodeCode);
         map.addAttribute("menu","培训资料");
         return "admin/learn/form";
     }
 
     /**
-     * 培训资料新增文件夹
+     * 培训资料保存文件夹
      * @return
      */
     @RequestMapping(value= {"/saveFolder"} ,method = RequestMethod.POST)

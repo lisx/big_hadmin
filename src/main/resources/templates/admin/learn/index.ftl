@@ -29,11 +29,11 @@
                                             </@shiro.hasPermission>
                                             </p>
                                             <hr>
-                                            <div class="row row-lg">
-                                                <div class="col-sm-3">
+                                            <div class="row">
+                                                <div class="col-sm-2">
                                                     <div class='tree'><ul id="treeDemo" class="ztree"></ul></div>
                                                 </div>
-                                                <div class="col-sm-9">
+                                                <div class="col-sm-10">
                                                     <!-- Example Card View -->
                                                     <div class="example-wrap">
                                                         <div class="example">
@@ -124,7 +124,6 @@
                     nodeCode:treeNode.id
                 }
             };
-            $(".nodeCodeTrain").val(treeNode.id);
             $("#table_train_list").bootstrapTable('refresh', opt);
 
         }
@@ -381,7 +380,7 @@
             });
         }
         function addFolder(){
-            var nodeCode=$(".addFolder").val();
+            var nodeCode=$(".addFolder").attr("dataid");
             layer.open({
                 type: 2,
                 title: '新建文件夹',
