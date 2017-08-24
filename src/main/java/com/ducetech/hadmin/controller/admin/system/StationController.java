@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ducetech.hadmin.common.JsonResult;
 import com.ducetech.hadmin.common.utils.BigConstant;
+import com.ducetech.hadmin.common.utils.FileUtil;
 import com.ducetech.hadmin.common.utils.PoiUtil;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
@@ -186,37 +187,52 @@ public class StationController extends BaseController {
 
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(MultipartHttpServletRequest request,String nodeCode){
+    public JsonResult uploadFilePost(MultipartHttpServletRequest request, String chunk, String chunks, String size, String folder,String nodeCode){
         List<MultipartFile> files =request.getFiles("file");
-        Station s=stationDao.findByNodeCode(nodeCode);
+        User user=getUser();
         MultipartFile file;
-        BigFile station;
         BufferedOutputStream stream;
         for (int i =0; i< files.size(); ++i) {
+            long flag=new Date().getTime();
             file = files.get(i);
             if (!file.isEmpty()) {
                 try {
-                    long flag=new Date().getTime();
-                    String filePath=BigConstant.upload+flag+file.getOriginalFilename();
-                    byte[] bytes = file.getBytes();
-                    stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
-                    stream.write(bytes);
-                    stream.close();
-                    station=new BigFile();
-                    station.setMenuType(BigConstant.Station);
-                    station.setFileName(file.getOriginalFilename());
-                    station.setFileSize(""+file.getSize()/1000);
-                    station.setCreateTime(new Date());
-                    station.setFileUrl(filePath);
-                    station.setStationFile(s);
-                    station.setNodeCode(s.getNodeCode());
-                    fileDao.save(station);
+                    String suffix=StringUtil.suffix(file.getOriginalFilename());
+                    if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {
+                        BigFile.saveFile(folder, nodeCode, user, file,BigConstant.office,BigConstant.Station,flag,fileDao,stationDao);
+                    }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
+                        BigFile.saveFile(folder, nodeCode, user, file,BigConstant.image,BigConstant.Station,flag,fileDao,stationDao);
+                    }else{
+                        try {
+                            if(com.alibaba.druid.util.StringUtils.isEmpty(chunk)) {
+                                //不分片的情况
+                                logger.info("不分片的情况");
+                                BigFile.saveFile(folder, nodeCode, user, file,BigConstant.video,BigConstant.Station,flag,fileDao,stationDao);
+                            }else{
+                                logger.info("分片的情况");
+                                String filePath = BigConstant.upload + "chunk/" + file.getOriginalFilename();
+                                byte[] bytes = file.getBytes();
+                                stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
+                                stream.write(bytes);
+                                stream.close();
+                                FileUtil.randomAccessFile(BigConstant.upload+file.getOriginalFilename(), file);
+                                //分片的情况
+                                if (Integer.valueOf(chunk) == (Integer.valueOf(chunks) - 1)) {
+                                    BigFile.saveFile(size,folder, nodeCode, user, file,BigConstant.video,BigConstant.Station,flag,fileDao,stationDao);
+                                } else {
+                                    logger.info("上传中" + file.getOriginalFilename() + " chunk:" + chunk, "");
+                                }
+                            }
+                        } catch (Exception e) {
+                            logger.info("上传失败{}",e.getMessage());
+                        }
+                    }
+
                 } catch (Exception e) {
-                    //stream =  null;
-                    return JsonResult.success("You failed to upload " + i + " =>" + e.getMessage());
+                    logger.info(e.getMessage());
                 }
             } else {
-                return JsonResult.success("You failed to upload " + i + " becausethe file was empty.");
+                return JsonResult.failure("You failed to upload " + i + " becausethe file was empty.");
             }
         }
         return JsonResult.success();
