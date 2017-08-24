@@ -1,6 +1,7 @@
 <!-- 全局js -->
 <#include "/admin/common/js.ftl">
 <#include "/admin/common/css.ftl">
+<#import "/admin/common/select.ftl" as my />
 <div class="ibox-content">
     <form class="form-horizontal m-t" id="frm" method="post" action="${ctx!}/admin/user/edit">
         <input type="hidden" id="id" name="id" value="${user.id}">
@@ -40,19 +41,15 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">站区：</label>
             <div class="col-sm-8">
-                <select name="unitId" class="form-control">
-                    <option value="0" <#if user.sex == 0>selected="selected"</#if>>女</option>
-                    <option value="1" <#if user.sex == 1>selected="selected"</#if>>男</option>
-                </select>
+        <@my.select id="area" class="form-control" datas=areas defaultValue="请选择"/>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">站点：</label>
             <div class="col-sm-8">
-                <select name="unitId" class="form-control">
-                    <option value="0" <#if user.sex == 0>selected="selected"</#if>>女</option>
-                    <option value="1" <#if user.sex == 1>selected="selected"</#if>>男</option>
-                </select>
+            <select id="station" name="station" class="form-control" >
+                <option value="请选择">请选择</option>
+            </select>
             </div>
         </div>
         <div class="form-group">
@@ -81,6 +78,24 @@
     </form>
 </div>
     <script type="text/javascript">
+        $("#area").change(function(){
+            var area=$("#area").val();
+            area=area.replace("#","%23");
+            console.log("||||"+area);
+            $.ajax({
+                url: '/admin/station/getStation?area='+area,
+                type: 'GET',
+                dataType: 'json',
+                cache: false,
+                processData: false,
+                contentType: false
+            }).done(function(stations) {
+                console.log(stations);
+                for(var i in stations){
+                    $("#station").append("<option>"+stations[i]+"</option>");
+                };
+            });
+        });
     $(document).ready(function () {
 	  	//外部js调用
 //	    laydate({

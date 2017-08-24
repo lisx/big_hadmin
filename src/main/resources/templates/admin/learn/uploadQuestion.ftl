@@ -66,6 +66,7 @@
     }
     $("#area").change(function(){
         var area=$("#area").val();
+        area=area.replace("#","%23");
         console.log("||||"+area);
         $.ajax({
             url: '/admin/station/getStation?area='+area,

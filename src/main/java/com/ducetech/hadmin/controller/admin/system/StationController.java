@@ -67,8 +67,12 @@ public class StationController extends BaseController {
     @RequestMapping("/getStation")
     @ResponseBody
     public List<String> getStation(String area){
+        logger.info("根据站区名获取站点数据{}",area);
         Station station=stationDao.findByNodeName(area);
-        List<String> list=stationDao.findStations(station.getNodeCode().length()+3,station.getNodeCode()+"___");
+
+        List<String> list=null;
+        if(null!=station)
+                list=stationDao.findStations(station.getNodeCode().length()+3,station.getNodeCode()+"___");
         return list;
 
     }
