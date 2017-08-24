@@ -172,7 +172,6 @@ public class TrainController  extends BaseController {
                         BigFile.saveFile(folder, nodeCode, user, file,BigConstant.image,BigConstant.TRAIN,flag,fileDao,stationDao);
                     }else{
                         try {
-
                             if(StringUtils.isEmpty(chunk)) {
                                 //不分片的情况
                                 logger.info("不分片的情况");
@@ -187,7 +186,7 @@ public class TrainController  extends BaseController {
                                 FileUtil.randomAccessFile(BigConstant.upload+file.getOriginalFilename(), file);
                                 //分片的情况
                                 if (Integer.valueOf(chunk) == (Integer.valueOf(chunks) - 1)) {
-                                    BigFile.saveFile(size,filePath,folder, nodeCode, user, file,BigConstant.video,BigConstant.TRAIN,flag,fileDao,stationDao);
+                                    BigFile.saveFile(size,folder, nodeCode, user, file,BigConstant.video,BigConstant.TRAIN,flag,fileDao,stationDao);
                                 } else {
                                     logger.info("上传中" + file.getOriginalFilename() + " chunk:" + chunk, "");
                                 }

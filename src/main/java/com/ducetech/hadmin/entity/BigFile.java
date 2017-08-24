@@ -126,8 +126,9 @@ public class BigFile extends BaseEntity {
         }
         return true;
     }
-    public static boolean saveFile(String size,String filePath,String folder, String nodeCode, User user, MultipartFile file, String fileType, String menuType, long flag, IBigFileDao fileDao, IStationDao stationDao) throws IOException {
+    public static boolean saveFile(String size,String folder, String nodeCode, User user, MultipartFile file, String fileType, String menuType, long flag, IBigFileDao fileDao, IStationDao stationDao) throws IOException {
         try {
+            String filePath;
             filePath=BigConstant.upload+file.getOriginalFilename();
             File oldFile=new File(filePath);
             filePath=BigConstant.upload+flag+file.getOriginalFilename();
