@@ -13,6 +13,7 @@ import com.ducetech.hadmin.entity.BigFile;
 import com.ducetech.hadmin.entity.Station;
 import com.ducetech.hadmin.entity.User;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
+import com.ducetech.hadmin.service.specification.SpecificationOperator;
 import com.ducetech.hadmin.service.specification.SpecificationOperator.Operator;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -143,7 +144,7 @@ public class StationController extends BaseController {
                                 Station stationObj = stationDao.findByNodeName(station);
                                 String nodeCode;
                                 if(null==lineObj) {
-                                    List<Station> objs=stationDao.findByStationArea(3);
+                                    List<Station> objs=stationDao.findByStationArea(6);
                                     nodeCode=Station.getNodeCode(objs, "");
                                     lineObj = new Station();
                                     lineObj.setNodeName(line);
@@ -151,7 +152,7 @@ public class StationController extends BaseController {
                                     stationDao.saveAndFlush(lineObj);
                                 }
                                 if(null==areaObj) {
-                                    List<Station> objs=stationDao.querySubNodesByCode(lineObj.getNodeCode()+"___",6);
+                                    List<Station> objs=stationDao.querySubNodesByCode(lineObj.getNodeCode()+"___",9);
                                     nodeCode=Station.getNodeCode(objs, lineObj.getNodeCode());
                                     areaObj = new Station();
                                     areaObj.setNodeName(area+"站区");
@@ -159,7 +160,7 @@ public class StationController extends BaseController {
                                     stationDao.saveAndFlush(areaObj);
                                 }
                                 if(null==stationObj) {
-                                    List<Station> objs=stationDao.querySubNodesByCode(areaObj.getNodeCode()+"___",9);
+                                    List<Station> objs=stationDao.querySubNodesByCode(areaObj.getNodeCode()+"___",12);
                                     nodeCode=Station.getNodeCode(objs, areaObj.getNodeCode());
                                     stationObj = new Station();
                                     stationObj.setNodeName(station);
@@ -189,27 +190,24 @@ public class StationController extends BaseController {
         List<MultipartFile> files =request.getFiles("file");
         Station s=stationDao.findByNodeCode(nodeCode);
         MultipartFile file;
-        //创建临时文件夹
-        File dirTempFile = new File(BigConstant.upload);
-        if (!dirTempFile.exists()) {
-            dirTempFile.mkdirs();
-        }
         BigFile station;
         BufferedOutputStream stream;
         for (int i =0; i< files.size(); ++i) {
             file = files.get(i);
             if (!file.isEmpty()) {
                 try {
+                    long flag=new Date().getTime();
+                    String filePath=BigConstant.upload+flag+file.getOriginalFilename();
                     byte[] bytes = file.getBytes();
-                    stream = new BufferedOutputStream(new FileOutputStream(new File(dirTempFile.getAbsolutePath()+"/"+file.getOriginalFilename())));
+                    stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
                     stream.write(bytes);
                     stream.close();
                     station=new BigFile();
-                    station.setMenuType("车站文件");
+                    station.setMenuType(BigConstant.Station);
                     station.setFileName(file.getOriginalFilename());
                     station.setFileSize(""+file.getSize()/1000);
                     station.setCreateTime(new Date());
-                    station.setFileUrl(BigConstant.upload+file.getOriginalFilename());
+                    station.setFileUrl(filePath);
                     station.setStationFile(s);
                     station.setNodeCode(s.getNodeCode());
                     fileDao.save(station);
@@ -223,20 +221,35 @@ public class StationController extends BaseController {
         }
         return JsonResult.success();
     }
-	@RequestMapping("/list")
-	@ResponseBody
-	public Page<BigFile> list(String nodeCode) {
-		SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<BigFile>();
-		String searchText = request.getParameter("searchText");
-		if(StringUtils.isNotBlank(searchText)){
-			builder.add("name", Operator.likeAll.name(), searchText);
-		}
-        if(StringUtils.isNotBlank(nodeCode)){
-            builder.add("nodeCode", Operator.likeAll.name(), nodeCode);
+    /**
+     * 查询集合
+     * @return Page<User>
+     */
+    @RequestMapping(value = { "/list" })
+    @ResponseBody
+    public Page<BigFile> list(String folder,String nodeCode) {
+        logger.info("list:folder"+folder);
+        SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<>();
+        String searchText = request.getParameter("searchText");
+        User user=getUser();
+        nodeCode = Station.getQueryNodeCode(nodeCode, user,stationDao);
+        if (!StringUtil.isBlank(nodeCode)&&!nodeCode.equals("undefined")) {
+            builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
+            builder.addOr("nodeCode", SpecificationOperator.Operator.eq.name(), BigConstant.ADMINCODE);
         }
-		Page<BigFile> page = fileDao.findAll(builder.generateSpecification(),getPageRequest());
-		return page;
-	}
+        if(null!=folder&&!StringUtil.isBlank(folder)) {
+            builder.add("folderName", SpecificationOperator.Operator.eq.name(), folder);
+        }else {
+            builder.add("folderName", SpecificationOperator.Operator.isNull.name(),null);
+        }
+        builder.add("menuType", SpecificationOperator.Operator.eq.name(), BigConstant.Station);
+        if(!StringUtil.isBlank(searchText)){
+            builder.add("fileName", SpecificationOperator.Operator.likeAll.name(), searchText);
+        }
+        Page<BigFile> bigFilePage=fileDao.findAll(builder.generateSpecification(), getPageRequest());
+        return bigFilePage;
+    }
+
 
     /**
      * 删除

@@ -102,7 +102,7 @@ public class QuestionController extends BaseController {
      */
     @RequestMapping(value = "/uploadQuestion", method = RequestMethod.GET)
     public String uploadQuestion(Model model) {
-        List<String> areas = stationDao.findLines(6);
+        List<String> areas = stationDao.findLines(9);
         model.addAttribute("areas", areas);
         return "admin/learn/uploadQuestion";
     }

@@ -2,9 +2,8 @@
 <#include "/admin/common/js.ftl">
 <#include "/admin/common/css.ftl">
 <#import "/admin/common/select.ftl" as my />
-<link href="${ctx!}/hadmin/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
-<!-- Data picker -->
-<script src="${ctx!}/hadmin/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+<!-- layerDate plugin javascript -->
+<script src="${ctx!}/hadmin/js/plugins/layer/laydate/laydate.js"></script>
 <div class="ibox-content">
     <form class="form-horizontal m-t" id="frm" method="post" action="${ctx!}/admin/running/uploadFilePost" enctype="multipart/form-data">
         <div class="form-group">
@@ -25,19 +24,18 @@
             <@my.select id="dateType" class="form-control" datas=["工作日","双休日","节假日"] defaultValue="请选择"/>
             </div>
         </div>
-        <div class="form-group" id="data_5">
-            <label class="font-noraml">运行时间：</label>
-            <div class="input-daterange input-group" id="datepicker">
-                <input type="text" class="input-sm form-control" name="startTime" value="2014-11-11">
-                <span class="input-group-addon">到</span>
-                <input type="text" class="input-sm form-control" name="endTime" value="2014-11-17">
-            </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">运行时间：</label>
+                <div class="col-sm-8">
+                    <input placeholder="开始日期" class="form-control layer-date" id="start">
+                    <input placeholder="结束日期" class="form-control layer-date" id="end">
+                </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">选择运营图：</label>
             <div class="col-sm-8">
                 <img id="preview" />
-                <br />
+                <br>
                 <input type="file" name="file" onchange="imgPreview(this)" />
             </div>
         </div>
@@ -49,9 +47,30 @@
     </form>
 </div>
 <script>
-    $('#datepicker').datetimepicker({
-        format: 'yyyy-mm-dd'
-    });
+        //日期范围限制
+        var start = {
+        elem: '#start',
+        format: 'YYYY-MM-DD',
+        min: laydate.now(), //设定最小日期为当前日期
+        istime: false,
+        istoday: false,
+        choose: function (datas) {
+        end.min = datas; //开始日选好后，重置结束日的最小日期
+        end.start = datas //将结束日的初始值设定为开始日
+    }
+    };
+        var end = {
+        elem: '#end',
+        format: 'YYYY-MM-DD',
+        min: laydate.now(),
+        istime: false,
+        istoday: false,
+        choose: function (datas) {
+        start.max = datas; //结束日选好后，重置开始日的最大日期
+    }
+    };
+        laydate(start);
+        laydate(end);
     function imgPreview(fileDom){
         //判断是否支持FileReader
         if (window.FileReader) {

@@ -42,6 +42,7 @@ public class BigConstant {
     public static final String Emergency="应急预案";
     public static final String User="人员信息";
     public static final String Question="考试练习";
+    public static final String Station="车站信息";
 
     public static String getImageUrl(String file) {
         return  "http://192.168.4.30:8080/interface/userImg?code="+file;

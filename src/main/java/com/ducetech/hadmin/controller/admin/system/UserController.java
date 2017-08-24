@@ -5,6 +5,7 @@ import com.ducetech.hadmin.common.utils.BigConstant;
 import com.ducetech.hadmin.common.utils.PoiUtil;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IBigFileDao;
+import com.ducetech.hadmin.dao.IStationDao;
 import com.ducetech.hadmin.entity.BigFile;
 import com.ducetech.hadmin.entity.Role;
 import com.ducetech.hadmin.entity.User;
@@ -18,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,6 +47,8 @@ public class UserController extends BaseController {
 	private final IRoleService roleService;
 	@Autowired
     IBigFileDao fileDao;
+	@Autowired
+    IStationDao stationDao;
 
     @Autowired
     public UserController(IUserService userService, IRoleService roleService) {
@@ -85,7 +89,9 @@ public class UserController extends BaseController {
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
-	public String add() {
+	public String add(Model model) {
+        List<String> areas = stationDao.findLines(9);
+        model.addAttribute("areas", areas);
 		return "admin/user/form";
 	}
 

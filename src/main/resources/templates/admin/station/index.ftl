@@ -57,7 +57,7 @@
                     title: "操作",
                     field: "empty",
                     formatter: function (value, row, index) {
-                        var operateHtml = '<@shiro.hasPermission name="system:user:edit"><button class="btn btn-primary btn-xs" type="button" onclick="down(\''+row.fileUrl+'\')"><i class="fa fa-edit"></i>&nbsp;下载</button> &nbsp;</@shiro.hasPermission>';
+                        var operateHtml = '<@shiro.hasPermission name="system:user:edit"><button class="btn btn-primary btn-xs" type="button" onclick="down(\''+row.id+'\',\''+row.fileName+'\')"><i class="fa fa-edit"></i>&nbsp;下载</button> &nbsp;</@shiro.hasPermission>';
                         operateHtml = operateHtml + '<@shiro.hasPermission name="system:user:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button> &nbsp;</@shiro.hasPermission>';
                         return operateHtml;
                     }
@@ -189,7 +189,7 @@
                 area: ['600px', '600px'],
                 content: '${ctx!}/admin/station/upload',
                 end: function(index){
-                    $('#table_list').bootstrapTable("refresh");
+                    $('#table_station_list').bootstrapTable("refresh");
                 }
             });
         };
@@ -205,7 +205,7 @@
                 area: ['600px', '600px'],
                 content: '${ctx!}/admin/station/uploadFile?nodeCode='+id,
                 end: function(index){
-                    $('#table_list').bootstrapTable("refresh");
+                    $('#table_station_list').bootstrapTable("refresh");
                 }
             });
         };
@@ -213,9 +213,13 @@
         function getTree(){
             return $.fn.zTree.getZTreeObj("treeDemo");
         };
-        function down(url){
-            window.open(url);
-            //window.location.href=url;
+        //下载文件
+        function down(id,name){
+            console.log(id+"|||||"+name);
+            var a = document.createElement('a');
+            a.href = "${ctx!}/admin/download/"+id;
+            a.download = name;
+            a.click();
         }
         function del(id){
             layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){

@@ -79,14 +79,14 @@ public class TrainController  extends BaseController {
         nodeCode = Station.getQueryNodeCode(nodeCode, user,stationDao);
         if (!StringUtil.isBlank(nodeCode)&&!nodeCode.equals("undefined")) {
             builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
-            builder.addOr("nodeCode", SpecificationOperator.Operator.eq.name(), "000");
+            builder.addOr("nodeCode", SpecificationOperator.Operator.eq.name(), BigConstant.ADMINCODE);
         }
         if(null!=folder&&!StringUtil.isBlank(folder)) {
             builder.add("folderName", SpecificationOperator.Operator.eq.name(), folder);
         }else {
             builder.add("folderName", SpecificationOperator.Operator.isNull.name(),null);
         }
-        builder.add("menuType", SpecificationOperator.Operator.eq.name(), "培训资料");
+        builder.add("menuType", SpecificationOperator.Operator.eq.name(), BigConstant.TRAIN);
         if(!StringUtil.isBlank(searchText)){
             builder.add("fileName", SpecificationOperator.Operator.likeAll.name(), searchText);
         }
