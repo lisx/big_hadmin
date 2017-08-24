@@ -3,6 +3,7 @@ package com.ducetech.hadmin.entity;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
+import com.ducetech.hadmin.common.utils.BigConstant;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.dao.IStationDao;
 import com.ducetech.hadmin.entity.support.BaseEntity;
@@ -92,6 +93,18 @@ public class Station extends BaseEntity {
             array.add(obj);
         }
         return array;
+    }
+    public static String getQueryNodeCode(String nodeCode, User user,IStationDao stationDao) {
+        Station station;
+        if(null!=user&&!user.getStationArea().equals(BigConstant.ADMIN)) {
+            station = stationDao.findByNodeName(user.getStationArea());
+            if(null!=station){
+                if(StringUtil.isBlank(nodeCode)||nodeCode.equals("undefined")){
+                    nodeCode=station.getNodeCode();
+                }
+            }
+        }
+        return nodeCode;
     }
     public static JSONArray createRootTree(List<Station> nodes ){
         JSONArray array = new JSONArray();

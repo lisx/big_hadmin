@@ -83,21 +83,26 @@ public class TrainController  extends BaseController {
         logger.info("list:folder"+folder);
         SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
+        User user=getUser();
+        nodeCode = Station.getQueryNodeCode(nodeCode, user,stationDao);
+        if (!StringUtil.isBlank(nodeCode)&&!nodeCode.equals("undefined")) {
+            builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
+            builder.addOr("nodeCode", SpecificationOperator.Operator.eq.name(), "000");
+        }
         if(null!=folder&&!StringUtil.isBlank(folder)) {
-            builder.add("folderName", SpecificationOperator.Operator.likeAll.name(), folder);
+            builder.add("folderName", SpecificationOperator.Operator.eq.name(), folder);
         }else {
             builder.add("folderName", SpecificationOperator.Operator.isNull.name(),null);
         }
-        if (!StringUtil.isBlank(nodeCode)&&!nodeCode.equals("undefined")) {
-            builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
-        }
-        builder.add("menuType", SpecificationOperator.Operator.likeAll.name(), "培训资料");
+        builder.add("menuType", SpecificationOperator.Operator.eq.name(), "培训资料");
         if(!StringUtil.isBlank(searchText)){
             builder.add("fileName", SpecificationOperator.Operator.likeAll.name(), searchText);
         }
         Page<BigFile> bigFilePage=fileDao.findAll(builder.generateSpecification(), getPageRequest());
         return bigFilePage;
     }
+
+
 
     /**
      * 培训资料文件夹

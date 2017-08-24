@@ -137,15 +137,7 @@ public class EmergencyController  extends BaseController {
         SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
         User user=getUser();
-        Station station;
-        if(null!=user&&!user.getStationArea().equals(BigConstant.ADMIN)) {
-            station = stationDao.findByNodeName(user.getStationArea());
-            if(null!=station){
-                if(StringUtil.isBlank(nodeCode)||nodeCode.equals("undefined")){
-                    nodeCode=station.getNodeCode();
-                }
-            }
-        }
+        nodeCode = Station.getQueryNodeCode(nodeCode, user,stationDao);
         if (!StringUtil.isBlank(nodeCode)&&!nodeCode.equals("undefined")) {
             builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
             builder.addOr("nodeCode", SpecificationOperator.Operator.eq.name(), "000");
