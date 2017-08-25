@@ -24,11 +24,11 @@
             <@my.select id="dateType" class="form-control" datas=["工作日","双休日","节假日"] defaultValue="请选择"/>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group runDate" style="display:none;">
             <label class="col-sm-3 control-label">运行时间：</label>
                 <div class="col-sm-8">
-                    <input placeholder="开始日期" class="form-control layer-date" id="start">
-                    <input placeholder="结束日期" class="form-control layer-date" id="end">
+                    <input placeholder="开始日期" name="startTime" class="form-control layer-date" id="start">
+                    <input placeholder="结束日期" name="endTime" class="form-control layer-date" id="end">
                 </div>
         </div>
         <div class="form-group">
@@ -47,6 +47,18 @@
     </form>
 </div>
 <script>
+
+    $(document).ready(function(){
+        $("#dateType").change(function(){
+            var type=$("#dateType").val();
+            console.log("||||"+type)
+            if(type=="节假日"){
+                $(".runDate").show();
+            }else{
+                $(".runDate").hide();
+            }
+        });
+    })
         //日期范围限制
         var start = {
         elem: '#start',

@@ -90,7 +90,7 @@ jQuery(function() {
         server: '/admin/train/uploadFilePost',
         fileNumLimit: 300,
         fileSizeLimit: 2100 * 1024 * 1024,    // 2100 M
-        fileSingleSizeLimit: 700 * 1024 * 1024    // 700 M
+        fileSingleSizeLimit: 1500 * 1024 * 1024    // 700 M
     });
 
     // 添加“添加文件”的按钮，

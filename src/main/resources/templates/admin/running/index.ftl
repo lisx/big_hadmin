@@ -99,20 +99,6 @@
                 }
             });
         });
-        //进入文件夹
-        function showFolder(folder){
-            layer.open({
-                type: 2,
-                title: '文件列表',
-                shadeClose: true,
-                shade: false,
-                area: ['100%', '100%'],
-                content: '${ctx!}/admin/running/toFolder?folder='+folder,
-                end: function(index){
-                    $('#table_running_list').bootstrapTable("refresh");
-                }
-            });
-        };
         //上传文件
         function addRunning(){
             layer.open({
@@ -127,21 +113,6 @@
                 }
             });
         };
-        //添加文件夹
-        function addFolder(){
-            var nodeCode=$(".addFolder").attr("dataid");
-            layer.open({
-                type: 2,
-                title: '新建文件夹',
-                shadeClose: true,
-                shade: false,
-                area: ['400px', '400px'],
-                content: '${ctx!}/admin/running/add?nodeCode='+nodeCode+'&menu=应急预案',
-                end: function(index){
-                    $('#table_running_list').bootstrapTable("refresh");
-                }
-            });
-        }
         //下载文件
         function down(url){
             var a = document.createElement('a');

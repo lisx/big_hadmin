@@ -87,7 +87,7 @@ public class BigFile extends BaseEntity {
     @JSONField(serialize = false)
     private String menuType;
     //是否使用
-    private String ifUse;
+    private Integer ifUse;
     //审核状态
     @JSONField(serialize = false)
     private String checkStatus;
@@ -170,6 +170,10 @@ public class BigFile extends BaseEntity {
             bf.setFolderFile(folderd);
             Station station = folderd.getStationFile();
             if (null != station){
+                bf.setStationFile(station);
+                bf.setNodeCode(station.getNodeCode());
+            }else{
+                station=stationDao.findByNodeName(user.getStationArea());
                 bf.setStationFile(station);
                 bf.setNodeCode(station.getNodeCode());
             }

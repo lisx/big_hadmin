@@ -34,11 +34,13 @@ public class Running extends BaseEntity {
     //归属时间类型
     private String dateType;
     //是否使用
-    private String ifUse;
+    private int ifUse;
     //开始时间
-    private String startTime;
+    @JSONField(format = "yyyy-MM-dd")
+    private Date startTime;
     //结束时间
-    private String endTime;
+    @JSONField(format = "yyyy-MM-dd")
+    private Date endTime;
     //线路
     private String lineName;
     public void setFileSize(String fileSize) {

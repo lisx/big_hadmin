@@ -113,7 +113,7 @@
             shadeClose: true,
             shade: false,
             area: ['100%', '105%'],
-            content: '${ctx!}/admin/train/uploadFile?folder=${folder}',
+            content: '${ctx!}/admin/train/uploadFile?folder=${folder}&nodeName=${nodeName}',
             end: function(index){
                 $('#table_folder_train_list').bootstrapTable("refresh");
                 layer.close(index);

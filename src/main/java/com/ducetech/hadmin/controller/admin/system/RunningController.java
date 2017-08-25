@@ -89,7 +89,7 @@ public class RunningController extends BaseController {
      */
     @RequestMapping(value = "/uploadFile", method = RequestMethod.GET)
     public String uploadFile(Model map) {
-        List<String> stations=stationDao.findLines(3);
+        List<String> stations=stationDao.findLines(6);
         map.addAttribute("stations",stations);
         map.addAttribute("menu","运行图");
         return "admin/running/uploadFile";
@@ -101,9 +101,9 @@ public class RunningController extends BaseController {
         logger.info("进入运行图上传文件");
         MultipartFile file =request.getFile("file");
         User user=getUser();
-        ;
         //创建临时文件夹
-        File dest = new File(BigConstant.upload+running.getFileName()+".jpg");
+        String path=BigConstant.upload+file.getOriginalFilename();
+        File dest = new File(path);
         if (!dest.getParentFile().exists()) {
             dest.getParentFile().mkdirs();
         }
@@ -115,6 +115,8 @@ public class RunningController extends BaseController {
             stream.close();
             running.setCreateId(user.getId());
             running.setCreateTime(new Date());
+            running.setFileUrl(path);
+            running.setIfUse(0);
             running.setFileSize(""+Math.round(file.getSize()/1024));
             fileDao.save(running);
             return JsonResult.success();

@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.swing.plaf.basic.BasicIconFactory;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -58,10 +59,11 @@ public class TrainController  extends BaseController {
 
 
     @RequestMapping("/toFolder")
-    public String toFolder(String folder,Model map) {
+    public String toFolder(String folder,String nodeCode,Model map) {
         logger.info("进入培训资料文件夹");
         System.out.println("folder+++"+folder);
         map.addAttribute("folder",folder);
+        map.addAttribute("nodeCode",nodeCode);
         return "admin/learn/folder";
     }
 
@@ -72,13 +74,14 @@ public class TrainController  extends BaseController {
     @RequestMapping(value = { "/list" })
     @ResponseBody
     public Page<BigFile> list(String folder,String nodeCode) {
-        logger.info("list:folder"+folder);
+        logger.info("list:folder{},nodeCode{}",folder,nodeCode);
         SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
         User user=getUser();
         nodeCode = Station.getQueryNodeCode(nodeCode, user,stationDao);
         if (!StringUtil.isBlank(nodeCode)&&!nodeCode.equals("undefined")) {
             builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
+            builder.addOr("nodeCode", SpecificationOperator.Operator.isNull.name(),null);
             builder.addOr("nodeCode", SpecificationOperator.Operator.eq.name(), BigConstant.ADMINCODE);
         }
         if(null!=folder&&!StringUtil.isBlank(folder)) {
@@ -87,6 +90,7 @@ public class TrainController  extends BaseController {
             builder.add("folderName", SpecificationOperator.Operator.isNull.name(),null);
         }
         builder.add("menuType", SpecificationOperator.Operator.eq.name(), BigConstant.TRAIN);
+        builder.add("ifUse", SpecificationOperator.Operator.eq.name(), 0);
         if(!StringUtil.isBlank(searchText)){
             builder.add("fileName", SpecificationOperator.Operator.likeAll.name(), searchText);
         }
@@ -135,6 +139,7 @@ public class TrainController  extends BaseController {
             nodeCode = area.getNodeCode();
         }
         try {
+            folder.setIfUse(0);
             folder.setIfFolder(1);
             folder.setCreateTime(new Date());
             folder.setCreateId(user.getId());
@@ -210,7 +215,9 @@ public class TrainController  extends BaseController {
     @ResponseBody
     public JsonResult delete(@PathVariable Integer id) {
         try {
-            fileDao.delete(id);
+            BigFile file=fileDao.findOne(id);
+            file.setIfUse(1);
+            fileDao.saveAndFlush(file);
         } catch (Exception e) {
             e.printStackTrace();
             return JsonResult.failure(e.getMessage());

@@ -207,7 +207,7 @@
                     formatter: function (value, row, index) {
                         var operateHtml ='';
                         if(row.ifFolder==1){
-                            operateHtml='<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="(\''+row.fileName+'\')"><i class="fa fa-edit"></i>&nbsp;查看</button> &nbsp;</@shiro.hasPermission>';
+                            operateHtml='<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="showFolder(\''+row.fileName+'\')"><i class="fa fa-edit"></i>&nbsp;查看</button> &nbsp;</@shiro.hasPermission>';
                         }else{
                             operateHtml='<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="down(\''+row.id+'\',\''+row.fileName+'\')"><i class="fa fa-edit"></i>&nbsp;下载</button> &nbsp;</@shiro.hasPermission>';
                         }
@@ -393,14 +393,15 @@
                 }
             });
         }
-        function showFolder(station){
+        function showFolder(folder){
+            var station=$(".addFolder").attr("dataid");
             layer.open({
                 type: 2,
                 title: '查看文件夹',
                 shadeClose: true,
                 shade: false,
                 area: ['98%', '98%'],
-                content: '${ctx!}/admin/train/toFolder?folder='+station,
+                content: '${ctx!}/admin/train/toFolder?folder='+folder+'&nodeName'+station,
                 end: function(index){
                     $('#table_train_list').bootstrapTable("refresh");
                 }
