@@ -39,7 +39,6 @@ public class FileInterface {
     IBigFileDao bigFileDao;
     @ApiOperation(value="获取站点文件全部数据",notes="获取站点文件全部数据")
     @RequestMapping(value="/findByStation",method = RequestMethod.GET)
-
     @ApiImplicitParams({
             @ApiImplicitParam(name="station",value="线路，站点，站区",dataType="string", paramType = "query"),
             @ApiImplicitParam(name="menuType",value="功能类型",dataType="String", paramType = "query")
@@ -55,6 +54,19 @@ public class FileInterface {
         area=nodeCode.substring(0,nodeCode.length()-3);
         List<BigFile> stations = bigFileDao.findByStationFileOrStationFileAndMenuType(str.getNodeCode()+"%","000",area,menuType);
         obj.put("data", stations);
+        obj.put("msg","查询成功");
+        obj.put("state","1");
+        return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
+    }
+    @ApiOperation(value="获取文件夹内全部数据",notes="获取文件夹内全部数据")
+    @RequestMapping(value="/findByFolder",method = RequestMethod.GET)
+    @ApiImplicitParam(name="folderId",value="文件夹名字",dataType="Integer", paramType = "query")
+    public JSONObject findFolder(Integer folderId) {
+        logger.info("获取文件夹内全部数据");
+        BigFile fold=bigFileDao.findOne(folderId);
+        List<BigFile> files=bigFileDao.findByFolderFile(fold);
+        obj = new JSONObject();
+        obj.put("data", files);
         obj.put("msg","查询成功");
         obj.put("state","1");
         return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));

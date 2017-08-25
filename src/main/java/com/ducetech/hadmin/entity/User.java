@@ -41,6 +41,10 @@ public class User extends BaseEntity {
 	 * 用户密码
 	 */
 	private String password;
+    /**
+     * 职位
+     */
+    private String position;
 
 	/**
 	 * 单位 站点 站区 线路

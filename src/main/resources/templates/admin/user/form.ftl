@@ -9,7 +9,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">员工编号：</label>
             <div class="col-sm-8">
-                <input id="userCode" name="userCode" class="form-control" type="text" value="${user.userName}" <#if user?exists> readonly="readonly"</#if> >
+                <input id="userCode" name="userCode" class="form-control" type="text" value="${user.userCode}" <#if user?exists> readonly="readonly"</#if> >
             </div>
         </div>
         <div class="form-group">
@@ -21,13 +21,13 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">员工姓名：</label>
             <div class="col-sm-8">
-                <input id="nickName" name="nickName" class="form-control" type="text" value="${user.nickName}">
+                <input id="nickName" name="nickName" class="form-control" type="text" value="${user.userName}">
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">职位：</label>
             <div class="col-sm-8">
-                <select name="unitId" class="form-control">
+                <select name="position" class="form-control">
                     <option>站务员</option>
                     <option>综控员</option>
                     <option>值班站长</option>
@@ -41,13 +41,13 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">站区：</label>
             <div class="col-sm-8">
-        <@my.select id="area" class="form-control" datas=areas defaultValue="请选择"/>
+        <@my.select id="stationArea" class="form-control" value=user.stationArea datas=areas defaultValue="请选择"/>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">站点：</label>
             <div class="col-sm-8">
-            <select id="station" name="station" class="form-control" >
+            <select id="station" name="station" value="${user.station}" class="form-control" >
                 <option value="请选择">请选择</option>
             </select>
             </div>
@@ -78,8 +78,8 @@
     </form>
 </div>
     <script type="text/javascript">
-        $("#area").change(function(){
-            var area=$("#area").val();
+        $("#stationArea").change(function(){
+            var area=$("#stationArea").val();
             area=area.replace("#","%23");
             console.log("||||"+area);
             $.ajax({
@@ -94,15 +94,10 @@
                 for(var i in stations){
                     $("#station").append("<option>"+stations[i]+"</option>");
                 };
+                $("#station").val("${user.station}");
             });
-        });
+        }).change();
     $(document).ready(function () {
-	  	//外部js调用
-//	    laydate({
-//	        elem: '#birthday', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
-//	        event: 'focus' //响应事件。如果没有传入event，则按照默认的click
-//	    });
-
 	    $("#frm").validate({
     	    rules: {
     	    	userName: {
