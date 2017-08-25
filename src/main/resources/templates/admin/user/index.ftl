@@ -79,6 +79,9 @@
 			        title: "用户名",
 			        field: "userName"
 			    },{
+                    title: "工号",
+                    field: "userCode"
+                },{
 			        title: "所属权限",
 			        field: "roles",
 			        formatter: function(value, row, index) {
@@ -88,9 +91,6 @@
                     	});
                     	return r;
                     }
-			    },{
-			        title: "姓名",
-			        field: "nickName"
 			    },{
                     title: "站点",
                     field: "station",
