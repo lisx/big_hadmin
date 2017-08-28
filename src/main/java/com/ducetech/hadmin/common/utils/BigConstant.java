@@ -18,8 +18,11 @@ public class BigConstant {
     public static final String jpeg=".jepg";
     public static final String jpg=".jpg";
     public static final String png=".png";
+    public static final String office="office";
+    public static final String video="video";
+    public static final String image="image";
     public static final String upload="/Users/lisx/upload/";
-
+    public static final String uploadChunk="/Users/lisx/upload/chunk/";
     public static ValueFilter filter = new ValueFilter() {
         @Override
         public Object process(Object obj, String s, Object v) {
@@ -30,19 +33,20 @@ public class BigConstant {
         }
     };
 
-    public static final String ADMIN ="运三分公司";
-    public static final String office="office";
-    public static final String video="video";
-    public static final String image="image";
-    public static final String TRAIN="培训资料";
-    public static final String Fire="消防安全";
     public static final String ADMINCODE="000";
-    public static final String Roll="首页滚播图";
-    public static final String Rules="规章制度";
-    public static final String Emergency="应急预案";
+    public static final String ADMIN ="运三分公司";
     public static final String User="人员信息";
-    public static final String Question="考试练习";
     public static final String Station="车站信息";
+    public static final String TRAIN="培训资料";
+    public static final String Question="考试练习";
+    public static final String Emergency="应急预案";
+    public static final String Rules="规章制度";
+    public static final String Fire="消防安全文件";
+    public static final String Running="运行图管理";
+    public static final String Notice="通知管理";
+    public static final String Roll="首页滚播图";
+    public static final String Edition="前端版本更新";
+
 
     public static String getImageUrl(String file) {
         return  "http://192.168.4.30:8080/interface/userImg?code="+file;

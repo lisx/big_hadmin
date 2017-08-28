@@ -13,7 +13,7 @@ import com.ducetech.hadmin.entity.Station;
 import com.ducetech.hadmin.entity.User;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator;
-import org.apache.el.stream.Stream;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import javax.swing.plaf.basic.BasicIconFactory;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -159,7 +158,7 @@ public class TrainController  extends BaseController {
      */
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(MultipartHttpServletRequest request, String chunk, String chunks, String size, String folder,String nodeCode){
+    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, String folder,String nodeCode,String guid){
         logger.info("进入培训资料上传文件");
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
@@ -177,24 +176,60 @@ public class TrainController  extends BaseController {
                         BigFile.saveFile(folder, nodeCode, user, file,BigConstant.image,BigConstant.TRAIN,flag,fileDao,stationDao);
                     }else{
                         try {
-                            if(StringUtils.isEmpty(chunk)) {
+                            if(StringUtils.isEmpty(chunk+"")) {
                                 //不分片的情况
                                 logger.info("不分片的情况");
                                 BigFile.saveFile(folder, nodeCode, user, file,BigConstant.video,BigConstant.TRAIN,flag,fileDao,stationDao);
                             }else{
                                 logger.info("分片的情况");
-                                String filePath = BigConstant.upload + "chunk/" + file.getOriginalFilename();
+                                String tempFileDir = BigConstant.uploadChunk+guid+"/";
+                                String realname = file.getOriginalFilename();
+                                // 临时目录用来存放所有分片文件
+                                File parentFileDir = new File(tempFileDir);
+                                if (!parentFileDir.exists()) {
+                                    parentFileDir.mkdirs();
+                                }
+                                // 分片处理时，前台会多次调用上传接口，每次都会上传文件的一部分到后台
+                                File tempPartFile = new File(parentFileDir, realname + chunk + ".part");
                                 byte[] bytes = file.getBytes();
-                                stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
+                                stream = new BufferedOutputStream(new FileOutputStream(tempPartFile));
                                 stream.write(bytes);
                                 stream.close();
-                                FileUtil.randomAccessFile(BigConstant.upload+file.getOriginalFilename(), file);
-                                //分片的情况
-                                if (Integer.valueOf(chunk) == (Integer.valueOf(chunks) - 1)) {
-                                    BigFile.saveFile(size,folder, nodeCode, user, file,BigConstant.video,BigConstant.TRAIN,flag,fileDao,stationDao);
-                                } else {
-                                    logger.info("上传中" + file.getOriginalFilename() + " chunk:" + chunk, "");
+                                // 是否全部上传完成
+                                // 所有分片都存在才说明整个文件上传完成
+                                boolean uploadDone = true;
+                                for (int c = 0; c < chunks; i++) {
+                                    File partFile = new File(parentFileDir, realname + c + ".part");
+                                    if (!partFile.exists()) {
+                                        uploadDone = false;
+                                        break;
+                                    }
                                 }
+                                // 所有分片文件都上传完成
+                                // 将所有分片文件合并到一个文件中
+                                if (uploadDone) {
+                                    String [] fileNames=new String[chunks];
+                                    File[] array = parentFileDir.listFiles();
+                                    for (int a=0;a<array.length;a++){
+                                        fileNames[a]=array[a].getName();
+                                    }
+                                        // 得到 destTempFile 就是最终的文件
+                                    FileUtil.merge(BigConstant.upload,fileNames,realname,guid);
+                                    // 删除临时目录中的分片文件
+                                    FileUtils.deleteDirectory(parentFileDir);
+                                } else {
+                                    // 临时文件创建失败
+//                                    if (chunk == chunks -1) {
+//                                        FileUtils.deleteDirectory(parentFileDir);
+//                                    }
+                                }
+//                                FileUtil.randomAccessFile(BigConstant.upload+file.getOriginalFilename(), file);
+//                                //分片的情况
+//                                if (Integer.valueOf(chunk) == (Integer.valueOf(chunks) - 1)) {
+//                                    BigFile.saveFile(size,folder, nodeCode, user, file,BigConstant.video,BigConstant.TRAIN,flag,fileDao,stationDao);
+//                                } else {
+//                                    logger.info("上传中" + file.getOriginalFilename() + " chunk:" + chunk, "");
+//                                }
                             }
                         } catch (Exception e) {
                             logger.info("上传失败{}",e.getMessage());

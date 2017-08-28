@@ -42,19 +42,15 @@ import java.util.Set;
 @Controller
 @RequestMapping("/admin/user")
 public class UserController extends BaseController {
-    private static Logger logger = LoggerFactory.getLogger(UserController.class);
-	private final IUserService userService;
-	private final IRoleService roleService;
+    Logger logger = LoggerFactory.getLogger(UserController.class);
+    @Autowired
+	IUserService userService;
+    @Autowired
+	IRoleService roleService;
 	@Autowired
     IBigFileDao fileDao;
 	@Autowired
     IStationDao stationDao;
-
-    @Autowired
-    public UserController(IUserService userService, IRoleService roleService) {
-        this.userService = userService;
-        this.roleService = roleService;
-    }
 
     /**
 	 * 用户管理初始化页面
@@ -149,19 +145,19 @@ public class UserController extends BaseController {
         List<MultipartFile> files =((MultipartHttpServletRequest)request).getFiles("file");
         MultipartFile file;
         BufferedOutputStream stream;
-        for (int i =0; i< files.size(); ++i) {
-            file = files.get(i);
+        for (MultipartFile file1 : files) {
+            file = file1;
             if (!file.isEmpty()) {
                 try {
                     byte[] bytes = file.getBytes();
-                    String path=BigConstant.upload+file.getOriginalFilename();
-                    File f=new File(path);
+                    String path = BigConstant.upload + file.getOriginalFilename();
+                    File f = new File(path);
                     stream = new BufferedOutputStream(new FileOutputStream(f));
                     stream.write(bytes);
                     stream.close();
                     BigFile bf = fileDao.findByFileName(file.getOriginalFilename());
-                    if(null==bf)
-                        bf=new BigFile();
+                    if (null == bf)
+                        bf = new BigFile();
                     bf.setFileSize("" + Math.round(file.getSize() / 1024));
                     bf.setMenuType(BigConstant.User);
                     bf.setFileType(BigConstant.image);

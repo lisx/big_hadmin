@@ -32,7 +32,7 @@ public class Notice extends BaseEntity {
     //站点
     private String stationName;
     //是否使用
-    private String ifUse;
+    private int ifUse;
     /**
      * 创建时间
      */

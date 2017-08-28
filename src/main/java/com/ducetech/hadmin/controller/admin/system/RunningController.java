@@ -4,8 +4,10 @@ import com.ducetech.hadmin.common.JsonResult;
 import com.ducetech.hadmin.common.utils.BigConstant;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
+import com.ducetech.hadmin.dao.IBigFileDao;
 import com.ducetech.hadmin.dao.IRunningDao;
 import com.ducetech.hadmin.dao.IStationDao;
+import com.ducetech.hadmin.entity.BigFile;
 import com.ducetech.hadmin.entity.Running;
 import com.ducetech.hadmin.entity.Station;
 import com.ducetech.hadmin.entity.User;
@@ -44,7 +46,9 @@ public class RunningController extends BaseController {
     @Autowired
     private IStationDao stationDao;
     @Autowired
-    IRunningDao fileDao;
+    IRunningDao runningDao;
+    @Autowired
+    IBigFileDao fileDao;
 
     /**
      * 运行图首页
@@ -68,7 +72,7 @@ public class RunningController extends BaseController {
         if(!StringUtil.isBlank(searchText)){
             builder.add("fileName", SpecificationOperator.Operator.likeAll.name(), searchText);
         }
-        return  fileDao.findAll(builder.generateSpecification(), getPageRequest());
+        return  runningDao.findAll(builder.generateSpecification(), getPageRequest());
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
@@ -83,7 +87,7 @@ public class RunningController extends BaseController {
         return JsonResult.success();
     }
     /**
-     * 进入培训上传页面
+     * 进入运行图上传页面
      * @param map
      * @return
      */
@@ -91,7 +95,7 @@ public class RunningController extends BaseController {
     public String uploadFile(Model map) {
         List<String> stations=stationDao.findLines(6);
         map.addAttribute("stations",stations);
-        map.addAttribute("menu","运行图");
+        map.addAttribute("menu",BigConstant.Running);
         return "admin/running/uploadFile";
     }
 
@@ -113,12 +117,18 @@ public class RunningController extends BaseController {
             stream = new BufferedOutputStream(new FileOutputStream(dest));
             stream.write(bytes);
             stream.close();
+            BigFile bigFile=new BigFile();
             running.setCreateId(user.getId());
             running.setCreateTime(new Date());
-            running.setFileUrl(path);
             running.setIfUse(0);
-            running.setFileSize(""+Math.round(file.getSize()/1024));
-            fileDao.save(running);
+            running.setFileName(file.getOriginalFilename());
+            bigFile.setFileUrl(path);
+            bigFile.setFileName(file.getOriginalFilename());
+            bigFile.setFileSize(""+Math.round(file.getSize()/1024));
+            bigFile.setMenuType(BigConstant.Running);
+            fileDao.save(bigFile);
+            running.setFileId(bigFile.getId());
+            runningDao.save(running);
             return JsonResult.success();
         } catch (IllegalStateException e) {
             e.printStackTrace();
@@ -126,23 +136,5 @@ public class RunningController extends BaseController {
             e.printStackTrace();
         }
         return JsonResult.success();
-    }
-
-    private void stationFolder(String folder, String nodeCode, Running bf,User user) {
-        if(null==folder) {
-            Station area;
-            if(null!=nodeCode&&!nodeCode.equals("undefined")){
-                area=stationDao.findByNodeCode(nodeCode);
-            }else{
-                area=stationDao.findByNodeName(user.getStationArea());
-            }
-            if (null != area) {
-                nodeCode = area.getNodeCode();
-            }else{
-            }
-        }else{
-        }
-        bf.setCreateTime(new Date());
-        bf.setCreateId(user.getId());
     }
 }

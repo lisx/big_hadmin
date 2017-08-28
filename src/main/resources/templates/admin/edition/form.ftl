@@ -3,10 +3,10 @@
 <div class="ibox-content">
     <div class="row">
         <div class="col-sm-12">
-            <form role="form" id="uploadForm" action="/admin/edition/fileUpload" method="POST" enctype="multipart/form-data">
+            <form role="form" id="uploadForm" action="/admin/edition/fileUploadEdition" method="POST" enctype="multipart/form-data">
                 <div class="form-group ">
                     <label>说明：请上传格式为apk的版本安装包。</label>
-                    <input type="file" class="form-control" name="fileUpload" />
+                    <input type="file" class="form-control" name="file" />
                 </div>
                 <div>
                     <button class="btn btn-sm btn-primary pull-left m-t-n-xs" onclick="uploadUserClose()" type="button"><strong>发布版本</strong>
@@ -21,17 +21,12 @@
 <script>
     function uploadUserClose(){
         $.ajax({
-            url: '/admin/user/fileUpload',
+            url: '/admin/edition/fileUploadEdition',
             type: 'POST',
             cache: false,
             data: new FormData($('#uploadForm')[0]),
             processData: false,
             contentType: false
-        }).done(function(msg) {
-            layer.msg(msg.message, {time: 2000},function(){
-                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-                parent.layer.close(index);
-            });
-        }).fail(function(res) {});
+        });
     }
 </script>

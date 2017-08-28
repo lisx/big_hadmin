@@ -1,7 +1,9 @@
 <#--通用型的select语句-->
-<#macro select id class datas multiple value="" defaultValue="" key="" text="">
+<#macro select id class datas multiple section value="" defaultValue="" key="" text="">
 <select id="${id}" name="${id}" multiple="${multiple}" class="${class}">
+    <#if defaultValue!="">
     <option value="">${defaultValue}</option>
+    </#if>
 <#--判断对象是否为map-->
     <#if datas?is_hash_ex>
     <#--循环map的key值-->
@@ -24,10 +26,14 @@
                     <option value="${data[key]}" >${data[text]}</option>
                 </#if>
             <#else>
-                <#if data==value>
-                    <option value="${data}" selected>${data}</option>
+                <#if data?ends_with(section) >
+                    <#assign parent=data>
                 <#else>
-                    <option value="${data}">${data}</option>
+                    <#if data==value>
+                        <option value="${data}" selected>${data}</option>
+                    <#else>
+                        <option value="${data}" data-section="${parent}">${data}</option>
+                    </#if>
                 </#if>
             </#if>
         </#list>

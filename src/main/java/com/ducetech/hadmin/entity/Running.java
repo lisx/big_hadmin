@@ -31,6 +31,8 @@ public class Running extends BaseEntity {
     private String fileSize;
     //文件类型
     private String fileType;
+
+    private Integer fileId;
     //归属时间类型
     private String dateType;
     //是否使用

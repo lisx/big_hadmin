@@ -24,4 +24,6 @@ public interface IBigFileDao extends IBaseDao<BigFile,Integer> {
     List<BigFile> findByStationFileOrStationFileAndMenuType(@Param("station") String station,@Param("ys") String ys,@Param("area") String area,@Param("menuType") String menuType);
     BigFile findByFileName(String folder);
     List<BigFile> findByFolderFile(BigFile file);
+
+    List<BigFile> findByMenuType(String menuType);
 }

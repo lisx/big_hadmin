@@ -13,6 +13,7 @@ import com.ducetech.hadmin.entity.Station;
 import com.ducetech.hadmin.entity.User;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,18 +101,23 @@ public class NoticeController extends BaseController {
      */
     @RequestMapping(value = "/uploadFile", method = RequestMethod.GET)
     public String uploadFile(Model map) {
-        List<String> stations=stationDao.findLines(3);
+        User user=getUser();
+        Station station=stationDao.findByNodeName(user.getStationArea());
+        List<String> stations=stationDao.findByTreeStations(6,station.getNodeCode()+"%");
+        logger.info("||||"+stations.size());
         map.addAttribute("stations",stations);
-        map.addAttribute("menu","通知");
+        map.addAttribute("menu",BigConstant.Notice);
         return "admin/notice/uploadFile";
     }
 
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Notice notice){
-        logger.info("进入通知上传文件");
+    public JsonResult uploadFilePost(MultipartHttpServletRequest request,String [] area, Notice notice){
+        logger.info("进入通知上传文件{}",area.length);
         User user=getUser();
+        notice.setStationName(StringUtils.join(area,","));
         notice.setCreateId(user.getId());
+        notice.setIfUse(0);
         notice.setCreateTime(new Date());
         noticeDao.save(notice);
         return JsonResult.success();

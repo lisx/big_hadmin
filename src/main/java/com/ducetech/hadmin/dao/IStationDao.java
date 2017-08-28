@@ -34,11 +34,14 @@ public interface IStationDao extends IBaseDao<Station,Integer> {
 
     @Query(value = "SELECT a from Station a where length(a.nodeCode)=:nodeLength order by a.nodeCode")
     List <Station> findByStationArea(@Param("nodeLength") int nodeLength);
+    @Query(value = "SELECT a.nodeName from Station a where length(a.nodeCode)=:nodeLength order by a.nodeCode")
+    List<String> findLines(@Param("nodeLength") int nodeLength);
 
     @Query(value = "SELECT a from Station a where a.nodeCode like :parentCode and length(a.nodeCode)=:nodeLength order by a.nodeCode")
     List<Station> querySubNodesByCode(@Param("parentCode") String parentCode,@Param("nodeLength") int nodeLength);
-    @Query(value = "SELECT a.nodeName from Station a where length(a.nodeCode)=:nodeLength order by a.nodeCode")
-    List<String> findLines(@Param("nodeLength") int nodeLength);
+
     @Query(value = "SELECT a.nodeName from Station a where length(a.nodeCode)=:nodeLength and a.nodeCode like :nodeCode order by a.nodeCode")
     List<String> findStations(@Param("nodeLength") int nodeLength,@Param("nodeCode")String nodeCode);
+    @Query(value = "SELECT a.nodeName from Station a where length(a.nodeCode)>:nodeLength and a.nodeCode like :nodeCode order by a.nodeCode")
+    List<String> findByTreeStations(@Param("nodeLength") int nodeLength,@Param("nodeCode")String nodeCode);
 }

@@ -51,11 +51,8 @@
                     title: "标题",
                     field: "title"
                 },{
-                    title: "发布人",
-                    field: "createId"
-                },{
                     title: "接收单位",
-                    field: "areaName"
+                    field: "stationName"
                 },{
                     title: "发布时间",
                     field: "createTime"
