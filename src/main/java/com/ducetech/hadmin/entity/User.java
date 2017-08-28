@@ -52,7 +52,7 @@ public class User extends BaseEntity {
 
 	private String station;
     private String stationArea;
-    //private String line;
+    private String line;
 
 	/**
 	 * 逻辑删除状态 0 未删除 1 删除

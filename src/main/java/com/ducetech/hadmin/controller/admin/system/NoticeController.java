@@ -104,7 +104,6 @@ public class NoticeController extends BaseController {
         User user=getUser();
         Station station=stationDao.findByNodeName(user.getStationArea());
         List<String> stations=stationDao.findByTreeStations(6,station.getNodeCode()+"%");
-        logger.info("||||"+stations.size());
         map.addAttribute("stations",stations);
         map.addAttribute("menu",BigConstant.Notice);
         return "admin/notice/uploadFile";
@@ -121,23 +120,5 @@ public class NoticeController extends BaseController {
         notice.setCreateTime(new Date());
         noticeDao.save(notice);
         return JsonResult.success();
-    }
-
-    private void stationFolder(String folder, String nodeCode, Notice bf,User user) {
-        if(null==folder) {
-            Station area;
-            if(null!=nodeCode&&!nodeCode.equals("undefined")){
-                area=stationDao.findByNodeCode(nodeCode);
-            }else{
-                area=stationDao.findByNodeName(user.getStationArea());
-            }
-            if (null != area) {
-                nodeCode = area.getNodeCode();
-            }else{
-            }
-        }else{
-        }
-        bf.setCreateTime(new Date());
-        bf.setCreateId(user.getId());
     }
 }

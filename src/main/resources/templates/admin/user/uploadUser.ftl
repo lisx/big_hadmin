@@ -41,7 +41,7 @@
     }
     function downUploadUser(){
         var a = document.createElement('a');
-            a.href = "/upload/usr.xls";
+            a.href = "/upload/user.xls";
             a.download = "人员信息模版.xls";
             a.click();
     }

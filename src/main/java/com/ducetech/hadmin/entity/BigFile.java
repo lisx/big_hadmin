@@ -118,6 +118,7 @@ public class BigFile extends BaseEntity {
             bf.setFileType(fileType);
             bf.setFileName(file.getOriginalFilename());
             bf.setFileUrl(filePath);
+            bf.setIfUse(0);
             stationFolder(folder, nodeCode, bf, user,fileDao,stationDao);
             fileDao.saveAndFlush(bf);
         }catch (Exception e){
@@ -140,6 +141,7 @@ public class BigFile extends BaseEntity {
             bf.setFileType(fileType);
             bf.setFileName(file.getOriginalFilename());
             bf.setFileUrl(filePath);
+            bf.setIfUse(0);
             stationFolder(folder, nodeCode, bf, user,fileDao,stationDao);
             fileDao.saveAndFlush(bf);
         }catch (Exception e){

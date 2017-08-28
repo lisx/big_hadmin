@@ -86,7 +86,7 @@ jQuery(function() {
         server: '/admin/station/uploadFilePost',
         fileNumLimit: 300,
         fileSizeLimit: 200 * 1024 * 1024,    // 200 M
-        fileSingleSizeLimit: 15 * 1024 * 1024    // 50 M
+        fileSingleSizeLimit: 50 * 1024 * 1024    // 50 M
     });
 
     uploader.options.formData.nodeCode = $("#fileNodeCode").val();

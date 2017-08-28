@@ -101,27 +101,43 @@ public class UserController extends BaseController {
     public JsonResult uploadUserExcel(@RequestParam("fileUpload") MultipartFile fileUpload) {
         try {
             if (fileUpload != null && !fileUpload.isEmpty()) {
-                List<List<List<String>>> data = PoiUtil.readExcelToList(fileUpload, 0);
+                List<List<List<String>>> data = PoiUtil.readExcelToList(fileUpload, 2);
                 if (null != data && !data.isEmpty()) {
                     for (List<List<String>> sheet : data) {
                         if (null != sheet && !sheet.isEmpty()) {
                             for (List<String> row : sheet) {
-                                String userCode = StringUtil.trim(row.get(0));
-                                String userName = StringUtil.trim(row.get(1));
-                                String unit = StringUtil.trim(row.get(2));
-                                String telphone = StringUtil.trim(row.get(3));
-                                String fwxxkUrl = StringUtil.trim(row.get(4));
-                                String zkysgzUrl = StringUtil.trim(row.get(5));
-                                String faszUrl = StringUtil.trim(row.get(6));
+                                String userName = StringUtil.trim(row.get(0));
+                                String stationArea = StringUtil.trim(row.get(1));
+                                String station = StringUtil.trim(row.get(2));
+                                String line = StringUtil.trim(row.get(3));
+                                String position = StringUtil.trim(row.get(4));
+                                String userCode = StringUtil.trim(row.get(5));
+                                String fwxxkUrl = StringUtil.trim(row.get(6));
+                                String faszUrl = StringUtil.trim(row.get(7));
+                                String zkysgzUrl = StringUtil.trim(row.get(8));
+                                if(stationArea.endsWith("站区")){
+
+                                }else{
+                                    stationArea=stationArea+"站区";
+                                }
+                                if(stationArea.endsWith("站")){
+
+                                }else{
+                                    station=station+"站";
+                                }
+
                                 User user = new User();
-                                //user.setUnitId(unit);
+                                user.setUserName(userName);
+                                user.setStationArea(stationArea);
+                                user.setStation(station);
+                                user.setLine(line);
+                                user.setPosition(position);
+                                user.setUserCode(userCode);
                                 user.setFwxxkUrl(fwxxkUrl);
                                 user.setZkysgzUrl(zkysgzUrl);
                                 user.setFaszUrl(faszUrl);
                                 user.setCreateTime(new Date());
                                 user.setIfUse(0);
-                                user.setUserCode(userCode);
-                                user.setUserName(userName);
                                 userService.saveOrUpdate(user);
                             }
                         }
