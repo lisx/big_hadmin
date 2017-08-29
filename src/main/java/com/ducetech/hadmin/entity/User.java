@@ -100,6 +100,13 @@ public class User extends BaseEntity {
 	@JoinTable(name = "big_user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
 	private java.util.Set<Role> roles;
 
+    public String getPhotoUrl() {
+        if(null==userCode)
+            return "";
+        else
+            return BigConstant.getImageUrl(userCode);
+    }
+
     public String getFwxxkUrl() {
         if(null==fwxxkUrl)
             return "";

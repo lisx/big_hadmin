@@ -69,24 +69,22 @@ jQuery(function() {
         dnd: '#uploader .queueList',
         paste: document.body,
 
-        accept: {
-            title: 'Images',
-            extensions: 'gif,jpg,jpeg,bmp,png',
-            mimeTypes: 'image/*'
-        },
-
         // swf文件路径
         swf: BASE_URL + '/Uploader.swf',
-        // formData:{
-        //     nodeCode:$("#fileNodeCode").val()
-        // },
+
         disableGlobalDnd: true,
+        formData: {
+            nodeCode: $("#nodeCode").val(),
+            guid: WebUploader.Base.guid()
+        },
+        //分片
         chunked: true,
+        chunkSize:100 * 1024 * 1024,
         // server: 'http://webuploader.duapp.com/server/fileupload.php',
         server: '/admin/station/uploadFilePost',
         fileNumLimit: 300,
-        fileSizeLimit: 200 * 1024 * 1024,    // 200 M
-        fileSingleSizeLimit: 50 * 1024 * 1024    // 50 M
+        fileSizeLimit: 2000 * 1024 * 1024,    // 2000 M
+        fileSingleSizeLimit: 500 * 1024 * 1024    // 500 M
     });
 
     uploader.options.formData.nodeCode = $("#fileNodeCode").val();

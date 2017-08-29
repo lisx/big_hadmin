@@ -120,7 +120,7 @@ public class UserController extends BaseController {
                                 }else{
                                     stationArea=stationArea+"站区";
                                 }
-                                if(stationArea.endsWith("站")){
+                                if(station.endsWith("站")){
 
                                 }else{
                                     station=station+"站";
@@ -133,6 +133,7 @@ public class UserController extends BaseController {
                                 user.setLine(line);
                                 user.setPosition(position);
                                 user.setUserCode(userCode);
+                                user.setPhotoUrl(userCode);
                                 user.setFwxxkUrl(fwxxkUrl);
                                 user.setZkysgzUrl(zkysgzUrl);
                                 user.setFaszUrl(faszUrl);

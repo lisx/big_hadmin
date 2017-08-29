@@ -9,6 +9,11 @@
     <div class="page-container">
         <input type="hidden" name="nodeCode" id="fileNodeCode" value="${nodeCode}" >
         <p>您可以尝试文件拖拽，使用QQ截屏工具，然后激活窗口后粘贴，或者点击添加图片按钮.</p>
+        <div class="col-md-12">
+            <div class="form-group">
+                <input type="hidden" id="nodeCode" name="nodeCode" value="${nodeCode}">
+            </div>
+        </div>
         <div id="uploader" class="wu-example">
             <div class="queueList">
                 <div id="dndArea" class="placeholder">

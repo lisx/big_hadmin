@@ -212,11 +212,7 @@ public class TrainController  extends BaseController {
                                 // 将所有分片文件合并到一个文件中
                                 logger.info("|||||||"+uploadDone);
                                 if (uploadDone) {
-                                   // String [] fileNames=new String[chunks];
                                     File[] array = parentFileDir.listFiles();
-//                                    for (int a=0;a<array.length;a++){
-//                                        fileNames[a]=array[a].getName();
-//                                    }
                                     List<Integer> fileNames=new ArrayList<>();
                                     for (int a=0;a<array.length;a++){
                                         logger.info("arr"+array[a].getName());
@@ -236,18 +232,7 @@ public class TrainController  extends BaseController {
                                     }
                                 } else {
                                     logger.info("上传中 chunks" + chunks + " chunk:" + chunk, "");
-                                    // 临时文件创建失败
-//                                    if (chunk == chunks -1) {
-//                                        FileUtils.deleteDirectory(parentFileDir);
-//                                    }
                                 }
-//                                FileUtil.randomAccessFile(BigConstant.upload+file.getOriginalFilename(), file);
-//                                //分片的情况
-//                                if (Integer.valueOf(chunk) == (Integer.valueOf(chunks) - 1)) {
-//                                    BigFile.saveFile(size,folder, nodeCode, user, file,BigConstant.video,BigConstant.TRAIN,flag,fileDao,stationDao);
-//                                } else {
-//                                    logger.info("上传中" + file.getOriginalFilename() + " chunk:" + chunk, "");
-//                                }
                             }
                         } catch (Exception e) {
                             logger.info("上传失败{}",e.getMessage());

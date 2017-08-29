@@ -51,6 +51,9 @@
                     title: "大小",
                     field: "fileSize",
                 },{
+                    title: "归属",
+                    field: "stationFile.nodeName",
+                },{
                     title: "创建时间",
                     field: "createTime"
                 },{
@@ -181,13 +184,15 @@
         };
 
         function upload(){
+            var id=$(".addFolder").attr("dataid");
+            console.log("id:++"+id);
             layer.open({
                 type: 2,
                 title: '上传',
                 shadeClose: true,
                 shade: false,
                 area: ['600px', '600px'],
-                content: '${ctx!}/admin/station/upload',
+                content: '${ctx!}/admin/station/upload?nodeCode='+id,
                 end: function(index){
                     $('#table_station_list').bootstrapTable("refresh");
                 }

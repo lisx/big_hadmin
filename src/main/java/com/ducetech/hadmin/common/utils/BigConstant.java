@@ -49,7 +49,7 @@ public class BigConstant {
 
 
     public static String getImageUrl(String file) {
-        return  "http://192.168.4.30:8080/interface/userImg?code="+file;
+        return  "http://192.168.5.127:8088/interface/userImg?code="+file;
     }
 
 }
