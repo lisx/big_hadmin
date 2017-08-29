@@ -266,33 +266,4 @@ public class FireSafetyController extends BaseController {
         }
         return JsonResult.success();
     }
-
-    private void stationFolder(String folder, String nodeCode, BigFile bf,User user) {
-        if(null==folder) {
-            Station area;
-            if(null!=nodeCode&&!nodeCode.equals("undefined")){
-                area=stationDao.findByNodeCode(nodeCode);
-            }else{
-                area=stationDao.findByNodeName(user.getStationArea());
-            }
-            if (null != area) {
-                nodeCode = area.getNodeCode();
-                bf.setNodeCode(nodeCode);
-                bf.setStationFile(area);
-            }else{
-                bf.setNodeCode("0");
-            }
-        }else{
-            bf.setFolderName(folder);
-            BigFile folder1=fileDao.findByFileName(folder);
-            bf.setFolderFile(folder1);
-            Station station = folder1.getStationFile();
-            if (null != station){
-                bf.setStationFile(station);
-                bf.setNodeCode(station.getNodeCode());
-            }
-        }
-        bf.setCreateTime(new Date());
-        bf.setCreateId(user.getId());
-    }
 }

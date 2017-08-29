@@ -153,7 +153,7 @@ public class RollPlayController extends BaseController {
                         bf.setFileType(type);
                         bf.setFileName(file.getOriginalFilename());
                         bf.setFileUrl(filePath);
-                        stationFolder(folder, nodeCode, bf,user);
+                        BigFile.stationFolder(folder, nodeCode, bf, user,fileDao,stationDao);
                         fileDao.saveAndFlush(bf);
                     }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
                         byte[] bytes = file.getBytes();
@@ -167,7 +167,7 @@ public class RollPlayController extends BaseController {
                         bf.setFileType(type);
                         bf.setFileName(file.getOriginalFilename());
                         bf.setFileUrl(filePath);
-                        stationFolder(folder, nodeCode, bf,user);
+                        BigFile.stationFolder(folder, nodeCode, bf, user,fileDao,stationDao);
                         fileDao.saveAndFlush(bf);
                     }else{
                         try {
@@ -191,7 +191,7 @@ public class RollPlayController extends BaseController {
                                 bf.setFileType(type);
                                 bf.setFileName(file.getOriginalFilename());
                                 bf.setFileUrl(filePath);
-                                stationFolder(folder, nodeCode, bf,user);
+                                BigFile.stationFolder(folder, nodeCode, bf, user,fileDao,stationDao);
                                 fileDao.saveAndFlush(bf);
                                 logger.info("success");
                             }else{
@@ -208,7 +208,7 @@ public class RollPlayController extends BaseController {
                                     bf.setFileName(file.getOriginalFilename());
                                     bf.setFolderName(folder);
                                     bf.setFileUrl(filePath);
-                                    stationFolder(folder, nodeCode, bf,user);
+                                    BigFile.stationFolder(folder, nodeCode, bf, user,fileDao,stationDao);
                                     fileDao.saveAndFlush(bf);
                                 } else {
                                     logger.info("上传中" + file.getOriginalFilename() + " chunk:" + chunk, "");
@@ -230,32 +230,5 @@ public class RollPlayController extends BaseController {
         return JsonResult.success();
     }
 
-    private void stationFolder(String folder, String nodeCode, BigFile bf,User user) {
-        if(null==folder) {
-            Station area;
-            if(null!=nodeCode&&!nodeCode.equals("undefined")){
-                area=stationDao.findByNodeCode(nodeCode);
-            }else{
-                area=stationDao.findByNodeName(user.getStationArea());
-            }
-            if (null != area) {
-                nodeCode = area.getNodeCode();
-                bf.setNodeCode(nodeCode);
-                bf.setStationFile(area);
-            }else{
-                bf.setNodeCode("0");
-            }
-        }else{
-            bf.setFolderName(folder);
-            BigFile folder1=fileDao.findByFileName(folder);
-            bf.setFolderFile(folder1);
-            Station station = folder1.getStationFile();
-            if (null != station){
-                bf.setStationFile(station);
-                bf.setNodeCode(station.getNodeCode());
-            }
-        }
-        bf.setCreateTime(new Date());
-        bf.setCreateId(user.getId());
-    }
+
 }

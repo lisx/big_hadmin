@@ -46,6 +46,10 @@ public class BigConstant {
     public static final String Notice="通知管理";
     public static final String Roll="首页滚播图";
     public static final String Edition="前端版本更新";
+    public static final String trainFolder1="题库";
+    public static final String trainFolder2="培训资料";
+    public static final String trainFolder3="信号平面图";
+    public static final String trainFolder4="案例库";
 
 
     public static String getImageUrl(String file) {
