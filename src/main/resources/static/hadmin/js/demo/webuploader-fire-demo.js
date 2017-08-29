@@ -81,7 +81,7 @@ jQuery(function() {
         chunked: true,
         chunkSize:100 * 1024 * 1024,
         // server: 'http://webuploader.duapp.com/server/fileupload.php',
-        server: '/admin/station/uploadFilePost',
+        server: '/admin/fire/uploadFilePost',
         fileNumLimit: 300,
         fileSizeLimit: 2000 * 1024 * 1024,    // 2000 M
         fileSingleSizeLimit: 1500 * 1024 * 1024    // 1500 M

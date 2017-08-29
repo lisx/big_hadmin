@@ -173,7 +173,7 @@ public class TrainController  extends BaseController {
                 try {
                     String suffix=StringUtil.suffix(file.getOriginalFilename());
                         try {
-                            if(StringUtils.isEmpty(chunk+"")) {
+                            if(null==chunks) {
                                 logger.info("不分片的情况");
                                 //不分片的情况
                                 if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {

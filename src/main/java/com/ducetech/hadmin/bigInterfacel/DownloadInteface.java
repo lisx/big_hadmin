@@ -1,5 +1,7 @@
 package com.ducetech.hadmin.bigInterfacel;
 
+import com.ducetech.hadmin.common.utils.BigConstant;
+import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IBigFileDao;
 import com.ducetech.hadmin.entity.BigFile;
@@ -34,9 +36,20 @@ public class DownloadInteface extends BaseController {
         BigFile file=fileDao.findOne(id);
         response.setCharacterEncoding("utf-8");
         response.setContentType("application/force-download");// 设置强制下载不打开
-        response.addHeader("Content-Disposition","attachment;fileName=" + URLEncoder.encode(file.getFileName(), "UTF-8"));// 设置文件名
+        // 设置文件名
         request.setCharacterEncoding("utf-8");
         String path= file.getFileUrl();
+        String suffix= StringUtil.suffix(file.getFileName());
+        if(file.getFileType().equals(BigConstant.office)){
+            if(suffix.equals(BigConstant.pdf)){
+                response.addHeader("Content-Disposition","attachment;fileName=" + URLEncoder.encode(file.getFileName(), "UTF-8"));
+            }else{
+                response.addHeader("Content-Disposition","attachment;fileName=" + URLEncoder.encode(file.getFileName()+BigConstant.pdf, "UTF-8"));
+                path=path+BigConstant.pdf;
+            }
+        }else{
+            response.addHeader("Content-Disposition","attachment;fileName=" + URLEncoder.encode(file.getFileName(), "UTF-8"));
+        }
         ServletOutputStream outputStream = response.getOutputStream();
         returnFile(path,outputStream);
     }

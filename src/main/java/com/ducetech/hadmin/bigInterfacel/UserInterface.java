@@ -87,5 +87,31 @@ public class UserInterface extends BaseController {
         return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
 
-
+    @ApiOperation(value="修改用户密码", notes="修改用户密码")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="code",value="用户工号",dataType="string", paramType = "query"),
+            @ApiImplicitParam(name="oldPassword",value="用户原密码",dataType="string", paramType = "query"),
+            @ApiImplicitParam(name="newPassword",value="用户新密码",dataType="string", paramType = "query")
+    })
+    @RequestMapping(value="/setUserPassword", method=RequestMethod.GET)
+    public JSONObject setUserPassword(String code,String oldPassword,String  newPassword) {
+        User user=userDao.findByUserCode(code);
+        obj=new JSONObject();
+        if(null!=user){
+            if(user.getPassword().equals(MD5Utils.md5(oldPassword))){
+                user.setPassword(MD5Utils.md5(newPassword));
+                userDao.save(user);
+                msg="修改密码成功！";
+                state=1;
+            }else{
+                msg="密码错误！";
+            }
+        }else{
+            msg="工号错误！";
+        }
+        obj.put("state",state);
+        obj.put("msg",msg);
+        obj.put("data","");
+        return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
+    }
 }

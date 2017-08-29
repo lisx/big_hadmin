@@ -15,6 +15,7 @@ import com.ducetech.hadmin.entity.Station;
 import com.ducetech.hadmin.entity.User;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -176,110 +179,89 @@ public class RulesController extends BaseController {
 
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(MultipartHttpServletRequest request, String chunk, String chunks, String size, String folder,String nodeCode){
-        logger.info("进入规章制度上传文件");
+    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, String folder,String nodeCode,String guid){
+        logger.info("进入培训资料上传文件");
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
         MultipartFile file;
-        //创建临时文件夹
-        File dirTempFile = new File(BigConstant.upload);
-        if (!dirTempFile.exists()) {
-            dirTempFile.mkdirs();
-        }
         BufferedOutputStream stream;
         for (int i =0; i< files.size(); ++i) {
+            long flag=new Date().getTime();
             file = files.get(i);
-            String type = null;
-            String filePath=BigConstant.upload+file.getOriginalFilename();
             if (!file.isEmpty()) {
                 try {
-                    String suffix=StringUtil.suffix(filePath);
-                    if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)) {
-                        filePath=BigConstant.upload+file.getOriginalFilename();
-                        byte[] bytes = file.getBytes();
-                        stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
-                        stream.write(bytes);
-                        stream.close();
-                        PdfUtil.office2PDF(filePath, filePath + BigConstant.pdf);
-                        type="office";
-                        BigFile bf=new BigFile();
-                        bf.setFileSize(""+Math.round(file.getSize()/1024));
-                        bf.setMenuType("规章制度");
-                        bf.setFileType(type);
-                        bf.setFileName(file.getOriginalFilename());
-                        bf.setFileUrl(filePath);
-                        stationFolder(folder, nodeCode, bf,user);
-                        fileDao.saveAndFlush(bf);
-                    }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
-                        byte[] bytes = file.getBytes();
-                        stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
-                        stream.write(bytes);
-                        stream.close();
-                        type="image";
-                        BigFile bf=new BigFile();
-                        bf.setFileSize(""+Math.round(file.getSize()/1024));
-                        bf.setMenuType("规章制度");
-                        bf.setFileType(type);
-                        bf.setFileName(file.getOriginalFilename());
-                        bf.setFileUrl(filePath);
-                        stationFolder(folder, nodeCode, bf,user);
-                        fileDao.saveAndFlush(bf);
-                    }else{
-                        try {
+                    String suffix=StringUtil.suffix(file.getOriginalFilename());
+                    try {
+                        if(null==chunks) {
+                            logger.info("不分片的情况");
+                            //不分片的情况
+                            if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {
+                                BigFile.saveFile(folder, nodeCode, user, file,BigConstant.office,BigConstant.Rules,flag,fileDao,stationDao);
+                            }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
+                                BigFile.saveFile(folder, nodeCode, user, file,BigConstant.image,BigConstant.Rules,flag,fileDao,stationDao);
+                            }else {
+                                BigFile.saveFile(folder, nodeCode, user, file, BigConstant.video, BigConstant.Rules, flag, fileDao, stationDao);
+                            }
+                        }else{
+                            logger.info("分片的情况");
+                            String tempFileDir = BigConstant.uploadChunk+guid+"/";
+                            String realname = file.getOriginalFilename();
+                            // 临时目录用来存放所有分片文件
+                            File parentFileDir = new File(tempFileDir+realname+"/");
+                            if (!parentFileDir.exists()) {
+                                parentFileDir.mkdirs();
+                            }
+                            // 分片处理时，前台会多次调用上传接口，每次都会上传文件的一部分到后台
+                            File tempPartFile = new File(parentFileDir, chunk+"");
                             byte[] bytes = file.getBytes();
-                            stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
+                            stream = new BufferedOutputStream(new FileOutputStream(tempPartFile));
                             stream.write(bytes);
                             stream.close();
-                            //拿到文件对象
-                            //第一个参数是目标文件的完整路径
-                            //第二参数是webupload分片传过来的文件
-                            //FileUtil的这个方法是把目标文件的指针，移到文件末尾，然后把分片文件追加进去，实现文件合并。简单说。就是每次最新的分片合到一个文件里面去。
-                            FileUtil.randomAccessFile(BigConstant.upload+file.getOriginalFilename(), file);
-                            //如果文件小与5M的话，分片参数chunk的值是null
-                            //5M的这个阈值是在upload3.js中的chunkSize属性决定的，超过chunkSize设置的大小才会进行分片，否则就不分片，不分片的话，webupload传到后台的chunk参数值就是null
-                            if(StringUtils.isEmpty(chunk)) {
-                                //不分片的情况
-                                type = "video";
-                                BigFile bf = new BigFile();
-                                bf.setFileSize("" + Math.round(Integer.parseInt(size) / 1024));
-                                bf.setMenuType("规章制度");
-                                bf.setFileType(type);
-                                bf.setFileName(file.getOriginalFilename());
-                                bf.setFileUrl(filePath);
-                                stationFolder(folder, nodeCode, bf,user);
-                                fileDao.saveAndFlush(bf);
-                                logger.info("success");
-                            }else{
-                                //分片的情况
-                                //chunk 分片索引，下标从0开始
-                                //chunks 总分片数
-                                if (Integer.valueOf(chunk) == (Integer.valueOf(chunks) - 1)) {
-                                    type="video";
-                                    logger.info("上传成功");
-                                    BigFile bf=new BigFile();
-                                    bf.setFileSize(""+Math.round(Integer.parseInt(size)/1024));
-                                    bf.setMenuType("规章制度");
-                                    bf.setFileType(type);
-                                    bf.setFileName(file.getOriginalFilename());
-                                    bf.setFolderName(folder);
-                                    bf.setFileUrl(filePath);
-                                    stationFolder(folder, nodeCode, bf,user);
-                                    fileDao.saveAndFlush(bf);
-                                } else {
-                                    logger.info("上传中" + file.getOriginalFilename() + " chunk:" + chunk, "");
+                            // 是否全部上传完成
+                            // 所有分片都存在才说明整个文件上传完成
+                            boolean uploadDone = true;
+                            for (int c = 0; c < chunks; c++) {
+                                File partFile = new File(parentFileDir, c+"");
+                                if (!partFile.exists()) {
+                                    uploadDone = false;
+                                    break;
                                 }
                             }
-                        } catch (Exception e) {
-                            logger.info("上传失败{}",e.getMessage());
+                            // 所有分片文件都上传完成
+                            // 将所有分片文件合并到一个文件中
+                            logger.info("|||||||"+uploadDone);
+                            if (uploadDone) {
+                                File[] array = parentFileDir.listFiles();
+                                List<Integer> fileNames=new ArrayList<>();
+                                for (int a=0;a<array.length;a++){
+                                    logger.info("arr"+array[a].getName());
+                                    fileNames.add(Integer.parseInt(array[a].getName()));
+                                }
+                                Collections.sort(fileNames);
+                                //     得到 destTempFile 就是最终的文件
+                                FileUtil.merge(BigConstant.upload,fileNames,realname,guid,flag);
+                                // 删除临时目录中的分片文件
+                                FileUtils.deleteDirectory(parentFileDir);
+                                if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {
+                                    BigFile.saveFile(size,folder, nodeCode, user, file,BigConstant.office,BigConstant.Rules,flag,fileDao,stationDao);
+                                }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
+                                    BigFile.saveFile(size,folder, nodeCode, user, file,BigConstant.image,BigConstant.Rules,flag,fileDao,stationDao);
+                                }else {
+                                    BigFile.saveFile(size,folder, nodeCode, user, file, BigConstant.video, BigConstant.Rules, flag, fileDao, stationDao);
+                                }
+                            } else {
+                                logger.info("上传中 chunks" + chunks + " chunk:" + chunk, "");
+                            }
                         }
+                    } catch (Exception e) {
+                        logger.info("上传失败{}",e.getMessage());
                     }
 
                 } catch (Exception e) {
-                    //stream =  null;
-                    return JsonResult.success("You failed to upload " + i + " =>" + e.getMessage());
+                    logger.info(e.getMessage());
                 }
             } else {
-                return JsonResult.success("You failed to upload " + i + " becausethe file was empty.");
+                return JsonResult.failure("You failed to upload " + i + " becausethe file was empty.");
             }
         }
         return JsonResult.success();

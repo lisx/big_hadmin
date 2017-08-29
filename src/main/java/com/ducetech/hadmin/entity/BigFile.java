@@ -71,6 +71,7 @@ public class BigFile extends BaseEntity {
 
     //文件大小
     private String fileSize;
+    private String byteSize;
     //文件类型
     private String fileType;
     //归属文件夹
@@ -118,6 +119,7 @@ public class BigFile extends BaseEntity {
             bf.setFileType(fileType);
             bf.setFileName(file.getOriginalFilename());
             bf.setFileUrl(filePath);
+            bf.setByteSize(file.getSize()+"");
             bf.setIfUse(0);
             stationFolder(folder, nodeCode, bf, user,fileDao,stationDao);
             fileDao.saveAndFlush(bf);
@@ -137,6 +139,7 @@ public class BigFile extends BaseEntity {
             oldFile.renameTo(newFile);
             BigFile bf = new BigFile();
             bf.setFileSize("" + Math.round(size/ 1024));
+            bf.setByteSize(size+"");
             bf.setMenuType(menuType);
             bf.setFileType(fileType);
             bf.setFileName(file.getOriginalFilename());

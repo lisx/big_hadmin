@@ -55,6 +55,8 @@ public class EditionController extends BaseController {
             BigFile bigFile=new BigFile();
             bigFile.setIfUse(0);
             bigFile.setFileUrl(path);
+            bigFile.setFileType("APK");
+            bigFile.setByteSize(file.getSize()+"");
             bigFile.setFileName(file.getOriginalFilename());
             bigFile.setFileSize(""+Math.round(file.getSize()/1024));
             bigFile.setMenuType(BigConstant.Edition);
