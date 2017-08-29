@@ -191,7 +191,7 @@ public class StationController extends BaseController {
 
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(MultipartHttpServletRequest request, String chunk, String chunks, String size, String folder,String nodeCode){
+    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, String folder,String nodeCode){
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
         MultipartFile file;
@@ -208,7 +208,7 @@ public class StationController extends BaseController {
                         BigFile.saveFile(folder, nodeCode, user, file,BigConstant.image,BigConstant.Station,flag,fileDao,stationDao);
                     }else{
                         try {
-                            if(com.alibaba.druid.util.StringUtils.isEmpty(chunk)) {
+                            if(com.alibaba.druid.util.StringUtils.isEmpty(chunk+"")) {
                                 //不分片的情况
                                 logger.info("不分片的情况");
                                 BigFile.saveFile(folder, nodeCode, user, file,BigConstant.video,BigConstant.Station,flag,fileDao,stationDao);

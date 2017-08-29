@@ -86,7 +86,7 @@ jQuery(function() {
         },
         //分片
         chunked: true,
-        chunkSize:20 * 1024 * 1024,
+        chunkSize:100 * 1024 * 1024,
         // server: 'http://webuploader.duapp.com/server/fileupload.php',
         server: '/admin/train/uploadFilePost',
         fileNumLimit: 300,

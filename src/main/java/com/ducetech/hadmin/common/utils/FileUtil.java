@@ -3,10 +3,7 @@ package com.ducetech.hadmin.common.utils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.*;
 
 /**
  * 文件类
@@ -58,17 +55,18 @@ public class FileUtil {
      * 注意：在拼接文件路劲时，一定不要忘记文件的跟路径，否则复制不成功
      * @param destPath 目标目录
      * @param srcPaths 源文件目录
+     * @param flag
      */
-    public static void merge(String destPath,String [] srcPaths,String destName,String guid){
+    public static void merge(String destPath, List<Integer> srcPaths, String destName, String guid, long flag){
         if(destPath==null||"".equals(destPath)||srcPaths==null){
             System.out.println("合并失败");
         }
-        for (String string : srcPaths) {
+        for (Integer string : srcPaths) {
             if("".equals(string)||string==null)
                 System.out.println("合并失败");
         }
         //合并后的文件名
-        destPath = destPath+destName;//合并后的文件路径
+        destPath = destPath+flag+destName;//合并后的文件路径
 
         File destFile = new File(destPath);//合并后的文件
         OutputStream out = null;
@@ -76,8 +74,9 @@ public class FileUtil {
         try {
             out = new FileOutputStream(destFile);
             bos = new BufferedOutputStream(out);
-            for (String src : srcPaths) {
-                File srcFile = new File(BigConstant.uploadChunk+src);
+            for (Integer src : srcPaths) {
+                System.out.println("src::"+BigConstant.uploadChunk+guid+"/"+destName+"/"+src);
+                File srcFile = new File(BigConstant.uploadChunk+guid+"/"+destName+"/"+src);
                 InputStream in = new FileInputStream(srcFile);
                 BufferedInputStream bis = new BufferedInputStream(in);
                 byte[] bytes = new byte[1024*1024];

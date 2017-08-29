@@ -180,7 +180,7 @@ public class EmergencyController  extends BaseController {
 
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(MultipartHttpServletRequest request, String chunk, String chunks, String size, String folder,String nodeCode){
+    public JsonResult uploadFilePost(MultipartHttpServletRequest request, int chunk, int chunks, int size, String folder,String nodeCode){
         logger.info("进入应急预案上传文件");
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
@@ -198,7 +198,7 @@ public class EmergencyController  extends BaseController {
                         BigFile.saveFile(folder, nodeCode, user, file,BigConstant.image,BigConstant.Emergency,flag,fileDao,stationDao);
                     }else{
                         try {
-                            if(StringUtils.isEmpty(chunk)) {
+                            if(StringUtils.isEmpty(chunk+"")) {
                                 //不分片的情况
                                 logger.info("不分片的情况");
                                 BigFile.saveFile(folder, nodeCode, user, file,BigConstant.video,BigConstant.Emergency,flag,fileDao,stationDao);

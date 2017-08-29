@@ -29,6 +29,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -170,27 +172,28 @@ public class TrainController  extends BaseController {
             if (!file.isEmpty()) {
                 try {
                     String suffix=StringUtil.suffix(file.getOriginalFilename());
-                    if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {
-                        BigFile.saveFile(folder, nodeCode, user, file,BigConstant.office,BigConstant.TRAIN,flag,fileDao,stationDao);
-                    }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
-                        BigFile.saveFile(folder, nodeCode, user, file,BigConstant.image,BigConstant.TRAIN,flag,fileDao,stationDao);
-                    }else{
                         try {
                             if(StringUtils.isEmpty(chunk+"")) {
-                                //不分片的情况
                                 logger.info("不分片的情况");
-                                BigFile.saveFile(folder, nodeCode, user, file,BigConstant.video,BigConstant.TRAIN,flag,fileDao,stationDao);
+                                //不分片的情况
+                                if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {
+                                    BigFile.saveFile(folder, nodeCode, user, file,BigConstant.office,BigConstant.TRAIN,flag,fileDao,stationDao);
+                                }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
+                                    BigFile.saveFile(folder, nodeCode, user, file,BigConstant.image,BigConstant.TRAIN,flag,fileDao,stationDao);
+                                }else {
+                                    BigFile.saveFile(folder, nodeCode, user, file, BigConstant.video, BigConstant.TRAIN, flag, fileDao, stationDao);
+                                }
                             }else{
                                 logger.info("分片的情况");
                                 String tempFileDir = BigConstant.uploadChunk+guid+"/";
                                 String realname = file.getOriginalFilename();
                                 // 临时目录用来存放所有分片文件
-                                File parentFileDir = new File(tempFileDir);
+                                File parentFileDir = new File(tempFileDir+realname+"/");
                                 if (!parentFileDir.exists()) {
                                     parentFileDir.mkdirs();
                                 }
                                 // 分片处理时，前台会多次调用上传接口，每次都会上传文件的一部分到后台
-                                File tempPartFile = new File(parentFileDir, realname + chunk + ".part");
+                                File tempPartFile = new File(parentFileDir, chunk+"");
                                 byte[] bytes = file.getBytes();
                                 stream = new BufferedOutputStream(new FileOutputStream(tempPartFile));
                                 stream.write(bytes);
@@ -198,8 +201,8 @@ public class TrainController  extends BaseController {
                                 // 是否全部上传完成
                                 // 所有分片都存在才说明整个文件上传完成
                                 boolean uploadDone = true;
-                                for (int c = 0; c < chunks; i++) {
-                                    File partFile = new File(parentFileDir, realname + c + ".part");
+                                for (int c = 0; c < chunks; c++) {
+                                    File partFile = new File(parentFileDir, c+"");
                                     if (!partFile.exists()) {
                                         uploadDone = false;
                                         break;
@@ -207,17 +210,32 @@ public class TrainController  extends BaseController {
                                 }
                                 // 所有分片文件都上传完成
                                 // 将所有分片文件合并到一个文件中
+                                logger.info("|||||||"+uploadDone);
                                 if (uploadDone) {
-                                    String [] fileNames=new String[chunks];
+                                   // String [] fileNames=new String[chunks];
                                     File[] array = parentFileDir.listFiles();
+//                                    for (int a=0;a<array.length;a++){
+//                                        fileNames[a]=array[a].getName();
+//                                    }
+                                    List<Integer> fileNames=new ArrayList<>();
                                     for (int a=0;a<array.length;a++){
-                                        fileNames[a]=array[a].getName();
+                                        logger.info("arr"+array[a].getName());
+                                        fileNames.add(Integer.parseInt(array[a].getName()));
                                     }
-                                        // 得到 destTempFile 就是最终的文件
-                                    FileUtil.merge(BigConstant.upload,fileNames,realname,guid);
+                                    Collections.sort(fileNames);
+                                    //     得到 destTempFile 就是最终的文件
+                                    FileUtil.merge(BigConstant.upload,fileNames,realname,guid,flag);
                                     // 删除临时目录中的分片文件
                                     FileUtils.deleteDirectory(parentFileDir);
+                                    if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {
+                                        BigFile.saveFile(size,folder, nodeCode, user, file,BigConstant.office,BigConstant.TRAIN,flag,fileDao,stationDao);
+                                    }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
+                                        BigFile.saveFile(size,folder, nodeCode, user, file,BigConstant.image,BigConstant.TRAIN,flag,fileDao,stationDao);
+                                    }else {
+                                        BigFile.saveFile(size,folder, nodeCode, user, file, BigConstant.video, BigConstant.TRAIN, flag, fileDao, stationDao);
+                                    }
                                 } else {
+                                    logger.info("上传中 chunks" + chunks + " chunk:" + chunk, "");
                                     // 临时文件创建失败
 //                                    if (chunk == chunks -1) {
 //                                        FileUtils.deleteDirectory(parentFileDir);
@@ -234,7 +252,6 @@ public class TrainController  extends BaseController {
                         } catch (Exception e) {
                             logger.info("上传失败{}",e.getMessage());
                         }
-                    }
 
                 } catch (Exception e) {
                     logger.info(e.getMessage());
