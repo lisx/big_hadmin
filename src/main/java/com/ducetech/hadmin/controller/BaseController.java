@@ -2,7 +2,6 @@ package com.ducetech.hadmin.controller;
 
 import com.ducetech.hadmin.common.DateEditor;
 import com.ducetech.hadmin.entity.User;
-import com.ducetech.hadmin.service.IUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -29,9 +28,6 @@ public class BaseController {
 
 	@Autowired
 	protected HttpServletResponse response;
-
-	@Autowired
-	private IUserService userService;
 
 	@InitBinder
     protected void initBinder(WebDataBinder webDataBinder) {

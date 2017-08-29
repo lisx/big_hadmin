@@ -27,8 +27,8 @@ public class Notice extends BaseEntity {
     private String title;
     //通知内容
     private String content;
-    //站区
-    private String areaName;
+    //文件集
+    private String files;
     //站点
     private String stationName;
     //是否使用

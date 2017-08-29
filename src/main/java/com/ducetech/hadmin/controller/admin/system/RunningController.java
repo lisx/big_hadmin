@@ -129,7 +129,7 @@ public class RunningController extends BaseController {
             fileDao.save(bigFile);
             running.setFileId(bigFile.getId());
             runningDao.save(running);
-            return JsonResult.success();
+            return JsonResult.success("处理成功了亲");
         } catch (IllegalStateException e) {
             e.printStackTrace();
         } catch (IOException e) {

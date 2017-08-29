@@ -4,13 +4,12 @@ import com.ducetech.hadmin.common.JsonResult;
 import com.ducetech.hadmin.common.utils.BigConstant;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
+import com.ducetech.hadmin.dao.IBigFileDao;
 import com.ducetech.hadmin.dao.INoticeDao;
 import com.ducetech.hadmin.dao.INoticeDao;
 import com.ducetech.hadmin.dao.IStationDao;
+import com.ducetech.hadmin.entity.*;
 import com.ducetech.hadmin.entity.Notice;
-import com.ducetech.hadmin.entity.Notice;
-import com.ducetech.hadmin.entity.Station;
-import com.ducetech.hadmin.entity.User;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator;
 import org.apache.commons.lang3.StringUtils;
@@ -31,6 +30,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -48,6 +48,8 @@ public class NoticeController extends BaseController {
     private IStationDao stationDao;
     @Autowired
     INoticeDao noticeDao;
+    @Autowired
+    IBigFileDao fileDao;
 
     /**
      * 通知首页
@@ -113,10 +115,40 @@ public class NoticeController extends BaseController {
     @ResponseBody
     public JsonResult uploadFilePost(MultipartHttpServletRequest request,String [] area, Notice notice){
         logger.info("进入通知上传文件{}",area.length);
+        List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
+        MultipartFile file;
+        BufferedOutputStream stream;
+        List<Integer> list=new ArrayList<>();
+        for (int i =0; i< files.size(); ++i) {
+            long flag = new Date().getTime();
+            file = files.get(i);
+            if (!file.isEmpty()) {
+                try {
+                    String suffix = StringUtil.suffix(file.getOriginalFilename());
+                    File tempPartFile = new File(BigConstant.upload, +flag+file.getOriginalFilename());
+                    byte[] bytes = file.getBytes();
+                    stream = new BufferedOutputStream(new FileOutputStream(tempPartFile));
+                    stream.write(bytes);
+                    stream.close();
+                    BigFile bigFile=new BigFile();
+                    bigFile.setIfUse(0);
+                    bigFile.setFileName(file.getOriginalFilename());
+                    bigFile.setFileType(suffix);
+                    bigFile.setMenuType(BigConstant.Notice);
+                    bigFile.setByteSize(file.getSize()+"");
+                    fileDao.saveAndFlush(bigFile);
+                    list.add(bigFile.getId());
+                } catch (Exception e) {
+                    logger.info("上传失败{}", e.getMessage());
+                }
+            }
+        }
         notice.setStationName(StringUtils.join(area,","));
         notice.setCreateId(user.getId());
         notice.setIfUse(0);
+        if(list.size()>0)
+        notice.setFiles(StringUtils.join(list,","));
         notice.setCreateTime(new Date());
         noticeDao.save(notice);
         return JsonResult.success();

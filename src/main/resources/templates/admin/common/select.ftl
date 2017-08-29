@@ -1,6 +1,6 @@
 <#--通用型的select语句-->
-<#macro select id class datas multiple value="" defaultValue="" key="" text="">
-<select id="${id}" name="${id}" multiple="${multiple}" class="${class}">
+<#macro select id class datas  value="" defaultValue="" key="" text="">
+<select id="${id}" name="${id}" class="${class}">
     <option value="">${defaultValue}</option>
 <#--判断对象是否为map-->
     <#if datas?is_hash_ex>

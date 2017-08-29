@@ -105,6 +105,7 @@ public class UserInterface extends BaseController {
                 state=1;
             }else{
                 msg="密码错误！";
+                state=0;
             }
         }else{
             msg="工号错误！";

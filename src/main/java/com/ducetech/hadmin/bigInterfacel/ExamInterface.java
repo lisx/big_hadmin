@@ -206,7 +206,7 @@ public class ExamInterface  extends BaseController {
             o.put("questions",questions);
             obj=new JSONObject();
             obj.put("state",state);
-            obj.put("msg",msg);
+            obj.put("msg","获取成功");
             obj.put("data",o);
         }else{
             obj=new JSONObject();
@@ -263,7 +263,7 @@ public class ExamInterface  extends BaseController {
             @ApiImplicitParam(name = "properIds", value = "答案Id", dataType = "String", paramType = "query")
     })
     public JSONObject questionExamLog(Integer logId,Integer questionId,String properIds){
-        logger.info("获取练习题");
+        logger.info("获取练习题logId:{}|questionId:{}|properIds:{}",logId,questionId,properIds);
         ExamLog examLog=examLogDao.findOne(logId);
         Question question=questionDao.findOne(questionId);
         List<Proper> propers=new ArrayList<>();
@@ -282,21 +282,26 @@ public class ExamInterface  extends BaseController {
                 score=exam.getSingleScore();
             }
         }else if(question.getMenuType().equals("排序")){
-            String[] ids = properIds.split(",");
-            if (ids.length > 0) {
-                String answer="";
-                for (String id : ids) {
-                    Proper proper = properDao.findOne(Integer.parseInt(id));
-                    if(null!=proper) {
-                        propers.add(proper);
-                        answer = answer + proper.getName() + "/";
-                    }
-                }
-                answer=answer.substring(0, answer.length()-1);
-                if(question.getProper().equals(answer)){
-                    score=exam.getRankScore();
-                }
+            if(properIds.equals("1")){
+
+            }else{
+                score=exam.getRankScore();
             }
+//            String[] ids = properIds.split(",");
+//            if (ids.length > 0) {
+//                String answer="";
+//                for (String id : ids) {
+//                    Proper proper = properDao.findOne(Integer.parseInt(id));
+//                    if(null!=proper) {
+//                        propers.add(proper);
+//                        answer = answer + proper.getName() + "/";
+//                    }
+//                }
+//                answer=answer.substring(0, answer.length()-1);
+//                if(question.getProper().equals(answer)){
+//                    score=exam.getRankScore();
+//                }
+//            }
         }else{
             String[] ids = properIds.split(",");
             if (ids.length > 0) {
@@ -319,17 +324,19 @@ public class ExamInterface  extends BaseController {
         }
         log.setSelectProper(propers);
         questionLogDao.save(log);
+        if(score!=0) {
+            msg="答对";
+        }else{
+            msg="答错";
+        }
         JSONObject o=new JSONObject();
         if(null!=examLog.getScore()) {
-            if(score!=0) {
                 o.put("score",score);
                 score = score + examLog.getScore();
                 o.put("total",score);
-                msg="答对";
-            }else{
-                msg="答错";
-                state=0;
-            }
+        }else {
+            o.put("score",score);
+            o.put("total",score);
         }
         examLog.setScore(score);
         examLogDao.saveAndFlush(examLog);
