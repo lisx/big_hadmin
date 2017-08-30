@@ -123,6 +123,7 @@ public class RunningController extends BaseController {
             running.setIfUse(0);
             running.setFileName(file.getOriginalFilename());
             bigFile.setFileUrl(path);
+            bigFile.setFileType(BigConstant.image);
             bigFile.setFileName(file.getOriginalFilename());
             bigFile.setFileSize(""+Math.round(file.getSize()/1024));
             bigFile.setMenuType(BigConstant.Running);
