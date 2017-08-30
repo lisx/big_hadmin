@@ -155,12 +155,17 @@ public class BigFile extends BaseEntity {
     }
 
     public static void stationFolder(String folder, String nodeCode, BigFile bf, User user, IBigFileDao fileDao, IStationDao stationDao) {
-        if(null==folder) {
+        if(null==folder||folder.equals(BigConstant.trainFolder1)||folder.equals(BigConstant.trainFolder2)||folder.equals(BigConstant.trainFolder3)||folder.equals(BigConstant.trainFolder4)){
             Station area;
             if(null!=nodeCode&&!nodeCode.equals("undefined")){
                 area=stationDao.findByNodeCode(nodeCode);
             }else{
                 area=stationDao.findByNodeName(user.getStationArea());
+            }
+            if(null!=folder){
+                bf.setFolderName(folder);
+                BigFile folderd=fileDao.findByFileName(folder);
+                bf.setFolderFile(folderd);
             }
             if (null != area) {
                 nodeCode = area.getNodeCode();

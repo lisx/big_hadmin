@@ -141,11 +141,11 @@
             <artifactId>lombok</artifactId>
             <version>1.16.2</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-devtools</artifactId>-->
-            <!--<optional>true</optional>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
@@ -179,16 +179,16 @@
         </dependency>
     </dependencies>
 	<build>
-        <resources>
-            <resource>
-                <directory>${project.basedir}/src/main/resources/static/hadmin/fonts</directory>
-                <filtering>false</filtering>
-                <includes>
-                    <include>*.woff</include>
-                    <include>*.ttf</include>
-                </includes>
-            </resource>
-        </resources>
+        <!--<resources>-->
+            <!--<resource>-->
+                <!--<directory>${project.basedir}/src/main/resources/static/hadmin/fonts</directory>-->
+                <!--<filtering>false</filtering>-->
+                <!--<includes>-->
+                    <!--<include>*.woff</include>-->
+                    <!--<include>*.ttf</include>-->
+                <!--</includes>-->
+            <!--</resource>-->
+        <!--</resources>-->
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

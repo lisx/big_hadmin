@@ -2,7 +2,7 @@
 <#include "/admin/common/js.ftl">
 <#include "/admin/common/css.ftl">
 <#include "/admin/common/webuploader.ftl">
-<#include "/admin/common/ztree.ftl">
+
 <body class="gray-bg">
     <div class="wrapper wrapper-content  animated fadeInRight">
         <div class="row">
@@ -21,19 +21,8 @@
                             <div class="tab-content">
                                 <div id="tab-1" class="tab-pane active">
                                     <div class="panel-body">
-                                            <p>
-                                            <@shiro.hasPermission name="system:resource:add">
-                                                <button class="btn btn-success uploadFile" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传资料</button>
-                                                <button class="btn btn-success addFolder" type="button" onclick="addFolder();"><i class="fa fa-plus"></i>&nbsp;新建文件夹</button>
-                                                <span class="spanStation"></span>
-                                            </@shiro.hasPermission>
-                                            </p>
-                                            <hr>
                                             <div class="row">
-                                                <div class="col-sm-2">
-                                                    <div class='tree'><ul id="treeDemo" class="ztree"></ul></div>
-                                                </div>
-                                                <div class="col-sm-10">
+                                                <div class="col-sm-12">
                                                     <!-- Example Card View -->
                                                     <div class="example-wrap">
                                                         <div class="example">
@@ -99,34 +88,7 @@
         </div>
     </div>
     <script type="text/javascript">
-        var setting = {
-            data: {
-                simpleData: {
-                    enable: true
-                }
-            },
-            callback: {
-                onClick: onClick
-            }
-        };
 
-        /*单击节点显示节点详情*/
-        function onClick(e,treeId,treeNode){
-            console.log("|||"+treeNode.id+"|||"+treeNode.name)
-            //初始化表格,动态从服务器加载数据
-            $(".uploadFile").attr("dataid",treeNode.id);
-            $(".addFolder").attr("dataid",treeNode.id);
-            $(".spanStation").html(treeNode.name);
-            var opt = {
-                url: "${ctx!}/admin/train/list",
-                silent: true,
-                query:{
-                    nodeCode:treeNode.id
-                }
-            };
-            $("#table_train_list").bootstrapTable('refresh', opt);
-
-        }
     </script>
     <!-- Page-Level Scripts -->
     <script>
@@ -186,16 +148,6 @@
                         }
                     }
                 },{
-                    title: "归属",
-                    field: "stationFile",
-                    formatter: function(value ,row,index) {
-                        if (value!=null) {
-                            return value.nodeName;
-                        }else{
-                            return "运三分公司";
-                        }
-                    }
-                },{
                     title: "大小",
                     field: "fileSize"
                 },{
@@ -211,15 +163,11 @@
                         }else{
                             operateHtml='<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="down(\''+row.id+'\',\''+row.fileName+'\')"><i class="fa fa-edit"></i>&nbsp;下载</button> &nbsp;</@shiro.hasPermission>';
                         }
-                    	operateHtml = operateHtml + '<@shiro.hasPermission name="system:resource:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="delFolder(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button></@shiro.hasPermission>';
                         return operateHtml;
                     }
 			    }]
 			});
-            $.get("${ctx!}/admin/station/tree",function(data){
-                var zNodes =eval(data);
-                $.fn.zTree.init($("#treeDemo"), setting, zNodes);
-            })
+
             //初始化表格,动态从服务器加载数据
             $("#table_bank_list").bootstrapTable({
                 //使用get请求到服务器获取数据
@@ -355,46 +303,9 @@
                 }]
             });
         });
-        //下载文件
-        function down(id,name){
-            console.log(id+"|||||"+name);
-            var a = document.createElement('a');
-            a.href = "${ctx!}/admin/download/"+id;
-            a.download = name;
-            a.click();
-        }
-        //上传培训资料
-        function uploadFile(){
-            var id=$(".addFolder").attr("dataid");
-            console.log("id:++"+id);
-            layer.open({
-                type: 2,
-                title: '批量上传资料',
-                shadeClose: true,
-                shade: false,
-                area: ['600px', '600px'],
-                content: '${ctx!}/admin/train/uploadFile?nodeCode='+id,
-                end: function(index){
-                    $('#table_train_list').bootstrapTable("refresh");
-                }
-            });
-        }
-        function addFolder(){
-            var nodeCode=$(".addFolder").attr("dataid");
-            layer.open({
-                type: 2,
-                title: '新建文件夹',
-                shadeClose: true,
-                shade: false,
-                area: ['400px', '400px'],
-                content: '${ctx!}/admin/train/add?nodeCode='+nodeCode+'&menu="培训资料"',
-                end: function(index){
-                    $('#table_train_list').bootstrapTable("refresh");
-                }
-            });
-        }
+
         function showFolder(folder){
-            var station=$(".addFolder").attr("dataid");
+            var station=$(".addFolder").attr("data-code");
             layer.open({
                 type: 2,
                 title: '查看文件夹',

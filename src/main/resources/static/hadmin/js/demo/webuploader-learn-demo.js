@@ -82,6 +82,7 @@ jQuery(function() {
         formData: {
             folder: $("#folder").val(),
             nodeCode: $("#nodeCode").val(),
+            menuType: $("#menuType").val(),
             guid: WebUploader.Base.guid()
         },
         //分片

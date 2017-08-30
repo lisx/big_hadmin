@@ -10,6 +10,7 @@
             <div class="form-group">
                 <input type="hidden" id="folder" name="folder" value="${folder}">
                 <input type="hidden" id="nodeCode" name="nodeCode" value="${nodeCode}">
+                <input type="hidden" id="menuType" name="menuType" value="${menuType}">
             </div>
         </div>
 
