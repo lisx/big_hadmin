@@ -37,7 +37,7 @@ public class Notice extends BaseEntity {
      * 创建时间
      */
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime;
+    private String createTime;
     private Integer createId;
     /**
      * 更新时间

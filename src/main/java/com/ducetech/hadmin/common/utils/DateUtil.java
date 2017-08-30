@@ -35,4 +35,20 @@ public class DateUtil {
         date = formatter.parse(strTime);
         return date;
     }
+    /**
+     * 格式化日期到字符串
+     * @param date Date
+     * @param formatStr 格式化字符串
+     * @return
+     */
+    public static String dateFormat(Date date,String formatStr){
+        SimpleDateFormat formater=null;
+        try{
+            formater=new SimpleDateFormat(formatStr);
+
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return formater.format(date);
+    }
 }

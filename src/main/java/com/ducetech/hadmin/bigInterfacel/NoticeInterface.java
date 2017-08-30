@@ -7,6 +7,7 @@ import com.ducetech.hadmin.dao.IRunningDao;
 import com.ducetech.hadmin.entity.Notice;
 import com.ducetech.hadmin.entity.Running;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,15 +35,26 @@ public class NoticeInterface {
     INoticeDao noticeDao;
     @ApiOperation(value="根据站点查询通知",notes="根据站点查询通知")
     @RequestMapping(value="/findByStation",method = RequestMethod.GET)
-    @ApiImplicitParam(name="station",value="站点",dataType="string", paramType = "query")
-    public JSONObject findByStation(String station){
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="station",value="站点",dataType="string", paramType = "query"),
+            @ApiImplicitParam(name="date",value="时间",dataType="string", paramType = "query")
+    })
+    public JSONObject findByStation(String station,String date){
         logger.info("根据站点查询通知");
         obj=new JSONObject();
-        List<Notice> notices=noticeDao.findByStationNameIsLike("%"+station+"%");
+        List<Notice> notices=noticeDao.findByStationNameIsLikeAndCreateTimeLike("%"+station+"%","%"+date+"%");
+        if(null!=notices&&notices.size()>0){
+            state=1;
+            msg="查询成功";
+        }else{
+            state=0;
+            msg="暂无数据";
+        }
         logger.info("|||||"+String.valueOf(notices.size()));
         obj.put("data", notices);
-        obj.put("msg","查询成功");
-        obj.put("state","1");
+        obj.put("msg",msg);
+        obj.put("state",state);
         return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
 }

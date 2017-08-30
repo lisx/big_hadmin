@@ -2,6 +2,7 @@ package com.ducetech.hadmin.controller.admin.system;
 
 import com.ducetech.hadmin.common.JsonResult;
 import com.ducetech.hadmin.common.utils.BigConstant;
+import com.ducetech.hadmin.common.utils.DateUtil;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IBigFileDao;
@@ -149,7 +150,7 @@ public class NoticeController extends BaseController {
         notice.setIfUse(0);
         if(list.size()>0)
         notice.setFiles(StringUtils.join(list,","));
-        notice.setCreateTime(new Date());
+        notice.setCreateTime(DateUtil.dateFormat(new Date(),"yyyy-MM-dd HH:mm:ss"));
         noticeDao.save(notice);
         return JsonResult.success();
     }

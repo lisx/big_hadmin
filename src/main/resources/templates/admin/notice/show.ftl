@@ -13,10 +13,21 @@
             </div>
         </div>
         <div class="form-group">
+            <label class="col-sm-3 control-label">接收单位：</label>
+            <div class="col-sm-8">
+                ${notice.stationName}
+            </div>
+        </div>
+        <div class="form-group">
             <label class="col-sm-3 control-label">内容：</label>
             <div class="col-sm-8">
-                <div class="noticeContent">
-                </div>
+                ${notice.content}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">附件：</label>
+            <div class="col-sm-8">
+            ${notice.files}
             </div>
         </div>
     </form>
