@@ -30,7 +30,7 @@
     	    },
     	    messages: {},
     	    submitHandler:function(form){
-    	        var url="${ctx!}/admin/train/saveFolder?nodeCode=${nodeCode}&menu=${menu}";
+    	        var url="${ctx!}/admin/train/saveFolder?nodeCode=${nodeCode}&menuType=${menuType}";
     	        console.log(url)
     	    	$.ajax({
    	    		   type: "POST",

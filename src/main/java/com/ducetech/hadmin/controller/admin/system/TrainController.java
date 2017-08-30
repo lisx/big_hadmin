@@ -1,6 +1,5 @@
 package com.ducetech.hadmin.controller.admin.system;
 
-import com.alibaba.druid.util.StringUtils;
 import com.ducetech.hadmin.common.JsonResult;
 import com.ducetech.hadmin.common.utils.BigConstant;
 import com.ducetech.hadmin.common.utils.FileUtil;
@@ -62,12 +61,17 @@ public class TrainController  extends BaseController {
     @RequestMapping("/toFolder")
     public String toFolder(String folder,String nodeCode,Model map) {
         logger.info("进入培训资料文件夹");
-        System.out.println("folder+++"+folder);
         map.addAttribute("folder",folder);
         map.addAttribute("nodeCode",nodeCode);
         return "admin/learn/folder";
     }
-
+    @RequestMapping("/twoFolder")
+    public String twoFolder(String folder,String nodeCode,Model map) {
+        logger.info("进入培训资料文件夹");
+        map.addAttribute("folder",folder);
+        map.addAttribute("nodeCode",nodeCode);
+        return "admin/learn/twoFolder";
+    }
     /**
      * 查询集合
      * @return Page<User>
@@ -160,10 +164,10 @@ public class TrainController  extends BaseController {
     }
 
     @RequestMapping(value="/add", method = RequestMethod.GET)
-    public String add(String nodeCode,Model map) {
+    public String add(String nodeCode,String menuType,Model map) {
         logger.info("进入培训资料添加文件夹{}",nodeCode);
         map.addAttribute("nodeCode",nodeCode);
-        map.addAttribute("menu","培训资料");
+        map.addAttribute("menuType",menuType);
         return "admin/learn/form";
     }
 
@@ -173,8 +177,8 @@ public class TrainController  extends BaseController {
      */
     @RequestMapping(value= {"/saveFolder"} ,method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult edit(BigFile folder,String nodeCode,String menu){
-        logger.info("新增培训资料文件夹nodeCode{},menu{}",nodeCode,menu);
+    public JsonResult edit(BigFile folder,String nodeCode,String menuType){
+        logger.info("新增培训资料文件夹nodeCode{},menu{}",nodeCode,menuType);
         User user=getUser();
         Station area;
         if(null!=nodeCode&&!nodeCode.equals("undefined")){
@@ -192,7 +196,8 @@ public class TrainController  extends BaseController {
             folder.setCreateId(user.getId());
             folder.setStationFile(area);
             folder.setNodeCode(nodeCode);
-            folder.setMenuType(menu);
+            folder.setMenuType(menuType);
+            folder.setFolderName(menuType);
             fileDao.saveAndFlush(folder);
         } catch (Exception e) {
             return JsonResult.failure(e.getMessage());

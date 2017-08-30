@@ -308,7 +308,7 @@
             var station=$(".addFolder").attr("data-code");
             layer.open({
                 type: 2,
-                title: '查看文件夹',
+                title: false,
                 shadeClose: true,
                 shade: false,
                 area: ['98%', '98%'],
