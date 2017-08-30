@@ -120,7 +120,14 @@ public class NoticeController extends BaseController {
         User user=getUser();
         MultipartFile file;
         BufferedOutputStream stream;
-        List<Integer> list=new ArrayList<>();
+        notice.setStationName(StringUtils.join(area,","));
+        notice.setCreateId(user.getId());
+        notice.setIfUse(0);
+        notice.setSendPerson(user.getUserName());
+        notice.setSendPostion(user.getStationArea());
+        notice.setCreateTime(DateUtil.dateFormat(new Date(),"yyyy-MM-dd HH:mm:ss"));
+        noticeDao.save(notice);
+        List<BigFile> list=new ArrayList<>();
         for (int i =0; i< files.size(); ++i) {
             long flag = new Date().getTime();
             file = files.get(i);
@@ -138,20 +145,14 @@ public class NoticeController extends BaseController {
                     bigFile.setFileType(suffix);
                     bigFile.setMenuType(BigConstant.Notice);
                     bigFile.setByteSize(file.getSize()+"");
+                    bigFile.setNotice(notice);
                     fileDao.saveAndFlush(bigFile);
-                    list.add(bigFile.getId());
+                    list.add(bigFile);
                 } catch (Exception e) {
                     logger.info("上传失败{}", e.getMessage());
                 }
             }
         }
-        notice.setStationName(StringUtils.join(area,","));
-        notice.setCreateId(user.getId());
-        notice.setIfUse(0);
-        if(list.size()>0)
-        notice.setFiles(StringUtils.join(list,","));
-        notice.setCreateTime(DateUtil.dateFormat(new Date(),"yyyy-MM-dd HH:mm:ss"));
-        noticeDao.save(notice);
         return JsonResult.success();
     }
 }

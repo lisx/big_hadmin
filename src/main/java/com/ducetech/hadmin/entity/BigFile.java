@@ -100,6 +100,9 @@ public class BigFile extends BaseEntity {
     private Station stationFile;
     @JSONField(serialize = false)
     private String nodeCode;
+    @ManyToOne
+    @JSONField(serialize = false)
+    private Notice notice;
     public static boolean saveFile(String folder, String nodeCode, User user, MultipartFile file, String fileType, String menuType, long flag, IBigFileDao fileDao, IStationDao stationDao) throws IOException {
         String filePath;
         BufferedOutputStream stream;

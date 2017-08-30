@@ -2,8 +2,10 @@ package com.ducetech.hadmin.bigInterfacel;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ducetech.hadmin.common.utils.BigConstant;
+import com.ducetech.hadmin.dao.IBigFileDao;
 import com.ducetech.hadmin.dao.INoticeDao;
 import com.ducetech.hadmin.dao.IRunningDao;
+import com.ducetech.hadmin.entity.BigFile;
 import com.ducetech.hadmin.entity.Notice;
 import com.ducetech.hadmin.entity.Running;
 import io.swagger.annotations.ApiImplicitParam;
@@ -16,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 通知管理接口
@@ -33,6 +37,8 @@ public class NoticeInterface {
     JSONObject obj;
     @Autowired
     INoticeDao noticeDao;
+    @Autowired
+    IBigFileDao fileDao;
     @ApiOperation(value="根据站点查询通知",notes="根据站点查询通知")
     @RequestMapping(value="/findByStation",method = RequestMethod.GET)
 
@@ -44,6 +50,10 @@ public class NoticeInterface {
         logger.info("根据站点查询通知");
         obj=new JSONObject();
         List<Notice> notices=noticeDao.findByStationNameIsLikeAndCreateTimeLike("%"+station+"%","%"+date+"%");
+        for(Notice notice:notices){
+            List<BigFile> files=notice.getBigFiles();
+            logger.info(files.size()+"||");
+        }
         if(null!=notices&&notices.size()>0){
             state=1;
             msg="查询成功";

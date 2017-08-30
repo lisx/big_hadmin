@@ -2,6 +2,7 @@ package com.ducetech.hadmin.dao;
 
 import com.ducetech.hadmin.dao.support.IBaseDao;
 import com.ducetech.hadmin.entity.BigFile;
+import com.ducetech.hadmin.entity.Notice;
 import com.ducetech.hadmin.entity.Station;
 import com.ducetech.hadmin.entity.User;
 import org.springframework.data.jpa.repository.Query;
@@ -26,4 +27,6 @@ public interface IBigFileDao extends IBaseDao<BigFile,Integer> {
     List<BigFile> findByFolderFile(BigFile file);
 
     List<BigFile> findByMenuType(String menuType);
+
+    List<BigFile> findByNotice(Notice notice);
 }

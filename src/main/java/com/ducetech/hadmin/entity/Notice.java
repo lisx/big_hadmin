@@ -7,6 +7,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.text.DecimalFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 文件管理
@@ -28,11 +29,15 @@ public class Notice extends BaseEntity {
     //通知内容
     private String content;
     //文件集
-    private String files;
+    @OneToMany(mappedBy = "notice")
+    private List<BigFile> bigFiles;
     //站点
     private String stationName;
     //是否使用
     private int ifUse;
+
+    private String sendPostion;
+    private String sendPerson;
     /**
      * 创建时间
      */
@@ -42,8 +47,9 @@ public class Notice extends BaseEntity {
     /**
      * 更新时间
      */
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss",serialize = false)
     private Date updateTime;
+    @JSONField(serialize = false)
     private Integer updateId;
 
 

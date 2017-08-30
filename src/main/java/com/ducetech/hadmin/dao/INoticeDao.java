@@ -6,6 +6,7 @@ import com.ducetech.hadmin.entity.Running;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -16,5 +17,5 @@ import java.util.List;
  **/
 @Repository
 public interface INoticeDao extends IBaseDao<Notice,Integer> {
-    List<Notice> findByStationNameIsLikeAndCreateTimeLike(String stationName,String date);
+    List<Notice> findByStationNameIsLikeAndCreateTimeLike(String stationName, String date);
 }
