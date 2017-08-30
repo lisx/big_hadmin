@@ -120,12 +120,17 @@ public class UserController extends BaseController {
                                 }else{
                                     stationArea=stationArea+"站区";
                                 }
+                                if(stationArea.equals("西直门站区")||stationArea.equals("东直门站区")||stationArea.equals("建国门站区")||stationArea.equals("北土城站区")||stationArea.equals("慈寿寺站区")){
+                                    stationArea=line+stationArea;
+                                }
                                 if(station.endsWith("站")){
 
                                 }else{
                                     station=station+"站";
                                 }
-
+                                if(station.equals("西直门站")||station.equals("东直门站")||station.equals("建国门站")||station.equals("北土城站")||station.equals("慈寿寺站")){
+                                    station=line+station;
+                                }
                                 User user = new User();
                                 user.setUserName(userName);
                                 user.setStationArea(stationArea);
