@@ -2,7 +2,9 @@ package com.ducetech.hadmin.bigInterfacel;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ducetech.hadmin.common.utils.BigConstant;
+import com.ducetech.hadmin.dao.INoticeDao;
 import com.ducetech.hadmin.dao.IRunningDao;
+import com.ducetech.hadmin.entity.Notice;
 import com.ducetech.hadmin.entity.Running;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -29,15 +31,16 @@ public class NoticeInterface {
     String msg;
     JSONObject obj;
     @Autowired
-    IRunningDao runningDao;
-    @ApiOperation(value="根据线路查询运行图",notes="根据线路查询运行图")
-    @RequestMapping(value="/findByLine",method = RequestMethod.GET)
-    @ApiImplicitParam(name="station",value="线路",dataType="string", paramType = "query")
-    public JSONObject findLineALl(String line){
-        logger.info("获取线路全部数据");
+    INoticeDao noticeDao;
+    @ApiOperation(value="根据站点查询通知",notes="根据站点查询通知")
+    @RequestMapping(value="/findByStation",method = RequestMethod.GET)
+    @ApiImplicitParam(name="station",value="站点",dataType="string", paramType = "query")
+    public JSONObject findByStation(String station){
+        logger.info("根据站点查询通知");
         obj=new JSONObject();
-        List<Running> runnings=runningDao.findByLineName(line);
-        obj.put("data", runnings);
+        List<Notice> notices=noticeDao.findByStationNameIsLike("%"+station+"%");
+        logger.info("|||||"+String.valueOf(notices.size()));
+        obj.put("data", notices);
         obj.put("msg","查询成功");
         obj.put("state","1");
         return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
