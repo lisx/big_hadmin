@@ -54,8 +54,8 @@
 			    //是否启用查询
 			    search: true,
 			    //是否启用详细信息视图
-			    detailView:true,
-			    detailFormatter:detailFormatter,
+//			    detailView:true,
+//			    detailFormatter:detailFormatter,
 			    //表示服务端请求
 			    sidePagination: "server",
 			    //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
@@ -70,7 +70,7 @@
 			    },
 			    //数据列
 			    columns: [{
-			        title: "ID",
+			        title: "编号",
 			        field: "id",
 			        sortable: true
 			    },{
@@ -176,9 +176,9 @@
        		});
         }
 
-        function detailFormatter(index, row) {
-	        var html = [];
-	        html.push('<p><b>描述:</b> ' + row.description + '</p>');
-	        return html.join('');
-	    }
+//        function detailFormatter(index, row) {
+//	        var html = [];
+//	        html.push('<p><b>描述:</b> ' + row.description + '</p>');
+//	        return html.join('');
+//	    }
     </script>

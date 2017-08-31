@@ -47,7 +47,7 @@ public class NoticeInterface {
             @ApiImplicitParam(name="date",value="时间",dataType="string", paramType = "query")
     })
     public JSONObject findByStation(String station,String date){
-        logger.info("根据站点查询通知");
+        logger.info("根据站点查询通知{}||{}",station,date);
         obj=new JSONObject();
         List<Notice> notices=noticeDao.findByStationNameIsLikeAndCreateTimeLike("%"+station+"%","%"+date+"%");
         for(Notice notice:notices){

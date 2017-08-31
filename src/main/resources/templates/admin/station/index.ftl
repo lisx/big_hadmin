@@ -67,20 +67,24 @@
                 }]
             });
             $.get("${ctx!}/admin/station/tree",function(data){
-                console.log("|||"+data);
                 var zNodes =eval(data);
-                $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+                zTreeObj=$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+                zTreeObj.expandAll(true);
+                $("#addLeaf").bind("click", {isParent:false}, add);
+                $("#edit").bind("click", edit);
+                $("#remove").bind("click", remove);
             })
         });
         var setting = {
             view: {
-                addHoverDom: addHoverDom,
-                removeHoverDom: removeHoverDom,
+//                addHoverDom: addHoverDom,
+//                removeHoverDom: removeHoverDom,
                 selectedMulti: false
             },
             edit: {
                 enable: true,
-                editNameSelectAll: false,
+                showRemoveBtn: false,
+                showRenameBtn: false,
                 removeTitle: '删除',
                 renameTitle: '编辑'
 
@@ -92,7 +96,6 @@
             },
             callback: {
                 beforeDrag: beforeDrag,
-                beforeEditName: beforeEditName,
                 beforeRemove: beforeRemove,
                 beforeRename: beforeRename,
                 onRemove: onRemove,
@@ -100,72 +103,154 @@
                 onClick: onClick
             }
         };
-
+        var log, className = "dark";
         function beforeDrag(treeId, treeNodes) {
             return false;
-        };
-        function beforeEditName(treeId, treeNode) {
-            //return confirm("确认编辑节点 " + treeNode.name +" 吗？");
-        };
+        }
+        function getTime() {
+            var now= new Date(),
+                    h=now.getHours(),
+                    m=now.getMinutes(),
+                    s=now.getSeconds(),
+                    ms=now.getMilliseconds();
+            return (h+":"+m+":"+s+ " " +ms);
+        }
         function beforeRemove(treeId, treeNode) {
-            var zTree = getTree();
-            zTree.selectNode(treeNode);
-            return confirm("确认删除节点 " + treeNode.name + " 吗？");
-        };
-        /*删除节点*/
+            return confirm("确认删除 节点 -- " + treeNode.name + " 吗？");
+        }
         function onRemove(e, treeId, treeNode) {
             var nodeId = treeNode.id;
+            console.log(nodeId)
             $.ajax({
                 url: '/admin/station/del/'+nodeId,
                 type: 'DELETE',
                 data: {}
             });
+        }
+        /*修改节点*/
+        function onRename(e,treeId,treeNode){
+            console.log("treeId:"+treeId);
+            $.post("/admin/station/update/"+treeNode.id,treeNode,function(data){});
         };
-
         function beforeRename(treeId, treeNode, newName) {
-            newName = $.trim(newName);
             if (newName.length == 0) {
                 alert("节点名称不能为空.");
-                var zTree = getTree();
+                var zTree = $.fn.zTree.getZTreeObj("treeDemo");
                 setTimeout(function(){zTree.editName(treeNode)}, 10);
                 return false;
             }
             return true;
-        };
-        /*修改节点*/
-        function onRename(e,treeId,treeNode){
-            console.log("treeId:"+treeId);
-            $.post("/admin/station/update/"+treeNode.id,treeNode,function(data){
-
-            });
-        };
-
-        /*点击新增增加节点*/
-        function addHoverDom(treeId, treeNode) {
-            var sObj = $("#" + treeNode.tId + "_span");
-            if (treeNode.editNameFlag || $("#addBtn_"+treeNode.id).length>0) return;
-            var addStr = "<span class='button add' id='addBtn_" + treeNode.id
-                    + "' title='新增' ></span>";
-            sObj.after(addStr);
-            var btn = $("#addBtn_"+treeNode.id);
-            if (btn) btn.bind("click", function(){
-                saveNode(treeNode);
-                return false;
-            });
-        };
-
-        function removeHoverDom(treeId, treeNode) {
-            $("#addBtn_"+treeNode.id).unbind().remove();
-        };
-
+        }
+        var newCount = 1;
         /*保存新的节点*/
         function saveNode(parentNode){
+            console.log(parentNode);
             var zTree = getTree();
             var _nodeName="新节点";
             $.post('/admin/station/save',{pId:parentNode.id,name:_nodeName},function(data){
+                console.log("data.nodeCode"+data.nodeCode)
                 var newCode = {id:data.nodeCode,pId:parentNode.id,name:_nodeName};
                 zTree.addNodes(parentNode,newCode);
             },"json");
+        };
+        function add(e) {
+            var zTree = getTree();
+                    isParent = e.data.isParent,
+                    nodes = zTree.getSelectedNodes(),
+                    treeNode = nodes[0];
+            if (treeNode) {
+                saveNode(treeNode);
+            }
+        };
+        function edit() {
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+                    nodes = zTree.getSelectedNodes(),
+                    treeNode = nodes[0];
+            if (nodes.length == 0) {
+                alert("请先选择一个节点");
+                return;
+            }
+            zTree.editName(treeNode);
+        };
+        function remove(e) {
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+                    nodes = zTree.getSelectedNodes(),
+                    treeNode = nodes[0];
+            if (nodes.length == 0) {
+                alert("请先选择一个节点");
+                return;
+            }
+            var callbackFlag = true;
+            zTree.removeNode(treeNode, callbackFlag);
+        };
+//        function beforeDrag(treeId, treeNodes) {
+//            return false;
+//        };
+//        function beforeEditName(treeId, treeNode) {
+//            //return confirm("确认编辑节点 " + treeNode.name +" 吗？");
+//        };
+//        function beforeRemove(treeId, treeNode) {
+//            var zTree = getTree();
+//            zTree.selectNode(treeNode);
+//            return confirm("确认删除节点 " + treeNode.name + " 吗？");
+//        };
+//        /*删除节点*/
+//        function onRemove(e, treeId, treeNode) {
+//            var nodeId = treeNode.id;
+//            $.ajax({
+//                url: '/admin/station/del/'+nodeId,
+//                type: 'DELETE',
+//                data: {}
+//            });
+//        };
+//
+//        function beforeRename(treeId, treeNode, newName) {
+//            newName = $.trim(newName);
+//            if (newName.length == 0) {
+//                alert("节点名称不能为空.");
+//                var zTree = getTree();
+//                setTimeout(function(){zTree.editName(treeNode)}, 10);
+//                return false;
+//            }
+//            return true;
+//        };
+//        /*修改节点*/
+//        function onRename(e,treeId,treeNode){
+//            console.log("treeId:"+treeId);
+//            $.post("/admin/station/update/"+treeNode.id,treeNode,function(data){
+//
+//            });
+//        };
+//
+//        /*点击新增增加节点*/
+//        function addHoverDom(treeId, treeNode) {
+//            var sObj = $("#" + treeNode.tId + "_span");
+//            if (treeNode.editNameFlag || $("#addBtn_"+treeNode.id).length>0) return;
+//            var addStr = "<span class='button add' id='addBtn_" + treeNode.id
+//                    + "' title='新增' ></span>";
+//            sObj.after(addStr);
+//            var btn = $("#addBtn_"+treeNode.id);
+//            if (btn) btn.bind("click", function(){
+//                saveNode(treeNode);
+//                return false;
+//            });
+//        };
+//
+//        function removeHoverDom(treeId, treeNode) {
+//            $("#addBtn_"+treeNode.id).unbind().remove();
+//        };
+//
+//        /*保存新的节点*/
+//        function saveNode(parentNode){
+//            var zTree = getTree();
+//            var _nodeName="新节点";
+//            $.post('/admin/station/save',{pId:parentNode.id,name:_nodeName},function(data){
+//                var newCode = {id:data.nodeCode,pId:parentNode.id,name:_nodeName};
+//                zTree.addNodes(parentNode,newCode);
+//            },"json");
+//        };
+        function getTree(){
+            return $.fn.zTree.getZTreeObj("treeDemo");
         };
         /*单击节点显示节点详情*/
         function onClick(e,treeId,treeNode){
@@ -215,9 +300,7 @@
             });
         };
 
-        function getTree(){
-            return $.fn.zTree.getZTreeObj("treeDemo");
-        };
+
         //下载文件
         function down(id,name){
             console.log(id+"|||||"+name);
@@ -250,18 +333,19 @@
                 <div class="ibox ">
                     <div class="ibox-content">
                         <p>
-                        	<@shiro.hasPermission name="system:resource:add">
-                        		<#--<button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;添加</button>-->
-                                <#--<button class="btn btn-success " type="button" onclick="upload();"><i class="fa fa-plus"></i>&nbsp;上传</button>-->
+                        	<@shiro.hasPermission name="system:station:uploadFile">
                                 <button class="btn btn-success fileUploadBtton" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传文件</button>
+                                <button class="btn btn-success addLeaf" id="addLeaf" type="button"><i class="fa fa-plus"></i>&nbsp;新增</button>
+                                <button class="btn btn-success edit" id="edit" type="button"><i class="fa fa-plus"></i>&nbsp;编辑</button>
+                                <button class="btn btn-success remove" id="remove" type="button"><i class="fa fa-plus"></i>&nbsp;删除</button>
                         	</@shiro.hasPermission>
                         </p>
                         <hr>
                         <div class="row row-lg">
-		                    <div class="col-sm-2">
+		                    <div class="col-sm-3">
                                     <div class='tree'><ul id="treeDemo" class="ztree"></ul></div>
                             </div>
-                            <div class="col-sm-10">
+                            <div class="col-sm-9">
 		                        <!-- Example Card View -->
 		                        <div class="example-wrap">
 		                            <div class="example">

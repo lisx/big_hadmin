@@ -80,17 +80,20 @@ public class StationController extends BaseController {
      */
     @RequestMapping(value = "/del/{nodeId}",method = RequestMethod.DELETE)
     @ResponseBody
-    public JsonResult del(@PathVariable String nodeId){
+    public JSONObject del(@PathVariable String nodeId){
         logger.info("进入删除节点nodeId{}",nodeId);
         Station station = stationDao.findByNodeCode(nodeId);
         stationDao.delete(station);
-        return JsonResult.success();
+        JSONObject obj=new JSONObject();
+        obj.put("node",nodeId);
+        return obj;
     }
 
     /**
      * 增加节点
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @ResponseBody
     public Station save(String name, String pId){
         logger.info("进入新增节点name{}||pId{}",name,pId);
         String pcode =StringUtil.trim(pId);
@@ -106,6 +109,7 @@ public class StationController extends BaseController {
      * 编辑节点
      */
     @RequestMapping(value = "/update/{nodeCode}", method = RequestMethod.POST)
+    @ResponseBody
     public JSONObject update(@PathVariable String nodeCode, String name){
         logger.info("进入编辑节点nodeCode{}||name{}",nodeCode,name);
         nodeCode = StringUtil.trim(nodeCode);
