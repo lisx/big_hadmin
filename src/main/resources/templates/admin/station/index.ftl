@@ -68,7 +68,7 @@
             });
             $.get("${ctx!}/admin/station/tree",function(data){
                 var zNodes =eval(data);
-                zTreeObj=$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+                var zTreeObj=$.fn.zTree.init($("#treeDemo"), setting, zNodes);
                 zTreeObj.expandAll(true);
                 $("#addLeaf").bind("click", {isParent:false}, add);
                 $("#edit").bind("click", edit);

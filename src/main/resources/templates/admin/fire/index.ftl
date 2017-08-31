@@ -113,7 +113,8 @@
             };
             $.get("/admin/fire/tree",function(data){
                 var zNodes =eval(data);
-                $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+                var zTreeObj=$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+                zTreeObj.expandAll(true);
             })
         });
 
