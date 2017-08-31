@@ -41,8 +41,13 @@ public class EditionInterface {
         List<BigFile> files=fileDao.findByMenuType("前端版本更新");
 
         BigFile file=null;
-        if(null!=files)
-                file=files.get(files.size()-1);
+        if(null!=files&&files.size()>0) {
+            if(files.size()==1){
+                file=files.get(0);
+            }else {
+                file = files.get(files.size() - 1);
+            }
+        }
         obj.put("data", file);
         obj.put("msg","查询成功");
         obj.put("state","1");

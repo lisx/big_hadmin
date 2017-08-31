@@ -14,10 +14,13 @@ import com.ducetech.hadmin.service.IUserService;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator.Operator;
 import com.ducetech.hadmin.common.utils.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -51,6 +54,8 @@ public class UserController extends BaseController {
     IBigFileDao fileDao;
 	@Autowired
     IStationDao stationDao;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     /**
 	 * 用户管理初始化页面
@@ -145,6 +150,10 @@ public class UserController extends BaseController {
                                 user.setCreateTime(new Date());
                                 user.setIfUse(0);
                                 userService.saveOrUpdate(user);
+                                String redisValue = stringRedisTemplate.opsForValue().get("user"+user.getId());
+                                if (StringUtils.isEmpty(redisValue)) {
+                                    stringRedisTemplate.opsForValue().set("user"+user.getId(), user.getUserName());
+                                }
                             }
                         }
                     }

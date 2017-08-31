@@ -94,33 +94,8 @@
 			        title: "资源URL",
 			        field: "sourceUrl"
 			    },{
-			        title: "层级",
-			        field: "level",
-			        sortable: true
-			    },{
-			        title: "排序",
-			        field: "sort",
-			        sortable: true
-			    },{
-			        title: "图标",
-			        field: "icon"
-			    },{
-			        title: "状态",
-			        sortable: true,
-			        field: "isHide",
-                    formatter: function (value, row, index) {
-                    	if(value == 0)
-                    		return '<span class="label label-info">显示</span>';
-                    	else if(value == 1)
-                    		return '<span class="label label-danger">隐藏</span>';
-                    }
-			    },{
 			        title: "创建时间",
 			        field: "createTime",
-			        sortable: true
-			    },{
-			        title: "更新时间",
-			        field: "updateTime",
 			        sortable: true
 			    },{
 			        title: "操作",
