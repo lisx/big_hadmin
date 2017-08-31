@@ -30,6 +30,8 @@ public class ExamLog extends BaseEntity {
     private User user;
     //考试时间
     private Date examTime;
+    //结束时间
+    private Date endTime;
     //题库
     @ManyToOne
     private QuestionBank bank;

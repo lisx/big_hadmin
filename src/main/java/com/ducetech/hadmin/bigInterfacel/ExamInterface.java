@@ -258,11 +258,12 @@ public class ExamInterface  extends BaseController {
     @ApiOperation(value="设置考试记录", notes="设置考试记录")
     @RequestMapping(value="/questionExamLog", method = RequestMethod.GET)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "logId", value = "考试记录Id", dataType = "Integer", paramType = "query"),
-            @ApiImplicitParam(name = "questionId", value = "问题Id", dataType = "Integer", paramType = "query"),
-            @ApiImplicitParam(name = "properIds", value = "答案Id", dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "logId", value = "考试记录Id", dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "questionId", value = "问题Id", dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "properIds", value = "答案Id", dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "endTime", value = "交卷时间", dataType = "String", paramType = "query"),
     })
-    public JSONObject questionExamLog(Integer logId,Integer questionId,String properIds){
+    public JSONObject questionExamLog(Integer logId,Integer questionId,String properIds,Date endTime){
         logger.info("获取练习题logId:{}|questionId:{}|properIds:{}",logId,questionId,properIds);
         ExamLog examLog=examLogDao.findOne(logId);
         Question question=questionDao.findOne(questionId);
@@ -339,6 +340,9 @@ public class ExamInterface  extends BaseController {
             o.put("total",score);
         }
         examLog.setScore(score);
+        if(null!=endTime){
+            examLog.setEndTime(endTime);
+        }
         examLogDao.saveAndFlush(examLog);
 
         obj=new JSONObject();
