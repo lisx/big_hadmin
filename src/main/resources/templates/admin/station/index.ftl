@@ -77,8 +77,6 @@
         });
         var setting = {
             view: {
-//                addHoverDom: addHoverDom,
-//                removeHoverDom: removeHoverDom,
                 selectedMulti: false
             },
             edit: {
@@ -184,72 +182,6 @@
             var callbackFlag = true;
             zTree.removeNode(treeNode, callbackFlag);
         };
-//        function beforeDrag(treeId, treeNodes) {
-//            return false;
-//        };
-//        function beforeEditName(treeId, treeNode) {
-//            //return confirm("确认编辑节点 " + treeNode.name +" 吗？");
-//        };
-//        function beforeRemove(treeId, treeNode) {
-//            var zTree = getTree();
-//            zTree.selectNode(treeNode);
-//            return confirm("确认删除节点 " + treeNode.name + " 吗？");
-//        };
-//        /*删除节点*/
-//        function onRemove(e, treeId, treeNode) {
-//            var nodeId = treeNode.id;
-//            $.ajax({
-//                url: '/admin/station/del/'+nodeId,
-//                type: 'DELETE',
-//                data: {}
-//            });
-//        };
-//
-//        function beforeRename(treeId, treeNode, newName) {
-//            newName = $.trim(newName);
-//            if (newName.length == 0) {
-//                alert("节点名称不能为空.");
-//                var zTree = getTree();
-//                setTimeout(function(){zTree.editName(treeNode)}, 10);
-//                return false;
-//            }
-//            return true;
-//        };
-//        /*修改节点*/
-//        function onRename(e,treeId,treeNode){
-//            console.log("treeId:"+treeId);
-//            $.post("/admin/station/update/"+treeNode.id,treeNode,function(data){
-//
-//            });
-//        };
-//
-//        /*点击新增增加节点*/
-//        function addHoverDom(treeId, treeNode) {
-//            var sObj = $("#" + treeNode.tId + "_span");
-//            if (treeNode.editNameFlag || $("#addBtn_"+treeNode.id).length>0) return;
-//            var addStr = "<span class='button add' id='addBtn_" + treeNode.id
-//                    + "' title='新增' ></span>";
-//            sObj.after(addStr);
-//            var btn = $("#addBtn_"+treeNode.id);
-//            if (btn) btn.bind("click", function(){
-//                saveNode(treeNode);
-//                return false;
-//            });
-//        };
-//
-//        function removeHoverDom(treeId, treeNode) {
-//            $("#addBtn_"+treeNode.id).unbind().remove();
-//        };
-//
-//        /*保存新的节点*/
-//        function saveNode(parentNode){
-//            var zTree = getTree();
-//            var _nodeName="新节点";
-//            $.post('/admin/station/save',{pId:parentNode.id,name:_nodeName},function(data){
-//                var newCode = {id:data.nodeCode,pId:parentNode.id,name:_nodeName};
-//                zTree.addNodes(parentNode,newCode);
-//            },"json");
-//        };
         function getTree(){
             return $.fn.zTree.getZTreeObj("treeDemo");
         };

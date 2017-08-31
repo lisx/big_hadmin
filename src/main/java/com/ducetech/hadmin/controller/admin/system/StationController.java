@@ -322,34 +322,4 @@ public class StationController extends BaseController {
         return JsonResult.success();
     }
 
-	@RequestMapping(value = "/add", method = RequestMethod.GET)
-	public String add(ModelMap map) {
-		List<Station> list = stationDao.findAll();
-		map.put("list", list);
-		return "admin/station/form";
-	}
-
-
-	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-	public String edit(@PathVariable Integer id,ModelMap map) {
-		Station station = stationDao.findOne(id);
-		map.put("station", station);
-
-		List<Station> list = stationDao.findAll();
-		map.put("list", list);
-		return "admin/station/form";
-	}
-
-	@RequestMapping(value= {"/edit"}, method = RequestMethod.POST)
-	@ResponseBody
-	public JsonResult edit(Station station, ModelMap map){
-		try {
-			stationDao.saveAndFlush(station);
-		} catch (Exception e) {
-			return JsonResult.failure(e.getMessage());
-		}
-		return JsonResult.success();
-	}
-
-
 }
