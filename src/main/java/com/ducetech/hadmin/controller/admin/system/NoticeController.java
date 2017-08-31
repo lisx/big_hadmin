@@ -134,16 +134,26 @@ public class NoticeController extends BaseController {
             if (!file.isEmpty()) {
                 try {
                     String suffix = StringUtil.suffix(file.getOriginalFilename());
-                    File tempPartFile = new File(BigConstant.upload, +flag+file.getOriginalFilename());
+                    String filePath=BigConstant.upload+flag+file.getOriginalFilename();
+                    File tempPartFile = new File(filePath);
                     byte[] bytes = file.getBytes();
                     stream = new BufferedOutputStream(new FileOutputStream(tempPartFile));
                     stream.write(bytes);
                     stream.close();
+                    String type="";
+                    if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {
+                        type=BigConstant.office;
+                    }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
+                        type=BigConstant.image;
+                    }else {
+                        type=BigConstant.video;
+                    }
                     BigFile bigFile=new BigFile();
                     bigFile.setIfUse(0);
                     bigFile.setFileName(file.getOriginalFilename());
-                    bigFile.setFileType(suffix);
+                    bigFile.setFileType(type);
                     bigFile.setMenuType(BigConstant.Notice);
+                    bigFile.setFileUrl(filePath);
                     bigFile.setByteSize(file.getSize()+"");
                     bigFile.setNotice(notice);
                     fileDao.saveAndFlush(bigFile);
