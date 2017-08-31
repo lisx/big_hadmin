@@ -208,6 +208,12 @@ public class UserController extends BaseController {
 		map.put("user", user);
 		return "admin/user/form";
 	}
+    @RequestMapping(value = "/show/{id}", method = RequestMethod.GET)
+    public String show(@PathVariable Integer id,ModelMap map) {
+        User user = userService.find(id);
+        map.put("user", user);
+        return "admin/user/show";
+    }
 
 	@RequestMapping(value= {"/edit"} ,method = RequestMethod.POST)
 	@ResponseBody
