@@ -95,7 +95,6 @@ public class User extends BaseEntity {
 	@OneToMany
     private List<ExamLog> logs;
 
-    @JSONField(serialize = false)
 	@ManyToMany(cascade = { CascadeType.REFRESH }, fetch = FetchType.LAZY)
 	@JoinTable(name = "big_user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
 	private java.util.Set<Role> roles;

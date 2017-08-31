@@ -86,6 +86,8 @@
 			        field: "roles",
 			        formatter: function(value, row, index) {
                     	var r = "";
+                    	console.log(value);
+                        console.log(row.roles);
                     	$(value).each(function (index,role){
                     		r = r + "【" + role.name + "】";
                     	});
