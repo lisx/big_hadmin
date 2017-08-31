@@ -116,7 +116,7 @@
             return (h+":"+m+":"+s+ " " +ms);
         }
         function beforeRemove(treeId, treeNode) {
-            return confirm("确认删除 节点 -- " + treeNode.name + " 吗？");
+            return confirm("确认删除 -- " + treeNode.name + " 吗？");
         }
         function onRemove(e, treeId, treeNode) {
             var nodeId = treeNode.id;
@@ -150,7 +150,8 @@
             $.post('/admin/station/save',{pId:parentNode.id,name:_nodeName},function(data){
                 console.log("data.nodeCode"+data.nodeCode)
                 var newCode = {id:data.nodeCode,pId:parentNode.id,name:_nodeName};
-                zTree.addNodes(parentNode,newCode);
+                newCode=zTree.addNodes(parentNode,newCode);
+                zTree.editName(newCode[0]);
             },"json");
         };
         function add(e) {
