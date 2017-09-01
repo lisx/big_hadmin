@@ -264,7 +264,7 @@ public class ExamInterface  extends BaseController {
             @ApiImplicitParam(name = "endTime", value = "交卷时间", dataType = "String", paramType = "query"),
     })
     public JSONObject questionExamLog(Integer logId,Integer questionId,String properIds,Date endTime){
-        logger.info("获取练习题logId:{}|questionId:{}|properIds:{}",logId,questionId,properIds);
+        logger.info("获取练习题logId:{}|questionId:{}|properIds:{}|endTime{}",logId,questionId,properIds,endTime);
         ExamLog examLog=examLogDao.findOne(logId);
         Question question=questionDao.findOne(questionId);
         List<Proper> propers=new ArrayList<>();
