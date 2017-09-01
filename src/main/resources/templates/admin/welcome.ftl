@@ -37,10 +37,8 @@
                             <div id="tab-2" class="tab-pane">
                                 <div class="panel-body">
                                     <p>
-                                    <@shiro.hasPermission name="system:resource:add">
                                         <button class="btn btn-success " type="button" onclick="uploadQuestion();"><i class="fa fa-plus"></i>&nbsp;创建题库</button>
                                         <button class="btn btn-success " type="button" onclick="uploadImage();"><i class="fa fa-plus"></i>&nbsp;批量导入附件</button>
-                                    </@shiro.hasPermission>
                                     </p>
                                     <hr>
                                     <div class="row row-lg">
@@ -59,9 +57,7 @@
                             <div id="tab-3" class="tab-pane">
                                 <div class="panel-body">
                                     <p>
-                                    <@shiro.hasPermission name="system:resource:add">
                                         <button class="btn btn-success " type="button" onclick="configExam();"><i class="fa fa-plus"></i>&nbsp;配置试卷类型</button>
-                                    </@shiro.hasPermission>
                                     </p>
                                     <hr>
                                     <div class="row row-lg">
