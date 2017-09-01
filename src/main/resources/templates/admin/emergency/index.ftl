@@ -220,10 +220,10 @@
                         </p>
                         <hr>
                         <div class="row row-lg">
-		                    <div class="col-sm-2">
+		                    <div class="col-sm-3">
                                     <div class='tree'><ul id="treeDemo" class="ztree"></ul></div>
                             </div>
-                            <div class="col-sm-10">
+                            <div class="col-sm-9">
                                 <!-- Example Card View -->
                                 <div class="example-wrap">
                                     <div class="example">

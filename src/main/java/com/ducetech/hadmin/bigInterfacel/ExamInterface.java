@@ -268,26 +268,31 @@ public class ExamInterface  extends BaseController {
         ExamLog examLog=examLogDao.findOne(logId);
         Question question=questionDao.findOne(questionId);
         List<Proper> propers=new ArrayList<>();
-        QuestionLog log=questionLogDao.findByQuestionAndLog(question,examLog);
+        QuestionLog log=null;
+
+
         Exam exam=examLog.getExam();
         //分数
         int score=0;
-        if(question.getMenuType().equals("判断")){
-            if(question.getProper().equals(properIds)){
-                score=exam.getJudgeScore();
-            }
-        }else if(question.getMenuType().equals("单选")){
-            Proper proper = properDao.findOne(Integer.parseInt(properIds));
-            propers.add(proper);
-            if(question.getProper().equals(proper.getName())){
-                score=exam.getSingleScore();
-            }
-        }else if(question.getMenuType().equals("排序")){
-            if(properIds.equals("1")){
+        if(null!=question) {
+            log = questionLogDao.findByQuestionAndLog(question, examLog);
 
-            }else{
-                score=exam.getRankScore();
-            }
+            if (question.getMenuType().equals("判断")) {
+                if (question.getProper().equals(properIds)) {
+                    score = exam.getJudgeScore();
+                }
+            } else if (question.getMenuType().equals("单选")) {
+                Proper proper = properDao.findOne(Integer.parseInt(properIds));
+                propers.add(proper);
+                if (question.getProper().equals(proper.getName())) {
+                    score = exam.getSingleScore();
+                }
+            } else if (question.getMenuType().equals("排序")) {
+                if (properIds.equals("1")) {
+
+                } else {
+                    score = exam.getRankScore();
+                }
 //            String[] ids = properIds.split(",");
 //            if (ids.length > 0) {
 //                String answer="";
@@ -303,23 +308,24 @@ public class ExamInterface  extends BaseController {
 //                    score=exam.getRankScore();
 //                }
 //            }
-        }else{
-            String[] ids = properIds.split(",");
-            if (ids.length > 0) {
-                List<String> list=Arrays.asList(question.getProper().split("/"));
-                List<String> answers=new ArrayList<>(list);
-                for (String id : ids) {
-                    Proper proper = properDao.findOne(Integer.parseInt(id));
-                    propers.add(proper);
-                    String temp=proper.getName();
-                    for(int i=0;i<answers.size();i++) {
-                        if(answers.get(i).equals(temp)) {
-                            answers.remove(i);
+            } else {
+                String[] ids = properIds.split(",");
+                if (ids.length > 0) {
+                    List<String> list = Arrays.asList(question.getProper().split("/"));
+                    List<String> answers = new ArrayList<>(list);
+                    for (String id : ids) {
+                        Proper proper = properDao.findOne(Integer.parseInt(id));
+                        propers.add(proper);
+                        String temp = proper.getName();
+                        for (int i = 0; i < answers.size(); i++) {
+                            if (answers.get(i).equals(temp)) {
+                                answers.remove(i);
+                            }
                         }
                     }
-                }
-                if(answers.size()==0){
-                    score=exam.getMultipleScore();
+                    if (answers.size() == 0) {
+                        score = exam.getMultipleScore();
+                    }
                 }
             }
         }
