@@ -23,7 +23,7 @@ public interface IResourceService extends IBaseService<Resource, Integer> {
 	 */
 	List<ZtreeView> tree(int roleId);
 
-	List<Resource> findAll();
+	List<Resource> findRoleId(int roleId);
 
 	/**
 	 * 修改或者新增资源

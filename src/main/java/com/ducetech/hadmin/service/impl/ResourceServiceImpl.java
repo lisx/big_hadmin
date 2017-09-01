@@ -42,6 +42,14 @@ public class ResourceServiceImpl extends BaseServiceImpl<Resource, Integer>
 	public IBaseDao<Resource, Integer> getBaseDao() {
 		return this.resourceDao;
 	}
+    @Override
+    public List<Resource> findRoleId(int roleId){
+        Role role = roleService.find(roleId);
+        Set<Resource> roleResources = role.getResources();
+        List<Resource> list=new ArrayList<>();
+        list.addAll(roleResources);
+        return list;
+    }
 
 	@Override
 	@Cacheable(value = "resourceCache", key = "'tree' + #roleId")

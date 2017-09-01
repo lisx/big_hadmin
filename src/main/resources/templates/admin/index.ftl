@@ -1,5 +1,6 @@
 <!-- 全局js -->
 <#include "/admin/common/js.ftl">
+
 <#include "/admin/common/css.ftl">
 <body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
     <div id="wrapper">
@@ -33,7 +34,7 @@
                         <ul class="nav nav-second-level">
                          <@shiro.hasPermission name="system:user:index">
                             <li>
-                               <a class="J_menuItem fa fa-cubes" href="${ctx!}/admin/user/index">人员信息</a>
+                               <a class="J_menuItem" href="${ctx!}/admin/user/index">人员信息</a>
                             </li>
                          </@shiro.hasPermission>
                          <@shiro.hasPermission name="system:role:index">
@@ -146,7 +147,7 @@
 
 
     <!-- 自定义js -->
-    <#--<script>-->
+    <script>
         <#--$.ajax({-->
             <#--type: "GET",-->
             <#--dataType: "json",-->
@@ -174,9 +175,9 @@
                 <#--});-->
             <#--}-->
         <#--});-->
-    <#--</script>-->
+    </script>
     <script src="${ctx!}/hadmin/js/hAdmin.js"></script>
-    <script type="text/javascript" src="${ctx!}/hadmin/js/index.js?v=${version!}"></script>
+    <#--<script type="text/javascript" src="${ctx!}/hadmin/js/index.js?v=${version!}"></script>-->
 </body>
 
 </html>

@@ -1,9 +1,12 @@
 package com.ducetech.hadmin.controller.admin.system;
 
 import java.util.List;
+import java.util.Set;
 
 import com.ducetech.hadmin.common.JsonResult;
 import com.ducetech.hadmin.controller.BaseController;
+import com.ducetech.hadmin.entity.Role;
+import com.ducetech.hadmin.entity.User;
 import com.ducetech.hadmin.service.IResourceService;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.entity.Resource;
@@ -35,7 +38,13 @@ public class ResourceController extends BaseController {
     @RequestMapping("/menuTree")
     @ResponseBody
     public List<Resource> menuTree(){
-        List<Resource> list = resourceService.findAll();
+	    User user=getUser();
+        Integer resourceId = null;
+        Set<Role> roles=user.getRoles();
+        for(Role role:roles){
+            resourceId=role.getId();
+        }
+        List<Resource> list = resourceService.findRoleId(resourceId);
         return list;
     }
 
