@@ -27,15 +27,16 @@ $(document).ready(function () {
 
 
     // 菜单切换
-    // $('.navbar-minimalize').click(function () {
-    //     $("body").toggleClass("mini-navbar");
-    //     SmoothlyMenu();
-    // });
-    $('#side-menu').delegate(".navbar-minimalize","click",function () {
+    $('.navbar-minimalize').click(function () {
         console.log(3)
         $("body").toggleClass("mini-navbar");
         SmoothlyMenu();
     });
+    // $('#side-menu').delegate(".navbar-minimalize","click",function () {
+    //     console.log(3)
+    //     $("body").toggleClass("mini-navbar");
+    //     SmoothlyMenu();
+    // });
 
     // 侧边栏高度
     function fix_height() {

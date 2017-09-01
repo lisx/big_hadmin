@@ -1,5 +1,5 @@
 <!-- 全局js -->
-<#include "/admin/common/js.ftl">
+<#include "/admin/common/index.ftl">
 
 <#include "/admin/common/css.ftl">
 <body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
@@ -144,40 +144,7 @@
         </div>
         <!--右侧部分结束-->
     </div>
-
-
-    <!-- 自定义js -->
-    <script>
-        <#--$.ajax({-->
-            <#--type: "GET",-->
-            <#--dataType: "json",-->
-            <#--url: "/admin/resource/menuTree",-->
-            <#--success: function(data){-->
-                <#--var $li,$menu_f_ul;-->
-                <#--$.each(data,function(index,item){-->
-                    <#--if(item.type==0){-->
-                        <#--$li=$('<li ></li>');-->
-                        <#--var $menu_f=$('<a href="#">\n'+-->
-                                <#--'<i class="fa '+item.icon+'"></i>\n'+-->
-                                <#--'<span  class="nav-label">'+item.name+'</span>\n'+-->
-                                <#--'</a>');-->
-                        <#--$li.append($menu_f);-->
-                        <#--$menu_f_ul=$('<ul class="nav nav-second-level collapse"></ul>');-->
-                        <#--$li.append($menu_f_ul);-->
-                        <#--$("ul#side-menu").append($li);-->
-                    <#--}else if(item.type==1){-->
-                        <#--var $menu_s=$('<li class="J_menuItem fa '+item.icon+'">\n'+-->
-                                <#--'<a href="${ctx!}'+item.sourceUrl+'">'+item.name+'</a>\n'+-->
-                                <#--'</li>');-->
-                        <#--$menu_f_ul.append($menu_s);-->
-                    <#--}-->
-
-                <#--});-->
-            <#--}-->
-        <#--});-->
-    </script>
     <script src="${ctx!}/hadmin/js/hAdmin.js"></script>
-    <#--<script type="text/javascript" src="${ctx!}/hadmin/js/index.js?v=${version!}"></script>-->
 </body>
 
 </html>
