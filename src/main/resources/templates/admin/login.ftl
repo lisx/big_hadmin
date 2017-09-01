@@ -18,12 +18,14 @@
     <div class="signinpanel">
         <div class="row">
             <div class="col-sm-12">
+                <img src="${ctx!}/hadmin/img/login-txt.png">
             	<#if message?exists >
 	            	<div class="alert alert-danger">
 	                    ${message!}
 	                </div>
                 </#if>
-                <form method="post" action="${ctx!}/admin/login" id="frm">
+
+                <form method="post" action="${ctx!}/admin/login" id="frm" style="margin-left: 80px;">
                     <h4 class="no-margins">登录：</h4>
                     <input type="text" class="form-control uname" name="username" id="username" placeholder="用户名" />
                     <input type="password" class="form-control pword m-b" name="password" id="password"  placeholder="密码" />

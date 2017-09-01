@@ -21,9 +21,9 @@ import java.util.List;
 public interface IBigFileDao extends IBaseDao<BigFile,Integer> {
     @Query(value="select o from BigFile o where o.stationFile=:station ")
     List<BigFile> findByStation(@Param("station") Station station);
-    @Query(value="select o from BigFile o where (o.nodeCode like:station or o.nodeCode=:ys or  o.nodeCode=:area ) and o.menuType=:menuType ")
+    @Query(value="select o from BigFile o where (o.nodeCode like:station or o.nodeCode=:ys or  o.nodeCode=:area ) and o.ifUse=0 and o.menuType=:menuType ")
     List<BigFile> findByStationFileOrStationFileAndMenuType(@Param("station") String station,@Param("ys") String ys,@Param("area") String area,@Param("menuType") String menuType);
-    @Query(value="select o from BigFile o where (o.nodeCode like:station or o.nodeCode=:ys or  o.nodeCode=:area ) and o.menuType=:menuType and o.fileName like:name")
+    @Query(value="select o from BigFile o where (o.nodeCode like:station or o.nodeCode=:ys or  o.nodeCode=:area ) and o.ifUse=0  and o.menuType=:menuType and o.fileName like:name")
     List<BigFile> findByStationFileOrStationFileAndMenuTypeAndFileName(@Param("station") String station,@Param("ys") String ys,@Param("area") String area,@Param("menuType") String menuType,@Param("name") String name);
     BigFile findByFileName(String folder);
     List<BigFile> findByFolderFile(BigFile file);

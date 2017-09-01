@@ -1,5 +1,5 @@
 <!-- 全局js -->
-<#include "/admin/common/index.ftl">
+<#include "/admin/common/js.ftl">
 
 <#include "/admin/common/css.ftl">
 <body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
@@ -20,7 +20,7 @@
                                 </span>
                             </a>
                         </div>
-                        <div class="logo-element">Subway
+                        <div class="logo-element">运三
                         </div>
                     </li>
                     <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">

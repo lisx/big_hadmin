@@ -1,6 +1,7 @@
 package com.ducetech.hadmin.common.utils;
 
 import com.alibaba.fastjson.serializer.ValueFilter;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * 项目常量
@@ -51,9 +52,11 @@ public class BigConstant {
     public static final String trainFolder3="信号平面图";
     public static final String trainFolder4="案例库";
 
-
+    @Value("${server.port}")
+    public static String port;
     public static String getImageUrl(String file) {
-        return  "http://192.168.5.127:8088/interface/userImg?code="+file;
+        System.out.println("||||"+port);
+        return  "http://192.168.10.38:8088/interface/userImg?code="+file;
     }
 
 }

@@ -48,6 +48,7 @@ public class ResourceServiceImpl extends BaseServiceImpl<Resource, Integer>
         Set<Resource> roleResources = role.getResources();
         List<Resource> list=new ArrayList<>();
         list.addAll(roleResources);
+        list.sort((s1, s2) -> s1.getId().compareTo(s2.getId()));
         return list;
     }
 
