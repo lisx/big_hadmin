@@ -32,6 +32,12 @@ public class ResourceController extends BaseController {
 		List<ZtreeView> list = resourceService.tree(resourceId);
 		return list;
 	}
+    @RequestMapping("/menuTree")
+    @ResponseBody
+    public List<Resource> menuTree(){
+        List<Resource> list = resourceService.findAll();
+        return list;
+    }
 
 	@RequestMapping("/index")
 	public String index() {

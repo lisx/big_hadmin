@@ -29,12 +29,11 @@
                         <a href="#">
                             <i class="fa fa-cubes"></i>
                             <span class="nav-label">基础信息维护</span>
-                            <span class="fa arrow"></span>
                         </a>
                         <ul class="nav nav-second-level">
                          <@shiro.hasPermission name="system:user:index">
                             <li>
-                               <a class="J_menuItem" href="${ctx!}/admin/user/index">人员信息</a>
+                               <a class="J_menuItem fa fa-cubes" href="${ctx!}/admin/user/index">人员信息</a>
                             </li>
                          </@shiro.hasPermission>
                          <@shiro.hasPermission name="system:role:index">
@@ -147,6 +146,35 @@
 
 
     <!-- 自定义js -->
+    <#--<script>-->
+        <#--$.ajax({-->
+            <#--type: "GET",-->
+            <#--dataType: "json",-->
+            <#--url: "/admin/resource/menuTree",-->
+            <#--success: function(data){-->
+                <#--var $li,$menu_f_ul;-->
+                <#--$.each(data,function(index,item){-->
+                    <#--if(item.type==0){-->
+                        <#--$li=$('<li ></li>');-->
+                        <#--var $menu_f=$('<a href="#">\n'+-->
+                                <#--'<i class="fa '+item.icon+'"></i>\n'+-->
+                                <#--'<span  class="nav-label">'+item.name+'</span>\n'+-->
+                                <#--'</a>');-->
+                        <#--$li.append($menu_f);-->
+                        <#--$menu_f_ul=$('<ul class="nav nav-second-level collapse"></ul>');-->
+                        <#--$li.append($menu_f_ul);-->
+                        <#--$("ul#side-menu").append($li);-->
+                    <#--}else if(item.type==1){-->
+                        <#--var $menu_s=$('<li class="J_menuItem fa '+item.icon+'">\n'+-->
+                                <#--'<a href="${ctx!}'+item.sourceUrl+'">'+item.name+'</a>\n'+-->
+                                <#--'</li>');-->
+                        <#--$menu_f_ul.append($menu_s);-->
+                    <#--}-->
+
+                <#--});-->
+            <#--}-->
+        <#--});-->
+    <#--</script>-->
     <script src="${ctx!}/hadmin/js/hAdmin.js"></script>
     <script type="text/javascript" src="${ctx!}/hadmin/js/index.js?v=${version!}"></script>
 </body>
