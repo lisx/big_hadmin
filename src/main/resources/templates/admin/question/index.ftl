@@ -11,7 +11,7 @@
 		                        <!-- Example Card View -->
 		                        <div class="example-wrap">
 		                            <div class="example">
-		                            	<table id="table_question_list"></table>
+		                            	<table id="table_question_list"  style="table-layout:fixed;overflow:hidden;"></table>
 		                            </div>
 		                        </div>
 		                        <!-- End Example Card View -->
@@ -33,7 +33,7 @@
 			    //必须设置，不然request.getParameter获取不到请求参数
 			    contentType: "application/x-www-form-urlencoded",
 			    //获取数据的Servlet地址
-			    url: "${ctx!}/admin/question/list",
+			    url: "${ctx!}/admin/question/list?id=${id}",
 			    //表格显示条纹
 			    striped: true,
 			    //启动分页
@@ -65,21 +65,23 @@
 			    columns: [{
 			        title: "编号",
 			        field: "id",
-                    width: "50"
+                    width: "5%"
 			    },{
                     title: "类型",
                     field: "menuType",
-                    width: "150"
+                    width: "10%"
                 },{
 			        title: "问题",
-			        field: "title"
+			        field: "title",
+                    width: "30%"
 			    },{
 			        title: "答案",
 			        field: "proper",
+                    width: "30%"
 			    },{
 			        title: "创建时间",
 			        field: "createTime",
-                    width: "300",
+                    width: "10%",
 			        sortable: true
 			    },{
 			        title: "操作",

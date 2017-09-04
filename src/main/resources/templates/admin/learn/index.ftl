@@ -338,13 +338,14 @@
 
 
         function bankShow(id){
+            console.log("id"+id);
             layer.open({
                 type: 2,
                 title: '查看试题',
                 shadeClose: true,
                 shade: false,
                 area: ['100%', '100%'],
-                content: '${ctx!}/admin/question/index',
+                content: '${ctx!}/admin/question/index?id='+id,
                 end: function(index){
                     $('#table_bank_list').bootstrapTable("refresh");
                 }
@@ -401,7 +402,7 @@
                 title: '创建题库',
                 shadeClose: true,
                 shade: false,
-                area: ['500px', '600px'],
+                area: ['90%', '99%'],
                 content: '${ctx!}/admin/question/uploadQuestion',
                 end: function(index){
                     $('#table_bank_list').bootstrapTable("refresh");

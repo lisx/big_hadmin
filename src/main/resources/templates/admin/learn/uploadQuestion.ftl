@@ -7,23 +7,28 @@
         <div class="col-sm-12">
             <form role="form" id="uploadForm" action="/admin/question/uploadFilePost" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label>题库名称：</label>
-                    <input type="text"  name="bankName" class="form-control">
+                    <label class="col-sm-2  control-label" >题库名称：</label>
+                    <div  class="col-sm-4">
+                        <input type="text"  name="bankName" class="form-control">
+                    </div>
+                    <label class="col-sm-2  control-label" ></label>
+                    <div  class="col-sm-4">
+                    </div>
                 </div>
+                <br><br>
                 <div class="form-group">
-                    <label>题目类型：</label>
-                    <@my.select id="questionType" class="form-control" datas=["单选","多选","判断","排序"] defaultValue="请选择"/>
-                </div>
-                <div class="form-group">
-                    <label>站区：</label>
-                <@my.select id="area" class="form-control" datas=areas defaultValue="请选择"/>
-                </div>
-                <div class="form-group">
-                    <label>站点：</label>
+                    <label class="col-sm-2  control-label">站区：</label>
+                    <div class="col-sm-4">
+                    <@my.select id="area" class="form-control" datas=areas defaultValue="全部"/>
+                    </div>
+                    <label class="col-sm-2 control-label">站点：</label>
+                    <div class="col-sm-4">
                     <select id="station" name="station" class="form-control" >
-                        <option value="请选择">请选择</option>
+                        <option value="全部">全部</option>
                     </select>
+                    </div>
                 </div>
+                <br><br>
                 <div class="form-group">
                     <button class="btn btn-sm btn-primary m-t-n-xs" onclick="downUpload('单选')" type="button"><strong>单选模版下载</strong>
                     </button>
@@ -34,11 +39,29 @@
                     <button class="btn btn-sm btn-primary m-t-n-xs" onclick="downUpload('排序')" type="button"><strong>排序模版下载</strong>
                     </button>
                 </div>
+                <br><br>
                 <div class="form-group">
-                    <label>上传试题：</label>
-                    <input type="file" class="form-control" name="fileUpload" />
+                    <label class="col-sm-2 control-label">上传单选试题：</label>
+                    <div class="col-sm-4">
+                    <input type="file" class="form-control" name="radioFile" />
+                    </div>
+                    <label class="col-sm-2 control-label">上传多选试题：</label>
+                    <div class="col-sm-4">
+                    <input type="file" class="form-control" name="multipleFile" />
+                    </div>
                 </div>
-
+                <br><br>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">上传判断试题：</label>
+                    <div class="col-sm-4">
+                    <input type="file" class="form-control" name="opinionFile" />
+                    </div>
+                    <label class="col-sm-2 control-label">上传排序试题：</label>
+                    <div class="col-sm-4">
+                    <input type="file" class="form-control" name="sortFile" />
+                    </div>
+                </div>
+                <br><br>
                 <div>
                     <button class="btn btn-sm btn-primary pull-left m-t-n-xs" onclick="uploadUserClose()" type="button"><strong>完成创建</strong>
                     </button>
