@@ -1,5 +1,6 @@
 package com.ducetech.hadmin.controller.admin;
 
+import com.ducetech.hadmin.common.utils.MD5Utils;
 import com.ducetech.hadmin.controller.BaseController;
 
 import com.ducetech.hadmin.entity.User;
@@ -21,10 +22,13 @@ public class LoginController extends BaseController {
     IUserService userService;
 	@RequestMapping(value = { "/admin/login","/" }, method = RequestMethod.GET)
 	public String login() {
-        User user=userService.findByUserName("admin");
+        User user=userService.findByUserName("运三管理员");
         if(null==user){
             user=new User();
-            user.setUserName("管理员");
+            user.setUserName("运三管理员");
+            user.setStationArea("运三分公司");
+            user.setUserCode("123456");
+            user.setPassword(MD5Utils.md5("123456"));
             userService.saveOrUpdate(user);
         }
 		return "admin/login";
