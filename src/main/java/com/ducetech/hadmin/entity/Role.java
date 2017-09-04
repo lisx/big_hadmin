@@ -53,7 +53,7 @@ public class Role extends BaseEntity {
 	 */
 	private String description;
 
-
+    @JSONField(serialize = false)
 	@ManyToMany(cascade = { CascadeType.REFRESH }, fetch = FetchType.LAZY)
 	@JoinTable(name = "big_role_resource", joinColumns = { @JoinColumn(name = "role_id") }, inverseJoinColumns = { @JoinColumn(name = "resource_id") })
 	private java.util.Set<Resource> resources;

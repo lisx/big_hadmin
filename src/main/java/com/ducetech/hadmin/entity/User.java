@@ -20,7 +20,12 @@ public class User extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 
-	/**
+    @Override
+    public String toString() {
+        return "";
+    }
+
+    /**
 	 * 用户id
 	 */
 	@Id
@@ -93,6 +98,7 @@ public class User extends BaseEntity {
 
 
 	@OneToMany
+    @JSONField(serialize = false)
     private List<ExamLog> logs;
 
 	@ManyToMany(cascade = { CascadeType.REFRESH }, fetch = FetchType.LAZY)

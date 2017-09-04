@@ -357,7 +357,7 @@
                 title: '配置试卷类型',
                 shadeClose: true,
                 shade: false,
-                area: ['600px', '700px'],
+                area: ['100%', '100%'],
                 content: '${ctx!}/admin/exam/add',
                 end: function(index){
                     $('#table_exam_list').bootstrapTable("refresh");
@@ -370,7 +370,7 @@
                 title: '配置试卷类型',
                 shadeClose: true,
                 shade: false,
-                area: ['600px', '600px'],
+                area: ['100%', '100%'],
                 content: '${ctx!}/admin/exam/examEdit?id='+id,
                 end: function(index){
                     $('#table_exam_list').bootstrapTable("refresh");
@@ -415,7 +415,7 @@
                 title: '批量上传附件',
                 shadeClose: true,
                 shade: false,
-                area: ['400px', '400px'],
+                area: ['100%', '100%'],
                 content: '${ctx!}/admin/question/uploadImage',
                 end: function(index){
                     $('#table_bank_list').bootstrapTable("refresh");

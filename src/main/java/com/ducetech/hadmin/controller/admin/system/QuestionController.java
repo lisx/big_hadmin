@@ -128,14 +128,18 @@ public class QuestionController extends BaseController {
                 if (null != area && !area.equals("全部")) {
                     s = stationDao.findByNodeName(area);
                     bank.setStation(s);
+                    bank.setNodeCode(s.getNodeCode());
                 } else {
                     s = stationDao.findByNodeName(user.getStationArea());
-                    if (null != s)
+                    if (null != s) {
                         bank.setStation(s);
+                        bank.setNodeCode(s.getNodeCode());
+                    }
                 }
                 if (null != station && !station.equals("全部")) {
                     s = stationDao.findByNodeName(station);
                     bank.setStation(s);
+                    bank.setNodeCode(s.getNodeCode());
                 }
                 questionBankDao.save(bank);
             }

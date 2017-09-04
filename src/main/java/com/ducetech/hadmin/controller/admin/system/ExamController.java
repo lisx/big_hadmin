@@ -4,8 +4,12 @@ import com.ducetech.hadmin.common.JsonResult;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IExamDao;
+import com.ducetech.hadmin.dao.IQuestionBankDao;
 import com.ducetech.hadmin.dao.IStationDao;
 import com.ducetech.hadmin.entity.Exam;
+import com.ducetech.hadmin.entity.QuestionBank;
+import com.ducetech.hadmin.entity.Station;
+import com.ducetech.hadmin.entity.User;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator;
 import org.slf4j.Logger;
@@ -14,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,6 +41,8 @@ public class ExamController extends BaseController {
     IExamDao examService;
     @Autowired
     IStationDao stationDao;
+    @Autowired
+    IQuestionBankDao bankDao;
 
     /**
      * 添加配置试卷
@@ -43,8 +50,16 @@ public class ExamController extends BaseController {
      * @return
      */
     @RequestMapping("/add")
-    public String index(Model model) {
+    public String index(ModelMap model) {
         logger.info("测试进入exam配置试卷页");
+        User user=getUser();
+        Station station=stationDao.findByNodeName(user.getStationArea());
+        String nodeCode="%000%";
+        if(null!=station){
+            nodeCode="%"+station.getNodeCode()+"%";
+        }
+        List<QuestionBank> banks=bankDao.findByStation(nodeCode);
+        model.addAttribute("banks",banks);
         return "admin/learn/examForm";
     }
 
@@ -101,5 +116,21 @@ public class ExamController extends BaseController {
             return JsonResult.failure(e.getMessage());
         }
         return JsonResult.success();
+    }
+
+    @RequestMapping(value = "/getBank/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public Exam getBank(@PathVariable Integer id) {
+        QuestionBank bank=bankDao.findOne(id);
+        int singleNum=bankDao.findByBank(bank,"单选");
+        int multipleNum=bankDao.findByBank(bank,"多选");
+        int judgeNum=bankDao.findByBank(bank,"判断");
+        int rankNum=bankDao.findByBank(bank,"排序");
+        Exam exam=new Exam();
+        exam.setSingleNum(singleNum);
+        exam.setMultipleNum(multipleNum);
+        exam.setJudgeNum(judgeNum);
+        exam.setRankNum(rankNum);
+        return exam;
     }
 }
