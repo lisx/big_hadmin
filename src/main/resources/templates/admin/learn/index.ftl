@@ -212,7 +212,14 @@
                     field: "name",
                 },{
                     title: "归属",
-                    field: "station.nodeName",
+                    field: "station",
+                    formatter:function(value, row, index) {
+                        if(null==value){
+                            return "";
+                        }else{
+                           return value.nodeName;
+                        }
+                    }
                 },{
                     title: "创建时间",
                     field: "createTime",

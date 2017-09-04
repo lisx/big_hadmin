@@ -27,7 +27,6 @@ public class QuestionBank  extends BaseEntity {
     private String name;
     @OneToMany
     private List<Question> questionList;
-    @JSONField(serialize = false)
     @ManyToOne
     private Station station;
 

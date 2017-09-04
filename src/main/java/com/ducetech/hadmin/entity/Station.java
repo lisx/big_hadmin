@@ -57,7 +57,7 @@ public class Station extends BaseEntity {
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
     private Integer updateId;
-
+    @JSONField(serialize = false)
     @OneToMany
     private List<QuestionBank> banks;
     public static JSONArray getZtrees(User user, IStationDao stationDao) {
