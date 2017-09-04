@@ -21,20 +21,20 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">员工姓名：</label>
             <div class="col-sm-8">
-                <input id="nickName" name="nickName" class="form-control" type="text" value="${user.userName}">
+                <input id="userName" name="userName" class="form-control" type="text" value="${user.userName}">
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">职位：</label>
             <div class="col-sm-8">
-                <select name="position" value="${user.position}" class="form-control">
-                    <option>站务员</option>
-                    <option>综控员</option>
-                    <option>值班站长</option>
-                    <option>副站长</option>
-                    <option>站长</option>
-                    <option>副站区长</option>
-                    <option>站区长</option>
+                <select name="position" id="position" value="${user.position}" class="form-control">
+                    <option value="站务员">站务员</option>
+                    <option value="综控员">综控员</option>
+                    <option value="值班站长">值班站长</option>
+                    <option value="副站长">副站长</option>
+                    <option value="站长">站长</option>
+                    <option value="副站区长">副站区长</option>
+                    <option value="站区长">站区长</option>
                 </select>
             </div>
         </div>
@@ -98,6 +98,7 @@
             });
         }).change();
     $(document).ready(function () {
+        $("#position").val("${user.position}");
 	    $("#frm").validate({
     	    rules: {
     	    	userName: {

@@ -46,9 +46,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Integer> implements I
 	@Override
 	public void saveOrUpdate(User user) {
 		if(user.getId() != null){
-			User dbUser = find(user.getId());
-            dbUser.setPassword(MD5Utils.md5(user.getPassword()));
-			update(dbUser);
+			update(user);
 		}else{
 			user.setPassword(MD5Utils.md5("123456"));
 			save(user);

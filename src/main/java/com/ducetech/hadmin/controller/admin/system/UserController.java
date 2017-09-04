@@ -2,6 +2,7 @@ package com.ducetech.hadmin.controller.admin.system;
 
 import com.ducetech.hadmin.common.JsonResult;
 import com.ducetech.hadmin.common.utils.BigConstant;
+import com.ducetech.hadmin.common.utils.MD5Utils;
 import com.ducetech.hadmin.common.utils.PoiUtil;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IBigFileDao;
@@ -234,6 +235,7 @@ public class UserController extends BaseController {
 	@ResponseBody
 	public JsonResult edit(User user){
 		try {
+		    user.setPassword(MD5Utils.md5(user.getPassword()));
 		    user.setIfUse(0);
 		    user.setCreateTime(new Date());
 		    user.setCreateId(getUser().getId());
