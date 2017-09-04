@@ -27,7 +27,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">职位：</label>
             <div class="col-sm-8">
-                <select name="position" class="form-control">
+                <select name="position" value="${user.position}" class="form-control">
                     <option>站务员</option>
                     <option>综控员</option>
                     <option>值班站长</option>
@@ -55,19 +55,19 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">服务信息卡编号：</label>
             <div class="col-sm-8">
-                <input id="fwxxkUrl" name="fwxxkUrl" class="form-control" value="${user.email}">
+                <input id="fwxxkUrl" name="fwxxkUrl" class="form-control" value="${fwxxkUrl}">
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">综控员上岗证编号：</label>
             <div class="col-sm-8">
-                <input id="zkysgzUrl" name="zkysgzUrl" class="form-control" value="${user.address}">
+                <input id="zkysgzUrl" name="zkysgzUrl" class="form-control" value="${zkysgzUrl}">
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">FAS证编号：</label>
             <div class="col-sm-8">
-                <input id="faszUrl" name="faszUrl" class="form-control" value="${user.address}">
+                <input id="faszUrl" name="faszUrl" class="form-control" value="${faszUrl}">
             </div>
         </div>
         <div class="form-group">
