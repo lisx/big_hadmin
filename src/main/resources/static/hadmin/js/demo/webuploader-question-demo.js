@@ -81,7 +81,8 @@ jQuery(function() {
         disableGlobalDnd: true,
         formData: {
             folder: $("#folder").val(),
-            nodeCode: $("#nodeCode").val()
+            nodeCode: $("#nodeCode").val(),
+            guid: WebUploader.Base.guid()
         },
         //分片
         chunked: true,
