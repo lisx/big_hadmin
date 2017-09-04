@@ -82,7 +82,7 @@
                             if(row.ifFolder==1){
                                 operateHtml='<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="showFolder(\''+row.fileName+'\')"><i class="fa fa-edit"></i>&nbsp;查看</button> &nbsp;</@shiro.hasPermission>';
                             }else{
-                                operateHtml='<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="down(\'http://127.0.0.1:8080/upload/train/'+row.fileType+'/'+row.fileName+'\',\''+row.fileName+'\')"><i class="fa fa-edit"></i>&nbsp;下载</button> &nbsp;</@shiro.hasPermission>';
+                                operateHtml='<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="down(\''+row.id+'\',\''+row.fileName+'\')"><i class="fa fa-edit"></i>&nbsp;下载</button> &nbsp;</@shiro.hasPermission>';
                             }
                         operateHtml = operateHtml + '<@shiro.hasPermission name="system:resource:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button></@shiro.hasPermission>';
                         return operateHtml;
@@ -180,10 +180,11 @@
             });
         }
         //下载文件
-        function down(url,name){
+        function down(id,name){
+            console.log(id+"|||||"+name);
             var a = document.createElement('a');
-            a.href = url;
-            a.download = "proposed_file_name";
+            a.href = "${ctx!}/admin/download/"+id;
+            a.download = name;
             a.click();
         }
         //删除文件夹或文件

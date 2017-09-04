@@ -111,10 +111,11 @@
             });
         }
         //下载文件
-        function down(url){
+        function down(id,name){
+            console.log(id+"|||||"+name);
             var a = document.createElement('a');
-            a.href = url;
-            a.download = "proposed_file_name";
+            a.href = "${ctx!}/admin/download/"+id;
+            a.download = name;
             a.click();
         }
         //删除文件夹或文件

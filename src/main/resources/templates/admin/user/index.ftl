@@ -133,7 +133,7 @@
         	      title: '用户修改',
         	      shadeClose: true,
         	      shade: false,
-        	      area: ['50%', '50%'],
+        	      area: ['900px', '600px'],
         	      content: '${ctx!}/admin/user/edit/' + id,
         	      end: function(index){
         	    	  $('#table_list').bootstrapTable("refresh");
