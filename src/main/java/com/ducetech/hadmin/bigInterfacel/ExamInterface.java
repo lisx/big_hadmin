@@ -288,7 +288,7 @@ public class ExamInterface  extends BaseController {
                     score = exam.getSingleScore();
                 }
             } else if (question.getMenuType().equals("排序")) {
-                if (properIds.equals("1")) {
+                if (properIds.equals("0")) {
 
                 } else {
                     score = exam.getRankScore();
@@ -355,6 +355,8 @@ public class ExamInterface  extends BaseController {
         obj.put("state",state);
         obj.put("msg",msg);
         obj.put("data",o);
-        return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
+        JSONObject jobj=JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
+        logger.info(jobj.toJSONString());
+        return jobj;
     }
 }

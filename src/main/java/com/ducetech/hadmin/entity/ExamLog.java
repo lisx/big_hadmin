@@ -26,6 +26,7 @@ public class ExamLog extends BaseEntity {
     private Integer id;
 
     private int ifUse;
+    @JSONField(serialize=false)
     @ManyToOne
     private User user;
     //考试时间
