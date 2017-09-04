@@ -89,6 +89,12 @@ public class ExamInterface  extends BaseController {
         logger.info("获取练习题");
         QuestionBank bank=questionBankDao.findOne(bankId);
         List<Question> questions=questionDao.findByQuestionBankAndMenuType(bank,type);
+        for (int i=0;i<questions.size();i++){
+            List<Proper> propers=questions.get(i).getPropers();
+            Collections.shuffle(propers);
+            questions.get(i).setPropers(propers);
+        }
+        Collections.shuffle(questions);
         obj=new JSONObject();
         obj.put("state",state);
         obj.put("msg",msg);
@@ -134,6 +140,7 @@ public class ExamInterface  extends BaseController {
                             logger.info(q.getPropers().size()+"单选");
                             List<Proper> pros=properDao.findByQuestion(q);
                             logger.info("pros||||||{}|||||{}|||"+pros.size(),q.getId());
+                            Collections.shuffle(pros);
                             q.setPropers(pros);
                             questions.add(q);
                         }else{
@@ -150,6 +157,7 @@ public class ExamInterface  extends BaseController {
                         if(!questions.contains(q)&&null!=q){
                             List<Proper> pros=properDao.findByQuestion(q);
                             logger.info("pros||||||{}|||||{}|||"+pros.size(),q.getId());
+                            Collections.shuffle(pros);
                             q.setPropers(pros);
                             questions.add(q);
                         }else{
@@ -180,6 +188,7 @@ public class ExamInterface  extends BaseController {
                             logger.info(q.getPropers().size()+"排序");
                             List<Proper> pros=properDao.findByQuestion(q);
                             logger.info("pros||||||{}|||||{}|||"+pros.size(),q.getId());
+                            Collections.shuffle(pros);
                             q.setPropers(pros);
                             questions.add(q);
                         }else{
