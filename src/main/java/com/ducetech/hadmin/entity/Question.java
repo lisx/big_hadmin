@@ -26,6 +26,7 @@ public class Question extends BaseEntity {
     //问题
     private String title;
     //正确答案
+    @Column(columnDefinition="longText")
     private String proper;
     //已选答案
     private String answer;

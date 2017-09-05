@@ -247,6 +247,12 @@ public class UserController extends BaseController {
 	@ResponseBody
 	public JsonResult edit(User user){
 		try {
+		    if(user.getStationArea().equals("请选择")){
+		        user.setStationArea("");
+            }
+            if(user.getStation().equals("请选择")){
+                user.setStation("");
+            }
 		    user.setPassword(MD5Utils.md5(user.getPassword()));
 		    user.setIfUse(0);
 		    user.setCreateTime(new Date());

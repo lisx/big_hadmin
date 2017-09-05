@@ -11,7 +11,7 @@
                                     <label class="col-sm-2 control-label">选择题库：</label>
                                     <div class="col-sm-4">
                                         <input type="hidden" id="bankName" name="bankName" >
-                                        <@my.select id="bankId" class="form-control" datas=banks key="id" text="name" defaultValue="全部"/>
+                                        <@my.select id="bankId" class="form-control" datas=banks key="id" text="name" value="${exam.bankId}" defaultValue="全部"/>
                                     </div>
                                     <label class="col-sm-2 control-label">试卷名称：</label>
                                     <div class="col-sm-4">
@@ -26,37 +26,37 @@
                                     </div>
                                     <label class="col-sm-2 control-label"> 每道题分数：</label>
                                     <div class="col-sm-4">
-                                        <input  type="number" min="0" name="singleScore" placeholder="每题分数" class="form-control"  style="margin-bottom: 10px;">
+                                        <input  type="number" min="0" name="singleScore" placeholder="每题分数" class="form-control" value="${exam.singleScore}"  style="margin-bottom: 10px;">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">多选题：</label>
                                     <div class="col-sm-4">
-                                        <input  type="number" min="0" name="multipleNum" class="form-control" style="margin-bottom: 10px;"  placeholder="题数">
+                                        <input  type="number" min="0" name="multipleNum" class="form-control" style="margin-bottom: 10px" value="${exam.multipleNum}"  placeholder="题数">
                                     </div>
                                     <label class="col-sm-2 control-label"> 每道题分数：</label>
                                     <div class="col-sm-4">
-                                        <input  type="number" min="0" name="multipleScore" placeholder="每题分数" class="form-control "  style="margin-bottom: 10px;">
+                                        <input  type="number" min="0" name="multipleScore" placeholder="每题分数" class="form-control " value="${exam.multipleScore}"  style="margin-bottom: 10px;">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">判断题：</label>
                                     <div class="col-sm-4">
-                                        <input type="number" min="0" name="judgeNum" class="form-control" style="margin-bottom: 10px;"  placeholder="题数">
+                                        <input type="number" min="0" name="judgeNum" class="form-control" style="margin-bottom: 10px;" value="${exam.judgeNum}" placeholder="题数">
                                     </div>
                                     <label class="col-sm-2 control-label"> 每道题分数：</label>
                                     <div class="col-sm-4">
-                                        <input  type="number" min="0" name="judgeScore" placeholder="每题分数" class="form-control " style="margin-bottom: 10px;">
+                                        <input  type="number" min="0" name="judgeScore" placeholder="每题分数" class="form-control " value="${exam.judgeScore}" style="margin-bottom: 10px;">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">排序题：</label>
                                     <div class="col-sm-4">
-                                        <input  type="number" min="0" name="rankNum" class="form-control" style="margin-bottom: 10px;"  placeholder="题数">
+                                        <input  type="number" min="0" name="rankNum" class="form-control" style="margin-bottom: 10px;" value="${exam.rankNum}" placeholder="题数">
                                     </div>
                                     <label class="col-sm-2 control-label"> 每道题分数：</label>
                                     <div class="col-sm-4">
-                                        <input  type="number" min="0" name="rankScore" placeholder="每题分数" class="form-control "  style="margin-bottom: 10px;">
+                                        <input  type="number" min="0" name="rankScore" placeholder="每题分数" class="form-control " value="${exam.rankScore}" style="margin-bottom: 10px;">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -70,8 +70,12 @@
         </div>
     </div>
 <script>
+
     $(document).ready(function () {
+        console.log("|||")
+
         $("#bankId").change(function(){
+            console.log("change");
             var checkText=$("#bankId").find("option:selected").text();
             var id=$("#bankId").find("option:selected").val();
             $("#bankName").val(checkText);
@@ -87,7 +91,8 @@
                     $("input[name='singleNum']").attr("max",data.singleNum).attr("placeholder","有"+data.singleNum+"道题");
                 }
             })
-        })
+        });
+        $("#bankId").change();
         $("#frm").validate({
             rules: {
                 name: {

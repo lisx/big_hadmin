@@ -70,6 +70,13 @@ public class QuestionController extends BaseController {
         logger.info("进入bank");
         SimpleSpecificationBuilder<QuestionBank> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
+        User user=getUser();
+        Station station=stationDao.findByNodeName(user.getStationArea());
+        String nodeCode="%000%";
+        if(null!=station){
+            nodeCode="%"+station.getNodeCode()+"%";
+        }
+        builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
         builder.add("ifUse", SpecificationOperator.Operator.eq.name(), 0);
         if (!StringUtil.isBlank(searchText)) {
             builder.add("name", SpecificationOperator.Operator.likeAll.name(), searchText);

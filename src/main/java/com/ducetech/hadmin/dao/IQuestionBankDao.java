@@ -21,7 +21,7 @@ import java.util.List;
 public interface IQuestionBankDao extends IBaseDao<QuestionBank,Integer> {
 
     QuestionBank findByName(String name);
-    @Query(value="select o from QuestionBank o where o.nodeCode like:station ")
+    @Query(value="select o from QuestionBank o where o.nodeCode like:station or o.nodeCode='000'")
     List<QuestionBank> findByStation(@Param("station") String station);
     @Query(value="SELECT COUNT(menuType) FROM Question WHERE questionBank=:bankId and menuType=:menuType")
     Integer findByBank(@Param("bankId") QuestionBank bankId,@Param("menuType") String menuType);

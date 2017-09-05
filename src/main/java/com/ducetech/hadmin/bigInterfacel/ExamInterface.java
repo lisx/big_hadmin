@@ -38,7 +38,7 @@ public class ExamInterface  extends BaseController {
     @Autowired
     IExamDao examDao;
     @Autowired
-    IQuestionBankDao questionBankDao;
+    IQuestionBankDao bankDao;
     @Autowired
     IQuestionDao questionDao;
     @Autowired
@@ -49,13 +49,29 @@ public class ExamInterface  extends BaseController {
     IProperDao properDao;
     @Autowired
     IExamLogDao examLogDao;
+    @Autowired
+    IStationDao stationDao;
 
-    @ApiOperation(value="获取试卷题库", notes="获取试卷题库")
+    @ApiOperation(value="获取用户所属站区试卷和题库", notes="获取用户所属站区试卷和题库")
+    @ApiImplicitParam(name="userId",value="用户id",dataType="String", paramType = "query")
     @RequestMapping(value="/findQuestionBankAll", method = RequestMethod.GET)
-    public JSONObject findQuestionBankAll(){
+    public JSONObject findQuestionBankAll(Integer userId){
         logger.info("获取试卷题库");
-        List<QuestionBank> banks=questionBankDao.findAll();
-        List<Exam> exams=examDao.findAll();
+        User user=null;
+        List<QuestionBank> banks=null;
+        List<Exam> exams=null;
+        if(null!=userId) {
+            user = userDao.findOne(userId);
+            if (null != user) {
+                Station station=stationDao.findByNodeName(user.getStationArea());
+                String nodeCode="%000%";
+                if(null!=station){
+                    nodeCode="%"+station.getNodeCode()+"%";
+                }
+                banks=bankDao.findByStation(nodeCode);
+                exams=examDao.findByStation(nodeCode);
+            }
+        }
         obj=new JSONObject();
         ValueFilter filter = new ValueFilter() {
             @Override
@@ -87,7 +103,7 @@ public class ExamInterface  extends BaseController {
     })
     public JSONObject findExamQuestion(Integer bankId,String type){
         logger.info("获取练习题");
-        QuestionBank bank=questionBankDao.findOne(bankId);
+        QuestionBank bank=bankDao.findOne(bankId);
         List<Question> questions=questionDao.findByQuestionBankAndMenuType(bank,type);
         for (int i=0;i<questions.size();i++){
             List<Proper> propers=questions.get(i).getPropers();
@@ -114,109 +130,114 @@ public class ExamInterface  extends BaseController {
         logger.info("获取试卷类型examId{}||bankId{}||userId{}",examId,bankId,userId);
         User user=null;
         ExamLog log=new ExamLog();
+        JSONObject o=new JSONObject();
         if(null!=userId){
             user=userDao.findOne(userId);
             if(null!=user){
                 log.setUser(user);
                 logger.info("user{}",user.getUserCode());
-            }
-            QuestionBank bank=questionBankDao.findOne(bankId);
-            Exam exam=examDao.findOne(examId);
-            List<Question> questions=new ArrayList<Question>();
-            if(null!=exam) {
-                List<Question> singles;
-                List<Question> multiples;
-                List<Question> judges;
-                List<Question> ranks;
-                Random rand = new Random();
-                if(null!=exam.getSingleNum()&&exam.getSingleNum()>0){
-                    singles = questionDao.findByQuestionBankAndMenuType(bank,"单选");
-                    if(singles.size()>0)
-                    for(int i=0;i<exam.getSingleNum();i++) {
-                        int l = rand.nextInt(singles.size());
-                        Question q=singles.get(l);
+                QuestionBank bank=bankDao.findOne(bankId);
+                Exam exam=examDao.findOne(examId);
+                List<Question> questions=new ArrayList<Question>();
+                if(null!=exam) {
+                    List<Question> singles;
+                    List<Question> multiples;
+                    List<Question> judges;
+                    List<Question> ranks;
+                    Random rand = new Random();
+                    if(null!=exam.getSingleNum()&&exam.getSingleNum()>0){
+                        singles = questionDao.findByQuestionBankAndMenuType(bank,"单选");
+                        if(singles.size()>0)
+                        for(int i=0;i<exam.getSingleNum();i++) {
+                            int l = rand.nextInt(singles.size());
+                            Question q=singles.get(l);
 
-                        if(!questions.contains(q)&&null!=q){
-                            logger.info(q.getPropers().size()+"单选");
-                            List<Proper> pros=properDao.findByQuestion(q);
-                            logger.info("pros||||||{}|||||{}|||"+pros.size(),q.getId());
-                            Collections.shuffle(pros);
-                            q.setPropers(pros);
-                            questions.add(q);
-                        }else{
-                            i--;
+                            if(!questions.contains(q)&&null!=q){
+                                logger.info(q.getPropers().size()+"单选");
+                                List<Proper> pros=properDao.findByQuestion(q);
+                                logger.info("pros||||||{}|||||{}|||"+pros.size(),q.getId());
+                                Collections.shuffle(pros);
+                                q.setPropers(pros);
+                                questions.add(q);
+                            }else{
+                                i--;
+                            }
+                        }
+                    }
+                    if(null!=exam.getMultipleNum()&&exam.getMultipleNum()>0){
+                        multiples = questionDao.findByQuestionBankAndMenuType(bank,"多选");
+                        if(multiples.size()>0)
+                        for(int i=0;i<exam.getMultipleNum();i++) {
+                            int l = rand.nextInt(multiples.size());
+                            Question q=multiples.get(l);
+                            if(!questions.contains(q)&&null!=q){
+                                List<Proper> pros=properDao.findByQuestion(q);
+                                logger.info("pros||||||{}|||||{}|||"+pros.size(),q.getId());
+                                Collections.shuffle(pros);
+                                q.setPropers(pros);
+                                questions.add(q);
+                            }else{
+                                i--;
+                            }
+                        }
+                    }
+                    if(null!=exam.getJudgeNum()&&exam.getJudgeNum()>0){
+                        judges = questionDao.findByQuestionBankAndMenuType(bank,"判断");
+                        if(judges.size()>0)
+                        for(int i=0;i<exam.getJudgeNum();i++) {
+                            int l = rand.nextInt(judges.size());
+                            Question q=judges.get(l);
+                            if(!questions.contains(q)&&null!=q){
+                                questions.add(q);
+                            }else{
+                                i--;
+                            }
+                        }
+                    }
+                    if(null!=exam.getRankNum()&&exam.getRankNum()>0){
+                        ranks = questionDao.findByQuestionBankAndMenuType(bank,"排序");
+                        if(ranks.size()>0)
+                        for(int i=0;i<exam.getRankNum();i++) {
+                            int l = rand.nextInt(ranks.size());
+                            Question q=ranks.get(l);
+                            if(!questions.contains(q)&&null!=q){
+                                logger.info(q.getPropers().size()+"排序");
+                                List<Proper> pros=properDao.findByQuestion(q);
+                                logger.info("pros||||||{}|||||{}|||"+pros.size(),q.getId());
+                                Collections.shuffle(pros);
+                                q.setPropers(pros);
+                                questions.add(q);
+                            }else{
+                                i--;
+                            }
                         }
                     }
                 }
-                if(null!=exam.getMultipleNum()&&exam.getMultipleNum()>0){
-                    multiples = questionDao.findByQuestionBankAndMenuType(bank,"多选");
-                    if(multiples.size()>0)
-                    for(int i=0;i<exam.getMultipleNum();i++) {
-                        int l = rand.nextInt(multiples.size());
-                        Question q=multiples.get(l);
-                        if(!questions.contains(q)&&null!=q){
-                            List<Proper> pros=properDao.findByQuestion(q);
-                            logger.info("pros||||||{}|||||{}|||"+pros.size(),q.getId());
-                            Collections.shuffle(pros);
-                            q.setPropers(pros);
-                            questions.add(q);
-                        }else{
-                            i--;
-                        }
-                    }
+                logger.info("|+|+|"+questions.size());
+                questions.removeAll(Collections.singleton(null));
+                log.setCreateTime(new Date());
+                log.setBank(bank);
+                log.setExam(exam);
+                log.setIfUse(0);
+                examLogDao.save(log);
+                for(Question question:questions){
+                    QuestionLog qlog=new QuestionLog();
+                    qlog.setQuestion(question);
+                    qlog.setLog(log);
+                    questionLogDao.save(qlog);
                 }
-                if(null!=exam.getJudgeNum()&&exam.getJudgeNum()>0){
-                    judges = questionDao.findByQuestionBankAndMenuType(bank,"判断");
-                    if(judges.size()>0)
-                    for(int i=0;i<exam.getJudgeNum();i++) {
-                        int l = rand.nextInt(judges.size());
-                        Question q=judges.get(l);
-                        if(!questions.contains(q)&&null!=q){
-                            questions.add(q);
-                        }else{
-                            i--;
-                        }
-                    }
-                }
-                if(null!=exam.getRankNum()&&exam.getRankNum()>0){
-                    ranks = questionDao.findByQuestionBankAndMenuType(bank,"排序");
-                    if(ranks.size()>0)
-                    for(int i=0;i<exam.getRankNum();i++) {
-                        int l = rand.nextInt(ranks.size());
-                        Question q=ranks.get(l);
-                        if(!questions.contains(q)&&null!=q){
-                            logger.info(q.getPropers().size()+"排序");
-                            List<Proper> pros=properDao.findByQuestion(q);
-                            logger.info("pros||||||{}|||||{}|||"+pros.size(),q.getId());
-                            Collections.shuffle(pros);
-                            q.setPropers(pros);
-                            questions.add(q);
-                        }else{
-                            i--;
-                        }
-                    }
-                }
+                o.put("log",log);
+                o.put("questions",questions);
+                obj=new JSONObject();
+                obj.put("state",state);
+                obj.put("msg","获取成功");
+                obj.put("data",o);
+            }else{
+                obj=new JSONObject();
+                obj.put("state",state);
+                obj.put("msg","缺少用户");
+                obj.put("data","");
             }
-            logger.info("|+|+|"+questions.size());
-            questions.removeAll(Collections.singleton(null));
-            log.setCreateTime(new Date());
-            log.setBank(bank);
-            log.setExam(exam);
-            log.setIfUse(0);
-            examLogDao.save(log);
-            for(Question question:questions){
-                QuestionLog qlog=new QuestionLog();
-                qlog.setQuestion(question);
-                qlog.setLog(log);
-                questionLogDao.save(qlog);
-            }
-            JSONObject o=new JSONObject();
-            o.put("log",log);
-            o.put("questions",questions);
-            obj=new JSONObject();
-            obj.put("state",state);
-            obj.put("msg","获取成功");
-            obj.put("data",o);
         }else{
             obj=new JSONObject();
             obj.put("state",state);

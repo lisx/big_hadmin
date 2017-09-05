@@ -13,9 +13,9 @@
                             <ul class="nav nav-tabs">
                                 <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true"> 培训资料</a>
                                 </li>
-                                <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">练习/考试</a>
+                                <li class="tab2"><a data-toggle="tab" href="#tab-2" aria-expanded="false">练习/考试</a>
                                 </li>
-                                <li class=""><a data-toggle="tab" href="#tab-3" aria-expanded="false">试卷类型</a>
+                                <li class="tab3"><a data-toggle="tab" href="#tab-3" aria-expanded="false">试卷类型</a>
                                 </li>
                             </ul>
                             <div class="tab-content">
@@ -368,6 +368,7 @@
                 content: '${ctx!}/admin/exam/add',
                 end: function(index){
                     $('#table_exam_list').bootstrapTable("refresh");
+                    $(".tab3").click();
                 }
             });
         }
@@ -378,9 +379,10 @@
                 shadeClose: true,
                 shade: false,
                 area: ['100%', '100%'],
-                content: '${ctx!}/admin/exam/examEdit?id='+id,
+                content: '${ctx!}/admin/exam/edit?id='+id,
                 end: function(index){
                     $('#table_exam_list').bootstrapTable("refresh");
+                    $(".tab3").click();
                 }
             });
         }
@@ -395,6 +397,7 @@
                         layer.msg(msg.message, {time: 2000},function(){
                             $('#table_exam_list').bootstrapTable("refresh");
                             layer.close(index);
+                            $(".tab3").click();
                         });
                     }
                 });
@@ -402,17 +405,18 @@
         }
 
 
-
+        //创建题库
         function uploadQuestion(){
             layer.open({
                 type: 2,
                 title: '创建题库',
                 shadeClose: true,
                 shade: false,
-                area: ['90%', '99%'],
+                area: ['90%', '90%'],
                 content: '${ctx!}/admin/question/uploadQuestion',
                 end: function(index){
                     $('#table_bank_list').bootstrapTable("refresh");
+                    $(".tab2").click();
                 }
             });
         }
@@ -426,6 +430,7 @@
                 content: '${ctx!}/admin/question/uploadImage',
                 end: function(index){
                     $('#table_bank_list').bootstrapTable("refresh");
+                    $(".tab2").click();
                 }
             });
         }

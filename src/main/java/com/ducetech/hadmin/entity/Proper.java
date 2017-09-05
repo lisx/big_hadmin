@@ -26,6 +26,7 @@ public class Proper extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private Integer id;
+    @Column(columnDefinition="longText")
     private String name;
     @JSONField(serialize = false)
     @ManyToOne

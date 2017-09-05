@@ -71,12 +71,21 @@ public class ExamController extends BaseController {
      */
     @RequestMapping("/edit")
     public String edit(Integer id,Model model) {
+        logger.info("进入exam编辑配置试卷页");
         if(null!=id) {
             Exam exam = examService.findOne(id);
             model.addAttribute("exam", exam);
             List<String> areas=stationDao.findLines(3);
             model.addAttribute("areas",areas);
         }
+        User user=getUser();
+        Station station=stationDao.findByNodeName(user.getStationArea());
+        String nodeCode="%000%";
+        if(null!=station){
+            nodeCode="%"+station.getNodeCode()+"%";
+        }
+        List<QuestionBank> banks=bankDao.findByStation(nodeCode);
+        model.addAttribute("banks",banks);
         return "admin/learn/examForm";
     }
     /**
@@ -88,6 +97,13 @@ public class ExamController extends BaseController {
     public Page<Exam> list() {
         SimpleSpecificationBuilder<Exam> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
+        User user=getUser();
+        Station station=stationDao.findByNodeName(user.getStationArea());
+        String nodeCode="%000%";
+        if(null!=station){
+            nodeCode="%"+station.getNodeCode()+"%";
+        }
+        builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
         if(!StringUtil.isBlank(searchText)){
             builder.add("name", SpecificationOperator.Operator.likeAll.name(), searchText);
         }
@@ -97,9 +113,14 @@ public class ExamController extends BaseController {
     @RequestMapping(value = "/saveExam", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult save(Exam exam) {
+        User user=getUser();
+        QuestionBank bank=bankDao.findOne(exam.getBankId());
         try {
             exam.setCreateId(getUser().getId());
             exam.setCreateTime(new Date());
+            exam.setStationName(user.getStation());
+            exam.setAreaName(user.getStationArea());
+            exam.setNodeCode(bank.getNodeCode());
             examService.saveAndFlush(exam);
         }catch(Exception e){
             logger.info(e.getMessage());
