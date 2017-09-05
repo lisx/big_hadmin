@@ -10,17 +10,28 @@ import com.ducetech.hadmin.entity.ExamLog;
 import com.ducetech.hadmin.entity.User;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator;
+import org.apache.http.util.TextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 配置考试类型
@@ -48,22 +59,29 @@ public class ExamLogController extends BaseController {
      * 查询试题集合
      * @return Page<User>
      */
-    @RequestMapping(value = { "/user" })
+    @RequestMapping(value = { "/user" }, method = RequestMethod.GET)
     @ResponseBody
     public Page<User> user() {
-        SimpleSpecificationBuilder<User> builder = new SimpleSpecificationBuilder<>();
-        String searchText = request.getParameter("searchText");
-        builder.add("size(logs)", SpecificationOperator.Operator.gt.name(), 0);
-        builder.add("ifUse", SpecificationOperator.Operator.eq.name(), 0);
-        try {
-            Page<User> list = userDao.findAll(builder.generateSpecification(), getPageRequest());
-            return list;
-        }catch(Exception e){
-            logger.debug(e.getMessage());
-        }
-        return null;
+        return userDao.findByScore( getPageRequest());
     }
-    @RequestMapping(value = { "/list" })
+
+    @RequestMapping(value = { "/show/{id}" }, method = RequestMethod.GET)
+    public String show(@PathVariable Integer id, Model model) {
+        User user=userDao.findOne(id);
+        List<ExamLog> logs=examLogDao.findByUser(user);
+        model.addAttribute("user",user);
+        model.addAttribute("logs",logs);
+        return "admin/examlog/show";
+    }
+
+    @RequestMapping(value = { "/userLog/{id}" }, method = RequestMethod.GET)
+    @ResponseBody
+    public List<ExamLog>  userLog(@PathVariable Integer id) {
+        User user=userDao.findOne(id);
+        List<ExamLog> logs=examLogDao.findByUser(user);
+        return logs;
+    }
+    @RequestMapping(value = { "/list" }, method = RequestMethod.GET)
     @ResponseBody
     public Page<ExamLog> list() {
         SimpleSpecificationBuilder<ExamLog> builder = new SimpleSpecificationBuilder<>();

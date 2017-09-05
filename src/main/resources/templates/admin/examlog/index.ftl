@@ -81,38 +81,33 @@
                     field: "userName"
 			    },{
                     title: "考试次数",
-                    field: "logs",
+                    field: "logs.size",
                     formatter: function (value, row, index) {
-                        if(null==value){
-                            return "";
-                        }else{
-                            return value.size();
-                        }
+
                     }
                 },{
 			        title: "操作",
 			        field: "empty",
                     formatter: function (value, row, index) {
-                    	var operateHtml = '<@shiro.hasPermission name="system:user:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="examLogDel(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button> &nbsp;</@shiro.hasPermission>';
+                    	var operateHtml = '<@shiro.hasPermission name="system:user:deleteBatch"><button class="btn btn-success btn-xs" type="button" onclick="userLog(\''+row.id+'\')"><i class="fa fa-eye"></i>&nbsp;查看</button> &nbsp;</@shiro.hasPermission>';
                         return operateHtml;
                     }
 			    }]
 			});
         });
-
-        function examLogDel(id){
-        	layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
-        		$.ajax({
-    	    		   type: "DELETE",
-    	    		   dataType: "json",
-    	    		   url: "${ctx!}/admin/examlog/delete/" + id,
-    	    		   success: function(msg){
-	 	   	    			layer.msg(msg.message, {time: 2000},function(){
-	 	   	    				$('#table_list').bootstrapTable("refresh");
-	 	   	    				layer.close(index);
-	 	   					});
-    	    		   }
-    	    	});
-       		});
+        function userLog(id){
+            console.log("id"+id);
+            layer.open({
+                type: 2,
+                title: '查看记录',
+                shadeClose: true,
+                shade: false,
+                area: ['100%', '100%'],
+                content: '${ctx!}/admin/examlog/show/' + id,
+                end: function(index){
+                    $('#table_list').bootstrapTable("refresh");
+                }
+            });
         }
+
     </script>

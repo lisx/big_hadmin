@@ -105,7 +105,7 @@
 			        title: "操作",
 			        field: "empty",
                     formatter: function (value, row, index) {
-                    	var operateHtml ='<@shiro.hasPermission name="system:user:edit"><button class="btn btn-primary btn-xs" type="button" onclick="show(\''+row.id+'\')"><i class="fa fa-edit"></i>&nbsp;详情</button> &nbsp;</@shiro.hasPermission>';
+                    	var operateHtml ='<@shiro.hasPermission name="system:user:edit"><button class="btn btn-success btn-xs" type="button" onclick="show(\''+row.id+'\')"><i class="fa fa-eye"></i>&nbsp;详情</button> &nbsp;</@shiro.hasPermission>';
                         operateHtml = operateHtml + '<@shiro.hasPermission name="system:user:edit"><button class="btn btn-primary btn-xs" type="button" onclick="edit(\''+row.id+'\')"><i class="fa fa-edit"></i>&nbsp;修改</button> &nbsp;</@shiro.hasPermission>';
                     	operateHtml = operateHtml + '<@shiro.hasPermission name="system:user:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button> &nbsp;</@shiro.hasPermission>';
                     	operateHtml = operateHtml + '<@shiro.hasPermission name="system:user:grant"><button class="btn btn-info btn-xs" type="button" onclick="grant(\''+row.id+'\')"><i class="fa fa-arrows"></i>&nbsp;选择权限</button></@shiro.hasPermission>';

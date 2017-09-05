@@ -122,9 +122,9 @@ public class ExamInterface  extends BaseController {
     @ApiOperation(value="获取试卷及考试题", notes="获取试卷及考试题")
     @RequestMapping(value="/findQuestionById", method = RequestMethod.GET)
     @ApiImplicitParams({
-            @ApiImplicitParam(name="examId",value="试卷id",dataType="Integer", paramType = "query"),
-            @ApiImplicitParam(name="bankId",value="题库id",dataType="Integer", paramType = "query"),
-            @ApiImplicitParam(name="userId",value="用户id",dataType="Integer", paramType = "query")
+            @ApiImplicitParam(name="examId",value="试卷id",dataType="String", paramType = "query"),
+            @ApiImplicitParam(name="bankId",value="题库id",dataType="String", paramType = "query"),
+            @ApiImplicitParam(name="userId",value="用户id",dataType="String", paramType = "query")
     })
     public JSONObject findQuestionById(Integer examId,Integer bankId,Integer userId){
         logger.info("获取试卷类型examId{}||bankId{}||userId{}",examId,bankId,userId);

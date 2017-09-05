@@ -22,7 +22,7 @@ public class User extends BaseEntity {
 
     @Override
     public String toString() {
-        return "";
+        return "User{";
     }
 
     /**
@@ -97,8 +97,7 @@ public class User extends BaseEntity {
     private Integer updateId;
 
 
-	@OneToMany
-    @JSONField(serialize = false)
+	@OneToMany(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
     private List<ExamLog> logs;
 
 	@ManyToMany(cascade = { CascadeType.REFRESH }, fetch = FetchType.LAZY)

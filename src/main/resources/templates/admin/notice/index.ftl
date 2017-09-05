@@ -60,7 +60,7 @@
                     title: "操作",
                     field: "empty",
                     formatter: function (value, row, index) {
-                        var operateHtml ='<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="show(\''+row.id+'\')"><i class="fa fa-edit"></i>&nbsp;详情</button> &nbsp;</@shiro.hasPermission>'
+                        var operateHtml ='<@shiro.hasPermission name="system:resource:add"><button class="btn btn-success btn-xs" type="button" onclick="show(\''+row.id+'\')"><i class="fa fa-eye"></i>&nbsp;详情</button> &nbsp;</@shiro.hasPermission>'
                          + '<@shiro.hasPermission name="system:resource:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button></@shiro.hasPermission>';
                         return operateHtml;
                     }
