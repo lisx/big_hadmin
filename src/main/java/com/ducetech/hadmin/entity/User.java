@@ -123,7 +123,7 @@ public class User extends BaseEntity {
         if(null==faszUrl)
             return "";
         else
-        return BigConstant.getImageUrl(faszUrl);
+            return BigConstant.getImageUrl(faszUrl);
     }
 
     public String getZkysgzUrl() {

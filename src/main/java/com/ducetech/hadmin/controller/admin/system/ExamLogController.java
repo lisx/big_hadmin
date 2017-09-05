@@ -5,7 +5,9 @@ import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IExamDao;
 import com.ducetech.hadmin.dao.IExamLogDao;
+import com.ducetech.hadmin.dao.IUserDao;
 import com.ducetech.hadmin.entity.ExamLog;
+import com.ducetech.hadmin.entity.User;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator;
 import org.slf4j.Logger;
@@ -34,6 +36,8 @@ public class ExamLogController extends BaseController {
     IExamDao examService;
     @Autowired
     IExamLogDao examLogDao;
+    @Autowired
+    IUserDao userDao;
 
     @RequestMapping("/index")
     public String index() {
@@ -44,6 +48,21 @@ public class ExamLogController extends BaseController {
      * 查询试题集合
      * @return Page<User>
      */
+    @RequestMapping(value = { "/user" })
+    @ResponseBody
+    public Page<User> user() {
+        SimpleSpecificationBuilder<User> builder = new SimpleSpecificationBuilder<>();
+        String searchText = request.getParameter("searchText");
+        builder.add("size(logs)", SpecificationOperator.Operator.gt.name(), 0);
+        builder.add("ifUse", SpecificationOperator.Operator.eq.name(), 0);
+        try {
+            Page<User> list = userDao.findAll(builder.generateSpecification(), getPageRequest());
+            return list;
+        }catch(Exception e){
+            logger.debug(e.getMessage());
+        }
+        return null;
+    }
     @RequestMapping(value = { "/list" })
     @ResponseBody
     public Page<ExamLog> list() {

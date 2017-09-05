@@ -211,15 +211,27 @@ public class UserController extends BaseController {
         map.addAttribute("areas", areas);
         if(null!=user.getFwxxkUrl()) {
             String[] fw=user.getFwxxkUrl().split("=");
-            map.put("fwxxkUrl", fw[1]);
+            if(fw.length>1) {
+                map.put("fwxxkUrl", fw[1]);
+            }else{
+                map.put("fwxxkUrl", fw[0]);
+            }
         }
         if(null!=user.getFwxxkUrl()) {
             String[] fw=user.getZkysgzUrl().split("=");
-            map.put("zkysgzUrl", fw[1]);
+            if(fw.length>1) {
+                map.put("zkysgzUrl", fw[1]);
+            }else{
+                map.put("zkysgzUrl", fw[0]);
+            }
         }
         if(null!=user.getFwxxkUrl()) {
             String[] fw=user.getFaszUrl().split("=");
-            map.put("faszUrl", fw[1]);
+            if(fw.length>1) {
+                map.put("faszUrl", fw[1]);
+            }else{
+                map.put("faszUrl", fw[0]);
+            }
         }
 		map.put("user", user);
 		return "admin/user/form";

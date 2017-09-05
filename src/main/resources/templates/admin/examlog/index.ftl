@@ -37,7 +37,7 @@
 			    //必须设置，不然request.getParameter获取不到请求参数
 			    contentType: "application/x-www-form-urlencoded",
 			    //获取数据的Servlet地址
-			    url: "${ctx!}/admin/examlog/list",
+			    url: "${ctx!}/admin/examlog/user",
 			    //表格显示条纹
 			    striped: true,
 			    //启动分页
@@ -71,15 +71,25 @@
 			        field: "id",
 			        sortable: true
 			    },{
-			        title: "用户名",
-			        field: "user.userName"
+			        title: "所属站区",
+			        field: "stationArea"
 			    },{
-                    title: "分数",
-                    field: "score"
+                    title: "所属车站",
+                    field: "station"
                 },{
-			        title: "考试时间",
-                    field: "createTime"
+			        title: "员工姓名",
+                    field: "userName"
 			    },{
+                    title: "考试次数",
+                    field: "logs",
+                    formatter: function (value, row, index) {
+                        if(null==value){
+                            return "";
+                        }else{
+                            return value.size();
+                        }
+                    }
+                },{
 			        title: "操作",
 			        field: "empty",
                     formatter: function (value, row, index) {
