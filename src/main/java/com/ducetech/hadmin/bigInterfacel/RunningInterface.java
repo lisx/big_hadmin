@@ -38,11 +38,18 @@ public class RunningInterface {
     @ApiImplicitParam(name="line",value="线路",dataType="string", paramType = "query")
     public JSONObject findLineALl(String line){
         logger.info("获取线路全部数据");
-        obj=new JSONObject();
         List<Running> runnings=runningDao.findByLineName(line);
+        if(null==runnings){
+            msg="暂无数据";
+            state=0;
+        }else{
+            msg="查询成功";
+            state=1;
+        }
+        obj=new JSONObject();
+        obj.put("msg",msg);
+        obj.put("state",state);
         obj.put("data", runnings);
-        obj.put("msg","查询成功");
-        obj.put("state","1");
         return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
 }

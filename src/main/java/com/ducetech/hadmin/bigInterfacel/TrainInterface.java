@@ -46,9 +46,17 @@ public class TrainInterface {
         obj = new JSONObject();
         Station str = stationDao.findByNodeName(station);
         List<BigFile> stations = bigFileDao.findByStation(str);
+        if(null==stations){
+            msg="暂无数据";
+            state=0;
+        }else{
+            msg="查询成功";
+            state=1;
+        }
+        obj=new JSONObject();
         obj.put("data", stations);
-        obj.put("msg","查询成功");
-        obj.put("state","1");
+        obj.put("msg",msg);
+        obj.put("state",state);
         return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
     @ApiOperation(value="获取站点文件夹全部数据",notes="获取站点文件夹全部数据")
@@ -56,12 +64,19 @@ public class TrainInterface {
     @ApiImplicitParam(name="station",value="线路，站点，站区",dataType="string", paramType = "query")
     public JSONObject findFolderByStation(String station) {
         logger.info("获取站点文件全部数据");
-        obj = new JSONObject();
         Station str = stationDao.findByNodeName(station);
         List<BigFile> stations = bigFileDao.findByStation(str);
+        if(null==stations){
+            msg="暂无数据";
+            state=0;
+        }else{
+            msg="查询成功";
+            state=1;
+        }
+        obj=new JSONObject();
         obj.put("data", stations);
-        obj.put("msg","查询成功");
-        obj.put("state","1");
+        obj.put("msg",msg);
+        obj.put("state",state);
         return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
 

@@ -56,6 +56,7 @@ public class UserInterface extends BaseController {
             msg="工号错误！";
             state=0;
         }
+        obj=new JSONObject();
         obj.put("state",state);
         obj.put("msg",msg);
         obj.put("data",user);
@@ -71,8 +72,15 @@ public class UserInterface extends BaseController {
         int state=1;
         String msg;
         List<User> r = userDao.findAllByStation(station);
+        if(null==r){
+            msg="暂无数据";
+            state=0;
+        }else{
+            msg="查询成功";
+        }
+        obj=new JSONObject();
         obj.put("state",state);
-        obj.put("msg","查询成功！");
+        obj.put("msg",msg);
         obj.put("data",r);
         return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
@@ -83,7 +91,15 @@ public class UserInterface extends BaseController {
         logger.info("进入获取用户详情接口=={}"+id);
         obj=new JSONObject();
         User user=userDao.findOne(id);
-        obj.put("state",1);
+        if(null==user){
+            msg="暂无数据";
+            state=0;
+        }else{
+            msg="查询成功";
+            state=1;
+        }
+        obj=new JSONObject();
+        obj.put("state",state);
         obj.put("msg",msg);
         obj.put("data",user);
         return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
@@ -98,7 +114,6 @@ public class UserInterface extends BaseController {
     @RequestMapping(value="/setUserPassword", method=RequestMethod.GET)
     public JSONObject setUserPassword(String code,String oldPassword,String  newPassword) {
         User user=userDao.findByUserCode(code);
-        obj=new JSONObject();
         if(null!=user){
             if(user.getPassword().equals(MD5Utils.md5(oldPassword))){
                 user.setPassword(MD5Utils.md5(newPassword));
@@ -113,6 +128,7 @@ public class UserInterface extends BaseController {
             msg="工号错误！";
             state=0;
         }
+        obj=new JSONObject();
         obj.put("state",state);
         obj.put("msg",msg);
         obj.put("data","");

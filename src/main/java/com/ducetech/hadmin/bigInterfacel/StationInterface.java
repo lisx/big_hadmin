@@ -37,9 +37,16 @@ public class StationInterface {
         logger.info("获取线路全部数据");
         obj=new JSONObject();
         List<Station> stations = stationDao.findByStationArea(6);
+        if(null==stations){
+            msg="暂无数据";
+            state=0;
+        }else{
+            msg="查询成功";
+            state=1;
+        }
         obj.put("data", stations);
-        obj.put("msg","查询成功");
-        obj.put("state","1");
+        obj.put("msg",msg);
+        obj.put("state",state);
         return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
 
@@ -50,14 +57,22 @@ public class StationInterface {
         logger.info("进入根据站区获取站点全部数据{}",line);
         obj=new JSONObject();
         Station str=stationDao.findByNodeName(line);
+        List<Station> stations=null;
         if(null!=str) {
-            List<Station> stations = stationDao.querySubNodesByCode(str.getNodeCode()+"___", 9);
+            stations = stationDao.querySubNodesByCode(str.getNodeCode()+"___", 9);
             obj.put("data", stations);
         }else{
             obj.put("data","");
         }
-        obj.put("msg","查询成功");
-        obj.put("state","1");
+        if(null==stations){
+            msg="暂无数据";
+            state=0;
+        }else{
+            msg="查询成功";
+            state=1;
+        }
+        obj.put("msg",msg);
+        obj.put("state",state);
         return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
     @ApiOperation(value="根据站区获取站点全部数据",notes="根据站区获取站点全部数据")
@@ -67,14 +82,23 @@ public class StationInterface {
         logger.info("进入根据站区获取站点全部数据{}",area);
         obj=new JSONObject();
         Station str=stationDao.findByNodeName(area);
+        List<Station> stations =null;
         if(null!=str) {
-            List<Station> stations = stationDao.querySubNodesByCode(str.getNodeCode()+"___", 12);
+            stations = stationDao.querySubNodesByCode(str.getNodeCode()+"___", 12);
             obj.put("data", stations);
         }else{
             obj.put("data","");
         }
-        obj.put("msg","查询成功");
-        obj.put("state","1");
+        if(null==stations){
+            msg="暂无数据";
+            state=0;
+        }else{
+            msg="查询成功";
+            state=1;
+        }
+        obj=new JSONObject();
+        obj.put("msg",msg);
+        obj.put("state",state);
         return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
 

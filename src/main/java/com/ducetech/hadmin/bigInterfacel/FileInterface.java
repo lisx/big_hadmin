@@ -53,9 +53,16 @@ public class FileInterface {
         if(nodeCode.length()==12)
         area=nodeCode.substring(0,nodeCode.length()-3);
         List<BigFile> stations = bigFileDao.findByStationFileOrStationFileAndMenuType(str.getNodeCode()+"%","000",area,menuType);
+        if(null==stations){
+            msg="暂无数据";
+            state=0;
+        }else{
+            msg="查询成功";
+            state=1;
+        }
+        obj.put("msg",msg);
+        obj.put("state",state);
         obj.put("data", stations);
-        obj.put("msg","查询成功");
-        obj.put("state","1");
         return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
     @ApiOperation(value="查询站点文件全部数据",notes="查询站点文件全部数据")
@@ -75,9 +82,16 @@ public class FileInterface {
         if(nodeCode.length()==12)
             area=nodeCode.substring(0,nodeCode.length()-3);
         List<BigFile> stations = bigFileDao.findByStationFileOrStationFileAndMenuTypeAndFileName(str.getNodeCode()+"%","000",area,menuType,"%"+name+"%");
+        if(null==stations){
+            msg="暂无数据";
+            state=0;
+        }else{
+            msg="查询成功";
+            state=1;
+        }
+        obj.put("msg",msg);
+        obj.put("state",state);
         obj.put("data", stations);
-        obj.put("msg","查询成功");
-        obj.put("state","1");
         return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
     @ApiOperation(value="获取文件夹内全部数据",notes="获取文件夹内全部数据")
@@ -87,10 +101,17 @@ public class FileInterface {
         logger.info("获取文件夹内全部数据");
         BigFile fold=bigFileDao.findOne(folderId);
         List<BigFile> files=bigFileDao.findByFolderFile(fold);
-        obj = new JSONObject();
+        if(null==files){
+            msg="暂无数据";
+            state=0;
+        }else{
+            msg="查询成功";
+            state=1;
+        }
+        obj=new JSONObject();
+        obj.put("msg",msg);
+        obj.put("state",state);
         obj.put("data", files);
-        obj.put("msg","查询成功");
-        obj.put("state","1");
         return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
 }

@@ -48,9 +48,16 @@ public class EditionInterface {
                 file = files.get(files.size() - 1);
             }
         }
+        if(null==file){
+            msg="暂无数据";
+            state=0;
+        }else{
+            msg="查询成功";
+            state=1;
+        }
         obj.put("data", file);
-        obj.put("msg","查询成功");
-        obj.put("state","1");
+        obj.put("msg",msg);
+        obj.put("state",state);
         return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
 }

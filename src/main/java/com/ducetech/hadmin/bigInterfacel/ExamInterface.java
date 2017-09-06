@@ -111,6 +111,13 @@ public class ExamInterface  extends BaseController {
             questions.get(i).setPropers(propers);
         }
         Collections.shuffle(questions);
+        if(null==questions){
+            msg="暂无数据";
+            state=0;
+        }else{
+            msg="查询成功";
+            state=1;
+        }
         obj=new JSONObject();
         obj.put("state",state);
         obj.put("msg",msg);
