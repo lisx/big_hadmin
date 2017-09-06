@@ -2,7 +2,9 @@ package com.ducetech.hadmin.common.utils;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.apache.poi.POIXMLDocument;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.slf4j.LoggerFactory;
@@ -109,5 +111,27 @@ public class PoiUtil {
             return new XSSFWorkbook(OPCPackage.open(inp));
         }
         throw new IllegalArgumentException("无法解析的excel版本");
+    }
+    /**
+     * 获得默认的单元格style 居中有边框
+     *
+     * @param wb
+     * @return
+     */
+    public static HSSFCellStyle getDefaultHssfCellStyle(HSSFWorkbook wb) {
+        HSSFCellStyle style = wb.createCellStyle();
+        style.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 创建一个居中格式
+        style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        //设置边框样式
+        style.setBorderTop(HSSFCellStyle.BORDER_THIN);
+        style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+        style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+        style.setBorderRight(HSSFCellStyle.BORDER_THIN);
+        //设置边框颜色
+        style.setTopBorderColor(HSSFColor.BLACK.index);
+        style.setBottomBorderColor(HSSFColor.BLACK.index);
+        style.setLeftBorderColor(HSSFColor.BLACK.index);
+        style.setRightBorderColor(HSSFColor.BLACK.index);
+        return style;
     }
 }

@@ -120,7 +120,7 @@
                 title: '用户详情',
                 shadeClose: true,
                 shade: false,
-                area: ['100%', '100%'],
+                area: ['97%', '94%'],
                 content: '${ctx!}/admin/user/show/' + id,
                 end: function(index){
                     $('#table_list').bootstrapTable("refresh");
@@ -133,7 +133,7 @@
         	      title: '用户修改',
         	      shadeClose: true,
         	      shade: false,
-        	      area: ['900px', '600px'],
+        	      area: ['97%', '94%'],
         	      content: '${ctx!}/admin/user/edit/' + id,
         	      end: function(index){
         	    	  $('#table_list').bootstrapTable("refresh");
@@ -146,7 +146,7 @@
         	      title: '用户添加',
         	      shadeClose: true,
         	      shade: false,
-        	      area: ['893px', '600px'],
+                  area: ['97%', '94%'],
         	      content: '${ctx!}/admin/user/add',
         	      end: function(index){
         	    	  $('#table_list').bootstrapTable("refresh");
@@ -159,7 +159,7 @@
                 title: '批量上传用户',
                 shadeClose: true,
                 shade: false,
-                area: ['600px', '600px'],
+                area: ['97%', '94%'],
                 content: '${ctx!}/admin/user/uploadUser',
                 end: function(index){
                     $('#table_list').bootstrapTable("refresh");
@@ -172,7 +172,7 @@
                 title: '批量上传证书',
                 shadeClose: true,
                 shade: false,
-                area: ['600px', '600px'],
+                area: ['97%', '94%'],
                 content: '${ctx!}/admin/user/uploadFile',
                 end: function(index){
                     $('#table_list').bootstrapTable("refresh");
@@ -185,7 +185,7 @@
         	      title: '选择权限',
         	      shadeClose: true,
         	      shade: false,
-        	      area: ['893px', '600px'],
+        	      area: ['500px', '600px'],
         	      content: '${ctx!}/admin/user/grant/'  + id,
         	      end: function(index){
         	    	  $('#table_list').bootstrapTable("refresh");
@@ -207,17 +207,7 @@
     	    	});
        		});
         }
-
-        function detailFormatter(index, row) {
-	        var html = [];
-	        html.push('<p><b>描述:</b> ' + row.description + '</p>');
-	        return html.join('');
-	    }
     </script>
-
-
-
-
 </body>
 
 </html>

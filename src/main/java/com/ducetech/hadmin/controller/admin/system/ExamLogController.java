@@ -1,6 +1,8 @@
 package com.ducetech.hadmin.controller.admin.system;
 
 import com.ducetech.hadmin.common.JsonResult;
+import com.ducetech.hadmin.common.utils.DateUtil;
+import com.ducetech.hadmin.common.utils.PoiUtil;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IExamDao;
@@ -11,6 +13,12 @@ import com.ducetech.hadmin.entity.User;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator;
 import org.apache.http.util.TextUtils;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +37,11 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.servlet.ServletOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -73,7 +86,98 @@ public class ExamLogController extends BaseController {
         model.addAttribute("logs",logs);
         return "admin/examlog/show";
     }
+    @RequestMapping(value = { "/exportLog/{id}" }, method = RequestMethod.GET)
+    public void exportLog(@PathVariable Integer id) throws IOException {
+        User user=userDao.findOne(id);
+        List<ExamLog> logs=examLogDao.findByUser(user);
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheet = workbook.createSheet(user.getUserName() + "的考试记录表格");
+        HSSFRow row;
+        HSSFCellStyle style = PoiUtil.getDefaultHssfCellStyle(workbook);
+        row = sheet.createRow(0);
+        Cell cell=row.createCell(0);
+        cell.setCellValue("姓名");
+        cell.setCellStyle(style);
+        cell=row.createCell(1);
+        cell.setCellValue(user.getUserName());
+        cell.setCellStyle(style);
+        cell=row.createCell(2);
+        cell.setCellValue("工号");
+        cell.setCellStyle(style);
+        cell=row.createCell(3);
+        cell.setCellValue(user.getUserCode());
+        cell.setCellStyle(style);
+        cell=row.createCell(4);
+        cell.setCellValue("站区");
+        cell.setCellStyle(style);
+        cell=row.createCell(5);
+        cell.setCellValue(user.getStationArea());
+        cell.setCellStyle(style);
+        cell=row.createCell(6);
+        cell.setCellValue("车站");
+        cell.setCellStyle(style);
+        cell=row.createCell(7);
+        cell.setCellValue(user.getStation());
+        cell.setCellStyle(style);
+        row=sheet.createRow(1);
+        cell=row.createCell(0);
+        cell.setCellValue("考试时间");
+        cell.setCellStyle(style);
+        cell=row.createCell(1);
+        cell.setCellStyle(style);
+        CellRangeAddress region=new CellRangeAddress(1, 1, 0, 1);
+        sheet.addMergedRegion(region);
+        cell=row.createCell(2);
+        cell.setCellValue("题库名称");
+        cell.setCellStyle(style);
+        cell=row.createCell(3);
+        cell.setCellStyle(style);
+        region=new CellRangeAddress(1, 1, 2, 3);
+        sheet.addMergedRegion(region);
+        cell=row.createCell(4);
+        cell.setCellValue("试卷类型");
+        cell.setCellStyle(style);
+        cell=row.createCell(5);
+        cell.setCellStyle(style);
+        region=new CellRangeAddress(1, 1, 4, 5);
+        sheet.addMergedRegion(region);
+        cell=row.createCell(6);
+        cell.setCellValue("用时");
+        cell.setCellStyle(style);
+        cell=row.createCell(7);
+        cell.setCellValue("分数");
+        cell.setCellStyle(style);
+        for(int i=0;i<logs.size();i++){
+            row=sheet.createRow(i+2);
+            for(int j=0;j<8;j++) {
+                cell = row.createCell(j);
+                cell.setCellStyle(style);
+            }
+            ExamLog log=logs.get(i);
+            String createTime= DateUtil.dateFormat(log.getCreateTime(),"yyyy-MM-dd HH:mm:ss");
+            row.getCell(0).setCellValue(createTime);
+            region=new CellRangeAddress(i+2, i+2, 0, 1);
+            sheet.addMergedRegion(region);
+            row.getCell(2).setCellValue(log.getBank().getName());
+            region=new CellRangeAddress(i+2, i+2, 2, 3);
+            sheet.addMergedRegion(region);
+            row.getCell(4).setCellValue(log.getExam().getExamName());
+            region=new CellRangeAddress(i+2, i+2, 4, 5);
+            sheet.addMergedRegion(region);
+            row.getCell(6).setCellValue(log.getEndTime());
+            row.getCell(7).setCellValue(log.getScore()==null?"":log.getScore()+"");
+        }
+        response.setHeader("content-Type", "application/vnd.ms-excel");
+        response.addHeader("Content-Disposition","attachment;fileName=" + URLEncoder.encode(user.getUserName()+"的考试记录.xls", "UTF-8"));// 设置文件名
+        OutputStream os = response.getOutputStream();
+        try {
+            workbook.write(os);
+            os.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+    }
     @RequestMapping(value = { "/userLog/{id}" }, method = RequestMethod.GET)
     @ResponseBody
     public List<ExamLog>  userLog(@PathVariable Integer id) {

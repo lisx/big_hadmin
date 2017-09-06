@@ -99,7 +99,7 @@
             console.log("id"+id);
             layer.open({
                 type: 2,
-                title: '查看记录',
+                title: false,
                 shadeClose: true,
                 shade: false,
                 area: ['100%', '100%'],
