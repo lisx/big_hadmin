@@ -1,26 +1,6 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-    <title> - 表单验证 jQuery Validation</title>
-    <meta name="keywords" content="">
-    <meta name="description" content="">
-
-    <link rel="shortcut icon" href="favicon.ico">
-    <link href="${ctx!}/hadmin/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
-    <link href="${ctx!}/hadmin/css/font-awesome.css?v=4.4.0" rel="stylesheet">
-    <link href="${ctx!}/hadmin/css/animate.css" rel="stylesheet">
-    <link href="${ctx!}/hadmin/css/style.css?v=4.1.0" rel="stylesheet">
-
-</head>
-
-        <div class="col-sm-12">
-            <div class="ibox float-e-margins">
+<!-- 全局js -->
+<#include "/admin/common/js.ftl">
+<#include "/admin/common/css.ftl">
                 <div class="ibox-content">
                     <form class="form-horizontal" id="frm" method="post" action="${ctx!}/admin/user/save">
                         <input type="hidden" id="id" name="id" value="${user.id}">
@@ -46,31 +26,25 @@
                         </div>
                     </form>
                 </div>
-            </div>
-        </div>
-<!-- 全局js -->
-<!--jquery-->
-<script src="${ctx!}/hadmin/js/jquery.min.js"></script>
-<!--bootstrap-->
-<script src="${ctx!}/hadmin/js/bootstrap.min.js"></script>
-<!-- Bootstrap table -->
-<script src="${ctx!}/hadmin/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
-<script src="${ctx!}/hadmin/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
-<script src="${ctx!}/hadmin/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
-<!-- Peity -->
-<script src="${ctx!}/hadmin/js/plugins/peity/jquery.peity.min.js"></script>
-<!-- layer -->
-<script src="${ctx!}/hadmin/js/plugins/layer/layer.min.js"></script>
-<!-- 自定义js -->
-<script src="${ctx!}/hadmin/js/content.js"></script>
-<!--jquery validate-->
-<script src="${ctx!}/hadmin/js/plugins/validate/jquery.validate.min.js"></script>
-<script src="${ctx!}/hadmin/js/plugins/validate/messages_zh.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         $("#frm").validate({
-            rules: {},
-            messages: {},
+            rules: {
+                roleIds:{
+                    required: true
+                }
+            },
+            messages: {
+                roleIds:"请选择权限"
+            },
+            errorPlacement: function (error, element) { //指定错误信息位置
+                if (element.is(':radio') || element.is(':checkbox')) { //如果是radio或checkbox
+                    var eid = element.attr('name'); //获取元素的name属性
+                    error.appendTo(element.parent().parent().parent().parent()); //将错误信息添加当前元素的父结点后面
+                } else {
+                    error.insertAfter(element);
+                }
+            },
             submitHandler:function(form){
                 $.ajax({
                     type: "POST",
@@ -88,7 +62,3 @@
         });
     });
 </script>
-
-</body>
-
-</html>

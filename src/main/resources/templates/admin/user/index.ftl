@@ -6,15 +6,17 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="ibox ">
-                    <div class="ibox-content">
+                    <div class="ibox-title">
+                        <h5>人员信息</h5>
+                    <@shiro.hasPermission name="system:user:add">
                         <p>
-                        	<@shiro.hasPermission name="system:user:add">
-                        		<button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;添加人员</button>
-                                <button class="btn btn-success " type="button" onclick="uploadUser();"><i class="fa fa-plus"></i>&nbsp;批量导入人员</button>
-                                <button class="btn btn-success " type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;批量导入附件</button>
-                        	</@shiro.hasPermission>
+                            <button class="btn btn-success pull-right" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;批量导入附件</button>
+                            <button class="btn btn-success pull-right" type="button" onclick="uploadUser();"><i class="fa fa-plus"></i>&nbsp;批量导入人员</button>
+                            <button class="btn btn-success pull-right" type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;添加人员</button>
                         </p>
-                        <hr>
+                    </@shiro.hasPermission>
+                    </div>
+                    <div class="ibox-content">
                         <div class="row row-lg">
 		                    <div class="col-sm-12">
 		                        <!-- Example Card View -->
@@ -76,7 +78,7 @@
 			        field: "id",
 			        sortable: true
 			    },{
-			        title: "用户名",
+			        title: "姓名",
 			        field: "userName"
 			    },{
                     title: "工号",
@@ -159,7 +161,7 @@
                 title: '批量上传用户',
                 shadeClose: true,
                 shade: false,
-                area: ['97%', '94%'],
+                area: ['50%', '50%'],
                 content: '${ctx!}/admin/user/uploadUser',
                 end: function(index){
                     $('#table_list').bootstrapTable("refresh");
@@ -185,7 +187,7 @@
         	      title: '选择权限',
         	      shadeClose: true,
         	      shade: false,
-        	      area: ['500px', '600px'],
+        	      area: ['300px', '300px'],
         	      content: '${ctx!}/admin/user/grant/'  + id,
         	      end: function(index){
         	    	  $('#table_list').bootstrapTable("refresh");

@@ -5,7 +5,7 @@
         <div class="col-sm-12">
             <form role="form" id="uploadForm" action="/admin/user/fileUploadUser" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label>第一步 请下载模板并根据示例填写需要导入的员工信息，上传会根据工号查找头像；三证号找对应三证图片。</label>
+                    <label>第一步 请下载模板并根据示例填写需要导入的员工信息，上传完成后会在批量导入附件中根据工号查找头像根据fw工号查找服务信息证；其它二证号找对应二证图片。</label>
                     <button class="btn btn-sm btn-primary m-t-n-xs" onclick="downUploadUser()" type="button"><strong>模版下载</strong>
                     </button>
                 </div>

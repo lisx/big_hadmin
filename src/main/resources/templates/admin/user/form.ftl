@@ -7,7 +7,7 @@
         <input type="hidden" id="id" name="id" value="${user.id}">
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">员工编号：</label>
+            <label class="col-sm-3 control-label">工号：</label>
             <div class="col-sm-8">
                 <input id="userCode" name="userCode" class="form-control" type="text" value="${user.userCode}" <#if user?exists> readonly="readonly"</#if> >
             </div>
@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">员工姓名：</label>
+            <label class="col-sm-3 control-label">姓名：</label>
             <div class="col-sm-8">
                 <input id="userName" name="userName" class="form-control" type="text" value="${user.userName}">
             </div>
@@ -138,7 +138,10 @@
     	    	maxlength: 10
     	      }
     	    },
-    	    messages: {},
+    	    messages: {
+    	        userName:"姓名必填",
+                userCode:"工号必填"
+            },
     	    submitHandler:function(form){
     	    	$.ajax({
    	    		   type: "POST",
