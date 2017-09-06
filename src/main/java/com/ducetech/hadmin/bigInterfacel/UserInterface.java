@@ -50,9 +50,11 @@ public class UserInterface extends BaseController {
                 state=1;
             }else{
                 msg="密码错误！";
+                state=0;
             }
         }else{
             msg="工号错误！";
+            state=0;
         }
         obj.put("state",state);
         obj.put("msg",msg);
@@ -109,6 +111,7 @@ public class UserInterface extends BaseController {
             }
         }else{
             msg="工号错误！";
+            state=0;
         }
         obj.put("state",state);
         obj.put("msg",msg);

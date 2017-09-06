@@ -104,6 +104,8 @@ public class ExamController extends BaseController {
             nodeCode="%"+station.getNodeCode()+"%";
         }
         builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
+        builder.addOr("nodeCode", SpecificationOperator.Operator.eq.name(), "000");
+        builder.add("ifUse", SpecificationOperator.Operator.eq.name(), 0);
         if(!StringUtil.isBlank(searchText)){
             builder.add("name", SpecificationOperator.Operator.likeAll.name(), searchText);
         }

@@ -67,7 +67,7 @@ public class QuestionController extends BaseController {
     @RequestMapping(value = {"/bank"})
     @ResponseBody
     public Page<QuestionBank> bank() {
-        logger.info("进入bank");
+        logger.info("进入bank查询Page");
         SimpleSpecificationBuilder<QuestionBank> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
         User user=getUser();
@@ -77,6 +77,7 @@ public class QuestionController extends BaseController {
             nodeCode="%"+station.getNodeCode()+"%";
         }
         builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
+        builder.addOr("nodeCode", SpecificationOperator.Operator.eq.name(), "000");
         builder.add("ifUse", SpecificationOperator.Operator.eq.name(), 0);
         if (!StringUtil.isBlank(searchText)) {
             builder.add("name", SpecificationOperator.Operator.likeAll.name(), searchText);

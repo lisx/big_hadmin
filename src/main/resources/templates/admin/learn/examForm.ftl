@@ -95,9 +95,12 @@
         $("#bankId").change();
         $("#frm").validate({
             rules: {
-                name: {
+                examName: {
                     required: true,
-                    maxlength: 40
+                    maxlength: 15
+                },
+                bankId: {
+                    required: true
                 }
             },
             messages: {},
