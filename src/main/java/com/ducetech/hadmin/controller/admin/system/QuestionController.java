@@ -1,9 +1,7 @@
 package com.ducetech.hadmin.controller.admin.system;
 
-import com.alibaba.druid.util.StringUtils;
 import com.ducetech.hadmin.common.JsonResult;
 import com.ducetech.hadmin.common.utils.BigConstant;
-import com.ducetech.hadmin.common.utils.FileUtil;
 import com.ducetech.hadmin.common.utils.PoiUtil;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
@@ -15,6 +13,7 @@ import com.ducetech.hadmin.entity.*;
 import com.ducetech.hadmin.service.IQuestionService;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,10 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.nio.channels.FileChannel;
 import java.util.*;
 
 import static com.ducetech.hadmin.common.JsonResult.*;
@@ -312,8 +307,7 @@ public class QuestionController extends BaseController {
                     }
                 }
             }
-            logger.info("||||"+contain.toString());
-            bank.setContain(contain.toString());
+            bank.setContain(StringUtils.join(contain.toArray(),","));
             questionBankDao.saveAndFlush(bank);
         }
         return JsonResult.success("上传成功！");
