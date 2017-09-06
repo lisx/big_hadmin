@@ -106,7 +106,7 @@
                 title: '新增运行图',
                 shadeClose: true,
                 shade: false,
-                area: ['100%', '100%'],
+                area: ['97%', '94%'],
                 content: '${ctx!}/admin/running/uploadFile',
                 end: function(index){
                     $('#table_running_list').bootstrapTable("refresh");
@@ -144,14 +144,17 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="ibox ">
-                    <div class="ibox-content">
+                    <div class="ibox-title">
+                        <h5>运行图管理</h5>
                         <p>
-                        	<@shiro.hasPermission name="system:resource:add">
-                                <button class="btn btn-success" type="button" onclick="addRunning();"><i class="fa fa-plus"></i>&nbsp;新增运行图</button>
-                                <span class="spanStation"></span>
-                        	</@shiro.hasPermission>
+                        <@shiro.hasPermission name="system:resource:add">
+                            <button class="btn btn-success pull-right" type="button" onclick="addRunning();"><i class="fa fa-plus"></i>&nbsp;新增运行图</button>
+                            <span class="spanStation"></span>
+                        </@shiro.hasPermission>
                         </p>
-                        <hr>
+                    </div>
+                    <div class="ibox-content">
+
                         <div class="row row-lg">
                             <div class="col-sm-12">
                                 <!-- Example Card View -->

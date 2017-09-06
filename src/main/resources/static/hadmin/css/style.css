@@ -12,11 +12,15 @@ p button {
 .margin_bottom10{
     margin-bottom: 10px;
 }
+.spanStation{
+    margin-left: 20px;
+}
 /*向上自定义*/
 .content-100 {
     width: 100%;
     height: 100%;
 }
+
 
 h1,
 h2,

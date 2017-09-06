@@ -143,7 +143,7 @@
                 title: '上传文件',
                 shadeClose: true,
                 shade: false,
-                area: ['100%', '100%'],
+                area: ['97%', '94%'],
                 content: '${ctx!}/admin/rollPlay/uploadFile?nodeCode='+id,
                 end: function(index){
                     $('#table_rollPlay_list').bootstrapTable("refresh");
@@ -181,14 +181,17 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="ibox ">
-                    <div class="ibox-content">
+                    <div class="ibox-title">
+                        <h5>首页滚播图</h5>
                         <p>
-                        	<@shiro.hasPermission name="system:resource:add">
-                                <button class="btn btn-success uploadFile" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传图片</button>
-                                <span class="spanStation"></span>
-                        	</@shiro.hasPermission>
+                        <@shiro.hasPermission name="system:resource:add">
+                            <button class="btn btn-success pull-right uploadFile" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传图片</button>
+                            <h5 class="spanStation" style="margin-left: 20px;"></h5>
+                        </@shiro.hasPermission>
                         </p>
-                        <hr>
+                    </div>
+                    <div class="ibox-content">
+
                         <div class="row row-lg">
 		                    <div class="col-sm-3">
                                     <div class='tree'><ul id="treeDemo" class="ztree"></ul></div>

@@ -11,6 +11,7 @@
                                     <#--<button class="btn btn-success uploadFile" data-menu="${folder}" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传资料</button>-->
                                     <button class="btn btn-success addFolder" data-menu="${folder}" type="button" onclick="addFolder();"><i class="fa fa-plus"></i>&nbsp;新建文件夹</button>
                                     <button class="btn btn-success uploadFile" data-menu="${folder}" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传资料</button>
+                                    <span class="spanStation" style="margin-left: 20px;font-weight:bold;"></span>
                                 </@shiro.hasPermission>
                                 </p>
                                 <div class="row row-lg">
@@ -105,7 +106,7 @@
             closeBtn: 0,
             shadeClose: false,
             shade: false,
-            area: ['100%', '100%'],
+            area: ['97%', '94%'],
             content: '${ctx!}/admin/train/twoFolder?folder='+folder+'&nodeName'+station,
             end: function(index){
                 $('#table_folder_train_list').bootstrapTable("refresh");

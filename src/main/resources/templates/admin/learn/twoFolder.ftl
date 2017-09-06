@@ -17,6 +17,7 @@
                                 <p>
                                 <@shiro.hasPermission name="system:resource:add">
                                     <button class="btn btn-success uploadFile" data-menu="${folder}" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传资料</button>
+                                    <h5 class="spanStation" style="margin-left: 20px;"></h5>
                                 </@shiro.hasPermission>
                                 </p>
                                 <div class="row row-lg">
@@ -51,7 +52,7 @@
             closeBtn: 0,
             shadeClose: true,
             shade: false,
-            area: ['100%', '100%'],
+            area: ['97%', '94%'],
             content: '${ctx!}/admin/train/uploadFile?folder=${folder}&nodeCode='+nodeCode+'&menuType='+menuType,
             end: function(index){
                 var opt = {

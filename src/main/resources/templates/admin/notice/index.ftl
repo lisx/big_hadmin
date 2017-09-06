@@ -74,7 +74,7 @@
                 title: '通知详情',
                 shadeClose: true,
                 shade: false,
-                area: ['100%', '100%'],
+                area: ['97%', '94%'],
                 content: '${ctx!}/admin/notice/show?id='+id,
                 end: function(index){
                     $('#table_notice_list').bootstrapTable("refresh");
@@ -88,7 +88,7 @@
                 title: '新增通知',
                 shadeClose: true,
                 shade: false,
-                area: ['100%', '100%'],
+                area: ['97%', '94%'],
                 content: '${ctx!}/admin/notice/uploadFile',
                 end: function(index){
                     $('#table_notice_list').bootstrapTable("refresh");
@@ -141,14 +141,16 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="ibox ">
-                    <div class="ibox-content">
+                    <div class="ibox-title">
+                        <h5>通知管理</h5>
                         <p>
-                        	<@shiro.hasPermission name="system:resource:add">
-                                <button class="btn btn-success" type="button" onclick="addRunning();"><i class="fa fa-plus"></i>&nbsp;发布通知</button>
-                                <span class="spanStation"></span>
-                        	</@shiro.hasPermission>
+                        <@shiro.hasPermission name="system:resource:add">
+                            <button class="btn btn-success pull-right" type="button" onclick="addRunning();"><i class="fa fa-plus"></i>&nbsp;发布通知</button>
+                            <span class="spanStation"></span>
+                        </@shiro.hasPermission>
                         </p>
-                        <hr>
+                    </div>
+                    <div class="ibox-content">
                         <div class="row row-lg">
                             <div class="col-sm-12">
                                 <!-- Example Card View -->
