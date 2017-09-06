@@ -69,11 +69,11 @@ jQuery(function() {
         dnd: '#uploader .queueList',
         paste: document.body,
 
-        // accept: {
-        //     title: 'Images',
-        //     extensions: 'gif,jpg,jpeg,bmp,png',
-        //     mimeTypes: 'image/*'
-        // },
+        accept: {
+            title: 'Images',
+            extensions: 'gif,jpg,jpeg,bmp,png',
+            mimeTypes: 'image/*'
+        },
 
         // swf文件路径
         swf: BASE_URL + '/Uploader.swf',
