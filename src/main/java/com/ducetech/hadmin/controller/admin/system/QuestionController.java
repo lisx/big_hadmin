@@ -108,7 +108,13 @@ public class QuestionController extends BaseController {
      */
     @RequestMapping(value = "/uploadQuestion", method = RequestMethod.GET)
     public String uploadQuestion(Model model) {
-        List<String> areas = stationDao.findLines(9);
+        User user=getUser();
+        List<String> areas=new ArrayList<>();
+        if(user.getStationArea().equals(BigConstant.ADMIN)) {
+           areas = stationDao.findLines(9);
+        }else{
+            areas.add(user.getStationArea());
+        }
         model.addAttribute("areas", areas);
         return "admin/learn/uploadQuestion";
     }
@@ -119,8 +125,9 @@ public class QuestionController extends BaseController {
     public JsonResult uploadFilePost(@RequestParam("radioFile") MultipartFile radioFile,@RequestParam("multipleFile") MultipartFile multipleFile,@RequestParam("opinionFile") MultipartFile opinionFile,@RequestParam("sortFile") MultipartFile sortFile, String questionType, String bankName, String area, String station) {
         User user = getUser();
         Station s;
+        Set<String> sets=new HashSet();
         if (radioFile.isEmpty()&&multipleFile.isEmpty()&&opinionFile.isEmpty()&&sortFile.isEmpty()) {
-            return success("文件为空,必须上传至少一个文件");
+            return JsonResult.failure(1,"文件为空,必须上传至少一个文件");
         } else {
             QuestionBank bank = questionBankDao.findByName(bankName);
             List<String> contain = new ArrayList<>();
@@ -167,8 +174,10 @@ public class QuestionController extends BaseController {
                                     question.setCreateId(user.getId());
                                     question.setCreateTime(new Date());
                                     question.setMenuType("判断");
-
                                     questionService.saveOrUpdate(question);
+                                    sets.add("判断");
+                                }else{
+                                    return JsonResult.failure(1,"上传的判断文件格式错误");
                                 }
                             }
                         }
@@ -196,6 +205,7 @@ public class QuestionController extends BaseController {
                                     question.setCreateTime(new Date());
                                     question.setMenuType("排序");
                                     questionService.saveOrUpdate(question);
+                                    sets.add("排序");
                                     Proper p = null;
                                     String[] arr = A.split("/");
                                     for (int i = 0; i < arr.length; i++) {
@@ -206,6 +216,8 @@ public class QuestionController extends BaseController {
                                             properDao.save(p);
                                         }
                                     }
+                                }else{
+                                    return JsonResult.failure(1,"上传的排序文件格式错误");
                                 }
 
                             }
@@ -234,6 +246,7 @@ public class QuestionController extends BaseController {
                                     question.setCreateTime(new Date());
                                     question.setMenuType("多选");
                                     questionService.saveOrUpdate(question);
+                                    sets.add("多选");
                                     String[] arr = A.split("/");
                                     Proper p = null;
                                     for (int i = 0; i < arr.length; i++) {
@@ -252,6 +265,8 @@ public class QuestionController extends BaseController {
                                             properDao.save(p);
                                         }
                                     }
+                                }else{
+                                    return JsonResult.failure(1,"上传的多选文件格式错误");
                                 }
                             }
                         }
@@ -285,6 +300,7 @@ public class QuestionController extends BaseController {
                                     question.setCreateTime(new Date());
                                     question.setMenuType("单选");
                                     questionService.saveOrUpdate(question);
+                                    sets.add("单选");
                                     Proper p = new Proper();
                                     p.setQuestion(question);
                                     p.setName(A);
@@ -301,13 +317,15 @@ public class QuestionController extends BaseController {
                                     p.setQuestion(question);
                                     p.setName(D);
                                     properDao.save(p);
+                                }else{
+                                    return JsonResult.failure(1,"上传的单选文件格式错误");
                                 }
                             }
                         }
                     }
                 }
             }
-            bank.setContain(StringUtils.join(contain.toArray(),","));
+            bank.setContain(StringUtils.join(sets.toArray(),","));
             questionBankDao.saveAndFlush(bank);
         }
         return JsonResult.success("上传成功！");

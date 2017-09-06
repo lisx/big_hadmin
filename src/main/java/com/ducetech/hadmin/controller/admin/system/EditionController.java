@@ -16,6 +16,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.*;
 
+import static com.ducetech.hadmin.common.JsonResult.*;
+
 /**
  * 下载文件
  *
@@ -61,10 +63,10 @@ public class EditionController extends BaseController {
             bigFile.setFileSize(""+Math.round(file.getSize()/1024));
             bigFile.setMenuType(BigConstant.Edition);
             fileDao.save(bigFile);
-            return JsonResult.success();
+            return success("上传成功");
         } catch (IOException e) {
             e.printStackTrace();
+            return failure("上传失败");
         }
-        return JsonResult.success();
     }
 }

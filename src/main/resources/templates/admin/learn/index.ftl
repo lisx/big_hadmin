@@ -412,7 +412,7 @@
                 title: '创建题库',
                 shadeClose: true,
                 shade: false,
-                area: ['90%', '90%'],
+                area: ['97%', '94%'],
                 content: '${ctx!}/admin/question/uploadQuestion',
                 end: function(index){
                     $('#table_bank_list').bootstrapTable("refresh");

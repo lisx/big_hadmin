@@ -46,7 +46,18 @@ public class UserServiceImpl extends BaseServiceImpl<User, Integer> implements I
 	@Override
 	public void saveOrUpdate(User user) {
 		if(user.getId() != null){
-			update(user);
+		    User dbUser=find(user.getId());
+		    dbUser.setStationArea(user.getStationArea());
+		    dbUser.setStation(user.getStation());
+		    dbUser.setPassword(user.getPassword());
+		    dbUser.setUserCode(user.getUserCode());
+		    dbUser.setUserName(user.getUserName());
+		    dbUser.setPosition(user.getPosition());
+		    dbUser.setLine(user.getLine());
+		    dbUser.setFaszUrl(user.getFaszUrl());
+		    dbUser.setFwxxkUrl(user.getFwxxkUrl());
+		    dbUser.setZkysgzUrl(user.getZkysgzUrl());
+			update(dbUser);
 		}else{
 			user.setPassword(MD5Utils.md5("123456"));
 			save(user);

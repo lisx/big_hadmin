@@ -9,7 +9,7 @@
                     <input type="file" class="form-control" name="file" />
                 </div>
                 <div>
-                    <button class="btn btn-sm btn-primary pull-left m-t-n-xs" onclick="uploadUserClose()" type="button"><strong>发布版本</strong>
+                    <button class="btn btn-sm btn-primary pull-left m-t-n-xs" type="submit"><strong>发布版本</strong>
                     </button>
                 </div>
             </form>
@@ -19,14 +19,32 @@
 <!-- 全局js -->
 <#include "/admin/common/js.ftl">
 <script>
-    function uploadUserClose(){
-        $.ajax({
-            url: '/admin/edition/fileUploadEdition',
-            type: 'POST',
-            cache: false,
-            data: new FormData($('#uploadForm')[0]),
-            processData: false,
-            contentType: false
+    $(document).ready(function () {
+        $("#uploadForm").validate({
+            rules: {
+                bankName: {
+                    required: true,
+                    maxlength: 10
+                }
+            },
+            messages: {},
+            submitHandler:function(form){
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    dataType: "json",
+                    processData: false,
+                    contentType: false,
+                    url: "${ctx!}/admin/edition/fileUploadEdition",
+                    data: new FormData($('#uploadForm')[0]),
+                    success: function(msg){
+                        layer.msg(msg.message, {time: 2000},function(){
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(index);
+                        });
+                    }
+                });
+            }
         });
-    }
+    });
 </script>

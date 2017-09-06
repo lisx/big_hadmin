@@ -63,7 +63,7 @@
                 </div>
                 <br><br>
                 <div>
-                    <button class="btn btn-sm btn-primary pull-left m-t-n-xs" onclick="uploadUserClose()" type="button"><strong>完成创建</strong>
+                    <button class="btn btn-sm btn-primary pull-left m-t-n-xs" type="submit"><strong>完成创建</strong>
                     </button>
                 </div>
             </form>
@@ -72,21 +72,51 @@
 </div>
 
 <script>
-    function uploadUserClose(){
-        $.ajax({
-            url: '/admin/question/uploadFilePost',
-            type: 'POST',
-            cache: false,
-            data: new FormData($('#uploadForm')[0]),
-            processData: false,
-            contentType: false
-        }).done(function(msg) {
-            layer.msg(msg.message, {time: 2000},function(){
-                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-                parent.layer.close(index);
-            });
-        }).fail(function(res) {});
-    }
+    $(document).ready(function () {
+        $("#uploadForm").validate({
+            rules: {
+                bankName: {
+                    required: true,
+                    maxlength: 10
+                }
+            },
+            messages: {},
+            submitHandler:function(form){
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    dataType: "json",
+                    processData: false,
+                    contentType: false,
+                    url: "${ctx!}/admin/question/uploadFilePost",
+                    data: new FormData($('#uploadForm')[0]),
+                    success: function(msg){
+                        layer.msg(msg.message, {time: 2000},function(){
+                            if(msg.code==0){
+                                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                                parent.layer.close(index);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    });
+//    function uploadUserClose(){
+//        $.ajax({
+//            url: '/admin/question/uploadFilePost',
+//            type: 'POST',
+//            cache: false,
+//            data: new FormData($('#uploadForm')[0]),
+//            processData: false,
+//            contentType: false
+//        }).done(function(msg) {
+//            layer.msg(msg.message, {time: 2000},function(){
+//                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+//                parent.layer.close(index);
+//            });
+//        }).fail(function(res) {});
+//    }
     $("#area").change(function(){
         var area=$("#area").val();
         area=area.replace("#","%23");

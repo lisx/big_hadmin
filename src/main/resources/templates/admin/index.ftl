@@ -103,7 +103,7 @@
 </@shiro.hasPermission>
 <@shiro.hasPermission name="system:edtion:index">
                             <li>
-                                <a class="J_menuItem" href="${ctx!}/admin/edition/index">前端版本更新</a>
+                                <a class="javascript:void();" onclick="uploadApk()" >前端版本更新</a>
                             </li>
 </@shiro.hasPermission>
                         </ul>
@@ -146,5 +146,19 @@
     </div>
     <script src="${ctx!}/hadmin/js/hAdmin.js"></script>
 </body>
-
+<script>
+    function uploadApk(){
+        layer.open({
+            type: 2,
+            title: '上传升级文件',
+            shadeClose: true,
+            shade: false,
+            area: ['50%', '50%'],
+            content: '${ctx!}/admin/edition/index',
+            end: function(index){
+                layer.close(index);
+            }
+        });
+    }
+</script>
 </html>
