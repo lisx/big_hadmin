@@ -121,6 +121,7 @@ public class ExamController extends BaseController {
             exam.setStationName(user.getStation());
             exam.setAreaName(user.getStationArea());
             exam.setNodeCode(bank.getNodeCode());
+            exam.setIfUse(0);
             examService.saveAndFlush(exam);
         }catch(Exception e){
             logger.info(e.getMessage());
@@ -131,7 +132,9 @@ public class ExamController extends BaseController {
     @ResponseBody
     public JsonResult delete(@PathVariable Integer id) {
         try {
-            examService.delete(id);
+            Exam exam=examService.findOne(id);
+            exam.setIfUse(1);
+            examService.saveAndFlush(exam);
         } catch (Exception e) {
             e.printStackTrace();
             return JsonResult.failure(e.getMessage());

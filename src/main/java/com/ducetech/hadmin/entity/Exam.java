@@ -50,6 +50,8 @@ public class Exam extends BaseEntity {
     private String stationName;
 
     private String nodeCode;
+
+    private Integer ifUse;
     /**
      * 创建时间
      */

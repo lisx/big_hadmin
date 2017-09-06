@@ -82,6 +82,7 @@ public class FireSafetyController extends BaseController {
         }else {
             builder.add("folderName", SpecificationOperator.Operator.isNull.name(),null);
         }
+        builder.add("ifUse", SpecificationOperator.Operator.eq.name(), 0);
         builder.add("menuType", SpecificationOperator.Operator.eq.name(), BigConstant.Fire);
         if(!StringUtil.isBlank(searchText)){
             builder.add("fileName", SpecificationOperator.Operator.likeAll.name(), searchText);
