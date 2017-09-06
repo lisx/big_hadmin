@@ -5,7 +5,7 @@
 <script src="${ctx!}/hadmin/js/demo/webuploader-question-demo.js"></script>
 <div class="ibox-content">
     <div class="page-container">
-        <p>您可以尝试文件拖拽，使用QQ截屏工具，然后激活窗口后粘贴，或者点击添加图片按钮.</p>
+        <p>练习考试批量导入附件文字：请将图片以创建题库时，下载的题型模板中“题干图片编号”一栏填入的字符，来命名将要上传的题干图片文件。</p>
         <div id="uploader" class="wu-example">
             <div class="queueList">
                 <div id="dndArea" class="placeholder">

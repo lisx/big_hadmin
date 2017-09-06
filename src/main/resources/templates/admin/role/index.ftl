@@ -2,18 +2,20 @@
 <#include "/admin/common/js.ftl">
 <#include "/admin/common/css.ftl">
 
-<body class="gray-bg">
     <div class="wrapper wrapper-content  animated fadeInRight">
         <div class="row">
             <div class="col-sm-12">
                 <div class="ibox ">
-                    <div class="ibox-content">
+                    <div class="ibox-title">
+                        <h5>权限管理</h5>
                         <p>
-                        <@shiro.hasPermission name="system:role:add">
-                        	<button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;添加权限</button>
-                        </@shiro.hasPermission>
+
                         </p>
-                        <hr>
+                    </div>
+                <#--<@shiro.hasPermission name="system:role:add">-->
+                <#--<button class="btn btn-success pull-right" type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;添加权限</button>-->
+                <#--</@shiro.hasPermission>-->
+                    <div class="ibox-content">
                         <div class="row row-lg">
 		                    <div class="col-sm-12">
 		                        <!-- Example Card View -->
@@ -85,7 +87,7 @@
 			        field: "empty",
                     formatter: function (value, row, index) {
                     	var operateHtml = '<@shiro.hasPermission name="system:role:edit"><button class="btn btn-primary btn-xs" type="button" onclick="edit(\''+row.id+'\')"><i class="fa fa-edit"></i>&nbsp;修改</button> &nbsp;</@shiro.hasPermission>';
-                    	operateHtml = operateHtml + '<@shiro.hasPermission name="system:role:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button> &nbsp;</@shiro.hasPermission>';
+                    	<#--operateHtml = operateHtml + '<@shiro.hasPermission name="system:role:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button> &nbsp;</@shiro.hasPermission>';-->
                     	operateHtml = operateHtml + '<@shiro.hasPermission name="system:role:grant"><button class="btn btn-info btn-xs" type="button" onclick="grant(\''+row.id+'\')"><i class="fa fa-arrows"></i>&nbsp;可使用功能</button></@shiro.hasPermission>';
                         return operateHtml;
                     }

@@ -2,14 +2,6 @@
 <#include "/admin/common/js.ftl">
 <#include "/admin/common/css.ftl">
 <#include "/admin/common/ztree.ftl">
-<body class="gray-bg">
-<div class="wrapper wrapper-content  animated fadeInRight">
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="ibox ">
-            <#--<div class="ibox-title">-->
-            <#--<h5>学习园地</h5>-->
-            <#--</div>-->
                 <div class="col-sm-13">
                     <div class="tabs-container">
                         <div class="tab-content">
@@ -39,12 +31,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-        </div>
-    </div>
-</div>
-</div>
 <!-- Page-Level Scripts -->
 <script>
     var setting = {

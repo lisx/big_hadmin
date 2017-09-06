@@ -59,10 +59,10 @@
                                         <input  type="number" min="0" name="rankScore" placeholder="每题分数" class="form-control margin_bottom10" value="${exam.rankScore}" >
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <div class="col-sm-12 col-sm-offset-3">
-                                        <button class="btn btn-primary" type="submit">提交</button>
-                                    </div>
+                                <br><br>
+                                <div>
+                                    <button class="btn btn-sm btn-primary pull-left m-t-n-xs" type="submit"><strong>完成创建</strong>
+                                    </button>
                                 </div>
                             </form>
                         </div>

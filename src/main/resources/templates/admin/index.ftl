@@ -31,7 +31,7 @@
                             <i class="fa fa-cubes"></i>
                             <span class="nav-label">基础信息维护</span>
                         </a>
-                        <ul class="nav nav-second-level">
+                        <ul class="nav nav-second-level collapse in">
                          <@shiro.hasPermission name="system:user:index">
                             <li>
                                <a class="J_menuItem" href="${ctx!}/admin/user/index">人员信息</a>
@@ -60,7 +60,7 @@
                             <span class="nav-label">运营管理</span>
                             <span class="fa arrow"></span>
                         </a>
-                        <ul class="nav nav-second-level">
+                        <ul class="nav nav-second-level collapse in">
 <@shiro.hasPermission name="system:train:index">
                             <li>
                                 <a class="J_menuItem" href="${ctx!}/admin/train/index">学习园地</a>

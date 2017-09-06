@@ -3,11 +3,13 @@
 <#include "/admin/common/css.ftl">
 <#include "/admin/common/webuploader.ftl">
 
-<body class="gray-bg">
     <div class="wrapper wrapper-content  animated fadeInRight">
         <div class="row">
             <div class="col-sm-12">
                 <div class="ibox ">
+                    <div class="ibox-title">
+                        <h5>学习园地</h5>
+                    </div>
                     <div class="col-sm-13">
                         <div class="tabs-container">
                             <ul class="nav nav-tabs">
@@ -36,15 +38,12 @@
                                     </div>
                                 <div id="tab-2" class="tab-pane">
                                     <div class="panel-body">
-                                            <p>
                                             <@shiro.hasPermission name="system:bank:add">
                                                 <button class="btn btn-success " type="button" onclick="uploadQuestion();"><i class="fa fa-plus"></i>&nbsp;创建题库</button>
                                             </@shiro.hasPermission>
                                             <@shiro.hasPermission name="system:bank:uploadFile">
                                                 <button class="btn btn-success " type="button" onclick="uploadImage();"><i class="fa fa-plus"></i>&nbsp;批量导入附件</button>
                                             </@shiro.hasPermission>
-                                            </p>
-                                        <hr>
                                         <div class="row row-lg">
                                             <div class="col-sm-12">
                                                 <!-- Example Card View -->
@@ -60,12 +59,9 @@
                                 </div>
                                 <div id="tab-3" class="tab-pane">
                                     <div class="panel-body">
-                                        <p>
                                         <@shiro.hasPermission name="system:exam:add">
                                             <button class="btn btn-success " type="button" onclick="configExam();"><i class="fa fa-plus"></i>&nbsp;配置试卷类型</button>
                                         </@shiro.hasPermission>
-                                        </p>
-                                        <hr>
                                         <div class="row row-lg">
                                             <div class="col-sm-12">
                                                 <!-- Example Card View -->
@@ -180,6 +176,9 @@
                 url: "${ctx!}/admin/question/bank",
                 //表格显示条纹
                 striped: true,
+                sortable: true, //是否启用排序
+                sortOrder: "desc", //排序方式
+                sortName:"id",
                 //启动分页
                 pagination: true,
                 //每页显示的记录数
@@ -317,10 +316,10 @@
             var station=$(".addFolder").attr("data-code");
             layer.open({
                 type: 2,
-                title: false,
+                title: folder,
                 shadeClose: true,
                 shade: false,
-                area: ['98%', '98%'],
+                area: ['97%', '94%'],
                 content: '${ctx!}/admin/train/toFolder?folder='+folder+'&nodeName'+station,
                 end: function(index){
                     $('#table_train_list').bootstrapTable("refresh");
@@ -351,7 +350,7 @@
                 title: '查看试题',
                 shadeClose: true,
                 shade: false,
-                area: ['100%', '100%'],
+                area: ['97%', '94%'],
                 content: '${ctx!}/admin/question/index?id='+id,
                 end: function(index){
                     $('#table_bank_list').bootstrapTable("refresh");
@@ -364,7 +363,7 @@
                 title: '配置试卷类型',
                 shadeClose: true,
                 shade: false,
-                area: ['100%', '100%'],
+                area: ['97%', '94%'],
                 content: '${ctx!}/admin/exam/add',
                 end: function(index){
                     $('#table_exam_list').bootstrapTable("refresh");
@@ -378,7 +377,7 @@
                 title: '配置试卷类型',
                 shadeClose: true,
                 shade: false,
-                area: ['100%', '100%'],
+                area: ['97%', '94%'],
                 content: '${ctx!}/admin/exam/edit?id='+id,
                 end: function(index){
                     $('#table_exam_list').bootstrapTable("refresh");
@@ -426,7 +425,7 @@
                 title: '批量上传附件',
                 shadeClose: true,
                 shade: false,
-                area: ['100%', '100%'],
+                area: ['97%', '94%'],
                 content: '${ctx!}/admin/question/uploadImage',
                 end: function(index){
                     $('#table_bank_list').bootstrapTable("refresh");

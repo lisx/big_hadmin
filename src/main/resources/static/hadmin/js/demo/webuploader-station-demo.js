@@ -69,6 +69,12 @@ jQuery(function() {
         dnd: '#uploader .queueList',
         paste: document.body,
 
+        accept: {
+            title: 'intoTypes',
+            extensions: 'jpg,jpeg,bmp,png,doc,xls,docx,xlsx,pdf,mp4,avi,rmvb,pmg',
+            mimeTypes: '.jpg,.jpeg,.bmp,.png,.doc,.xls,.docx,.xlsx,.pdf,.mp4,.avi,.rmvb,.pmg'
+        },
+
         // swf文件路径
         swf: BASE_URL + '/Uploader.swf',
 
@@ -79,12 +85,12 @@ jQuery(function() {
         },
         //分片
         chunked: true,
-        chunkSize:100 * 1024 * 1024,
+        chunkSize:100 * 1024 * 1024, //100M
         // server: 'http://webuploader.duapp.com/server/fileupload.php',
         server: '/admin/station/uploadFilePost',
         fileNumLimit: 300,
-        fileSizeLimit: 2000 * 1024 * 1024,    // 2000 M
-        fileSingleSizeLimit: 1500 * 1024 * 1024    // 1500 M
+        fileSizeLimit: 20000 * 1024 * 1024,    // 20000 M
+        fileSingleSizeLimit: 2048 * 1024 * 1024    // 2048 M
     });
 
     uploader.options.formData.nodeCode = $("#fileNodeCode").val();
@@ -111,6 +117,7 @@ jQuery(function() {
             $info = $('<p class="error"></p>'),
 
             showError = function( code ) {
+            console.log("||||||"+code);
                 switch( code ) {
                     case 'exceed_size':
                         text = '文件大小超出';

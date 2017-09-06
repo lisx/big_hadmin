@@ -122,15 +122,15 @@ public class QuestionController extends BaseController {
 
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(@RequestParam("radioFile") MultipartFile radioFile,@RequestParam("multipleFile") MultipartFile multipleFile,@RequestParam("opinionFile") MultipartFile opinionFile,@RequestParam("sortFile") MultipartFile sortFile, String questionType, String bankName, String area, String station) {
+    public JsonResult uploadFilePost(@RequestParam("radioFile") MultipartFile radioFile,@RequestParam("multipleFile") MultipartFile multipleFile,@RequestParam("opinionFile") MultipartFile opinionFile,@RequestParam("sortFile") MultipartFile sortFile, String bankName, String area, String station) {
         User user = getUser();
         Station s;
+
         Set<String> sets=new HashSet();
         if (radioFile.isEmpty()&&multipleFile.isEmpty()&&opinionFile.isEmpty()&&sortFile.isEmpty()) {
             return JsonResult.failure(1,"文件为空,必须上传至少一个文件");
         } else {
             QuestionBank bank = questionBankDao.findByName(bankName);
-            List<String> contain = new ArrayList<>();
             if (null == bank) {
                 bank = new QuestionBank();
                 bank.setName(bankName);
@@ -155,7 +155,6 @@ public class QuestionController extends BaseController {
                 questionBankDao.save(bank);
             }
             if (!opinionFile.isEmpty()) {//判断
-                contain.add("判断");
                 List<List<List<String>>> data = PoiUtil.readExcelToList(opinionFile, 2);
                 if (null != data && !data.isEmpty()) {
                     String A = null, B = null, C = null, D = null, title = null, imgUrl = null;
@@ -169,7 +168,11 @@ public class QuestionController extends BaseController {
                                     Question question = new Question();
                                     question.setTitle(title);
                                     question.setProper(A);
-                                    question.setImgUrl(imgUrl);
+                                    if(imgUrl.equals("无")||StringUtil.isBlank(imgUrl)){
+
+                                    }else {
+                                        question.setImgUrl(area+imgUrl+BigConstant.jpg);
+                                    }
                                     question.setQuestionBank(bank);
                                     question.setCreateId(user.getId());
                                     question.setCreateTime(new Date());
@@ -185,7 +188,6 @@ public class QuestionController extends BaseController {
                 }
             }
             if (!sortFile.isEmpty()) {//排序
-                contain.add("排序");
                 List<List<List<String>>> data = PoiUtil.readExcelToList(sortFile, 2);
                 if (null != data && !data.isEmpty()) {
                     String A = null, B = null, C = null, D = null, title = null, imgUrl = null;
@@ -199,7 +201,11 @@ public class QuestionController extends BaseController {
                                     Question question = new Question();
                                     question.setTitle(title);
                                     question.setProper(A);
-                                    question.setImgUrl(imgUrl);
+                                    if(imgUrl.equals("无")||StringUtil.isBlank(imgUrl)){
+
+                                    }else {
+                                        question.setImgUrl(area+imgUrl+BigConstant.jpg);
+                                    }
                                     question.setQuestionBank(bank);
                                     question.setCreateId(user.getId());
                                     question.setCreateTime(new Date());
@@ -226,7 +232,6 @@ public class QuestionController extends BaseController {
                 }
             }
             if (!multipleFile.isEmpty()) {//多选
-                contain.add("多选");
                 List<List<List<String>>> data = PoiUtil.readExcelToList(multipleFile, 2);
                 if (null != data && !data.isEmpty()) {
                     String A = null, B = null, C = null, D = null, title = null, imgUrl = null;
@@ -240,7 +245,11 @@ public class QuestionController extends BaseController {
                                     Question question = new Question();
                                     question.setTitle(title);
                                     question.setProper(A);
-                                    question.setImgUrl(imgUrl);
+                                    if(imgUrl.equals("无")||StringUtil.isBlank(imgUrl)){
+
+                                    }else {
+                                        question.setImgUrl(area+imgUrl+BigConstant.jpg);
+                                    }
                                     question.setQuestionBank(bank);
                                     question.setCreateId(user.getId());
                                     question.setCreateTime(new Date());
@@ -274,13 +283,16 @@ public class QuestionController extends BaseController {
                 }
             }
             if (!radioFile.isEmpty()) {//单选
-                contain.add("单选");
                 List<List<List<String>>> data = PoiUtil.readExcelToList(radioFile, 2);
                 if (null != data && !data.isEmpty()) {
                     String A = null, B = null, C = null, D = null, title = null, imgUrl = null;
                     for (List<List<String>> sheet : data) {
                         if (null != sheet && !sheet.isEmpty()) {
-                            for (List<String> row : sheet) {
+                            int err=0;
+                            //for (List<String> row : sheet) {
+                            for (int i=0;i<sheet.size();i++) {
+                                err=i+2;
+                                List<String> row=sheet.get(i);
                                 if (row.size() == 6) {
                                     title = StringUtil.trim(row.get(0));
                                     imgUrl = StringUtil.trim(row.get(1));
@@ -294,7 +306,11 @@ public class QuestionController extends BaseController {
                                     Question question = new Question();
                                     question.setTitle(title);
                                     question.setProper(A);
-                                    question.setImgUrl(imgUrl);
+                                    if(imgUrl.equals("无")||StringUtil.isBlank(imgUrl)){
+
+                                    }else {
+                                        question.setImgUrl(area+imgUrl+BigConstant.jpg);
+                                    }
                                     question.setQuestionBank(bank);
                                     question.setCreateId(user.getId());
                                     question.setCreateTime(new Date());
@@ -318,7 +334,11 @@ public class QuestionController extends BaseController {
                                     p.setName(D);
                                     properDao.save(p);
                                 }else{
-                                    return JsonResult.failure(1,"上传的单选文件格式错误");
+                                    if(row.size()==1){
+
+                                    }else {
+                                        return JsonResult.failure(1, "上传的单选文件第" + err + "行格式错误");
+                                    }
                                 }
                             }
                         }

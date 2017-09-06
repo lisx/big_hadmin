@@ -120,7 +120,11 @@ public class BigFile extends BaseEntity {
             bf.setFileSize("" + Math.round(file.getSize() / 1024));
             bf.setMenuType(menuType);
             bf.setFileType(fileType);
-            bf.setFileName(file.getOriginalFilename());
+            if(menuType.equals(BigConstant.Question)) {
+                bf.setFileName(user.getStationArea()+file.getOriginalFilename());
+            }else{
+                bf.setFileName(file.getOriginalFilename());
+            }
             bf.setFileUrl(filePath);
             bf.setByteSize(file.getSize()+"");
             bf.setIfUse(0);

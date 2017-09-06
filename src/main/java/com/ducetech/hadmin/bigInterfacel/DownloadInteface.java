@@ -39,6 +39,7 @@ public class DownloadInteface extends BaseController {
     public void download( Integer id) throws IOException {
         BigFile file=fileDao.findOne(id);
         response.setCharacterEncoding("utf-8");
+        response.setContentLength(Integer.parseInt(file.getByteSize()));
         response.setContentType("application/force-download");// 设置强制下载不打开
         // 设置文件名
         request.setCharacterEncoding("utf-8");

@@ -14,6 +14,9 @@
                 url: "${ctx!}/admin/station/list",
                 //表格显示条纹
                 striped: true,
+                sortable: true, //是否启用排序
+                sortOrder: "desc", //排序方式
+                sortName:"id",
                 //启动分页
                 pagination: true,
                 //每页显示的记录数
@@ -157,6 +160,10 @@
                     isParent = e.data.isParent,
                     nodes = zTree.getSelectedNodes(),
                     treeNode = nodes[0];
+            if (nodes.length == 0) {
+                alert("请先选择一个站区或站点");
+                return;
+            }
             if (treeNode) {
                 saveNode(treeNode);
             }
@@ -166,7 +173,7 @@
                     nodes = zTree.getSelectedNodes(),
                     treeNode = nodes[0];
             if (nodes.length == 0) {
-                alert("请先选择一个节点");
+                alert("请先选择一个站区或站点");
                 return;
             }
             zTree.editName(treeNode);
@@ -176,7 +183,7 @@
                     nodes = zTree.getSelectedNodes(),
                     treeNode = nodes[0];
             if (nodes.length == 0) {
-                alert("请先选择一个节点");
+                alert("请先选择一个站点");
                 return;
             }
             var callbackFlag = true;
@@ -225,7 +232,7 @@
                 title: '上传文件',
                 shadeClose: true,
                 shade: false,
-                area: ['600px', '600px'],
+                area: ['97%', '94%'],
                 content: '${ctx!}/admin/station/uploadFile?nodeCode='+id,
                 end: function(index){
                     $('#table_station_list').bootstrapTable("refresh");
@@ -259,21 +266,22 @@
         };
     </script>
 
-<body class="gray-bg">
     <div class="wrapper wrapper-content  animated fadeInRight">
         <div class="row">
             <div class="col-sm-12">
                 <div class="ibox ">
-                    <div class="ibox-content">
+                    <div class="ibox-title">
+                        <h5>车站信息</h5>
                         <p>
-                        	<@shiro.hasPermission name="system:station:uploadFile">
-                                <button class="btn btn-success fileUploadBtton" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传文件</button>
-                                <button class="btn btn-success addLeaf" id="addLeaf" type="button"><i class="fa fa-plus"></i>&nbsp;新增</button>
-                                <button class="btn btn-success edit" id="edit" type="button"><i class="fa fa-plus"></i>&nbsp;编辑</button>
-                                <button class="btn btn-success remove" id="remove" type="button"><i class="fa fa-plus"></i>&nbsp;删除</button>
-                        	</@shiro.hasPermission>
+                        <@shiro.hasPermission name="system:station:uploadFile">
+                            <button class="btn btn-success pull-right fileUploadBtton" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传文件</button>
+                            <button class="btn btn-success pull-right remove" id="remove" type="button"><i class="fa fa-plus"></i>&nbsp;删除</button>
+                            <button class="btn btn-success pull-right edit" id="edit" type="button"><i class="fa fa-plus"></i>&nbsp;编辑</button>
+                            <button class="btn btn-success pull-right addLeaf" id="addLeaf" type="button"><i class="fa fa-plus"></i>&nbsp;新增</button>
+                        </@shiro.hasPermission>
                         </p>
-                        <hr>
+                    </div>
+                    <div class="ibox-content">
                         <div class="row row-lg">
 		                    <div class="col-sm-3">
                                     <div class='tree'><ul id="treeDemo" class="ztree"></ul></div>

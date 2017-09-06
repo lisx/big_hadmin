@@ -6,10 +6,13 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="ibox ">
-                    <div class="ibox-content">
+                    <div class="ibox-title">
+                        <h5>考试记录</h5>
                         <p>
+
                         </p>
-                        <hr>
+                    </div>
+                    <div class="ibox-content">
                         <div class="row row-lg">
 		                    <div class="col-sm-12">
 		                        <!-- Example Card View -->
@@ -102,7 +105,7 @@
                 title: false,
                 shadeClose: true,
                 shade: false,
-                area: ['100%', '100%'],
+                area: ['97%', '94%'],
                 content: '${ctx!}/admin/examlog/show/' + id,
                 end: function(index){
                     $('#table_list').bootstrapTable("refresh");
