@@ -128,6 +128,7 @@ public class QuestionController extends BaseController {
             return success("文件为空,必须上传至少一个文件");
         } else {
             QuestionBank bank = questionBankDao.findByName(bankName);
+            List<String> contain = new ArrayList<>();
             if (null == bank) {
                 bank = new QuestionBank();
                 bank.setName(bankName);
@@ -152,6 +153,7 @@ public class QuestionController extends BaseController {
                 questionBankDao.save(bank);
             }
             if (!opinionFile.isEmpty()) {//判断
+                contain.add("判断");
                 List<List<List<String>>> data = PoiUtil.readExcelToList(opinionFile, 2);
                 if (null != data && !data.isEmpty()) {
                     String A = null, B = null, C = null, D = null, title = null, imgUrl = null;
@@ -170,6 +172,7 @@ public class QuestionController extends BaseController {
                                     question.setCreateId(user.getId());
                                     question.setCreateTime(new Date());
                                     question.setMenuType("判断");
+
                                     questionService.saveOrUpdate(question);
                                 }
                             }
@@ -178,6 +181,7 @@ public class QuestionController extends BaseController {
                 }
             }
             if (!sortFile.isEmpty()) {//排序
+                contain.add("排序");
                 List<List<List<String>>> data = PoiUtil.readExcelToList(sortFile, 2);
                 if (null != data && !data.isEmpty()) {
                     String A = null, B = null, C = null, D = null, title = null, imgUrl = null;
@@ -215,6 +219,7 @@ public class QuestionController extends BaseController {
                 }
             }
             if (!multipleFile.isEmpty()) {//多选
+                contain.add("多选");
                 List<List<List<String>>> data = PoiUtil.readExcelToList(multipleFile, 2);
                 if (null != data && !data.isEmpty()) {
                     String A = null, B = null, C = null, D = null, title = null, imgUrl = null;
@@ -259,6 +264,7 @@ public class QuestionController extends BaseController {
                 }
             }
             if (!radioFile.isEmpty()) {//单选
+                contain.add("单选");
                 List<List<List<String>>> data = PoiUtil.readExcelToList(radioFile, 2);
                 if (null != data && !data.isEmpty()) {
                     String A = null, B = null, C = null, D = null, title = null, imgUrl = null;
@@ -303,10 +309,12 @@ public class QuestionController extends BaseController {
                                 }
                             }
                         }
-
                     }
                 }
             }
+            logger.info("||||"+contain.toString());
+            bank.setContain(contain.toString());
+            questionBankDao.saveAndFlush(bank);
         }
         return JsonResult.success("上传成功！");
     }

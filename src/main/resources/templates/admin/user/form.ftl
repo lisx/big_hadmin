@@ -39,11 +39,21 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">站区：</label>
+            <label class="col-sm-3 control-label">线路：</label>
             <div class="col-sm-8">
-        <@my.select id="stationArea" class="form-control" value=user.stationArea datas=areas defaultValue="请选择"/>
+            <@my.select id="line" class="form-control" value=user.line datas=lines defaultValue="请选择"/>
             </div>
         </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">站区：</label>
+            <div class="col-sm-8">
+        <#--<@my.select id="stationArea" class="form-control" value=user.stationArea datas=areas defaultValue="请选择"/>-->
+            <select id="stationArea" name="stationArea" value="${user.stationArea}" class="form-control" >
+                <option value="请选择">请选择</option>
+            </select>
+            </div>
+        </div>
+
         <div class="form-group">
             <label class="col-sm-3 control-label">站点：</label>
             <div class="col-sm-8">
@@ -78,25 +88,43 @@
     </form>
 </div>
     <script type="text/javascript">
-        $("#stationArea").change(function(){
-            var area=$("#stationArea").val();
-            area=area.replace("#","%23");
-            console.log("||||"+area);
+        $("#line").change(function(){
+            var line=$("#line").val();
+            console.log("||||"+line);
             $.ajax({
-                url: '/admin/station/getStation?area='+area,
+                url: '/admin/station/getStation?area='+line,
                 type: 'GET',
                 dataType: 'json',
                 cache: false,
                 processData: false,
                 contentType: false
-            }).done(function(stations) {
-                console.log(stations);
-                for(var i in stations){
-                    $("#station").append("<option>"+stations[i]+"</option>");
+            }).done(function(areas) {
+                console.log(areas);
+                for(var i in areas){
+                    $("#stationArea").append("<option>"+areas[i]+"</option>");
                 };
-                $("#station").val("${user.station}");
+                $("#stationArea").val("${user.stationArea}");
+                $("#stationArea").change(function(){
+                    var area=$("#stationArea").val();
+                    console.log("||||"+area);
+                    $.ajax({
+                        url: '/admin/station/getStation?area='+area,
+                        type: 'GET',
+                        dataType: 'json',
+                        cache: false,
+                        processData: false,
+                        contentType: false
+                    }).done(function(stations) {
+                        console.log(stations);
+                        for(var i in stations){
+                            $("#station").append("<option>"+stations[i]+"</option>");
+                        };
+                        $("#station").val("${user.station}");
+                    });
+                }).change();
             });
         }).change();
+
     $(document).ready(function () {
         $("#position").val("${user.position}");
 	    $("#frm").validate({
@@ -105,7 +133,7 @@
     	        required: true,
     	    	maxlength: 10
     	      },
-    	      	nickName: {
+    	      	userCode: {
     	        required: true,
     	    	maxlength: 10
     	      }

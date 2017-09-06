@@ -249,7 +249,9 @@ body.body-small .navbar-top-links li:last-child {
     width: 200px;
     display: inline-table;
 }
-
+.margin_bottom10{
+    margin-bottom: 10px;
+}
 .navbar-form-custom .form-group {
     margin-bottom: 0;
 }

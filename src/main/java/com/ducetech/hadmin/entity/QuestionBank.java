@@ -32,6 +32,7 @@ public class QuestionBank  extends BaseEntity {
 
     private String nodeCode;
     private int ifUse;
+    private String contain;
     /**
      * 创建时间
      */

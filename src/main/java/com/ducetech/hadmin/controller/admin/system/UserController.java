@@ -89,8 +89,8 @@ public class UserController extends BaseController {
 
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public String add(Model model) {
-        List<String> areas = stationDao.findLines(9);
-        model.addAttribute("areas", areas);
+        List<String> lines = stationDao.findLines(6);
+        model.addAttribute("lines", lines);
 		return "admin/user/form";
 	}
 
@@ -207,8 +207,8 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
 	public String edit(@PathVariable Integer id,ModelMap map) {
 		User user = userService.find(id);
-        List<String> areas = stationDao.findLines(9);
-        map.addAttribute("areas", areas);
+        List<String> lines = stationDao.findLines(6);
+        map.addAttribute("lines", lines);
         if(null!=user.getFwxxkUrl()) {
             String[] fw=user.getFwxxkUrl().split("=");
             if(fw.length>1) {
