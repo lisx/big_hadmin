@@ -22,13 +22,15 @@
     $(document).ready(function () {
         $("#uploadForm").validate({
             rules: {
-                bankName: {
-                    required: true,
-                    maxlength: 10
+                file: {
+                    required: true
                 }
             },
-            messages: {},
+            messages: {
+                file:"需要选择升级文件"
+            },
             submitHandler:function(form){
+                $(".btn-primary").attr("disabled","disabled");
                 $.ajax({
                     type: "POST",
                     cache: false,
