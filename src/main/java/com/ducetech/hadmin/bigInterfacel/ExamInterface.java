@@ -53,25 +53,25 @@ public class ExamInterface  extends BaseController {
     IStationDao stationDao;
 
     @ApiOperation(value="获取用户所属站区试卷和题库", notes="获取用户所属站区试卷和题库")
-    @ApiImplicitParam(name="userId",value="用户id",dataType="String", paramType = "query")
+    @ApiImplicitParam(name="station",value="站点",dataType="String", paramType = "query")
     @RequestMapping(value="/findQuestionBankAll", method = RequestMethod.GET)
-    public JSONObject findQuestionBankAll(Integer userId){
+    public JSONObject findQuestionBankAll(String station){
         logger.info("获取试卷题库");
         User user=null;
         List<QuestionBank> banks=null;
         List<Exam> exams=null;
-        if(null!=userId) {
-            user = userDao.findOne(userId);
-            if (null != user) {
-                Station station=stationDao.findByNodeName(user.getStationArea());
-                String nodeCode="%000%";
-                if(null!=station){
-                    nodeCode="%"+station.getNodeCode()+"%";
-                }
-                banks=bankDao.findByStation(nodeCode);
-                exams=examDao.findByStation(nodeCode);
-            }
+        Station sub=stationDao.findByNodeName(station);
+        String nodeCode="%000%";
+        if(null!=sub){
+            state=1;
+            msg="查询成功";
+            nodeCode="%"+sub.getNodeCode()+"%";
+        }else{
+            state=0;
+            msg="未获取站点";
         }
+        banks=bankDao.findByStation(nodeCode);
+        exams=examDao.findByStation(nodeCode);
         obj=new JSONObject();
         ValueFilter filter = new ValueFilter() {
             @Override

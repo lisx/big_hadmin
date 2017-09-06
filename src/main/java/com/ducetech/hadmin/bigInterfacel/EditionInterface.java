@@ -49,7 +49,7 @@ public class EditionInterface {
             }
         }
         if(null==file){
-            msg="暂无数据";
+            msg="暂无更新";
             state=0;
         }else{
             msg="查询成功";
