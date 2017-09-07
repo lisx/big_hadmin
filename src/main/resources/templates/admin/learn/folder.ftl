@@ -68,8 +68,7 @@
         var nodeCode=$(".uploadFile").attr("data-code");
         layer.open({
             type: 2,
-            title:false,
-            closeBtn: 0,
+            title:"${folder}上传文件",
             shadeClose: true,
             shade: false,
             area: ['100%', '100%'],
@@ -102,24 +101,17 @@
         var station=$(".addFolder").attr("data-code");
         layer.open({
             type: 2,
-            title:false,
-            closeBtn: 0,
+            title:folder,
             shadeClose: false,
             shade: false,
-            area: ['97%', '94%'],
+            area: ['100%', '100%'],
             content: '${ctx!}/admin/train/twoFolder?folder='+folder+'&nodeName'+station,
             end: function(index){
                 $('#table_folder_train_list').bootstrapTable("refresh");
             }
         });
     }
-    function down(id,name){
-        console.log(id+"|||||"+name);
-        var a = document.createElement('a');
-        a.href = "${ctx!}/admin/download/"+id;
-        a.download = name;
-        a.click();
-    }
+
     function del(id){
         layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
             $.ajax({

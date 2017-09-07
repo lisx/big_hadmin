@@ -348,7 +348,11 @@ jQuery(function() {
             case 'finish':
                 stats = uploader.getStats();
                 if ( stats.successNum ) {
+                    console.log("||||--")
                     alert( '上传成功' );
+                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                    console.log("||||"+index)
+                    parent.layer.close(index);
                     $('#table_station_list').bootstrapTable("refresh");
                 } else {
                     // 没有成功的图片，重设

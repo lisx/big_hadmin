@@ -52,7 +52,7 @@
             closeBtn: 0,
             shadeClose: true,
             shade: false,
-            area: ['97%', '94%'],
+            area: ['100%', '100%'],
             content: '${ctx!}/admin/train/uploadFile?folder=${folder}&nodeCode='+nodeCode+'&menuType='+menuType,
             end: function(index){
                 var opt = {
