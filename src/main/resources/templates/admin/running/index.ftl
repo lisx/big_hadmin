@@ -48,7 +48,7 @@
                     field: "id",
                     sortable: true
                 },{
-                    title: "文件名",
+                    title: "运行图名称",
                     field: "fileName"
                 },{
                     title: "使用时间",

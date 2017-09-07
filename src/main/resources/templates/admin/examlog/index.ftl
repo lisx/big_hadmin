@@ -92,17 +92,17 @@
 			        title: "操作",
 			        field: "empty",
                     formatter: function (value, row, index) {
-                    	var operateHtml = '<@shiro.hasPermission name="system:user:deleteBatch"><button class="btn btn-success btn-xs" type="button" onclick="userLog(\''+row.id+'\')"><i class="fa fa-eye"></i>&nbsp;查看</button> &nbsp;</@shiro.hasPermission>';
+                    	var operateHtml = '<@shiro.hasPermission name="system:user:deleteBatch"><button class="btn btn-success btn-xs" type="button" onclick="userLog(\''+row.id+'\',\''+row.userName+'\')"><i class="fa fa-eye"></i>&nbsp;查看</button> &nbsp;</@shiro.hasPermission>';
                         return operateHtml;
                     }
 			    }]
 			});
         });
-        function userLog(id){
-            console.log("id"+id);
+        function userLog(id,name){
+            console.log(name+"id"+id);
             layer.open({
                 type: 2,
-                title: false,
+                title: name+'的考试记录',
                 shadeClose: true,
                 shade: false,
                 area: ['97%', '94%'],

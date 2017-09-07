@@ -348,6 +348,9 @@ jQuery(function() {
                 stats = uploader.getStats();
                 if ( stats.successNum ) {
                     alert( '上传成功' );
+                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                    parent.layer.close(index);
+                    $('#table_emergency_list').bootstrapTable("refresh")
                 } else {
                     // 没有成功的文件，重设
                     state = 'done';

@@ -41,7 +41,7 @@
         </div>
         <div class="form-group">
             <div class="col-sm-8 col-sm-offset-3">
-                <button class="btn btn-primary" type="button" onclick="uploadClose()" >保存</button>
+                <button class="btn btn-primary" type="submit" >保存</button>
             </div>
         </div>
     </form>
@@ -108,20 +108,46 @@
         };
         reader.readAsDataURL(file);
     }
-    function uploadClose(){
-        $.ajax({
-            url: '${ctx!}/admin/running/uploadFilePost',
-            type: 'POST',
-            cache: false,
-            data: new FormData($('#frm')[0]),
-            processData: false,
-            contentType: false
-        }).done(function(msg) {
-            layer.msg(msg.message, {time: 2000},function(){
-                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-                parent.layer.close(index);
-            });
-        }).fail(function(res) {});
-    }
+    $(document).ready(function () {
+        $("#frm").validate({
+            rules: {
+                fileName: {
+                    required: true,
+                    maxlength: 10
+                },
+                lineName: {
+                    required: true
+                },
+                dateType: {
+                    required: true
+                },
+                file: {
+                    required: true
+                }
+            },
+            messages: {
+                fileName:"运行图名称必填",
+                lineName:"线路必选",
+                dateType:"时间设置必选",
+                file:"文件必选"
+            },
+            submitHandler:function(form){
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: '${ctx!}/admin/running/uploadFilePost',
+                    data: new FormData($('#frm')[0]),
+                    processData: false,
+                    contentType: false,
+                    success: function(msg){
+                        layer.msg(msg.message, {time: 2000},function(){
+                            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                            parent.layer.close(index);
+                        });
+                    }
+                });
+            }
+        });
+    });
 </script>
 
