@@ -33,6 +33,8 @@ public class QuestionBank  extends BaseEntity {
     private String nodeCode;
     private int ifUse;
     private String contain;
+    @OneToMany
+    private List<Exam> exams;
     /**
      * 创建时间
      */

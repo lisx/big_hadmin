@@ -127,6 +127,7 @@ public class FireSafetyController extends BaseController {
         }
         try {
             folder.setIfFolder(1);
+            folder.setIfUse(0);
             folder.setCreateTime(new Date());
             folder.setCreateId(user.getId());
             folder.setStationFile(area);

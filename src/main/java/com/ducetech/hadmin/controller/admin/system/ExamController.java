@@ -55,10 +55,12 @@ public class ExamController extends BaseController {
         User user=getUser();
         Station station=stationDao.findByNodeName(user.getStationArea());
         String nodeCode="%000%";
+        String area="";
         if(null!=station){
             nodeCode="%"+station.getNodeCode()+"%";
+            area=station.getNodeCode().substring(0,station.getNodeCode().length()-3);
         }
-        List<QuestionBank> banks=bankDao.findByStation(nodeCode);
+        List<QuestionBank> banks=bankDao.findByStation(nodeCode,area);
         model.addAttribute("banks",banks);
         return "admin/learn/examForm";
     }
@@ -81,10 +83,13 @@ public class ExamController extends BaseController {
         User user=getUser();
         Station station=stationDao.findByNodeName(user.getStationArea());
         String nodeCode="%000%";
+        String area="";
         if(null!=station){
             nodeCode="%"+station.getNodeCode()+"%";
+            area=station.getNodeCode().substring(0,station.getNodeCode().length()-3);
         }
-        List<QuestionBank> banks=bankDao.findByStation(nodeCode);
+        logger.debug("||||||{}||||{}",nodeCode,area);
+        List<QuestionBank> banks=bankDao.findByStation(nodeCode,area);
         model.addAttribute("banks",banks);
         return "admin/learn/examForm";
     }
@@ -118,6 +123,7 @@ public class ExamController extends BaseController {
         User user=getUser();
         QuestionBank bank=bankDao.findOne(exam.getBankId());
         try {
+            exam.setQuestionBank(bank);
             exam.setCreateId(getUser().getId());
             exam.setCreateTime(new Date());
             exam.setStationName(user.getStation());

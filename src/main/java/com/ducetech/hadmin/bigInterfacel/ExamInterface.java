@@ -62,16 +62,22 @@ public class ExamInterface  extends BaseController {
         List<Exam> exams=null;
         Station sub=stationDao.findByNodeName(station);
         String nodeCode="%000%";
+        String area="";
         if(null!=sub){
             state=1;
             msg="查询成功";
             nodeCode="%"+sub.getNodeCode()+"%";
+            area=sub.getNodeCode().substring(0,sub.getNodeCode().length()-3);
         }else{
             state=0;
             msg="未获取站点";
         }
-        banks=bankDao.findByStation(nodeCode);
-        exams=examDao.findByStation(nodeCode);
+        logger.debug("||||||{}||||{}",nodeCode,area);
+        banks=bankDao.findByStation(nodeCode,area);
+        for(int i=0;i<banks.size();i++) {
+            exams = examDao.findByQuestionBank(banks.get(i));
+            banks.get(i).setExams(exams);
+        }
         obj=new JSONObject();
         ValueFilter filter = new ValueFilter() {
             @Override
@@ -87,7 +93,7 @@ public class ExamInterface  extends BaseController {
         };
         JSONObject o=new JSONObject();
         o.put("banks",banks);
-        o.put("exams",exams);
+        //o.put("exams",exams);
         obj.put("state",state);
         obj.put("msg",msg);
         obj.put("data",o);
@@ -301,7 +307,7 @@ public class ExamInterface  extends BaseController {
             @ApiImplicitParam(name = "endTime", value = "交卷时间", dataType = "String", paramType = "query"),
     })
     public JSONObject questionExamLog(Integer logId,Integer questionId,String properIds,String endTime){
-        logger.info("获取练习题logId:{}|questionId:{}|properIds:{}|endTime{}",logId,questionId,properIds,endTime);
+        logger.info("设置考试记录:{}|questionId:{}|properIds:{}|endTime{}",logId,questionId,properIds,endTime);
         ExamLog examLog=examLogDao.findOne(logId);
         Question question=questionDao.findOne(questionId);
         List<Proper> propers=new ArrayList<>();
@@ -366,7 +372,10 @@ public class ExamInterface  extends BaseController {
                 }
             }
         }
-        log.setSelectProper(propers);
+        if(null!=log&&null!=propers) {
+            log.setSelectProper(propers);
+        }
+        if(null!=log)
         questionLogDao.save(log);
         if(score!=0) {
             msg="答对";

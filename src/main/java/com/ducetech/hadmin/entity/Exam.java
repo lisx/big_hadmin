@@ -52,6 +52,9 @@ public class Exam extends BaseEntity {
     private String nodeCode;
 
     private Integer ifUse;
+    @JSONField(serialize = false)
+    @ManyToOne
+    private QuestionBank questionBank;
     /**
      * 创建时间
      */
