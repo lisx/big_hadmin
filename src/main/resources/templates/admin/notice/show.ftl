@@ -1,7 +1,6 @@
 <!-- 全局js -->
 <#include "/admin/common/js.ftl">
 <#include "/admin/common/css.ftl">
-<#include "/admin/common/summernote.ftl">
 <#import "/admin/common/select.ftl" as my />
 
 <div class="ibox-content">

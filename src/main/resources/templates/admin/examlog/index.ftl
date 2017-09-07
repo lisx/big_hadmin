@@ -70,7 +70,7 @@
 			    },
 			    //数据列
 			    columns: [{
-			        title: "ID",
+			        title: "编号",
 			        field: "id",
 			        sortable: true
 			    },{

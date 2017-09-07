@@ -31,4 +31,4 @@ return false;
 <script src="${ctx!}/hadmin/js/plugins/validate/messages_zh.min.js"></script>
 <!-- 全局js -->
 <script src="${ctx!}/hadmin/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-<script src="${ctx!}/hadmin/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<#--<script src="${ctx!}/hadmin/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>-->
