@@ -186,7 +186,10 @@ public class QuestionController extends BaseController {
                     String A = null, B = null, C = null, D = null, title = null, imgUrl = null;
                     for (List<List<String>> sheet : data) {
                         if (null != sheet && !sheet.isEmpty()) {
-                            for (List<String> row : sheet) {
+                            int err=0;
+                            for (int i=0;i<sheet.size();i++) {
+                                err=i+2;
+                                List<String> row=sheet.get(i);
                                 if (row.size() == 3) {
                                     title = StringUtil.trim(row.get(0));
                                     imgUrl = StringUtil.trim(row.get(1));
@@ -206,7 +209,11 @@ public class QuestionController extends BaseController {
                                     questionService.saveOrUpdate(question);
                                     sets.add("判断");
                                 }else{
-                                    return JsonResult.failure(1,"上传的判断文件格式错误");
+                                    if(row.size()==1){
+
+                                    }else {
+                                        return JsonResult.failure(1, "上传的判断文件第" + err + "行格式错误");
+                                    }
                                 }
                             }
                         }
@@ -219,7 +226,10 @@ public class QuestionController extends BaseController {
                     String A = null, B = null, C = null, D = null, title = null, imgUrl = null;
                     for (List<List<String>> sheet : data) {
                         if (null != sheet && !sheet.isEmpty()) {
-                            for (List<String> row : sheet) {
+                            int err=0;
+                            for (int j=0;j<sheet.size();j++) {
+                                err=j+2;
+                                List<String> row=sheet.get(j);
                                 if (row.size() == 3) {
                                     title = StringUtil.trim(row.get(0));
                                     imgUrl = StringUtil.trim(row.get(1));
@@ -249,7 +259,11 @@ public class QuestionController extends BaseController {
                                         }
                                     }
                                 }else{
-                                    return JsonResult.failure(1,"上传的排序文件格式错误");
+                                    if(row.size()==1){
+
+                                    }else {
+                                        return JsonResult.failure(1, "上传的排序文件第" + err + "行格式错误");
+                                    }
                                 }
 
                             }
@@ -263,7 +277,10 @@ public class QuestionController extends BaseController {
                     String A = null, B = null, C = null, D = null, title = null, imgUrl = null;
                     for (List<List<String>> sheet : data) {
                         if (null != sheet && !sheet.isEmpty()) {
-                            for (List<String> row : sheet) {
+                            int err=0;
+                            for (int j=0;j<sheet.size();j++) {
+                                err=j+2;
+                                List<String> row=sheet.get(j);
                                 if (row.size() > 3) {
                                     title = StringUtil.trim(row.get(0));
                                     imgUrl = StringUtil.trim(row.get(1));
@@ -301,7 +318,11 @@ public class QuestionController extends BaseController {
                                         }
                                     }
                                 }else{
-                                    return JsonResult.failure(1,"上传的多选文件格式错误");
+                                    if(row.size()==1){
+
+                                    }else {
+                                        return JsonResult.failure(1, "上传的多选文件第" + err + "行格式错误");
+                                    }
                                 }
                             }
                         }
@@ -315,7 +336,6 @@ public class QuestionController extends BaseController {
                     for (List<List<String>> sheet : data) {
                         if (null != sheet && !sheet.isEmpty()) {
                             int err=0;
-                            //for (List<String> row : sheet) {
                             for (int i=0;i<sheet.size();i++) {
                                 err=i+2;
                                 List<String> row=sheet.get(i);
