@@ -21,7 +21,11 @@
                                 <lable class="col-sm-2">工号：</lable>
                                 <span class="col-sm-2">${user.userCode}</span>
                                 <lable class="col-sm-2">权限：</lable>
-                                <span class="col-sm-2"></span>
+                                <span class="col-sm-2">
+                                <#list user.roles as role>
+                                    ${role.name}
+                                </#list>
+                                </span>
                     </div>
                     <div class="row">
                                 <lable class="col-sm-2">线路：</lable>

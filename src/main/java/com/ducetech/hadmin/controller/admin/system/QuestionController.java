@@ -80,6 +80,32 @@ public class QuestionController extends BaseController {
         return questionBankDao.findAll(builder.generateSpecification(), getPageRequest());
     }
 
+    @RequestMapping(value = "/bank/delete/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public JsonResult bankDelete(@PathVariable Integer id) {
+        try {
+            QuestionBank bank=questionBankDao.findOne(id);
+            bank.setIfUse(1);
+            questionBankDao.saveAndFlush(bank);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return JsonResult.failure(e.getMessage());
+        }
+        return JsonResult.success();
+    }
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public JsonResult delete(@PathVariable Integer id) {
+        try {
+            Question question=questionService.find(id);
+            question.setIfUse(1);
+            questionService.saveOrUpdate(question);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return JsonResult.failure(e.getMessage());
+        }
+        return JsonResult.success();
+    }
     /**
      * 查询试题集合
      *

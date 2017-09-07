@@ -12,9 +12,8 @@ public interface IQuestionService extends IBaseService<Question, Integer> {
 
 	/**
 	 * 增加或者修改文章分类
-	 * @param learn
 	 */
-	void saveOrUpdate(Question learn);
+	void saveOrUpdate(Question question);
 
     void delete(Integer id);
 

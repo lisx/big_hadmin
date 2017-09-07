@@ -228,7 +228,7 @@
                     field: "empty",
                     formatter: function (value, row, index) {
                         var operateHtml = '<@shiro.hasPermission name="system:resource:add"><button class="btn btn-success btn-xs" type="button" onclick="bankShow(\''+row.id+'\')"><i class="fa fa-eye"></i>&nbsp;查看</button> &nbsp;</@shiro.hasPermission>';
-                        operateHtml = operateHtml + '<@shiro.hasPermission name="system:resource:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button></@shiro.hasPermission>';
+                        operateHtml = operateHtml + '<@shiro.hasPermission name="system:resource:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="bankDel(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button></@shiro.hasPermission>';
                         return operateHtml;
                     }
                 }]
@@ -355,6 +355,21 @@
                 end: function(index){
                     $('#table_bank_list').bootstrapTable("refresh");
                 }
+            });
+        }
+        function bankDel(id){
+            layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
+                $.ajax({
+                    type: "DELETE",
+                    dataType: "json",
+                    url: "${ctx!}/admin/question/bank/delete/" + id,
+                    success: function(msg){
+                        layer.msg(msg.message, {time: 2000},function(){
+                            $('#table_bank_list').bootstrapTable("refresh");
+                            layer.close(index);
+                        });
+                    }
+                });
             });
         }
         function configExam(){

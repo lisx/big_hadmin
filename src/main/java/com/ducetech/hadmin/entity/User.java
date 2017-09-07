@@ -2,6 +2,7 @@ package com.ducetech.hadmin.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.ducetech.hadmin.common.utils.BigConstant;
+import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.entity.support.BaseEntity;
 import lombok.Data;
 
@@ -106,13 +107,17 @@ public class User extends BaseEntity {
 
     public void getImage(String http){
         http=http.replaceAll("\"","");
-        String s1=http+this.getZkysgzUrl();
-        String s2=http+this.getFwxxkUrl();
-        String s3=http+this.getFaszUrl();
-        String s4=http+this.getPhotoUrl();
-        this.setZkysgzUrl(s1);
-        this.setFwxxkUrl(s2);
-        this.setFaszUrl(s3);
-        this.setPhotoUrl(s4);
+        if(!StringUtil.isBlank(this.getZkysgzUrl())){
+            this.setZkysgzUrl(http+this.getZkysgzUrl());
+        }
+        if(!StringUtil.isBlank(this.getFwxxkUrl())){
+            this.setFwxxkUrl(http+this.getFwxxkUrl());
+        }
+        if(!StringUtil.isBlank(this.getFaszUrl())){
+            this.setFaszUrl(http+this.getFaszUrl());
+        }
+        if(!StringUtil.isBlank(this.getPhotoUrl())){
+            this.setPhotoUrl(http+this.getPhotoUrl());
+        }
     }
 }
