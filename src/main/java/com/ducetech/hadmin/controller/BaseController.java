@@ -1,6 +1,7 @@
 package com.ducetech.hadmin.controller;
 
 import com.ducetech.hadmin.common.DateEditor;
+import com.ducetech.hadmin.common.utils.DucetechProperties;
 import com.ducetech.hadmin.entity.User;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -28,6 +29,9 @@ public class BaseController {
 
 	@Autowired
 	protected HttpServletResponse response;
+
+	@Autowired
+    protected DucetechProperties properties;
 
 	@InitBinder
     protected void initBinder(WebDataBinder webDataBinder) {

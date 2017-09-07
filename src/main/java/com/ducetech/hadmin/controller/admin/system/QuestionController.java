@@ -375,7 +375,7 @@ public class QuestionController extends BaseController {
             file = files.get(i);
             if (!file.isEmpty()) {
                 try {
-                    BigFile.saveFile(folder, nodeCode, user, file, BigConstant.image, BigConstant.Question, flag, fileDao, stationDao);
+                    BigFile.saveFile(properties.getUpload(),folder, nodeCode, user, file, BigConstant.image, BigConstant.Question, flag, fileDao, stationDao);
                 } catch (Exception e) {
                     logger.info(e.getMessage());
                 }

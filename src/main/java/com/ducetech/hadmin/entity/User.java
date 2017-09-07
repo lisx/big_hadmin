@@ -104,31 +104,15 @@ public class User extends BaseEntity {
 	@JoinTable(name = "big_user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
 	private java.util.Set<Role> roles;
 
-    public String getPhotoUrl() {
-        if(null==userCode)
-            return "";
-        else
-            return BigConstant.getImageUrl(userCode);
-    }
-
-    public String getFwxxkUrl() {
-        if(null==fwxxkUrl)
-            return "";
-        else
-        return BigConstant.getImageUrl(fwxxkUrl);
-    }
-
-    public String getFaszUrl() {
-        if(null==faszUrl)
-            return "";
-        else
-            return BigConstant.getImageUrl(faszUrl);
-    }
-
-    public String getZkysgzUrl() {
-        if(null==zkysgzUrl)
-            return "";
-        else
-        return BigConstant.getImageUrl(zkysgzUrl);
+    public void getImage(String http){
+        http=http.replaceAll("\"","");
+        String s1=http+this.getZkysgzUrl();
+        String s2=http+this.getFwxxkUrl();
+        String s3=http+this.getFaszUrl();
+        String s4=http+this.getPhotoUrl();
+        this.setZkysgzUrl(s1);
+        this.setFwxxkUrl(s2);
+        this.setFaszUrl(s3);
+        this.setPhotoUrl(s4);
     }
 }

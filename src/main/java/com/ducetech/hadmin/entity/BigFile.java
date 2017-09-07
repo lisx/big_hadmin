@@ -103,12 +103,12 @@ public class BigFile extends BaseEntity {
     @ManyToOne
     @JSONField(serialize = false)
     private Notice notice;
-    public static boolean saveFile(String folder, String nodeCode, User user, MultipartFile file, String fileType, String menuType, long flag, IBigFileDao fileDao, IStationDao stationDao) throws IOException {
+    public static boolean saveFile(String upload,String folder, String nodeCode, User user, MultipartFile file, String fileType, String menuType, long flag, IBigFileDao fileDao, IStationDao stationDao) throws IOException {
         String filePath;
         BufferedOutputStream stream;
         try {
             String suffix= StringUtil.suffix(file.getOriginalFilename());
-            filePath = BigConstant.upload + flag + file.getOriginalFilename();
+            filePath = upload + flag + file.getOriginalFilename();
             byte[] bytes = file.getBytes();
             stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
             stream.write(bytes);
@@ -136,12 +136,12 @@ public class BigFile extends BaseEntity {
         }
         return true;
     }
-    public static boolean saveFile(Integer size,String folder, String nodeCode, User user, MultipartFile file, String fileType, String menuType, long flag, IBigFileDao fileDao, IStationDao stationDao) throws IOException {
+    public static boolean saveFile(String upload,Integer size,String folder, String nodeCode, User user, MultipartFile file, String fileType, String menuType, long flag, IBigFileDao fileDao, IStationDao stationDao) throws IOException {
         try {
             String filePath;
-            filePath=BigConstant.upload+file.getOriginalFilename();
+            filePath=upload+file.getOriginalFilename();
             File oldFile=new File(filePath);
-            filePath=BigConstant.upload+flag+file.getOriginalFilename();
+            filePath=upload+flag+file.getOriginalFilename();
             File newFile=new File(filePath);
             oldFile.renameTo(newFile);
             BigFile bf = new BigFile();

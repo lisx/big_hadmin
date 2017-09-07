@@ -197,15 +197,15 @@ public class RulesController extends BaseController {
                             logger.info("不分片的情况");
                             //不分片的情况
                             if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {
-                                BigFile.saveFile(folder, nodeCode, user, file,BigConstant.office,BigConstant.Rules,flag,fileDao,stationDao);
+                                BigFile.saveFile(properties.getUpload(),folder, nodeCode, user, file,BigConstant.office,BigConstant.Rules,flag,fileDao,stationDao);
                             }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
-                                BigFile.saveFile(folder, nodeCode, user, file,BigConstant.image,BigConstant.Rules,flag,fileDao,stationDao);
+                                BigFile.saveFile(properties.getUpload(),folder, nodeCode, user, file,BigConstant.image,BigConstant.Rules,flag,fileDao,stationDao);
                             }else {
-                                BigFile.saveFile(folder, nodeCode, user, file, BigConstant.video, BigConstant.Rules, flag, fileDao, stationDao);
+                                BigFile.saveFile(properties.getUpload(),folder, nodeCode, user, file, BigConstant.video, BigConstant.Rules, flag, fileDao, stationDao);
                             }
                         }else{
                             logger.info("分片的情况");
-                            String tempFileDir = BigConstant.uploadChunk+guid+"/";
+                            String tempFileDir = properties.getUpload()+guid+"/";
                             String realname = file.getOriginalFilename();
                             // 临时目录用来存放所有分片文件
                             File parentFileDir = new File(tempFileDir+realname+"/");
@@ -240,15 +240,15 @@ public class RulesController extends BaseController {
                                 }
                                 Collections.sort(fileNames);
                                 //     得到 destTempFile 就是最终的文件
-                                FileUtil.merge(BigConstant.upload,fileNames,realname,guid,flag);
+                                FileUtil.merge(properties.getUpload(),fileNames,realname,guid,flag);
                                 // 删除临时目录中的分片文件
                                 FileUtils.deleteDirectory(parentFileDir);
                                 if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {
-                                    BigFile.saveFile(size,folder, nodeCode, user, file,BigConstant.office,BigConstant.Rules,flag,fileDao,stationDao);
+                                    BigFile.saveFile(properties.getUpload(),size,folder, nodeCode, user, file,BigConstant.office,BigConstant.Rules,flag,fileDao,stationDao);
                                 }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
-                                    BigFile.saveFile(size,folder, nodeCode, user, file,BigConstant.image,BigConstant.Rules,flag,fileDao,stationDao);
+                                    BigFile.saveFile(properties.getUpload(),size,folder, nodeCode, user, file,BigConstant.image,BigConstant.Rules,flag,fileDao,stationDao);
                                 }else {
-                                    BigFile.saveFile(size,folder, nodeCode, user, file, BigConstant.video, BigConstant.Rules, flag, fileDao, stationDao);
+                                    BigFile.saveFile(properties.getUpload(),size,folder, nodeCode, user, file, BigConstant.video, BigConstant.Rules, flag, fileDao, stationDao);
                                 }
                             } else {
                                 logger.info("上传中 chunks" + chunks + " chunk:" + chunk, "");

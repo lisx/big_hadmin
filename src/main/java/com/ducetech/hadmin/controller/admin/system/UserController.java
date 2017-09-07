@@ -1,9 +1,7 @@
 package com.ducetech.hadmin.controller.admin.system;
 
 import com.ducetech.hadmin.common.JsonResult;
-import com.ducetech.hadmin.common.utils.BigConstant;
-import com.ducetech.hadmin.common.utils.MD5Utils;
-import com.ducetech.hadmin.common.utils.PoiUtil;
+import com.ducetech.hadmin.common.utils.*;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IBigFileDao;
 import com.ducetech.hadmin.dao.IStationDao;
@@ -14,7 +12,6 @@ import com.ducetech.hadmin.service.IRoleService;
 import com.ducetech.hadmin.service.IUserService;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator.Operator;
-import com.ducetech.hadmin.common.utils.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +54,8 @@ public class UserController extends BaseController {
     IStationDao stationDao;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
-
+    @Autowired
+    DucetechProperties properties;
     /**
 	 * 用户管理初始化页面
 	 * @return string
@@ -182,7 +180,7 @@ public class UserController extends BaseController {
             if (!file.isEmpty()) {
                 try {
                     byte[] bytes = file.getBytes();
-                    String path = BigConstant.upload + file.getOriginalFilename();
+                    String path = properties.getUpload() + file.getOriginalFilename();
                     File f = new File(path);
                     stream = new BufferedOutputStream(new FileOutputStream(f));
                     stream.write(bytes);
@@ -239,6 +237,8 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/show/{id}", method = RequestMethod.GET)
     public String show(@PathVariable Integer id,ModelMap map) {
         User user = userService.find(id);
+        logger.info(properties.getUploadChunk()+"||||||"+properties.getHttp());
+        user.getImage(properties.getHttp());
         map.put("user", user);
         return "admin/user/show";
     }

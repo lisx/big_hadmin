@@ -1,5 +1,6 @@
 package com.ducetech.hadmin.common.utils;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -18,36 +19,36 @@ public class FileUtil {
      * @param outPath  输出文件的路径(路径+文件名)
      * @throws IOException
      */
-    public static void randomAccessFile( String outPath,MultipartFile temp) throws IOException{
-        RandomAccessFile raFile = null;
-        BufferedInputStream inputStream=null;
-        File tempFile=new File(BigConstant.upload+"chunk/"+temp.getOriginalFilename());
-        try{
-            File dirFile = new File(outPath);
-            //以读写的方式打开目标文件
-            raFile = new RandomAccessFile(dirFile, "rw");
-            raFile.seek(raFile.length());
-            inputStream = (BufferedInputStream) temp.getInputStream();//new BufferedInputStream(new FileInputStream(tempFile));
-            byte[] buf = new byte[1024];
-            int length = 0;
-            while ((length = inputStream.read(buf)) != -1) {
-                raFile.write(buf, 0, length);
-            }
-        }catch(Exception e){
-            throw new IOException(e.getMessage());
-        }finally{
-            try {
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-                if (raFile != null) {
-                    raFile.close();
-                }
-            }catch(Exception e){
-                throw new IOException(e.getMessage());
-            }
-        }
-    }
+//    public static void randomAccessFile( String outPath,MultipartFile temp) throws IOException{
+//        RandomAccessFile raFile = null;
+//        BufferedInputStream inputStream=null;
+//        File tempFile=new File(properties.getUpload()+"chunk/"+temp.getOriginalFilename());
+//        try{
+//            File dirFile = new File(outPath);
+//            //以读写的方式打开目标文件
+//            raFile = new RandomAccessFile(dirFile, "rw");
+//            raFile.seek(raFile.length());
+//            inputStream = (BufferedInputStream) temp.getInputStream();//new BufferedInputStream(new FileInputStream(tempFile));
+//            byte[] buf = new byte[1024];
+//            int length = 0;
+//            while ((length = inputStream.read(buf)) != -1) {
+//                raFile.write(buf, 0, length);
+//            }
+//        }catch(Exception e){
+//            throw new IOException(e.getMessage());
+//        }finally{
+//            try {
+//                if (inputStream != null) {
+//                    inputStream.close();
+//                }
+//                if (raFile != null) {
+//                    raFile.close();
+//                }
+//            }catch(Exception e){
+//                throw new IOException(e.getMessage());
+//            }
+//        }
+//    }
 
 
     /**
@@ -66,17 +67,17 @@ public class FileUtil {
                 System.out.println("合并失败");
         }
         //合并后的文件名
-        destPath = destPath+flag+destName;//合并后的文件路径
+        String destPathFile = destPath+flag+destName;//合并后的文件路径
 
-        File destFile = new File(destPath);//合并后的文件
+        File destFile = new File(destPathFile);//合并后的文件
         OutputStream out = null;
         BufferedOutputStream bos = null;
         try {
             out = new FileOutputStream(destFile);
             bos = new BufferedOutputStream(out);
             for (Integer src : srcPaths) {
-                System.out.println("src::"+BigConstant.uploadChunk+guid+"/"+destName+"/"+src);
-                File srcFile = new File(BigConstant.uploadChunk+guid+"/"+destName+"/"+src);
+                System.out.println("src::"+destPath+guid+"/"+destName+"/"+src);
+                File srcFile = new File(destPath+guid+"/"+destName+"/"+src);
                 InputStream in = new FileInputStream(srcFile);
                 BufferedInputStream bis = new BufferedInputStream(in);
                 byte[] bytes = new byte[1024*1024];
@@ -92,6 +93,7 @@ public class FileUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }finally{
+            deleteAllFilesOfDir(new File(destPath+guid));
             //关闭流
             try {
                 if(bos!=null)bos.close();
@@ -100,5 +102,18 @@ public class FileUtil {
                 e.printStackTrace();
             }
         }
+    }
+    public static void deleteAllFilesOfDir(File path) {
+        if (!path.exists())
+            return;
+        if (path.isFile()) {
+            path.delete();
+            return;
+        }
+        File[] files = path.listFiles();
+        for (int i = 0; i < files.length; i++) {
+            deleteAllFilesOfDir(files[i]);
+        }
+        path.delete();
     }
 }

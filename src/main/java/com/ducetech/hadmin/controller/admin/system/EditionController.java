@@ -43,7 +43,7 @@ public class EditionController extends BaseController {
         MultipartFile file =request.getFile("file");
         User user=getUser();
         //创建临时文件夹
-        String path= BigConstant.upload+file.getOriginalFilename();
+        String path= properties.getUpload()+file.getOriginalFilename();
         File dest = new File(path);
         if (!dest.getParentFile().exists()) {
             dest.getParentFile().mkdirs();

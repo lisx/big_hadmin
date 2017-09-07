@@ -107,7 +107,7 @@ public class RunningController extends BaseController {
         User user=getUser();
         //创建临时文件夹
         long flag=new Date().getTime();
-        String path=BigConstant.upload+flag+file.getOriginalFilename();
+        String path=properties.getUpload()+flag+file.getOriginalFilename();
         File dest = new File(path);
         if (!dest.getParentFile().exists()) {
             dest.getParentFile().mkdirs();

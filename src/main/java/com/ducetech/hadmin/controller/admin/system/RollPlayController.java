@@ -128,14 +128,14 @@ public class RollPlayController extends BaseController {
         User user=getUser();
         MultipartFile file;
         //创建临时文件夹
-        File dirTempFile = new File(BigConstant.upload);
+        File dirTempFile = new File(properties.getUpload());
         if (!dirTempFile.exists()) {
             dirTempFile.mkdirs();
         }
         BufferedOutputStream stream;
         for (int i =0; i< files.size(); ++i) {
             file = files.get(i);
-            String filePath=BigConstant.upload+file.getOriginalFilename();
+            String filePath=properties.getUpload()+file.getOriginalFilename();
             if (!file.isEmpty()) {
                 try {
                     byte[] bytes = file.getBytes();

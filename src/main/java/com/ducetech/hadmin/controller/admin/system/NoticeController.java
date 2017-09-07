@@ -134,7 +134,7 @@ public class NoticeController extends BaseController {
             if (!file.isEmpty()) {
                 try {
                     String suffix = StringUtil.suffix(file.getOriginalFilename());
-                    String filePath=BigConstant.upload+flag+file.getOriginalFilename();
+                    String filePath=properties.getUpload()+flag+file.getOriginalFilename();
                     File tempPartFile = new File(filePath);
                     byte[] bytes = file.getBytes();
                     stream = new BufferedOutputStream(new FileOutputStream(tempPartFile));
