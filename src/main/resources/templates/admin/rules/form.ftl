@@ -25,7 +25,7 @@
 
 	    $("#frm").validate({
     	    rules: {
-    	      	name: {
+    	      	fileName: {
     	        required: true,
     	        maxlength: 40
     	      }

@@ -82,7 +82,7 @@
 			    },
 			    //数据列
 			    columns: [{
-			        title: "ID",
+			        title: "编号",
 			        field: "id",
 			        sortable: true
 			    },{
@@ -112,7 +112,7 @@
                 title: '批量上传资料',
                 shadeClose: true,
                 shade: false,
-                area: ['100%', '105%'],
+                area: ['100%', '100%'],
                 content: '${ctx!}/admin/emergency/uploadFile?folder=${folder}',
                 end: function(index){
                     $('#table_folder_emergency_list').bootstrapTable("refresh");

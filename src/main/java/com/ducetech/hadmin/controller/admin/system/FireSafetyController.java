@@ -104,7 +104,7 @@ public class FireSafetyController extends BaseController {
     public String add(String nodeCode,Model map) {
         logger.info("进入消防安全添加文件夹");
         map.addAttribute("nodeCode",nodeCode);
-        map.addAttribute("menu","消防安全");
+        map.addAttribute("menu",BigConstant.Fire);
         return "admin/fire/form";
     }
 
