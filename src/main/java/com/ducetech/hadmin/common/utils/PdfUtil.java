@@ -49,12 +49,12 @@ public class PdfUtil {
                 outputFile.getParentFile().mkdirs();
             }
 
-            String OpenOffice_HOME = "/Applications/OpenOffice.app/Contents/";//这里是OpenOffice的安装目录, 在我的项目中,为了便于拓展接口,没有直接写成这个样子,但是这样是绝对没问题的
+            String OpenOffice_HOME = "/opt/openoffice4/";//这里是OpenOffice的安装目录, 在我的项目中,为了便于拓展接口,没有直接写成这个样子,但是这样是绝对没问题的
 
             // 启动OpenOffice的服务
-//            String command = OpenOffice_HOME
-//                    + "program/soffice -headless -accept=\"socket,host=127.0.0.1,port=8100;urp;\" -nofirststartwizard";
-//            Process pro = Runtime.getRuntime().exec(command);
+            String command = OpenOffice_HOME
+                    + "program/soffice -headless -accept=\"socket,host=127.0.0.1,port=8100;urp;\" -nofirststartwizard";
+            Process pro = Runtime.getRuntime().exec(command);
             // connect to an OpenOffice.org instance running on port 8100
             OpenOfficeConnection connection = new SocketOpenOfficeConnection(
                     "127.0.0.1", 8100);
@@ -68,9 +68,9 @@ public class PdfUtil {
             converter.convert(inputFile, outputFile);
 
             // close the connection
-            //connection.disconnect();
+            connection.disconnect();
             // 关闭OpenOffice服务的进程
-           // pro.destroy();
+            pro.destroy();
 
             return 0;
 
