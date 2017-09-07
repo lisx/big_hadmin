@@ -3,6 +3,7 @@ package com.ducetech.hadmin.bigInterfacel;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.ValueFilter;
 import com.ducetech.hadmin.common.utils.BigConstant;
+import com.ducetech.hadmin.common.utils.DucetechProperties;
 import com.ducetech.hadmin.common.utils.MD5Utils;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IUserDao;
@@ -34,6 +35,8 @@ public class UserInterface extends BaseController {
     JSONObject obj;
     @Autowired
     IUserDao userDao;
+    @Autowired
+    DucetechProperties properties;
     @ApiOperation(value="用户登录", notes="根据用户工号及密码登录")
     @RequestMapping(value="/login", method = RequestMethod.GET)
     @ApiImplicitParams({
@@ -72,6 +75,11 @@ public class UserInterface extends BaseController {
         int state=1;
         String msg;
         List<User> r = userDao.findAllByStation(station);
+        for(int i=0;i<r.size();i++){
+            User user=r.get(i);
+            user.getImage(properties.getHttp());
+            r.set(i,user);
+        }
         if(null==r){
             msg="暂无数据";
             state=0;
@@ -91,6 +99,7 @@ public class UserInterface extends BaseController {
         logger.info("进入获取用户详情接口=={}"+id);
         obj=new JSONObject();
         User user=userDao.findOne(id);
+        user.getImage(properties.getHttp());
         if(null==user){
             msg="暂无数据";
             state=0;
