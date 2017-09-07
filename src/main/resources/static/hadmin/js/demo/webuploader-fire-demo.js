@@ -83,8 +83,8 @@ jQuery(function() {
         // server: 'http://webuploader.duapp.com/server/fileupload.php',
         server: '/admin/fire/uploadFilePost',
         fileNumLimit: 300,
-        fileSizeLimit: 2000 * 1024 * 1024,    // 2000 M
-        fileSingleSizeLimit: 1500 * 1024 * 1024    // 1500 M
+        fileSizeLimit: 20480 * 1024 * 1024,    // 20480 M
+        fileSingleSizeLimit: 2048 * 1024 * 1024    // 2048 M
     });
 
     uploader.options.formData.nodeCode = $("#fileNodeCode").val();

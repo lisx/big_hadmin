@@ -96,7 +96,6 @@ public class StationInterface {
             msg="查询成功";
             state=1;
         }
-        obj=new JSONObject();
         obj.put("msg",msg);
         obj.put("state",state);
         return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));

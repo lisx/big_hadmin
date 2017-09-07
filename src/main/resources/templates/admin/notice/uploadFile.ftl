@@ -50,15 +50,17 @@
                     maxlength: 40
                 },
                 area: {
-                    required: true,
-                    maxlength: 40
+                    required: true
                 },
                 content: {
-                    required: true,
-                    maxlength: 40
+                    required: true
                 }
             },
-            messages: {},
+            messages: {
+                content:"内容必填",
+                area:"必选",
+                title:"标题必填"
+            },
             submitHandler:function(form){
                 $.ajax({
                     type: "POST",

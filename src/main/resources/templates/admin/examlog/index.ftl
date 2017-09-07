@@ -92,7 +92,7 @@
 			        title: "操作",
 			        field: "empty",
                     formatter: function (value, row, index) {
-                    	var operateHtml = '<@shiro.hasPermission name="system:user:deleteBatch"><button class="btn btn-success btn-xs" type="button" onclick="userLog(\''+row.id+'\',\''+row.userName+'\')"><i class="fa fa-eye"></i>&nbsp;查看</button> &nbsp;</@shiro.hasPermission>';
+                    	var operateHtml = '<@shiro.hasPermission name="admin:examlog:show"><button class="btn btn-success btn-xs" type="button" onclick="userLog(\''+row.id+'\',\''+row.userName+'\')"><i class="fa fa-eye"></i>&nbsp;查看</button> &nbsp;</@shiro.hasPermission>';
                         return operateHtml;
                     }
 			    }]
