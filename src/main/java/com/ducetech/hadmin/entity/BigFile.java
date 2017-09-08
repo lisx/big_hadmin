@@ -2,7 +2,7 @@ package com.ducetech.hadmin.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.ducetech.hadmin.common.utils.BigConstant;
-import com.ducetech.hadmin.common.utils.PdfUtil;
+import com.ducetech.hadmin.common.utils.Office2PdfUtil;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.dao.IBigFileDao;
 import com.ducetech.hadmin.dao.IStationDao;
@@ -113,7 +113,7 @@ public class BigFile extends BaseEntity {
             stream.write(bytes);
             stream.close();
             if (fileType.equals(BigConstant.office)&&!suffix.equals(BigConstant.pdf)) {
-                PdfUtil.office2PDF(filePath, filePath + BigConstant.pdf);
+                Office2PdfUtil.office2Pdf(filePath, filePath + BigConstant.pdf);
             }
             BigFile bf = new BigFile();
             bf.setFileSize("" + Math.round(file.getSize() / 1024));
