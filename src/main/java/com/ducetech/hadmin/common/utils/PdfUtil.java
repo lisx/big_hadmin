@@ -5,9 +5,7 @@ import com.artofsolving.jodconverter.openoffice.connection.OpenOfficeConnection;
 import com.artofsolving.jodconverter.openoffice.connection.SocketOpenOfficeConnection;
 import com.artofsolving.jodconverter.openoffice.converter.OpenOfficeDocumentConverter;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.net.ConnectException;
 
 /**
@@ -50,8 +48,13 @@ public class PdfUtil {
             }
 
             // 启动OpenOffice的服务
-            String command = "/opt/openoffice4/program/soffice -headless -accept=\"socket,host=127.0.0.1,port=8100;urp;\" -nofirststartwizard";
-            Process pro = Runtime.getRuntime().exec(command);
+            //String command = "/opt/openoffice4/program/soffice -headless -accept=\"socket,host=127.0.0.1,port=8100;urp;\" -nofirststartwizard";
+            //Process pro = Runtime.getRuntime().exec(command);
+            try {
+                startSOfficeService();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             // connect to an OpenOffice.org instance running on port 8100
             OpenOfficeConnection connection = new SocketOpenOfficeConnection(
                     "127.0.0.1", 8100);
@@ -67,8 +70,8 @@ public class PdfUtil {
             // close the connection
             connection.disconnect();
             // 关闭OpenOffice服务的进程
-            pro.destroy();
-
+            //pro.destroy();
+            killSOfficeProcess();
             return 0;
 
         } catch (ConnectException e) {
@@ -78,5 +81,30 @@ public class PdfUtil {
         }
 
         return 1;
+    }
+    public static void startSOfficeService() throws InterruptedException, IOException {
+        //First we need to check if the soffice process is running
+        String commands = "pgrep soffice";
+        Process process = Runtime.getRuntime().exec(commands);
+        //Need to wait for this command to execute
+        int code = process.waitFor();
+
+        //If we get anything back from readLine, then we know the process is running
+        BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        if (in.readLine() == null) {
+            //Nothing back, then we should execute the process
+            process = Runtime.getRuntime().exec("/root/soffice.sh");
+            code = process.waitFor();
+            System.out.println("soffice script started");
+        } else {
+            System.out.println("soffice script is already running");
+        }
+
+        in.close();
+    }
+    public static void killSOfficeProcess() throws IOException {
+        if (System.getProperty("os.name").matches(("(?i).*Linux.*"))) {
+            Runtime.getRuntime().exec("pkill soffice");
+        }
     }
 }
