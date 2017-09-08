@@ -95,7 +95,7 @@ public class PdfUtil {
             //Nothing back, then we should execute the process
             process = Runtime.getRuntime().exec("/root/soffice.sh");
             code = process.waitFor();
-            System.out.println("soffice script started");
+            System.out.println("soffice script "+code+" started");
         } else {
             System.out.println("soffice script is already running");
         }
