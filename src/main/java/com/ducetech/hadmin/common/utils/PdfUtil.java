@@ -50,11 +50,11 @@ public class PdfUtil {
             // 启动OpenOffice的服务
             //String command = "/opt/openoffice4/program/soffice -headless -accept=\"socket,host=127.0.0.1,port=8100;urp;\" -nofirststartwizard";
             //Process pro = Runtime.getRuntime().exec(command);
-            try {
-                startSOfficeService();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                startSOfficeService();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
             // connect to an OpenOffice.org instance running on port 8100
             OpenOfficeConnection connection = new SocketOpenOfficeConnection(
                     "127.0.0.1", 8100);
@@ -71,7 +71,7 @@ public class PdfUtil {
             connection.disconnect();
             // 关闭OpenOffice服务的进程
             //pro.destroy();
-            killSOfficeProcess();
+//            killSOfficeProcess();
             return 0;
 
         } catch (ConnectException e) {
