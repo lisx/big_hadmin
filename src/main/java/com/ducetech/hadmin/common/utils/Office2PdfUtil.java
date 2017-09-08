@@ -3,8 +3,6 @@ package com.ducetech.hadmin.common.utils;
 import org.jodconverter.OfficeDocumentConverter;
 import org.jodconverter.office.OfficeException;
 import org.jodconverter.office.OfficeManager;
-import org.jodconverter.office.OfficeTask;
-import org.jodconverter.process.UnixProcessManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
