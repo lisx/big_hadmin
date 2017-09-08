@@ -200,7 +200,11 @@ public class QuestionController extends BaseController {
                                     if(imgUrl.equals("无")||StringUtil.isBlank(imgUrl)){
 
                                     }else {
-                                        question.setImgUrl(area+imgUrl+BigConstant.jpg);
+                                        if(StringUtil.isBlank(area)){
+                                            question.setImgUrl(imgUrl + BigConstant.jpg);
+                                        }else {
+                                            question.setImgUrl(area + imgUrl + BigConstant.jpg);
+                                        }
                                     }
                                     question.setQuestionBank(bank);
                                     question.setCreateId(user.getId());
@@ -240,7 +244,11 @@ public class QuestionController extends BaseController {
                                     if(imgUrl.equals("无")||StringUtil.isBlank(imgUrl)){
 
                                     }else {
-                                        question.setImgUrl(area+imgUrl+BigConstant.jpg);
+                                        if(StringUtil.isBlank(area)){
+                                            question.setImgUrl(imgUrl + BigConstant.jpg);
+                                        }else {
+                                            question.setImgUrl(area + imgUrl + BigConstant.jpg);
+                                        }
                                     }
                                     question.setQuestionBank(bank);
                                     question.setCreateId(user.getId());
@@ -291,7 +299,11 @@ public class QuestionController extends BaseController {
                                     if(imgUrl.equals("无")||StringUtil.isBlank(imgUrl)){
 
                                     }else {
-                                        question.setImgUrl(area+imgUrl+BigConstant.jpg);
+                                        if(StringUtil.isBlank(area)){
+                                            question.setImgUrl(imgUrl + BigConstant.jpg);
+                                        }else {
+                                            question.setImgUrl(area + imgUrl + BigConstant.jpg);
+                                        }
                                     }
                                     question.setQuestionBank(bank);
                                     question.setCreateId(user.getId());
@@ -355,7 +367,11 @@ public class QuestionController extends BaseController {
                                     if(imgUrl.equals("无")||StringUtil.isBlank(imgUrl)){
 
                                     }else {
-                                        question.setImgUrl(area+imgUrl+BigConstant.jpg);
+                                        if(StringUtil.isBlank(area)){
+                                            question.setImgUrl(imgUrl + BigConstant.jpg);
+                                        }else {
+                                            question.setImgUrl(area + imgUrl + BigConstant.jpg);
+                                        }
                                     }
                                     question.setQuestionBank(bank);
                                     question.setCreateId(user.getId());
