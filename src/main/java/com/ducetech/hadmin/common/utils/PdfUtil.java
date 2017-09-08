@@ -1,10 +1,9 @@
 package com.ducetech.hadmin.common.utils;
 
-
-import com.artofsolving.jodconverter.DocumentConverter;
-import com.artofsolving.jodconverter.openoffice.connection.OpenOfficeConnection;
-import com.artofsolving.jodconverter.openoffice.connection.SocketOpenOfficeConnection;
-import com.artofsolving.jodconverter.openoffice.converter.OpenOfficeDocumentConverter;
+import org.jodconverter.OfficeDocumentConverter;
+import org.jodconverter.office.OfficeException;
+import org.jodconverter.office.OfficeManager;
+import org.jodconverter.office.OfficeTask;
 
 import java.io.*;
 import java.net.ConnectException;
@@ -57,27 +56,50 @@ public class PdfUtil {
 //                e.printStackTrace();
 //            }
             // connect to an OpenOffice.org instance running on port 8100
-            OpenOfficeConnection connection = new SocketOpenOfficeConnection(
-                    "127.0.0.1", 8100);
-            connection.connect();
 
-            // convert
-            DocumentConverter converter = new OpenOfficeDocumentConverter(
-                    connection);
+//            OpenOfficeConnection connection = new SocketOpenOfficeConnection(
+//                    "127.0.0.1", 8100);
+//            connection.connect();
+            OfficeManager manager= new OfficeManager() {
+                @Override
+                public void execute(OfficeTask officeTask) throws OfficeException {
+
+                }
+
+                @Override
+                public boolean isRunning() {
+                    return false;
+                }
+
+                @Override
+                public void start() throws OfficeException {
+
+                }
+
+                @Override
+                public void stop() throws OfficeException {
+
+                }
+            };
+            OfficeDocumentConverter converter2=new OfficeDocumentConverter(manager);
             System.out.println("inputFile"+inputFile);
             System.out.println("outputFile"+outputFile);
-            converter.convert(inputFile, outputFile);
-
-            // close the connection
-            connection.disconnect();
+            converter2.convert(inputFile,outputFile);
+            // convert
+//            DocumentConverter converter = new OpenOfficeDocumentConverter(
+//                    connection);
+//            System.out.println("inputFile"+inputFile);
+//            System.out.println("outputFile"+outputFile);
+//            converter.convert(inputFile, outputFile);
+//
+//            // close the connection
+//            connection.disconnect();
             // 关闭OpenOffice服务的进程
             //pro.destroy();
 //            killSOfficeProcess();
             return 0;
 
-        } catch (ConnectException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (OfficeException e) {
             e.printStackTrace();
         }
 
