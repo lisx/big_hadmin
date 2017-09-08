@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,8 +41,9 @@ public class RunningInterface {
         logger.info("获取线路全部数据");
         List<Running> runnings=runningDao.findByLineName(line);
         if(null==runnings){
+            runnings=new ArrayList<>();
             msg="暂无数据";
-            state=0;
+            state=1;
         }else{
             msg="查询成功";
             state=1;

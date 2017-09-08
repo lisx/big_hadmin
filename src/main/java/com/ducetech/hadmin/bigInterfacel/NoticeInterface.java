@@ -58,7 +58,8 @@ public class NoticeInterface {
             state=1;
             msg="查询成功";
         }else{
-            state=0;
+            notices=new ArrayList<>();
+            state=1;
             msg="暂无数据";
         }
         logger.info("|||||"+String.valueOf(notices.size()));
