@@ -1,6 +1,5 @@
 package com.ducetech.hadmin.config.intercepter;
 
-import org.joda.time.DateTimeUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -27,7 +26,7 @@ public class CommonIntercepter implements HandlerInterceptor {
 			HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
 			request.setAttribute("ctx", request.getContextPath());
-			request.setAttribute("version", DateTimeUtils.currentTimeMillis());
+			request.setAttribute("version", System.currentTimeMillis());
 	}
 
 	@Override

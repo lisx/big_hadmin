@@ -340,9 +340,9 @@ body.mini-navbar .navbar-default .nav > li > .nav-second-level li a {
     position: relative;
 }
 
-.slimScrollDiv >* {
-    overflow: hidden;
-}
+/*.slimScrollDiv >* {*/
+    /*overflow: hidden;*/
+/*}*/
 
 .mini-navbar .nav-second-level li a {
     padding: 10px 10px 10px 15px;

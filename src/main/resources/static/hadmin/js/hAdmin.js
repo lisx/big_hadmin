@@ -15,15 +15,15 @@ $(document).ready(function () {
         $('#right-sidebar').toggleClass('sidebar-open');
     });
 
-    //固定菜单栏
-    $(function () {
-        console.log(2)
-        $('.sidebar-collapse').slimScroll({
-            height: '100%',
-            railOpacity: 0.9,
-            alwaysVisible: false
-        });
-    });
+    // //固定菜单栏
+    // $(function () {
+    //     console.log(2)
+    //     $('.sidebar-collapse').slimScroll({
+    //         height: '100%',
+    //         railOpacity: 0.9,
+    //         alwaysVisible: false
+    //     });
+    // });
 
 
     // 菜单切换
@@ -64,9 +64,9 @@ $(document).ready(function () {
         }
     });
 
-    $('.full-height-scroll').slimScroll({
-        height: '100%'
-    });
+    // $('.full-height-scroll').slimScroll({
+    //     height: '100%'
+    // });
 
     $('#side-menu').delegate("li","click",function () {
         console.log(8)
