@@ -23,9 +23,9 @@
                         <div class="logo-element">运三
                         </div>
                     </li>
-                    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
-                        <span class="ng-scope">分类</span>
-                    </li>
+                    <#--<li class="hidden-folded padder m-t m-b-sm text-muted text-xs">-->
+                        <#--<span class="ng-scope">分类</span>-->
+                    <#--</li>-->
                     <li>
                         <a href="#">
                             <i class="fa fa-cubes"></i>

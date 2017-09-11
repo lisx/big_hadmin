@@ -24,28 +24,31 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
+        <!--spring boot freemarker模版 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-freemarker</artifactId>
 		</dependency>
-
-		<dependency>
+        <!--spring boot 配置处理器 -->
+        <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
-
+        <!--JDBC的自动配置spring-boot-starter-data-jpa依赖于spring-boot-starter-jdbc，而SpringBoot对JDBC做了一些自动配置。源码放在org.springframework.boot.autoconfigure.jdbc-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-
+        <!--缓存的支持-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-cache</artifactId>
 		</dependency>
-
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+        </dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -56,11 +59,6 @@
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
 			<version>1.0.15</version>
-		</dependency>
-
-		<dependency>
-			<groupId>net.sf.ehcache</groupId>
-			<artifactId>ehcache</artifactId>
 		</dependency>
 
 		<dependency>
@@ -181,64 +179,6 @@
             <artifactId>jodconverter-spring-boot-starter</artifactId>
             <version>4.0.0-RELEASE</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>cglib</groupId>-->
-            <!--<artifactId>cglib</artifactId>-->
-            <!--<version>3.2.4</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>com.artofsolving</groupId>-->
-            <!--<artifactId>jodconverter</artifactId>-->
-            <!--<version>2.2.1</version>-->
-        <!--</dependency>-->
-        <!--&lt;!&ndash; https://mvnrepository.com/artifact/commons-io/commons-io &ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>commons-io</groupId>-->
-            <!--<artifactId>commons-io</artifactId>-->
-            <!--<version>1.4</version>-->
-        <!--</dependency>-->
-        <!--&lt;!&ndash; https://mvnrepository.com/artifact/commons-cli/commons-cli &ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>commons-cli</groupId>-->
-            <!--<artifactId>commons-cli</artifactId>-->
-            <!--<version>1.4</version>-->
-        <!--</dependency>-->
-        <!--&lt;!&ndash; https://mvnrepository.com/artifact/com.thoughtworks.xstream/xstream &ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>com.thoughtworks.xstream</groupId>-->
-            <!--<artifactId>xstream</artifactId>-->
-            <!--<version>1.3.1</version>-->
-        <!--</dependency>-->
-        <!--&lt;!&ndash; https://mvnrepository.com/artifact/org.openoffice/unoil &ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>org.openoffice</groupId>-->
-            <!--<artifactId>unoil</artifactId>-->
-            <!--<version>3.2.1</version>-->
-        <!--</dependency>-->
-        <!--&lt;!&ndash; https://mvnrepository.com/artifact/org.openoffice/ridl &ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>org.openoffice</groupId>-->
-            <!--<artifactId>ridl</artifactId>-->
-            <!--<version>3.2.1</version>-->
-        <!--</dependency>-->
-        <!--&lt;!&ndash; https://mvnrepository.com/artifact/org.openoffice/jurt &ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>org.openoffice</groupId>-->
-            <!--<artifactId>jurt</artifactId>-->
-            <!--<version>3.2.1</version>-->
-        <!--</dependency>-->
-        <!--&lt;!&ndash; https://mvnrepository.com/artifact/org.openoffice/juh &ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>org.openoffice</groupId>-->
-            <!--<artifactId>juh</artifactId>-->
-            <!--<version>3.2.1</version>-->
-        <!--</dependency>-->
-        <!--&lt;!&ndash; https://mvnrepository.com/artifact/org.openoffice/bootstrap-connector &ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>org.openoffice</groupId>-->
-            <!--<artifactId>bootstrap-connector</artifactId>-->
-            <!--<version>0.1.1</version>-->
-        <!--</dependency>-->
     </dependencies>
 
 	<build>

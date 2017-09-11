@@ -113,7 +113,6 @@
             rules: {
                 fileName: {
                     required: true,
-                    maxlength: 10
                 },
                 lineName: {
                     required: true

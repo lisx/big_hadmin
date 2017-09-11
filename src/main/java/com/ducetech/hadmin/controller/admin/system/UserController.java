@@ -5,6 +5,7 @@ import com.ducetech.hadmin.common.utils.*;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IBigFileDao;
 import com.ducetech.hadmin.dao.IStationDao;
+import com.ducetech.hadmin.dao.IUserDao;
 import com.ducetech.hadmin.entity.BigFile;
 import com.ducetech.hadmin.entity.Role;
 import com.ducetech.hadmin.entity.User;
@@ -47,6 +48,8 @@ public class UserController extends BaseController {
     @Autowired
 	IUserService userService;
     @Autowired
+    IUserDao userDao;
+    @Autowired
 	IRoleService roleService;
 	@Autowired
     IBigFileDao fileDao;
@@ -82,7 +85,8 @@ public class UserController extends BaseController {
             builder.addOr("stationArea", Operator.likeAll.name(), searchText);
             builder.addOr("line", Operator.likeAll.name(), searchText);
 		}
-        return userService.findAll(builder.generateSpecification(), getPageRequest());
+		logger.info("查询人员首页");
+        return userDao.findAll(builder.generateSpecification(), getPageRequest());
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.GET)

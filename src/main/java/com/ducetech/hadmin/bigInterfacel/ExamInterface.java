@@ -261,42 +261,6 @@ public class ExamInterface  extends BaseController {
 
     }
 
-    @ApiOperation(value="设置试卷", notes="设置试卷")
-    @RequestMapping(value="/setExam", method = RequestMethod.GET)
-    @ApiImplicitParams({
-            @ApiImplicitParam(name="examName",value="试卷名",dataType="String", paramType = "query"),
-            @ApiImplicitParam(name="singleNum",value="单选题数量",dataType="Integer", paramType = "query"),
-            @ApiImplicitParam(name="singleScore",value="单选题分数",dataType="Integer", paramType = "query"),
-            @ApiImplicitParam(name="multipleNum",value="多选题数量",dataType="Integer", paramType = "query"),
-            @ApiImplicitParam(name="multipleScore",value="多选题分数",dataType="Integer", paramType = "query"),
-            @ApiImplicitParam(name="judgeNum",value="判断题数量",dataType="Integer", paramType = "query"),
-            @ApiImplicitParam(name="judgeScore",value="判断题分数",dataType="Integer", paramType = "query"),
-            @ApiImplicitParam(name="rankNum",value="排序提数量",dataType="Integer", paramType = "query"),
-            @ApiImplicitParam(name="rankScore",value="排序提分数",dataType="Integer", paramType = "query"),
-    })
-    public JSONObject setExam(String examName,Integer singleNum,Integer singleScore,Integer multipleNum,
-            Integer multipleScore,Integer judgeNum,Integer judgeScore,Integer rankNum,Integer rankScore){
-        logger.info("进入设置试卷");
-        Exam exam=examDao.findByExamName(examName);
-        if(null==exam) {
-            exam = new Exam();
-            exam.setExamName(examName);
-            exam.setSingleNum(singleNum);
-            exam.setSingleScore(singleScore);
-            exam.setMultipleNum(multipleNum);
-            exam.setMultipleScore(multipleScore);
-            exam.setJudgeNum(judgeNum);
-            exam.setJudgeScore(judgeScore);
-            exam.setRankNum(rankNum);
-            exam.setRankScore(rankScore);
-            examDao.save(exam);
-        }
-        obj=new JSONObject();
-        obj.put("state",state);
-        obj.put("msg",msg);
-        obj.put("data",exam);
-        return obj;
-    }
 
     @ApiOperation(value="设置考试记录", notes="设置考试记录")
     @RequestMapping(value="/questionExamLog", method = RequestMethod.GET)

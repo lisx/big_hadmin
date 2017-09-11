@@ -42,14 +42,16 @@
     	    rules: {
     	      username: {
     	        required: true,
-    	        minlength: 2
-    	      }
+    	      },
+                password:{
+    	          required: true
+                }
     	    },
     	    messages: {
     	      username: {
     	        required: "请输入用户名",
-    	        minlength: "用户名必需由两个字母组成"
-    	      }
+    	      },
+                password:"请输入密码"
     	    },
     	    submitHandler:function(form){
                 form.submit();
