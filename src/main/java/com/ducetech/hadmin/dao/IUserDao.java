@@ -28,7 +28,4 @@ public interface IUserDao extends IBaseDao<User, Integer> {
         countQuery = "select count(u.id) from (select user_id,count(score) scount from big_exam_log  GROUP BY user_id) t ,big_user u where t.scount>0 and u.id = t.user_id"
     )
     Page<User> findByScore(@Param("pageable") Pageable pageable);
-    @Cacheable(value = "findUserAll")
-    @Override
-    Page<User> findAll(Specification<User> specification, Pageable pageable);
 }

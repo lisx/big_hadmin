@@ -34,7 +34,7 @@
             diskExpiryThreadIntervalSeconds="120"
             memoryStoreEvictionPolicy="LRU"
     />
-    <cache name="findUserAll"
+    <cache name="findByScore"
            maxEntriesLocalHeap="200"
            timeToLiveSeconds="600">
     </cache>

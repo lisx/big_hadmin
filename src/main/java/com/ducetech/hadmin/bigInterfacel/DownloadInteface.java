@@ -50,17 +50,17 @@ public class DownloadInteface extends BaseController {
         request.setCharacterEncoding("utf-8");
         String path= file.getFileUrl();
         logger.info("path:"+path);
-        String suffix= StringUtil.suffix(file.getFileName());
-        if(file.getFileType().equals(BigConstant.office)){
-            if(suffix.equals(BigConstant.pdf)){
-                response.addHeader("Content-Disposition","attachment;fileName=" + URLEncoder.encode(file.getFileName(), "UTF-8"));
-            }else{
-                response.addHeader("Content-Disposition","attachment;fileName=" + URLEncoder.encode(file.getFileName()+BigConstant.pdf, "UTF-8"));
-                path=path+BigConstant.pdf;
-            }
-        }else{
+//        String suffix= StringUtil.suffix(file.getFileName());
+//        if(file.getFileType().equals(BigConstant.office)){
+//            if(suffix.equals(BigConstant.pdf)){
+//                response.addHeader("Content-Disposition","attachment;fileName=" + URLEncoder.encode(file.getFileName(), "UTF-8"));
+//            }else{
+//                response.addHeader("Content-Disposition","attachment;fileName=" + URLEncoder.encode(file.getFileName()+BigConstant.pdf, "UTF-8"));
+//                path=path+BigConstant.pdf;
+//            }
+//        }else{
             response.addHeader("Content-Disposition","attachment;fileName=" + URLEncoder.encode(file.getFileName(), "UTF-8"));
-        }
+//        }
         ServletOutputStream outputStream = response.getOutputStream();
         returnFile(path,outputStream);
     }
