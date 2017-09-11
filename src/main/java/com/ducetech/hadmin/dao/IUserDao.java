@@ -18,7 +18,6 @@ import java.util.List;
 @Repository
 public interface IUserDao extends IBaseDao<User, Integer> {
 	User findByUserName(String userName);
-	@Cacheable(value = "findByUserCode")
     User findByUserCode(String userCode);
     @Cacheable(value = "findAllByStation")
     @Query(value="select o from User o where o.station=:station or o.stationArea=:station ")

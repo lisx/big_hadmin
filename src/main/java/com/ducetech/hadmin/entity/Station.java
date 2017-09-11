@@ -62,7 +62,8 @@ public class Station extends BaseEntity {
     private List<QuestionBank> banks;
     public static JSONArray getZtrees(User user, IStationDao stationDao) {
         List<Station> stations=null;
-        if(user.getStationArea().equals("运三分公司")){
+        if(user.getStationArea().equals("运三分公司")||user.getStationArea().equals("")||user.getStationArea().equals(null
+        )){
             stations=stationDao.findAll();
         }else{
             Station s=stationDao.findByNodeName(user.getStationArea());
