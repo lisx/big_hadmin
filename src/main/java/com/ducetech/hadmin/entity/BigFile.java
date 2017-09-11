@@ -112,9 +112,9 @@ public class BigFile extends BaseEntity {
             stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
             stream.write(bytes);
             stream.close();
-            if (fileType.equals(BigConstant.office)&&!suffix.equals(BigConstant.pdf)) {
-                Office2PdfUtil.office2Pdf(filePath, filePath + BigConstant.pdf);
-            }
+//            if (fileType.equals(BigConstant.office)&&!suffix.equals(BigConstant.pdf)) {
+//                Office2PdfUtil.office2Pdf(filePath, filePath + BigConstant.pdf);
+//            }
             BigFile bf = new BigFile();
             bf.setFileSize("" + Math.round(file.getSize() / 1024));
             bf.setMenuType(menuType);
