@@ -123,6 +123,7 @@ public class RunningController extends BaseController {
             running.setCreateTime(new Date());
             running.setIfUse(0);
             bigFile.setFileUrl(path);
+            bigFile.setByteSize(file.getSize()+"");
             bigFile.setFileType(BigConstant.image);
             bigFile.setFileName(file.getOriginalFilename());
             bigFile.setFileSize(""+Math.round(file.getSize()/1024));

@@ -143,6 +143,7 @@ public class RollPlayController extends BaseController {
                     stream.close();
                     BigFile bf=new BigFile();
                     bf.setFileSize(""+Math.round(file.getSize()/1024));
+                    bf.setByteSize(file.getSize()+"");
                     bf.setMenuType(BigConstant.Roll);
                     bf.setFileType(BigConstant.image);
                     bf.setIfUse(0);
