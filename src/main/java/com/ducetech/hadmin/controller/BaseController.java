@@ -33,11 +33,11 @@ public class BaseController {
 	@Autowired
     protected DucetechProperties properties;
 
-//	@InitBinder
-//    protected void initBinder(WebDataBinder webDataBinder) {
-//        webDataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
-//        webDataBinder.registerCustomEditor(Date.class, new DateEditor(true));
-//    }
+	@InitBinder
+    protected void initBinder(WebDataBinder webDataBinder) {
+        webDataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+        webDataBinder.registerCustomEditor(Date.class, new DateEditor(true));
+    }
 
 	/**
      * 带参重定向
