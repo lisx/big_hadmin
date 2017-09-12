@@ -9,6 +9,7 @@
         text-overflow:ellipsis;
         white-space: nowrap;
     }
+    span{word-break:normal; width:auto; display:block; white-space:pre-wrap;word-wrap : break-word ;overflow: hidden ;}
 </style>
 <body class="gray-bg">
     <div class="wrapper wrapper-content  animated fadeInRight">
@@ -104,7 +105,7 @@
         });
         function detailFormatter(index, row) {
             var html = [];
-            html.push('<p><b>问题:</b> ' + row.title + '</p>'+'<br><p><b>答案:</b> ' + row.proper + '</p>');
+            html.push('<span><b>问题:</b> ' + row.title + '</span>'+'<span><b>答案:</b> ' + row.proper + '</span>');
             return html.join('');
         }
         function del(id){
