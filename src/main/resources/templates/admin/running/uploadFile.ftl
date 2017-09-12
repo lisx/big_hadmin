@@ -93,12 +93,12 @@
 
         //获取文件
         var file = fileDom.files[0];
-        var imageType = /^image\//;
-        //是否是图片
-        if (!imageType.test(file.type)) {
-            alert("请选择图片！");
-            return;
-        }
+//        var imageType = /^image\//;
+//        //是否是图片
+//        if (!imageType.test(file.type)) {
+//            alert("请选择图片！");
+//            return;
+//        }
         //读取完成
         reader.onload = function(e) {
             //获取图片dom

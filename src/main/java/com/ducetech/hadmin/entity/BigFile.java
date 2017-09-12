@@ -2,6 +2,7 @@ package com.ducetech.hadmin.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.ducetech.hadmin.common.utils.BigConstant;
+import com.ducetech.hadmin.common.utils.Md5CaculateUtil;
 import com.ducetech.hadmin.common.utils.Office2PdfUtil;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.dao.IBigFileDao;
@@ -38,6 +39,8 @@ public class BigFile extends BaseEntity {
     //文件地址
     @JSONField(serialize = false)
     private String fileUrl;
+    //md5值
+    private String md5;
     /**
      * 创建时间
      */
@@ -112,12 +115,15 @@ public class BigFile extends BaseEntity {
             stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
             stream.write(bytes);
             stream.close();
-            if (fileType.equals(BigConstant.office)&&!suffix.equals(BigConstant.pdf)) {
-                Office2PdfUtil.office2Pdf(filePath, filePath + BigConstant.pdf);
-            }
+//            if (fileType.equals(BigConstant.office)&&!suffix.equals(BigConstant.pdf)) {
+//                Office2PdfUtil.office2Pdf(filePath, filePath + BigConstant.pdf);
+//            }
+
             BigFile bf = new BigFile();
             bf.setFileSize("" + Math.round(file.getSize() / 1024));
             bf.setMenuType(menuType);
+            String md5=Md5CaculateUtil.getHash(filePath,"MD5");
+            bf.setMd5(md5);
             bf.setFileType(fileType);
             if(menuType.equals(BigConstant.Question)) {
                 bf.setFileName(user.getStationArea()+file.getOriginalFilename());
@@ -144,6 +150,8 @@ public class BigFile extends BaseEntity {
             File newFile=new File(filePath);
             oldFile.renameTo(newFile);
             BigFile bf = new BigFile();
+            String md5=Md5CaculateUtil.getHash(filePath,"MD5");
+            bf.setMd5(md5);
             bf.setFileSize("" + Math.round(size/ 1024));
             bf.setByteSize(size+"");
             bf.setMenuType(menuType);
