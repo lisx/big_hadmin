@@ -11,7 +11,7 @@
                     <@shiro.hasPermission name="system:user:add">
                         <p>
                             <button class="btn btn-success pull-right" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;批量导入附件</button>
-                            <button class="btn btn-success pull-right" type="button" onclick="uploadUser();"><i class="fa fa-plus"></i>&nbsp;批量导入人员</button>
+                            <button class="btn btn-success pull-right uploadUser" type="button" onclick="uploadUser();"><i class="fa fa-plus"></i>&nbsp;批量导入人员</button>
                             <button class="btn btn-success pull-right" type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;添加人员</button>
                         </p>
                     </@shiro.hasPermission>
@@ -21,8 +21,8 @@
 		                    <div class="col-sm-12">
 		                        <!-- Example Card View -->
 		                        <div class="example-wrap">
-		                            <div class="example">
-		                            	<table id="table_list"></table>
+		                            <div class="example table-responsive ">
+		                            	<table class="table table-bordered" id="table_list"></table>
 		                            </div>
 		                        </div>
 		                        <!-- End Example Card View -->
@@ -76,16 +76,20 @@
 			    columns: [{
 			        title: "编号",
 			        field: "id",
+                    width:50,
 			        sortable: true
 			    },{
 			        title: "姓名",
-			        field: "userName"
+			        field: "userName",
+                    width:120
 			    },{
                     title: "工号",
-                    field: "userCode"
+                    field: "userCode",
+                    width:120
                 },{
 			        title: "所属权限",
 			        field: "roles",
+                    width:120,
 			        formatter: function(value, row, index) {
                     	var r = "";
                     	$(value).each(function (index,role){
@@ -96,16 +100,19 @@
 			    },{
                     title: "站点",
                     field: "station",
+                    width:120
 			    },{
                     title: "站区",
                     field: "stationArea",
+                    width:120
                 },{
 			        title: "创建时间",
 			        field: "createTime",
-			        sortable: true
+                    width:120
 			    },{
 			        title: "操作",
 			        field: "empty",
+                    width:350,
                     formatter: function (value, row, index) {
                     	var operateHtml ='<@shiro.hasPermission name="system:user:edit"><button class="btn btn-success btn-xs" type="button" onclick="show(\''+row.id+'\')"><i class="fa fa-eye"></i>&nbsp;详情</button> &nbsp;</@shiro.hasPermission>';
                         operateHtml = operateHtml + '<@shiro.hasPermission name="system:user:edit"><button class="btn btn-primary btn-xs" type="button" onclick="edit(\''+row.id+'\')"><i class="fa fa-edit"></i>&nbsp;修改</button> &nbsp;</@shiro.hasPermission>';
@@ -156,6 +163,7 @@
             });
         }
         function uploadUser(){
+            $(".uploadUser").attr("disabled","disabled");
             layer.open({
                 type: 2,
                 title: '批量上传用户',
@@ -164,6 +172,7 @@
                 area: ['50%', '50%'],
                 content: '${ctx!}/admin/user/uploadUser',
                 end: function(index){
+                    $(".uploadUser").attr("disabled","false");
                     $('#table_list').bootstrapTable("refresh");
                 }
             });

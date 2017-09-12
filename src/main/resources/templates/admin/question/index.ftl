@@ -1,5 +1,15 @@
 <#include "/admin/common/css.ftl">
 <#include "/admin/common/js.ftl">
+<style>
+    .detail{
+        width:50px;
+    }
+    .table tbody tr td{
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+    }
+</style>
 <body class="gray-bg">
     <div class="wrapper wrapper-content  animated fadeInRight">
         <div class="row">
@@ -44,11 +54,11 @@
 			    pageNumber: 1,
 			    //记录数可选列表
 			    pageList: [5, 10, 15, 20, 25],
+                //是否启用详细信息视图
+                detailView:true,
+                detailFormatter:detailFormatter,
 			    //是否启用查询
 			    search: true,
-			    //是否启用详细信息视图
-			    //detailView:true,
-			    //detailFormatter:detailFormatter,
 			    //表示服务端请求
 			    sidePagination: "server",
 			    //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
@@ -65,28 +75,26 @@
 			    columns: [{
 			        title: "编号",
 			        field: "id",
-                    width: "5%"
+                    width:50
 			    },{
                     title: "类型",
                     field: "menuType",
-                    width: "10%"
+                    width:50
                 },{
 			        title: "问题",
 			        field: "title",
-                    width: "30%"
 			    },{
 			        title: "答案",
 			        field: "proper",
-                    width: "30%"
 			    },{
 			        title: "创建时间",
 			        field: "createTime",
-                    width: "10%",
-			        sortable: true
+			        sortable: true,
+                    width:200,
 			    },{
 			        title: "操作",
 			        field: "empty",
-                    width: "150",
+                    width:80,
                     formatter: function (value, row, index) {
                     	var operateHtml = '<@shiro.hasPermission name="system:user:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button> &nbsp;</@shiro.hasPermission>';
                         return operateHtml;
@@ -94,7 +102,11 @@
 			    }]
 			});
         });
-
+        function detailFormatter(index, row) {
+            var html = [];
+            html.push('<p><b>问题:</b> ' + row.title + '</p>'+'<br><p><b>答案:</b> ' + row.proper + '</p>');
+            return html.join('');
+        }
         function del(id){
         	layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
         		$.ajax({

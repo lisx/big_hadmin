@@ -14,7 +14,7 @@
                     <input type="file" class="form-control" name="fileUpload" />
                 </div>
                 <div>
-                    <button class="btn btn-sm btn-primary pull-right m-t-n-xs" onclick="uploadUserClose()" type="button"><strong>上传文件</strong>
+                    <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit"><strong>上传文件</strong>
                     </button>
                 </div>
             </form>
@@ -24,21 +24,35 @@
 <!-- 全局js -->
 <#include "/admin/common/js.ftl">
 <script>
-    function uploadUserClose(){
-        $.ajax({
-            url: '/admin/user/fileUploadUser',
-            type: 'POST',
-            cache: false,
-            data: new FormData($('#uploadForm')[0]),
-            processData: false,
-            contentType: false
-        }).done(function(msg) {
-            layer.msg(msg.message, {time: 2000},function(){
-                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-                parent.layer.close(index);
-            });
-        }).fail(function(res) {});
-    }
+    $(document).ready(function () {
+        $("#frm").validate({
+            rules: {
+                fileUpload: {
+                    required: true
+                },
+            },
+            messages: {
+                fileUpload:"上传文件必选"
+            },
+            submitHandler:function(form){
+                $(".btn-primary").attr("disabled","disabled");
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: "${ctx!}/admin/user/fileUploadUser",
+                    data: new FormData($('#uploadForm')[0]),
+                    processData: false,
+                    contentType: false,
+                    success: function(msg){
+                        layer.msg(msg.message, {time: 2000},function(){
+                            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                            parent.layer.close(index);
+                        });
+                    }
+                });
+            }
+        });
+    });
     function downUploadUser(){
         var a = document.createElement('a');
             a.href = "/upload/user.xls";

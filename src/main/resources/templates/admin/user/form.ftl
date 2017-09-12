@@ -143,6 +143,7 @@
                 userCode:"工号必填"
             },
     	    submitHandler:function(form){
+                $(".btn-primary").attr("disabled","disabled");
     	    	$.ajax({
    	    		   type: "POST",
    	    		   dataType: "json",

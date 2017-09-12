@@ -46,6 +46,7 @@
                 }
             },
             submitHandler:function(form){
+                $(".btn-primary").attr("disabled","disabled");
                 $.ajax({
                     type: "POST",
                     dataType: "json",
