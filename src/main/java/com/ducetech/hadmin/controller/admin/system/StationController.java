@@ -17,15 +17,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -41,6 +40,11 @@ public class StationController extends BaseController {
     IBigFileDao fileDao;
     @Autowired
     DucetechProperties properties;
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
+
+
+
     /**
      * 树形菜单
      * @return
@@ -189,16 +193,14 @@ public class StationController extends BaseController {
 
     @RequestMapping(value = "/uploadFileCheck", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject uploadFilePost(String md5,Integer fileSize,String fileType,String fileName,String nodeCode,String folder){
-        logger.debug("md5:{},fileSize:{},fileType:{},nodeCode{}",md5,fileSize,fileType,nodeCode);
-        List<BigFile> bigFiles=fileDao.findByMd5(md5);
-        String fileUrl="";
+    public JsonResult uploadFileCheck(String md5,Integer fileSize,String fileType,String fileName,String nodeCode,String folder,String param){
+        logger.debug("md5:{},fileSize:{},fileType:{},nodeCode{},param{}",md5,fileSize,fileType,nodeCode,param);
+        //List<BigFile> bigFiles=fileDao.findByMd5(md5);
+        String fileUrl=stringRedisTemplate.opsForValue().get("fileMd5"+md5);
         User user=getUser();
-        int errorCode =0;
-        boolean fileExist=false;
-        if(null!=bigFiles&&bigFiles.size()>0){
-            fileUrl=bigFiles.get(0).getFileUrl();
-            fileExist=true;
+        logger.debug("fileUrl:::::"+fileUrl);
+        if(!StringUtil.isBlank(fileUrl)){
+            logger.debug("fileUrl:::|||::"+fileUrl);
             BigFile bf = new BigFile();
             bf.setFileSize("" + Math.round(fileSize / 1024));
             bf.setMenuType(BigConstant.Station);
@@ -210,20 +212,17 @@ public class StationController extends BaseController {
             bf.setIfUse(0);
             bf.stationFolder(folder, nodeCode, bf, user,fileDao,stationDao);
             fileDao.saveAndFlush(bf);
+            stringRedisTemplate.opsForValue().set("fileMd5"+md5,fileUrl);
+            return JsonResult.success(fileUrl);
         }else{
-            errorCode=1;
+            return JsonResult.failure(fileUrl);
         }
-        JSONObject obj=new JSONObject();
-        obj.put("errorCode",errorCode);
-        obj.put("fileExist",fileExist);
-        obj.put("fileUrl",fileUrl);
-        return obj;
     }
 
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, String folder,String nodeCode,String guid,String fileUrl){
-        logger.info("进入上传文件{}"+fileUrl);
+    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, String folder,String nodeCode,String guid,String md5){
+        logger.info("进入上传文件{}"+md5);
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
         MultipartFile file;
@@ -231,6 +230,7 @@ public class StationController extends BaseController {
         for (int i =0; i< files.size(); ++i) {
             long flag=new Date().getTime();
             file = files.get(i);
+
             if (!file.isEmpty()) {
                 try {
                     String suffix=StringUtil.suffix(file.getOriginalFilename());
@@ -239,14 +239,14 @@ public class StationController extends BaseController {
                             logger.info("不分片的情况");
                             //不分片的情况
                             if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {
-                                BigFile.saveFile(properties.getUpload(),folder, nodeCode, user, file,BigConstant.office,BigConstant.Station,flag,fileDao,stationDao);
+                                BigFile.saveFile(md5,properties.getUpload(),folder, nodeCode, user, file,BigConstant.office,BigConstant.Station,flag,fileDao,stationDao);
                             }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
-                                BigFile.saveFile(properties.getUpload(),folder, nodeCode, user, file,BigConstant.image,BigConstant.Station,flag,fileDao,stationDao);
+                                BigFile.saveFile(md5,properties.getUpload(),folder, nodeCode, user, file,BigConstant.image,BigConstant.Station,flag,fileDao,stationDao);
                             }else {
-                                BigFile.saveFile(properties.getUpload(),folder, nodeCode, user, file, BigConstant.video, BigConstant.Station, flag, fileDao, stationDao);
+                                BigFile.saveFile(md5,properties.getUpload(),folder, nodeCode, user, file, BigConstant.video, BigConstant.Station, flag, fileDao, stationDao);
                             }
                         }else{
-                            logger.info("分片的情况");
+                            logger.info("分片的情况"+guid);
                             String tempFileDir = properties.getUpload()+guid+"/";
                             String realname = file.getOriginalFilename();
                             // 临时目录用来存放所有分片文件
@@ -280,17 +280,18 @@ public class StationController extends BaseController {
                                     logger.info("arr"+array[a].getName());
                                     fileNames.add(Integer.parseInt(array[a].getName()));
                                 }
+                                fileNames= new ArrayList(new TreeSet(fileNames));
                                 Collections.sort(fileNames);
                                 //     得到 destTempFile 就是最终的文件
                                 FileUtil.merge(properties.getUpload(),fileNames,realname,guid,flag);
                                 // 删除临时目录中的分片文件
                                 FileUtils.deleteDirectory(parentFileDir);
                                 if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {
-                                    BigFile.saveFile(properties.getUpload(),size,folder, nodeCode, user, file,BigConstant.office,BigConstant.Station,flag,fileDao,stationDao);
+                                    BigFile.saveFile(md5,properties.getUpload(),size,folder, nodeCode, user, file,BigConstant.office,BigConstant.Station,flag,fileDao,stationDao);
                                 }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
-                                    BigFile.saveFile(properties.getUpload(),size,folder, nodeCode, user, file,BigConstant.image,BigConstant.Station,flag,fileDao,stationDao);
+                                    BigFile.saveFile(md5,properties.getUpload(),size,folder, nodeCode, user, file,BigConstant.image,BigConstant.Station,flag,fileDao,stationDao);
                                 }else {
-                                    BigFile.saveFile(properties.getUpload(),size,folder, nodeCode, user, file, BigConstant.video, BigConstant.Station, flag, fileDao, stationDao);
+                                    BigFile.saveFile(md5,properties.getUpload(),size,folder, nodeCode, user, file, BigConstant.video, BigConstant.Station, flag, fileDao, stationDao);
                                 }
                             } else {
                                 logger.info("上传中 chunks" + chunks + " chunk:" + chunk, "");

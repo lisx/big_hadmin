@@ -3,7 +3,7 @@
 <#include "/admin/common/css.ftl">
 <#include "/admin/common/webuploader.ftl">
 
-    <script src="${ctx!}/hadmin/js/demo/webuploader-station-demo.js"></script>
+<script src="${ctx!}/hadmin/js/demo/webuploader-station-demo.js"></script>
 
 <div class="ibox-content">
     <div class="page-container">

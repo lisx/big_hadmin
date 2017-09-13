@@ -179,7 +179,7 @@ public class FireSafetyController extends BaseController {
 
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, String folder,String nodeCode,String guid){
+    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, String folder,String nodeCode,String guid,String md5){
         logger.info("进入培训资料上传文件");
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
@@ -196,11 +196,11 @@ public class FireSafetyController extends BaseController {
                             logger.info("不分片的情况");
                             //不分片的情况
                             if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {
-                                BigFile.saveFile(properties.getUpload(),folder, nodeCode, user, file,BigConstant.office,BigConstant.Fire,flag,fileDao,stationDao);
+                                BigFile.saveFile(md5,properties.getUpload(),folder, nodeCode, user, file,BigConstant.office,BigConstant.Fire,flag,fileDao,stationDao);
                             }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
-                                BigFile.saveFile(properties.getUpload(),folder, nodeCode, user, file,BigConstant.image,BigConstant.Fire,flag,fileDao,stationDao);
+                                BigFile.saveFile(md5,properties.getUpload(),folder, nodeCode, user, file,BigConstant.image,BigConstant.Fire,flag,fileDao,stationDao);
                             }else {
-                                BigFile.saveFile(properties.getUpload(),folder, nodeCode, user, file, BigConstant.video, BigConstant.Fire, flag, fileDao, stationDao);
+                                BigFile.saveFile(md5,properties.getUpload(),folder, nodeCode, user, file, BigConstant.video, BigConstant.Fire, flag, fileDao, stationDao);
                             }
                         }else{
                             logger.info("分片的情况");
@@ -243,11 +243,11 @@ public class FireSafetyController extends BaseController {
                                 // 删除临时目录中的分片文件
                                 FileUtils.deleteDirectory(parentFileDir);
                                 if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {
-                                    BigFile.saveFile(properties.getUpload(),size,folder, nodeCode, user, file,BigConstant.office,BigConstant.Fire,flag,fileDao,stationDao);
+                                    BigFile.saveFile(md5,properties.getUpload(),size,folder, nodeCode, user, file,BigConstant.office,BigConstant.Fire,flag,fileDao,stationDao);
                                 }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
-                                    BigFile.saveFile(properties.getUpload(),size,folder, nodeCode, user, file,BigConstant.image,BigConstant.Fire,flag,fileDao,stationDao);
+                                    BigFile.saveFile(md5,properties.getUpload(),size,folder, nodeCode, user, file,BigConstant.image,BigConstant.Fire,flag,fileDao,stationDao);
                                 }else {
-                                    BigFile.saveFile(properties.getUpload(),size,folder, nodeCode, user, file, BigConstant.video, BigConstant.Fire, flag, fileDao, stationDao);
+                                    BigFile.saveFile(md5,properties.getUpload(),size,folder, nodeCode, user, file, BigConstant.video, BigConstant.Fire, flag, fileDao, stationDao);
                                 }
                             } else {
                                 logger.info("上传中 chunks" + chunks + " chunk:" + chunk, "");

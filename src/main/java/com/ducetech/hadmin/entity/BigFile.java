@@ -104,11 +104,11 @@ public class BigFile extends BaseEntity {
     @ManyToOne
     @JSONField(serialize = false)
     private Notice notice;
-    public static boolean saveFile(String upload,String folder, String nodeCode, User user, MultipartFile file, String fileType, String menuType, long flag, IBigFileDao fileDao, IStationDao stationDao) throws IOException {
+    public static boolean saveFile(String md5,String upload,String folder, String nodeCode, User user, MultipartFile file, String fileType, String menuType, long flag, IBigFileDao fileDao, IStationDao stationDao) throws IOException {
         String filePath;
         BufferedOutputStream stream;
         try {
-            String suffix= StringUtil.suffix(file.getOriginalFilename());
+//            String suffix= StringUtil.suffix(file.getOriginalFilename());
             filePath = upload + flag + file.getOriginalFilename();
             byte[] bytes = file.getBytes();
             stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
@@ -121,7 +121,7 @@ public class BigFile extends BaseEntity {
             BigFile bf = new BigFile();
             bf.setFileSize("" + Math.round(file.getSize() / 1024));
             bf.setMenuType(menuType);
-            String md5=Md5CaculateUtil.getHash(filePath,"MD5");
+            //String md5=Md5CaculateUtil.getHash(filePath,"MD5");
             bf.setMd5(md5);
             bf.setFileType(fileType);
             if(menuType.equals(BigConstant.Question)) {
@@ -140,7 +140,7 @@ public class BigFile extends BaseEntity {
         }
         return true;
     }
-    public static boolean saveFile(String upload,Integer size,String folder, String nodeCode, User user, MultipartFile file, String fileType, String menuType, long flag, IBigFileDao fileDao, IStationDao stationDao) throws IOException {
+    public static boolean saveFile(String md5,String upload,Integer size,String folder, String nodeCode, User user, MultipartFile file, String fileType, String menuType, long flag, IBigFileDao fileDao, IStationDao stationDao) throws IOException {
         try {
             String filePath;
             filePath=upload+file.getOriginalFilename();
@@ -149,7 +149,7 @@ public class BigFile extends BaseEntity {
             File newFile=new File(filePath);
             oldFile.renameTo(newFile);
             BigFile bf = new BigFile();
-            String md5=Md5CaculateUtil.getHash(filePath,"MD5");
+            //String md5=Md5CaculateUtil.getHash(filePath,"MD5");
             bf.setMd5(md5);
             bf.setFileSize("" + Math.round(size/ 1024));
             bf.setByteSize(size+"");

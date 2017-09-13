@@ -59,7 +59,7 @@ jQuery(function() {
         'before-send-file': function(file){
             var uploader = this.owner;
             var deferred = WebUploader.Deferred();
-            uploader.md5File(file.source,0,10*1024*1024)
+            uploader.md5File(file.source)
                 .progress(function(percentage) {
                     //console.log('Percentage:', percentage);
                     $('#'+file.id ).find('p.imgWrap').text('正在读取文件信息...');
@@ -81,7 +81,7 @@ jQuery(function() {
                             ,'nodeCode': $("#nodeCode").val()
                         },
                         dataType: 'json',
-                        async:false,//是否使用异步
+                        async:true,//是否使用异步
                         success: function(result){
                             console.log(result);
                             if (result['code'] == 0)
@@ -110,7 +110,7 @@ jQuery(function() {
             }
             else
             {
-                console.log("上传的文件"+block.file.name+block.chunk)
+                console.log("上传的文件"+block.file.name)
                 deferred.resolve();
             }
             return deferred.promise();
