@@ -42,12 +42,10 @@
     	    rules: {
     	    	roleKey: {
     	        required: true,
-    	        minlength: 4,
     	    	maxlength: 30
     	      },
     	        name: {
     	        required: true,
-    	        minlength: 4,
     	    	maxlength: 30
     	      },
     	        status: {

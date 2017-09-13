@@ -83,8 +83,9 @@ public class StationController extends BaseController {
     @ResponseBody
     public JSONObject del(@PathVariable String nodeId){
         logger.info("进入删除节点nodeId{}",nodeId);
-        Station station = stationDao.findByNodeCode(nodeId);
-        stationDao.delete(station);
+        //Station station = stationDao.findByNodeCode(nodeId);
+        List<Station> stations=stationDao.findByNodeCodeStartingWith(nodeId);
+        stationDao.delete(stations);
         JSONObject obj=new JSONObject();
         obj.put("node",nodeId);
         return obj;
@@ -360,6 +361,7 @@ public class StationController extends BaseController {
     @ResponseBody
     public JsonResult delete(@PathVariable Integer id){
         logger.info("进入删除节点Id{}",id);
+
         fileDao.delete(id);
         return JsonResult.success();
     }

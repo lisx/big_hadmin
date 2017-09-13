@@ -117,7 +117,7 @@
                     	var operateHtml ='<@shiro.hasPermission name="system:user:edit"><button class="btn btn-success btn-xs" type="button" onclick="show(\''+row.id+'\')"><i class="fa fa-eye"></i>&nbsp;详情</button> &nbsp;</@shiro.hasPermission>';
                         operateHtml = operateHtml + '<@shiro.hasPermission name="system:user:edit"><button class="btn btn-primary btn-xs" type="button" onclick="edit(\''+row.id+'\')"><i class="fa fa-edit"></i>&nbsp;修改</button> &nbsp;</@shiro.hasPermission>';
                     	operateHtml = operateHtml + '<@shiro.hasPermission name="system:user:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button> &nbsp;</@shiro.hasPermission>';
-                    	operateHtml = operateHtml + '<@shiro.hasPermission name="system:user:grant"><button class="btn btn-info btn-xs" type="button" onclick="grant(\''+row.id+'\')"><i class="fa fa-arrows"></i>&nbsp;选择权限</button></@shiro.hasPermission>';
+                    	operateHtml = operateHtml + '<@shiro.hasPermission name="system:user:grant"><button class="btn btn-info btn-xs grantBtn" is-shown="true" type="button" onclick="grant(\''+row.id+'\')"><i class="fa fa-arrows"></i>&nbsp;选择权限</button></@shiro.hasPermission>';
                         return operateHtml;
                     }
 			    }]
@@ -172,7 +172,7 @@
                 area: ['50%', '50%'],
                 content: '${ctx!}/admin/user/uploadUser',
                 end: function(index){
-                    $(".uploadUser").attr("disabled","false");
+                    $(".uploadUser").attr("disabled",false);
                     $('#table_list').bootstrapTable("refresh");
                 }
             });
@@ -191,17 +191,18 @@
             });
         }
         function grant(id){
-        	layer.open({
-        	      type: 2,
-        	      title: '选择权限',
-        	      shadeClose: true,
-        	      shade: false,
-        	      area: ['300px', '300px'],
-        	      content: '${ctx!}/admin/user/grant/'  + id,
-        	      end: function(index){
-        	    	  $('#table_list').bootstrapTable("refresh");
-       	    	  }
-        	    });
+            $(".grantBtn").attr("disabled","disabled");
+            layer.open({
+              type: 2,
+              title: '选择权限',
+              shadeClose: true,
+              shade: false,
+              area: ['300px', '300px'],
+              content: '${ctx!}/admin/user/grant/'  + id,
+              end: function(index){
+                  $('#table_list').bootstrapTable("refresh");
+              }
+            });
         }
         function del(id){
         	layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
