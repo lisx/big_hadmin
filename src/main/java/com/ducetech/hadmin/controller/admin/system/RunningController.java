@@ -115,6 +115,7 @@ public class RunningController extends BaseController {
         try {
             BufferedOutputStream stream;
             byte[] bytes = file.getBytes();
+
             stream = new BufferedOutputStream(new FileOutputStream(dest));
             stream.write(bytes);
             stream.close();

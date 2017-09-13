@@ -44,10 +44,10 @@ jQuery(function() {
         supportTransition = (function(){
             var s = document.createElement('p').style,
                 r = 'transition' in s ||
-                    'WebkitTransition' in s ||
-                    'MozTransition' in s ||
-                    'msTransition' in s ||
-                    'OTransition' in s;
+                      'WebkitTransition' in s ||
+                      'MozTransition' in s ||
+                      'msTransition' in s ||
+                      'OTransition' in s;
             s = null;
             return r;
         })(),
@@ -55,69 +55,6 @@ jQuery(function() {
         // WebUploader实例
         uploader;
 
-    WebUploader.Uploader.register({
-        'before-send-file': function(file){
-            var uploader = this.owner;
-            var deferred = WebUploader.Deferred();
-            uploader.md5File(file.source)
-                .progress(function(percentage) {
-                    console.log('Percentage:', percentage);
-                })
-                .then(function(ret) {
-                    console.log("md5"+ret);
-                    //偷懒，直接将文件的md5值赋值进file
-                    file.md5 = ret;
-                    //取得MD5值后，请求服务器查询对应文件是否已存在（秒传）
-                    $.ajax({
-                        type: 'POST',
-                        url: '/admin/station/uploadFileCheck',
-                        data: {
-                            'md5':file.md5
-                            ,'fileSize':file.size
-                            ,'fileType':file.ext
-                            ,'fileName':file.name
-                            ,'nodeCode': $("#nodeCode").val()
-                        },
-                        dataType: 'json',
-                        async:true,//是否使用异步
-                        success: function(result){
-                            console.log(result);
-                            if (result['errorCode'] == 0)
-                            {
-                                //如果对应文件已经存在，意为着秒传成功，将下载地址啊之类的数据也绑到file对象里，后续uploadSuccess事件里再取出来。
-                                if (result['fileExist'])
-                                {
-                                    file.ret = result['fileUrl'];
-                                    console.log('秒传：',result['fileUrl']);
-                                }
-                            }
-                            else
-                            {
-                                alert(result['errorStr']);
-                            }
-                            // 结束此promise, webuploader接着往下走。
-                            deferred.resolve();
-                        }
-                    });
-                });
-            // 返回的是 promise 对象
-            return deferred.promise();
-        }
-        ,'before-send':function(block){
-            var deferred = WebUploader.Deferred();
-            if (block.file.ret)
-            {//此处跳过秒传的文件
-                console.log("此处跳过秒传的文件"+block.file.name)
-                deferred.reject();
-            }
-            else
-            {
-                console.log("上传的文件"+block.file.name)
-                deferred.resolve();
-            }
-            return deferred.promise();
-        }
-    });
     if ( !WebUploader.Uploader.support() ) {
         alert( 'Web Uploader 不支持您的浏览器！如果你使用的是IE浏览器，请尝试升级 flash 播放器');
         throw new Error( 'WebUploader does not support the browser you are using.' );
@@ -144,10 +81,8 @@ jQuery(function() {
         disableGlobalDnd: true,
         formData: {
             nodeCode: $("#nodeCode").val(),
-            guid: WebUploader.Base.guid(),
+            guid: WebUploader.Base.guid()
         },
-        //图片不压缩
-        compress:false,
         //分片
         chunked: true,
         chunkSize:100 * 1024 * 1024, //100M
@@ -181,7 +116,7 @@ jQuery(function() {
             $info = $('<p class="error"></p>'),
 
             showError = function( code ) {
-                console.log("||||||"+code);
+            console.log("||||||"+code);
                 switch( code ) {
                     case 'exceed_size':
                         text = '文件大小超出';
@@ -281,6 +216,22 @@ jQuery(function() {
                 });
             } else {
                 $wrap.css( 'filter', 'progid:DXImageTransform.Microsoft.BasicImage(rotation='+ (~~((file.rotation/90)%4 + 4)%4) +')');
+                // use jquery animate to rotation
+                // $({
+                //     rotation: rotation
+                // }).animate({
+                //     rotation: file.rotation
+                // }, {
+                //     easing: 'linear',
+                //     step: function( now ) {
+                //         now = now * Math.PI / 180;
+
+                //         var cos = Math.cos( now ),
+                //             sin = Math.sin( now );
+
+                //         $wrap.css( 'filter', "progid:DXImageTransform.Microsoft.Matrix(M11=" + cos + ",M12=" + (-sin) + ",M21=" + sin + ",M22=" + cos + ",SizingMethod='auto expand')");
+                //     }
+                // });
             }
 
 
@@ -321,7 +272,7 @@ jQuery(function() {
 
         if ( state === 'ready' ) {
             text = '选中' + fileCount + '张图片，共' +
-                WebUploader.formatSize( fileSize ) + '。';
+                    WebUploader.formatSize( fileSize ) + '。';
         } else if ( state === 'confirm' ) {
             stats = uploader.getStats();
             if ( stats.uploadFailNum ) {
@@ -332,8 +283,8 @@ jQuery(function() {
         } else {
             stats = uploader.getStats();
             text = '共' + fileCount + '张（' +
-                WebUploader.formatSize( fileSize )  +
-                '），已上传' + stats.successNum + '张';
+                    WebUploader.formatSize( fileSize )  +
+                    '），已上传' + stats.successNum + '张';
 
             if ( stats.uploadFailNum ) {
                 text += '，失败' + stats.uploadFailNum + '张';

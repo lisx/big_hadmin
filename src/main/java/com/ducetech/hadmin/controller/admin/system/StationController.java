@@ -187,10 +187,43 @@ public class StationController extends BaseController {
         return "admin/station/uploadFile";
     }
 
+    @RequestMapping(value = "/uploadFileCheck", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject uploadFilePost(String md5,Integer fileSize,String fileType,String fileName,String nodeCode,String folder){
+        logger.debug("md5:{},fileSize:{},fileType:{},nodeCode{}",md5,fileSize,fileType,nodeCode);
+        List<BigFile> bigFiles=fileDao.findByMd5(md5);
+        String fileUrl="";
+        User user=getUser();
+        int errorCode =0;
+        boolean fileExist=false;
+        if(null!=bigFiles&&bigFiles.size()>0){
+            fileUrl=bigFiles.get(0).getFileUrl();
+            fileExist=true;
+            BigFile bf = new BigFile();
+            bf.setFileSize("" + Math.round(fileSize / 1024));
+            bf.setMenuType(BigConstant.Station);
+            bf.setMd5(md5);
+            bf.setFileType(fileType);
+            bf.setFileName(fileName);
+            bf.setFileUrl(fileUrl);
+            bf.setByteSize(fileSize+"");
+            bf.setIfUse(0);
+            bf.stationFolder(folder, nodeCode, bf, user,fileDao,stationDao);
+            fileDao.saveAndFlush(bf);
+        }else{
+            errorCode=1;
+        }
+        JSONObject obj=new JSONObject();
+        obj.put("errorCode",errorCode);
+        obj.put("fileExist",fileExist);
+        obj.put("fileUrl",fileUrl);
+        return obj;
+    }
+
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, String folder,String nodeCode,String guid){
-        logger.info("进入上传文件");
+    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, String folder,String nodeCode,String guid,String fileUrl){
+        logger.info("进入上传文件{}"+fileUrl);
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
         MultipartFile file;

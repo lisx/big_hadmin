@@ -47,9 +47,9 @@ public class Md5CaculateUtil {
 
         ins.close();
 //        也可以用apache自带的计算MD5方法
-        return DigestUtils.md5Hex(md5.digest());
+//        return DigestUtils.md5Hex(md5.digest());
 //        自己写的转计算MD5方法
-//        return toHexString(md5.digest());
+        return toHexString(md5.digest());
     }
 
     public static String getHash2(String fileName){
@@ -102,7 +102,7 @@ public class Md5CaculateUtil {
 //        }
         long start = System.currentTimeMillis();
         System.out.println("开始计算文件MD5值,请稍后...");
-        String fileName = "/Users/lisx/Downloads/1 巴沟站三维图.jpg";
+        String fileName = "/Users/lisx/Downloads/Taxi.Driver.1976.出租车司机.双语字幕.HR-HDTV.AC3.1024x554.x264-人人影视制作.mkv";
 ////        String fileName = "E:\\SoTowerStudio-3.1.0.exe";
         String hashType = "MD5";
         String hash = getHash(fileName,hashType);
