@@ -106,7 +106,7 @@
                 sortOrder: "desc", //排序方式
                 sortName:"ifFolder,id",
 			    //启动分页
-			    pagination: true,
+			    pagination: false,
 			    //每页显示的记录数
 			    pageSize: 10,
 			    //当前第几页
@@ -114,7 +114,7 @@
 			    //记录数可选列表
 			    pageList: [5, 10, 15, 20, 25],
 			    //是否启用查询
-			    search: true,
+			    search: false,
 			    //是否启用详细信息视图
 			   // detailView:true,
 			   // detailFormatter:detailFormatter,
@@ -132,11 +132,7 @@
 			    },
                 //数据列
                 columns: [{
-                    title: "编号",
-                    field: "id",
-                    sortable: true
-                },{
-                    title: "文件名",
+                    title: "",
                     field: "empty",
                     formatter: function(value ,row,index) {
                         if (row.ifFolder == 1) {
@@ -145,25 +141,7 @@
                             return row.fileName;
                         }
                     }
-                },{
-                    title: "大小",
-                    field: "fileSize"
-                },{
-                    title: "创建时间",
-                    field: "createTime"
-                },{
-			        title: "操作",
-			        field: "empty",
-                    formatter: function (value, row, index) {
-                        var operateHtml ='';
-                        if(row.ifFolder==1){
-                            operateHtml='<@shiro.hasPermission name="system:resource:add"><button class="btn btn-success btn-xs" type="button" onclick="showFolder(\''+row.fileName+'\')"><i class="fa fa-eye"></i>&nbsp;查看</button> &nbsp;</@shiro.hasPermission>';
-                        }else{
-                            operateHtml='<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="down(\''+row.id+'\',\''+row.fileName+'\')"><i class="fa fa-download"></i>&nbsp;下载</button> &nbsp;</@shiro.hasPermission>';
-                        }
-                        return operateHtml;
-                    }
-			    }]
+                }]
 			});
 
             //初始化表格,动态从服务器加载数据
