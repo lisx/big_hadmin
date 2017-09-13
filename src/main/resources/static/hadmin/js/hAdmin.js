@@ -44,13 +44,11 @@ $(document).ready(function () {
     });
 
     $('#side-menu').delegate("li","click",function () {
-        console.log(8)
         if ($('body').hasClass('mini-navbar')) {
             NavToggle();
         }
     });
     $('#side-menu').delegate("li li a","click",function () {
-        console.log(9)
         if ($(window).width() < 769) {
             NavToggle();
         }

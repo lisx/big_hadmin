@@ -103,7 +103,7 @@
 </@shiro.hasPermission>
 <@shiro.hasPermission name="system:edtion:index">
                             <li>
-                                <a class="javascript:void();" onclick="uploadApk()" >前端版本更新</a>
+                                <a class="javascript:void(); uploadApk" is-shown="true" onclick="uploadApk()" >前端版本更新</a>
                             </li>
 </@shiro.hasPermission>
                         </ul>
@@ -147,18 +147,24 @@
     <script src="${ctx!}/hadmin/js/hAdmin.js"></script>
 </body>
 <script>
-    function uploadApk(){
-        layer.open({
-            type: 2,
-            title: '上传升级文件',
-            shadeClose: true,
-            shade: false,
-            area: ['50%', '50%'],
-            content: '${ctx!}/admin/edition/index',
-            end: function(index){
-                layer.close(index);
-            }
-        });
+    function uploadApk() {
+        var status = $(".uploadApk").attr('is-shown');
+        console.log(status)
+        if (status=='true') {
+            $(".uploadApk").attr('is-shown', false)
+            layer.open({
+                type: 2,
+                title: '上传升级文件',
+                shadeClose: true,
+                shade: false,
+                area: ['50%', '50%'],
+                content: '${ctx!}/admin/edition/index',
+                end: function (index) {
+                    layer.close(index);
+                    $(".uploadApk").attr('is-shown', true)
+                }
+            });
+        }
     }
 </script>
 </html>
