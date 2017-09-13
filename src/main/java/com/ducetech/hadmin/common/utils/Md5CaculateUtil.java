@@ -102,7 +102,7 @@ public class Md5CaculateUtil {
 //        }
         long start = System.currentTimeMillis();
         System.out.println("开始计算文件MD5值,请稍后...");
-        String fileName = "/Users/lisx/Downloads/Taxi.Driver.1976.出租车司机.双语字幕.HR-HDTV.AC3.1024x554.x264-人人影视制作.mkv";
+        String fileName = "/Users/lisx/Downloads/电话闭塞初稿.mp4";
 ////        String fileName = "E:\\SoTowerStudio-3.1.0.exe";
         String hashType = "MD5";
         String hash = getHash(fileName,hashType);

@@ -59,7 +59,7 @@ jQuery(function() {
         'before-send-file': function(file){
             var uploader = this.owner;
             var deferred = WebUploader.Deferred();
-            uploader.md5File(file.source,0,10*1024*1024)
+            uploader.md5File(file.source)
                 .progress(function(percentage) {
                     //console.log('Percentage:', percentage);
                     $('#'+file.id ).find('p.imgWrap').text('正在读取文件信息...');
@@ -115,7 +115,7 @@ jQuery(function() {
             }
             return deferred.promise();
         }
-    });
+        });
     if ( !WebUploader.Uploader.support() ) {
         alert( 'Web Uploader 不支持您的浏览器！如果你使用的是IE浏览器，请尝试升级 flash 播放器');
         throw new Error( 'WebUploader does not support the browser you are using.' );
@@ -129,7 +129,6 @@ jQuery(function() {
         },
         dnd: '#uploader .queueList',
         paste: document.body,
-
         accept: {
             title: 'intoTypes',
             extensions: 'jpg,jpeg,bmp,png,doc,xls,docx,xlsx,pdf,mp4,avi,rmvb,pmg',
@@ -149,7 +148,7 @@ jQuery(function() {
         //分片
         chunked: true,
         chunkSize:100 * 1024 * 1024, //100M
-        // server: 'http://webuploader.duapp.com/server/fileupload.php',
+        threads:1,
         server: '/admin/station/uploadFilePost',
         fileNumLimit: 300,
         fileSizeLimit: 20480 * 1024 * 1024,    // 20480 M
@@ -179,7 +178,6 @@ jQuery(function() {
             $info = $('<p class="error"></p>'),
 
             showError = function( code ) {
-                console.log("||||||"+code);
                 switch( code ) {
                     case 'exceed_size':
                         text = '文件大小超出';
@@ -394,10 +392,8 @@ jQuery(function() {
             case 'finish':
                 stats = uploader.getStats();
                 if ( stats.successNum ) {
-                    console.log("||||--")
                     alert( '上传成功' );
                     var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-                    console.log("||||"+index)
                     parent.layer.close(index);
                     $('#table_station_list').bootstrapTable("refresh");
                 } else {

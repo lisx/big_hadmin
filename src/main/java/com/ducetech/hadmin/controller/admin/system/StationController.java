@@ -205,14 +205,20 @@ public class StationController extends BaseController {
             bf.setFileSize("" + Math.round(fileSize / 1024));
             bf.setMenuType(BigConstant.Station);
             bf.setMd5(md5);
-            bf.setFileType(fileType);
+            String suffix="."+fileType;
+            if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {
+                bf.setFileType(fileType);
+            }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
+                bf.setFileType(fileType);
+            }else {
+                bf.setFileType(fileType);
+            }
             bf.setFileName(fileName);
             bf.setFileUrl(fileUrl);
             bf.setByteSize(fileSize+"");
             bf.setIfUse(0);
             bf.stationFolder(folder, nodeCode, bf, user,fileDao,stationDao);
             fileDao.saveAndFlush(bf);
-            stringRedisTemplate.opsForValue().set("fileMd5"+md5,fileUrl);
             return JsonResult.success(fileUrl);
         }else{
             return JsonResult.failure(fileUrl);
@@ -221,16 +227,18 @@ public class StationController extends BaseController {
 
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, String folder,String nodeCode,String guid,String md5){
-        logger.info("进入上传文件{}"+md5);
+    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, String folder,String nodeCode,String guid,String md5,String upStatus){
+        logger.info("进入上传文件{}"+upStatus);
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
         MultipartFile file;
         BufferedOutputStream stream;
+        guid=md5;
+        FileInputStream fis= null;
+        BigFile bf=null;
         for (int i =0; i< files.size(); ++i) {
             long flag=new Date().getTime();
             file = files.get(i);
-
             if (!file.isEmpty()) {
                 try {
                     String suffix=StringUtil.suffix(file.getOriginalFilename());
@@ -238,15 +246,17 @@ public class StationController extends BaseController {
                         if(null==chunks) {
                             logger.info("不分片的情况");
                             //不分片的情况
+
                             if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {
-                                BigFile.saveFile(md5,properties.getUpload(),folder, nodeCode, user, file,BigConstant.office,BigConstant.Station,flag,fileDao,stationDao);
+                                bf=BigFile.saveFile(md5,properties.getUpload(),folder, nodeCode, user, file,BigConstant.office,BigConstant.Station,flag,fileDao,stationDao);
                             }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
-                                BigFile.saveFile(md5,properties.getUpload(),folder, nodeCode, user, file,BigConstant.image,BigConstant.Station,flag,fileDao,stationDao);
+                                bf=BigFile.saveFile(md5,properties.getUpload(),folder, nodeCode, user, file,BigConstant.image,BigConstant.Station,flag,fileDao,stationDao);
                             }else {
-                                BigFile.saveFile(md5,properties.getUpload(),folder, nodeCode, user, file, BigConstant.video, BigConstant.Station, flag, fileDao, stationDao);
+                                bf=BigFile.saveFile(md5,properties.getUpload(),folder, nodeCode, user, file, BigConstant.video, BigConstant.Station, flag, fileDao, stationDao);
                             }
+                            stringRedisTemplate.opsForValue().set("fileMd5"+md5,bf.getFileUrl());
                         }else{
-                            logger.info("分片的情况"+guid);
+                            logger.info("分片的情况");
                             String tempFileDir = properties.getUpload()+guid+"/";
                             String realname = file.getOriginalFilename();
                             // 临时目录用来存放所有分片文件
@@ -287,12 +297,13 @@ public class StationController extends BaseController {
                                 // 删除临时目录中的分片文件
                                 FileUtils.deleteDirectory(parentFileDir);
                                 if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {
-                                    BigFile.saveFile(md5,properties.getUpload(),size,folder, nodeCode, user, file,BigConstant.office,BigConstant.Station,flag,fileDao,stationDao);
+                                    bf=BigFile.saveFile(md5,properties.getUpload(),size,folder, nodeCode, user, file,BigConstant.office,BigConstant.Station,flag,fileDao,stationDao);
                                 }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
-                                    BigFile.saveFile(md5,properties.getUpload(),size,folder, nodeCode, user, file,BigConstant.image,BigConstant.Station,flag,fileDao,stationDao);
+                                    bf=BigFile.saveFile(md5,properties.getUpload(),size,folder, nodeCode, user, file,BigConstant.image,BigConstant.Station,flag,fileDao,stationDao);
                                 }else {
-                                    BigFile.saveFile(md5,properties.getUpload(),size,folder, nodeCode, user, file, BigConstant.video, BigConstant.Station, flag, fileDao, stationDao);
+                                    bf=BigFile.saveFile(md5,properties.getUpload(),size,folder, nodeCode, user, file, BigConstant.video, BigConstant.Station, flag, fileDao, stationDao);
                                 }
+                                stringRedisTemplate.opsForValue().set("fileMd5"+md5,bf.getFileUrl());
                             } else {
                                 logger.info("上传中 chunks" + chunks + " chunk:" + chunk, "");
                             }

@@ -8,6 +8,8 @@ import com.ducetech.hadmin.dao.IBigFileDao;
 import com.ducetech.hadmin.dao.IStationDao;
 import com.ducetech.hadmin.entity.support.BaseEntity;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
@@ -104,9 +106,11 @@ public class BigFile extends BaseEntity {
     @ManyToOne
     @JSONField(serialize = false)
     private Notice notice;
-    public static boolean saveFile(String md5,String upload,String folder, String nodeCode, User user, MultipartFile file, String fileType, String menuType, long flag, IBigFileDao fileDao, IStationDao stationDao) throws IOException {
+
+    public static BigFile saveFile(String md5,String upload,String folder, String nodeCode, User user, MultipartFile file, String fileType, String menuType, long flag, IBigFileDao fileDao, IStationDao stationDao) throws IOException {
         String filePath;
         BufferedOutputStream stream;
+        BigFile bf = new BigFile();
         try {
 //            String suffix= StringUtil.suffix(file.getOriginalFilename());
             filePath = upload + flag + file.getOriginalFilename();
@@ -118,7 +122,6 @@ public class BigFile extends BaseEntity {
 //                Office2PdfUtil.office2Pdf(filePath, filePath + BigConstant.pdf);
 //            }
 
-            BigFile bf = new BigFile();
             bf.setFileSize("" + Math.round(file.getSize() / 1024));
             bf.setMenuType(menuType);
             //String md5=Md5CaculateUtil.getHash(filePath,"MD5");
@@ -136,11 +139,11 @@ public class BigFile extends BaseEntity {
             fileDao.saveAndFlush(bf);
         }catch (Exception e){
             System.out.println(e.getMessage());
-            return false;
         }
-        return true;
+        return bf;
     }
-    public static boolean saveFile(String md5,String upload,Integer size,String folder, String nodeCode, User user, MultipartFile file, String fileType, String menuType, long flag, IBigFileDao fileDao, IStationDao stationDao) throws IOException {
+    public static BigFile saveFile(String md5,String upload,Integer size,String folder, String nodeCode, User user, MultipartFile file, String fileType, String menuType, long flag, IBigFileDao fileDao, IStationDao stationDao) throws IOException {
+        BigFile bf = new BigFile();
         try {
             String filePath;
             filePath=upload+file.getOriginalFilename();
@@ -148,7 +151,7 @@ public class BigFile extends BaseEntity {
             filePath=upload+flag+file.getOriginalFilename();
             File newFile=new File(filePath);
             oldFile.renameTo(newFile);
-            BigFile bf = new BigFile();
+
             //String md5=Md5CaculateUtil.getHash(filePath,"MD5");
             bf.setMd5(md5);
             bf.setFileSize("" + Math.round(size/ 1024));
@@ -162,9 +165,8 @@ public class BigFile extends BaseEntity {
             fileDao.saveAndFlush(bf);
         }catch (Exception e){
             System.out.println(e.getMessage());
-            return false;
         }
-        return true;
+        return bf;
     }
 
     public static void stationFolder(String folder, String nodeCode, BigFile bf, User user, IBigFileDao fileDao, IStationDao stationDao) {
