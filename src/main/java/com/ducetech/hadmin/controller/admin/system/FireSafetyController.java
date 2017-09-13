@@ -171,8 +171,8 @@ public class FireSafetyController extends BaseController {
      */
     @RequestMapping(value = "/uploadFile", method = RequestMethod.GET)
     public String uploadFile(Model map,String folder,String nodeCode) {
-        System.out.println("++++++"+folder);
         map.addAttribute("folder",folder);
+        map.addAttribute("menuType",BigConstant.Fire);
         map.addAttribute("nodeCode",nodeCode);
         return "admin/fire/uploadFile";
     }

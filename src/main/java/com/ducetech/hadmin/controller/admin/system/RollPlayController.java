@@ -116,6 +116,7 @@ public class RollPlayController extends BaseController {
     @RequestMapping(value = "/uploadFile", method = RequestMethod.GET)
     public String uploadFile(Model map,String nodeCode) {
         map.addAttribute("nodeCode",nodeCode);
+        map.addAttribute("menuType",BigConstant.Roll);
         return "admin/rollPlay/uploadFile";
     }
 

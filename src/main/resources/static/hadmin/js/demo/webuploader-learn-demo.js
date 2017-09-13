@@ -54,7 +54,69 @@ jQuery(function() {
 
         // WebUploader实例
         uploader;
-
+    WebUploader.Uploader.register({
+        'before-send-file': function(file){
+            var uploader = this.owner;
+            var deferred = WebUploader.Deferred();
+            uploader.md5File(file.source)
+                .progress(function(percentage) {
+                    //console.log('Percentage:', percentage);
+                    $('#'+file.id ).find('p.imgWrap').text('正在读取文件信息...');
+                })
+                .then(function(ret) {
+                    uploader.options.formData.md5=ret;
+                    console.log("md5"+ret);
+                    //偷懒，直接将文件的md5值赋值进file
+                    file.md5 = ret;
+                    //取得MD5值后，请求服务器查询对应文件是否已存在（秒传）
+                    $.ajax({
+                        type: 'POST',
+                        url: '/admin/station/uploadFileCheck',
+                        data: {
+                            'md5':file.md5
+                            ,'fileSize':file.size
+                            ,'fileType':file.ext
+                            ,'fileName':file.name
+                            ,'nodeCode': $("#nodeCode").val()
+                            ,'folder': $("#folder").val()
+                            ,'menuType': $("#menuType").val()
+                        },
+                        dataType: 'json',
+                        async:true,//是否使用异步
+                        success: function(result){
+                            console.log(result);
+                            if (result['code'] == 0)
+                            {
+                                file.ret = result['data'];
+                                console.log('秒传：'+result['data']);
+                            }
+                            else
+                            {
+                                console.log('非秒传'+result['code']);
+                            }
+                            // 结束此promise, webuploader接着往下走。
+                            deferred.resolve();
+                        }
+                    });
+                });
+            // 返回的是 promise 对象
+            return deferred.promise();
+        }
+        ,'before-send':function(block){
+            var deferred = WebUploader.Deferred();
+            if (block.file.ret)
+            {//此处跳过秒传的文件
+                console.log("此处跳过秒传的文件"+block.file.name)
+                deferred.reject();
+            }
+            else
+            {
+                console.log("上传的文件"+block.file.name+block.chunk)
+                deferred.resolve();
+            }
+            return deferred.promise();
+        }
+    });
     if ( !WebUploader.Uploader.support() ) {
         alert( 'Web Uploader 不支持您的浏览器！如果你使用的是IE浏览器，请尝试升级 flash 播放器');
         throw new Error( 'WebUploader does not support the browser you are using.' );
@@ -69,11 +131,6 @@ jQuery(function() {
         dnd: '#uploader .queueList',
         paste: document.body,
 
-        // accept: {
-        //     title: 'Images',
-        //     extensions: 'gif,jpg,jpeg,bmp,png',
-        //     mimeTypes: 'image/*'
-        // },
 
         // swf文件路径
         swf: BASE_URL + '/Uploader.swf',
@@ -82,14 +139,13 @@ jQuery(function() {
         formData: {
             folder: $("#folder").val(),
             nodeCode: $("#nodeCode").val(),
-            menuType: $("#menuType").val(),
-            guid: WebUploader.Base.guid()
+            menuType: $("#menuType").val()
         },
         //分片
         chunked: true,
         chunkSize:100 * 1024 * 1024,
-        // server: 'http://webuploader.duapp.com/server/fileupload.php',
         server: '/admin/train/uploadFilePost',
+        threads:1,
         fileNumLimit: 300,
         fileSizeLimit: 20480 * 1024 * 1024,    // 2100 M
         fileSingleSizeLimit: 2048 * 1024 * 1024    // 700 M

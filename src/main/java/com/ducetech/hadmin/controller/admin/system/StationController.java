@@ -188,22 +188,20 @@ public class StationController extends BaseController {
     @RequestMapping(value = "/uploadFile", method = RequestMethod.GET)
     public String uploadFile(String nodeCode,Model map) {
         map.addAttribute("nodeCode",nodeCode);
+        map.addAttribute("menuType",BigConstant.Station);
         return "admin/station/uploadFile";
     }
 
     @RequestMapping(value = "/uploadFileCheck", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFileCheck(String md5,Integer fileSize,String fileType,String fileName,String nodeCode,String folder,String param){
-        logger.debug("md5:{},fileSize:{},fileType:{},nodeCode{},param{}",md5,fileSize,fileType,nodeCode,param);
-        //List<BigFile> bigFiles=fileDao.findByMd5(md5);
+    public JsonResult uploadFileCheck(String md5,Integer fileSize,String fileType,String fileName,String nodeCode,String folder,String menuType){
+        logger.debug("md5:{},fileSize:{},fileType:{},nodeCode{},param{}",md5,fileSize,fileType,nodeCode,menuType);
         String fileUrl=stringRedisTemplate.opsForValue().get("fileMd5"+md5);
         User user=getUser();
-        logger.debug("fileUrl:::::"+fileUrl);
         if(!StringUtil.isBlank(fileUrl)){
-            logger.debug("fileUrl:::|||::"+fileUrl);
             BigFile bf = new BigFile();
             bf.setFileSize("" + Math.round(fileSize / 1024));
-            bf.setMenuType(BigConstant.Station);
+            bf.setMenuType(menuType);
             bf.setMd5(md5);
             String suffix="."+fileType;
             if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {

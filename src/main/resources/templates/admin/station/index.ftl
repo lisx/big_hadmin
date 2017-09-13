@@ -226,7 +226,6 @@
 
         function uploadFile(){
             var id=$(".fileUploadBtton").attr("dataid");
-            console.log("id:++"+id);
             layer.open({
                 type: 2,
                 title: '上传文件',
