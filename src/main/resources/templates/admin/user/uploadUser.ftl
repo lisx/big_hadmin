@@ -11,7 +11,7 @@
                 </div>
                 <div class="form-group">
                     <label>第二步: 选择已经填写完成的员工信息模板点击上传（仅支持.xls/.xlsx格式,且文件大小不能超过2M ）。</label>
-                    <input type="file" class="form-control" name="fileUpload" />
+                    <input type="file" class="form-control" name="fileUpload"  accept=".xls,.xlsx"/>
                 </div>
                 <div>
                     <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit"><strong>上传文件</strong>
