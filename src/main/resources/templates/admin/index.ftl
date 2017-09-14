@@ -156,7 +156,7 @@
                 type: 2,
                 title: '上传升级文件',
                 shadeClose: true,
-                shade: false,
+                shade:[0.2,'#fff'],
                 area: ['50%', '50%'],
                 content: '${ctx!}/admin/edition/index',
                 end: function (index) {
