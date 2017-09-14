@@ -83,8 +83,7 @@
 			    columns: [{
 			        title: "编号",
 			        field: "id",
-                    width:50,
-			        sortable: true
+                    width:80
 			    },{
 			        title: "姓名",
 			        field: "userName",
