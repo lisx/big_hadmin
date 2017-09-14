@@ -72,6 +72,7 @@ public class RunningController extends BaseController {
         if(!StringUtil.isBlank(searchText)){
             builder.add("fileName", SpecificationOperator.Operator.likeAll.name(), searchText);
         }
+        builder.add("ifUse", SpecificationOperator.Operator.eq.name(), 1);
         return  runningDao.findAll(builder.generateSpecification(), getPageRequest());
     }
 
