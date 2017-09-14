@@ -73,7 +73,8 @@ public class Weather {
 
         this.Ctiyid = Cityid;
         // 连接中央气象台的API
-        URL url = new URL("http://m.weather.com.cn/data/" + Ctiyid + ".html");
+        //URL url = new URL("http://www.weather.com.cn/data/" + Ctiyid + ".html");
+        URL url = new URL("http://www.weather.com.cn/data/cityinfo/"+Ctiyid+".html");
         connectionData = url.openConnection();
         connectionData.setConnectTimeout(1000);
         try {

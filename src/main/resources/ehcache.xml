@@ -34,14 +34,7 @@
             diskExpiryThreadIntervalSeconds="120"
             memoryStoreEvictionPolicy="LRU"
     />
-    <cache name="findByScore"
-           maxEntriesLocalHeap="200"
-           timeToLiveSeconds="600">
-    </cache>
-    <cache name="findAllByStation"
-           maxEntriesLocalHeap="200"
-           timeToLiveSeconds="600">
-    </cache>
+    
     <cache name="resourceCache"
            maxEntriesLocalHeap="10000"
            maxEntriesLocalDisk="1000"
