@@ -72,10 +72,7 @@
 <script>
 
     $(document).ready(function () {
-        console.log("|||")
-
         $("#bankId").change(function(){
-            console.log("change");
             var checkText=$("#bankId").find("option:selected").text();
             var id=$("#bankId").find("option:selected").val();
             $("#bankName").val(checkText);

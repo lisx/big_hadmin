@@ -97,7 +97,6 @@
     <!-- Page-Level Scripts -->
     <script>
         $(document).ready(function () {
-            console.log("++++++++++++++++++++++")
 			//初始化表格,动态从服务器加载数据
 			$("#table_train_list").bootstrapTable({
 			    //使用get请求到服务器获取数据
@@ -330,7 +329,6 @@
 
 
         function bankShow(id){
-            console.log("id"+id);
             layer.open({
                 type: 2,
                 title: '查看试题',

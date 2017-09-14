@@ -60,7 +60,14 @@
                     field: "fileSize",
                 },{
                     title: "归属",
-                    field: "stationFile.nodeName",
+                    field: "stationFile",
+                    formatter: function(value ,row,index) {
+                        if (value!=null) {
+                            return value.nodeName;
+                        }else{
+                            return "运三分公司";
+                        }
+                    }
                 },{
                     title: "创建时间",
                     field: "createTime"
@@ -199,9 +206,9 @@
         };
         /*单击节点显示节点详情*/
         function onClick(e,treeId,treeNode){
-            console.log("|||"+treeNode.id+"|||"+treeNode.name)
             //初始化表格,动态从服务器加载数据
             $(".fileUploadBtton").attr("dataid",treeNode.id);
+            $(".spanStation").html(treeNode.name);
             var opt = {
                 url: "${ctx!}/admin/station/list",
                 silent: true,
@@ -282,6 +289,7 @@
                             <button class="btn btn-success pull-right remove" id="remove" type="button"><i class="fa fa-plus"></i>&nbsp;删除</button>
                             <button class="btn btn-success pull-right edit" id="edit" type="button"><i class="fa fa-plus"></i>&nbsp;编辑</button>
                             <button class="btn btn-success pull-right addLeaf" id="addLeaf" type="button"><i class="fa fa-plus"></i>&nbsp;新增</button>
+                            <span class="spanStation" style="margin-left: 20px;padding-bottom:20px;font-weight:bold;"></span>
                         </@shiro.hasPermission>
                         </p>
                     </div>

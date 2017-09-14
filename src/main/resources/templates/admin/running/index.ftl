@@ -93,7 +93,6 @@
                     }
                 }],
                 onClickRow:function (row) {
-                    console.log("||||"+row.id)
                     $(".uploadFile").attr("folderId",row.id);
                     var opt = {
                         url: "${ctx!}/admin/running/list",
