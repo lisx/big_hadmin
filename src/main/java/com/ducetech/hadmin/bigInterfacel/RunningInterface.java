@@ -39,7 +39,7 @@ public class RunningInterface {
     @ApiImplicitParam(name="line",value="线路",dataType="string", paramType = "query")
     public JSONObject findLineALl(String line){
         logger.info("获取线路全部数据");
-        List<Running> runnings=runningDao.findByLineName(line);
+        List<Running> runnings=runningDao.findByLineNameAndIfUse(line,0);
         if(null==runnings){
             runnings=new ArrayList<>();
             msg="暂无数据";
