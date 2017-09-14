@@ -106,7 +106,12 @@ public class NoticeController extends BaseController {
     public String uploadFile(Model map) {
         User user=getUser();
         Station station=stationDao.findByNodeName(user.getStationArea());
-        List<String> stations=stationDao.findByTreeStations(6,station.getNodeCode()+"%");
+        List<String> stations=null;
+        if(null!=station) {
+            stations=stationDao.findByTreeStations(6, station.getNodeCode() + "%");
+        }else{
+            stations=stationDao.findByTreeStations(6, BigConstant.ADMINCODE + "%");
+        }
         map.addAttribute("stations",stations);
         map.addAttribute("menu",BigConstant.Notice);
         return "admin/notice/uploadFile";

@@ -167,14 +167,16 @@
         //添加文件夹
         function addFolder(){
             var nodeCode=$(".addFolder").attr("dataid");
+            $(".addFolder").attr("disabled","disabled");
             layer.open({
                 type: 2,
                 title: '新建文件夹',
                 shadeClose: true,
-                shade: false,
+                shade:[0.2,'#fff'],
                 area: ['400px', '400px'],
                 content: '${ctx!}/admin/fire/add?nodeCode='+nodeCode+'&menu=应急预案',
                 end: function(index){
+                    $(".addFolder").attr("disabled",false);
                     $('#table_fire_list').bootstrapTable("refresh");
                 }
             });

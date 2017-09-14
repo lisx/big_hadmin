@@ -108,6 +108,22 @@
             html.push('<span><b>问题:</b> ' + row.title + '</span>'+'<span><b>答案:</b> ' + row.proper + '</span>');
             return html.join('');
         }
+        $("#table_question_list").on("click","tr td:nth-child(4)",function(){
+            var content=$(this).text();
+            layer.open({
+                type: 4,
+                close:false,
+                content: [content, $(this)] //数组第二项即吸附元素选择器或者DOM
+            });
+        })
+        $("#table_question_list").on("click","tr td:nth-child(5)",function(){
+            var content=$(this).text();
+            layer.open({
+                type: 4,
+                shade:[0.2,'#fff'],
+                content: [content, $(this)] //数组第二项即吸附元素选择器或者DOM
+            });
+        })
         function del(id){
         	layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
         		$.ajax({

@@ -85,15 +85,17 @@
     function addFolder(){
         var nodeCode=$(".addFolder").attr("data-code");
         var menuType=$(".addFolder").attr("data-menu");
+        $(".addFolder").attr("disabled","disabled");
         layer.open({
             type: 2,
             title: '新建文件夹',
             shadeClose: true,
-            shade: false,
+            shade: [0.2,'#fff'],
             area: ['400px', '400px'],
             content: '${ctx!}/admin/train/add?nodeCode='+nodeCode+'&menuType='+menuType,
             end: function(index){
                 $('#table_folder_train_list').bootstrapTable("refresh");
+                $(".addFolder").attr("disabled",false);
             }
         });
     }
