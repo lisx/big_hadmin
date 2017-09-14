@@ -50,6 +50,8 @@
 			    url: "${ctx!}/admin/examlog/user",
 			    //表格显示条纹
 			    striped: true,
+                sortOrder: "desc", //排序方式
+                sortName:"id",
 			    //启动分页
 			    pagination: true,
 			    //每页显示的记录数

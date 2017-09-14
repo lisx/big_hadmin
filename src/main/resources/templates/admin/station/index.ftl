@@ -21,7 +21,6 @@
                 url: "${ctx!}/admin/station/list",
                 //表格显示条纹
                 striped: true,
-                sortable: true, //是否启用排序
                 sortOrder: "desc", //排序方式
                 sortName:"id",
                 //启动分页
@@ -52,8 +51,7 @@
                 //数据列
                 columns: [{
                     title: "编号",
-                    field: "id",
-                    sortable: true
+                    field: "id"
                 },{
                     title: "文件名",
                     field: "fileName"

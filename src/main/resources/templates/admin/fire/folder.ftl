@@ -55,6 +55,8 @@
 			    url: "${ctx!}/admin/emergency/list?folder=${folder}",
 			    //表格显示条纹
 			    striped: true,
+                sortOrder: "desc", //排序方式
+                sortName:"ifFolder,id",
 			    //启动分页
 			    pagination: true,
 			    //每页显示的记录数

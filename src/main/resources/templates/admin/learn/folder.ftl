@@ -157,6 +157,8 @@
             url: "${ctx!}/admin/train/list?folder=${folder}",
             //表格显示条纹
             striped: true,
+            sortName:"id",
+            sortOrder:"desc",
             //启动分页
             pagination: true,
             //每页显示的记录数
