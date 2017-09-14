@@ -289,7 +289,7 @@
                             <button class="btn btn-success pull-right remove" id="remove" type="button"><i class="fa fa-plus"></i>&nbsp;删除</button>
                             <button class="btn btn-success pull-right edit" id="edit" type="button"><i class="fa fa-plus"></i>&nbsp;编辑</button>
                             <button class="btn btn-success pull-right addLeaf" id="addLeaf" type="button"><i class="fa fa-plus"></i>&nbsp;新增</button>
-                            <span class="spanStation" style="margin-left: 20px;padding-bottom:20px;font-weight:bold;"></span>
+                            <h5 class="spanStation" style="margin-left: 20px"></h5>
                         </@shiro.hasPermission>
                         </p>
                     </div>

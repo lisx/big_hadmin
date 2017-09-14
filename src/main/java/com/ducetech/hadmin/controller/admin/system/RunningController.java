@@ -79,7 +79,9 @@ public class RunningController extends BaseController {
     @ResponseBody
     public JsonResult delete(@PathVariable Integer id) {
         try {
-            fileDao.delete(id);
+            BigFile bigFile=fileDao.findOne(id);
+            bigFile.setIfUse(1);
+            fileDao.saveAndFlush(bigFile);
         } catch (Exception e) {
             e.printStackTrace();
             return JsonResult.failure(e.getMessage());

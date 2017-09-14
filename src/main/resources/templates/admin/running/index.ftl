@@ -155,7 +155,7 @@
                         <p>
                         <@shiro.hasPermission name="system:resource:add">
                             <button class="btn btn-success pull-right" type="button" onclick="addRunning();"><i class="fa fa-plus"></i>&nbsp;新增运行图</button>
-                            <span class="spanStation"></span>
+                            <h5 class="spanStation" style="margin-left: 20px"></h5>
                         </@shiro.hasPermission>
                         </p>
                     </div>
