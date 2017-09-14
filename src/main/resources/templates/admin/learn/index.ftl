@@ -2,7 +2,13 @@
 <#include "/admin/common/js.ftl">
 <#include "/admin/common/css.ftl">
 <#include "/admin/common/webuploader.ftl">
-
+<style>
+    .table tbody tr td{
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+    }
+</style>
     <div class="wrapper wrapper-content  animated fadeInRight">
         <div class="row">
             <div class="col-sm-12">
@@ -49,7 +55,7 @@
                                                 <!-- Example Card View -->
                                                 <div class="example-wrap">
                                                     <div class="example">
-                                                        <table id="table_bank_list"></table>
+                                                        <table class="table table-bordered"  id="table_bank_list"></table>
                                                     </div>
                                                 </div>
                                                 <!-- End Example Card View -->
@@ -67,7 +73,7 @@
                                                 <!-- Example Card View -->
                                                 <div class="example-wrap">
                                                     <div class="example">
-                                                        <table id="table_exam_list"></table>
+                                                        <table class="table table-bordered"  id="table_exam_list"></table>
                                                     </div>
                                                 </div>
                                                 <!-- End Example Card View -->

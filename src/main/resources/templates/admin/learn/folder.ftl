@@ -2,7 +2,14 @@
 <#include "/admin/common/js.ftl">
 <#include "/admin/common/css.ftl">
 <#include "/admin/common/ztree.ftl">
-                <div class="col-sm-13">
+<style>
+    .table tbody tr td{
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+    }
+</style>
+                <div class="col-sm-12">
                     <div class="tabs-container">
                         <div class="tab-content">
                             <div class="panel-body">
@@ -22,7 +29,7 @@
                                         <!-- Example Card View -->
                                         <div class="example-wrap">
                                             <div class="example">
-                                                <table id="table_folder_train_list"></table>
+                                                <table class="table table-bordered"  id="table_folder_train_list"></table>
                                             </div>
                                         </div>
                                         <!-- End Example Card View -->

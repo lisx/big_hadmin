@@ -1,7 +1,13 @@
 <!-- 全局js -->
 <#include "/admin/common/js.ftl">
 <#include "/admin/common/css.ftl">
-
+<style>
+    .table tbody tr td{
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+    }
+</style>
     <div class="wrapper wrapper-content  animated fadeInRight">
         <div class="row">
             <div class="col-sm-12">
@@ -21,7 +27,7 @@
 		                        <!-- Example Card View -->
 		                        <div class="example-wrap">
 		                            <div class="example">
-		                            	<table id="table_list"></table>
+		                            	<table class="table table-bordered"  id="table_list"></table>
 		                            </div>
 		                        </div>
 		                        <!-- End Example Card View -->
@@ -46,7 +52,7 @@
 			    //表格显示条纹
 			    striped: true,
 			    //启动分页
-			    pagination: true,
+			    pagination: false,
 			    //每页显示的记录数
 			    pageSize: 10,
 			    //当前第几页
@@ -54,7 +60,7 @@
 			    //记录数可选列表
 			    pageList: [5, 10, 15, 20, 25],
 			    //是否启用查询
-			    search: true,
+			    search: false,
 			    //是否启用详细信息视图
 			   // detailView:true,
 			    //detailFormatter:detailFormatter,

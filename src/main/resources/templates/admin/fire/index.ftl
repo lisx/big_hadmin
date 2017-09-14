@@ -2,6 +2,13 @@
 <#include "/admin/common/css.ftl">
 <#include "/admin/common/js.ftl">
 <#include "/admin/common/ztree.ftl">
+<style>
+    .table tbody tr td{
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+    }
+</style>
     <script type="text/javascript">
         $(document).ready(function () {
             //初始化表格,动态从服务器加载数据
@@ -231,7 +238,7 @@
                                 <!-- Example Card View -->
                                 <div class="example-wrap">
                                     <div class="example">
-                                        <table id="table_fire_list"></table>
+                                        <table class="table table-bordered"  id="table_fire_list"></table>
                                     </div>
                                 </div>
                                 <!-- End Example Card View -->

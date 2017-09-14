@@ -1,6 +1,13 @@
 <!-- 全局js -->
 <#include "/admin/common/js.ftl">
 <#include "/admin/common/css.ftl">
+<style>
+    .table tbody tr td{
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+    }
+</style>
 <body class="gray-bg">
     <div class="wrapper wrapper-content  animated fadeInRight">
         <div class="row">
@@ -18,7 +25,7 @@
 		                        <!-- Example Card View -->
 		                        <div class="example-wrap">
 		                            <div class="example">
-		                            	<table id="table_list"></table>
+		                            	<table class="table table-bordered"  id="table_list"></table>
 		                            </div>
 		                        </div>
 		                        <!-- End Example Card View -->

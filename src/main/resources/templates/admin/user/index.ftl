@@ -1,6 +1,13 @@
 <!-- 全局js -->
 <#include "/admin/common/js.ftl">
 <#include "/admin/common/css.ftl">
+<style>
+    .table tbody tr td{
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+    }
+</style>
 <body class="gray-bg">
     <div class="wrapper wrapper-content  animated fadeInRight">
         <div class="row">
