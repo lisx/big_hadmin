@@ -126,6 +126,8 @@ public class RunningController extends BaseController {
             running.setCreateId(user.getId());
             running.setCreateTime(new Date());
             running.setIfUse(0);
+            running.setByteSize(file.getSize()+"");
+            running.setFileUrl(file.getOriginalFilename());
             bigFile.setFileUrl(path);
             bigFile.setByteSize(file.getSize()+"");
             bigFile.setFileType(BigConstant.image);

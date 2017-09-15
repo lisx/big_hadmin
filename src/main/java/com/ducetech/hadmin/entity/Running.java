@@ -29,6 +29,7 @@ public class Running extends BaseEntity {
     private String fileUrl;
     //文件大小
     private String fileSize;
+    private String byteSize;
     //文件类型
     private String fileType;
 

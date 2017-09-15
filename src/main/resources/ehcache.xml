@@ -34,7 +34,7 @@
             diskExpiryThreadIntervalSeconds="120"
             memoryStoreEvictionPolicy="LRU"
     />
-    
+
     <cache name="resourceCache"
            maxEntriesLocalHeap="10000"
            maxEntriesLocalDisk="1000"

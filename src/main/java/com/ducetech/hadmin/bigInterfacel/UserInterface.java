@@ -74,9 +74,11 @@ public class UserInterface extends BaseController {
         obj=new JSONObject();
         int state=1;
         String msg;
-        List<User> r = userDao.findAllByStation(station);
+        List<User> r = null;
+        r=userDao.findAllByStation(station);
         for(int i=0;i<r.size();i++){
-            User user=r.get(i);
+            User user=null;
+            user=r.get(i);
             user.getImage(properties.getHttp());
             r.set(i,user);
         }
