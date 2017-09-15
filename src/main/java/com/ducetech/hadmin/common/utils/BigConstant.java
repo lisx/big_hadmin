@@ -1,8 +1,6 @@
 package com.ducetech.hadmin.common.utils;
 
 import com.alibaba.fastjson.serializer.ValueFilter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 /**
  * 项目常量
@@ -24,16 +22,11 @@ public class BigConstant {
     public static final String office="office";
     public static final String video="video";
     public static final String image="image";
-//    public static final String upload="/Users/lisx/upload/";
-//    public static final String uploadChunk="/Users/lisx/upload/chunk/";
-    public static ValueFilter filter = new ValueFilter() {
-        @Override
-        public Object process(Object obj, String s, Object v) {
-            if(v==null||v.equals(null)){
-                return "";
-            }
-            return v;
+    public static ValueFilter filter = (obj, s, v) -> {
+        if(v==null||v.equals(null)){
+            return "";
         }
+        return v;
     };
 
     public static final String ADMINCODE="000";
@@ -53,9 +46,5 @@ public class BigConstant {
     public static final String trainFolder2="文档资料";
     public static final String trainFolder3="信号平面图";
     public static final String trainFolder4="案例库";
-
-//    public static String getImageUrl(String file) {
-//        return  "http://192.168.5.127:8088/interface/userImg?code="+file;
-//    }
 
 }
