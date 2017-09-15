@@ -17,4 +17,6 @@ public class DucetechProperties {
     private String uploadChunk;
     @Value("${ducetech.http}")
     private String http;
+    @Value("${ducetech.icon}")
+    private String icon;
 }

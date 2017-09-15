@@ -64,6 +64,8 @@ public class WeatherInfo extends BaseEntity {
 
     private String so2;
 
+    private String url;
+
     private String createTime;
 
     public WeatherInfo() {

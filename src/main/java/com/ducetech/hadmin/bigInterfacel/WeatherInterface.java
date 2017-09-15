@@ -2,6 +2,7 @@ package com.ducetech.hadmin.bigInterfacel;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ducetech.hadmin.common.utils.BigConstant;
+import com.ducetech.hadmin.common.utils.DucetechProperties;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IWeatherDao;
 import com.ducetech.hadmin.entity.WeatherInfo;
@@ -28,6 +29,8 @@ public class WeatherInterface extends BaseController {
     JSONObject obj;
     @Autowired
     IWeatherDao weatherDao;
+    @Autowired
+    DucetechProperties properties;
     @ApiOperation(value="获取天气预报", notes="获取天气预报")
     @RequestMapping(value="/detail", method = RequestMethod.GET)
     public JSONObject getWeather(){
@@ -35,6 +38,7 @@ public class WeatherInterface extends BaseController {
         WeatherInfo info=null;
         try {
             info=weatherDao.findWeatherInfo();
+            info.setUrl(properties.getIcon()+info.getCode()+BigConstant.png);
             state=1;
             msg="查询正常";
             if(null==info){

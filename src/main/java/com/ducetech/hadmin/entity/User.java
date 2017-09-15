@@ -106,7 +106,7 @@ public class User extends BaseEntity {
 	private java.util.Set<Role> roles;
 
     public void getImage(String http){
-        http=http.replaceAll("\"","");
+        //http=http.replaceAll("\"","");
         if(!StringUtil.isBlank(this.getZkysgzUrl())){
             this.setZkysgzUrl(http+this.getZkysgzUrl());
         }
