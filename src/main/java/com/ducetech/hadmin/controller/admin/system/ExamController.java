@@ -88,7 +88,6 @@ public class ExamController extends BaseController {
             nodeCode="%"+station.getNodeCode()+"%";
             area=station.getNodeCode().substring(0,station.getNodeCode().length()-3);
         }
-        logger.debug("||||||{}||||{}",nodeCode,area);
         List<QuestionBank> banks=bankDao.findByStation(nodeCode,area);
         model.addAttribute("banks",banks);
         return "admin/learn/examForm";

@@ -9,7 +9,8 @@
                 <div class="form-group">
                     <label class="col-sm-2  control-label" >题库名称：</label>
                     <div  class="col-sm-4">
-                        <input type="text"  name="bankName" class="form-control">
+                        <input type="hidden" name="id" value="${bank.id}">
+                        <input type="text"  name="bankName" value="${bank.name}" <#if bank?exists> readonly="readonly"</#if> class="form-control">
                     </div>
                     <label class="col-sm-2  control-label" ></label>
                     <div  class="col-sm-4">
@@ -19,11 +20,11 @@
                 <div class="form-group">
                     <label class="col-sm-2  control-label">站区：</label>
                     <div class="col-sm-4">
-                    <@my.select id="area" class="form-control" datas=areas defaultValue="全部"/>
+                    <@my.select id="area" class="form-control"  datas=areas defaultValue="全部"/>
                     </div>
                     <label class="col-sm-2 control-label">站点：</label>
                     <div class="col-sm-4">
-                    <select id="station" name="station" class="form-control" >
+                    <select id="station" name="station" <#if bank?exists> readonly="readonly"</#if> class="form-control" >
                         <option value="全部">全部</option>
                     </select>
                     </div>

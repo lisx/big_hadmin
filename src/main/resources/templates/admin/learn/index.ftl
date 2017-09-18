@@ -210,7 +210,8 @@
                     title: "操作",
                     field: "empty",
                     formatter: function (value, row, index) {
-                        var operateHtml = '<@shiro.hasPermission name="system:resource:add"><button class="btn btn-success btn-xs" type="button" onclick="bankShow(\''+row.id+'\')"><i class="fa fa-eye"></i>&nbsp;查看</button> &nbsp;</@shiro.hasPermission>';
+                        var operateHtml ='<@shiro.hasPermission name="system:resource:add"><button class="btn btn-success btn-xs" type="button" onclick="bankAdd(\''+row.id+'\')"><i class="fa fa-plus"></i>&nbsp;添加</button> &nbsp;</@shiro.hasPermission>';
+                        operateHtml = operateHtml + '<@shiro.hasPermission name="system:resource:add"><button class="btn btn-success btn-xs" type="button" onclick="bankShow(\''+row.id+'\')"><i class="fa fa-eye"></i>&nbsp;查看</button> &nbsp;</@shiro.hasPermission>';
                         operateHtml = operateHtml + '<@shiro.hasPermission name="system:resource:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="bankDel(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button></@shiro.hasPermission>';
                         return operateHtml;
                     }
@@ -327,6 +328,20 @@
             });
         }
 
+        function bankAdd(id){
+            layer.open({
+                type: 2,
+                title: '添加题库',
+                shadeClose: true,
+                shade: false,
+                area: ['97%', '94%'],
+                content: '${ctx!}/admin/question/uploadQuestion?id='+id,
+                end: function(index){
+                    $('#table_bank_list').bootstrapTable("refresh");
+                    $(".tab2").click();
+                }
+            });
+        }
 
         function bankShow(id){
             layer.open({
@@ -411,7 +426,7 @@
                 shadeClose: true,
                 shade: false,
                 area: ['97%', '94%'],
-                content: '${ctx!}/admin/question/uploadQuestion',
+                content: '${ctx!}/admin/question/uploadQuestion?id=0',
                 end: function(index){
                     $('#table_bank_list').bootstrapTable("refresh");
                     $(".tab2").click();

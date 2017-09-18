@@ -133,14 +133,17 @@ public class QuestionController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/uploadQuestion", method = RequestMethod.GET)
-    public String uploadQuestion(Model model) {
+    public String uploadQuestion(Integer id,Model model) {
         User user=getUser();
+        QuestionBank bank = questionBankDao.findOne(id);
         List<String> areas=new ArrayList<>();
-        if(user.getStationArea().equals(BigConstant.ADMIN)) {
+        logger.debug("||||"+user.getStationArea());
+        if(user.getStationArea().equals(BigConstant.ADMIN)||user.getStationArea().equals("")) {
            areas = stationDao.findLines(9);
         }else{
             areas.add(user.getStationArea());
         }
+        model.addAttribute("bank", bank);
         model.addAttribute("areas", areas);
         return "admin/learn/uploadQuestion";
     }
@@ -148,7 +151,7 @@ public class QuestionController extends BaseController {
 
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(@RequestParam("radioFile") MultipartFile radioFile,@RequestParam("multipleFile") MultipartFile multipleFile,@RequestParam("opinionFile") MultipartFile opinionFile,@RequestParam("sortFile") MultipartFile sortFile, String bankName, String area, String station) {
+    public JsonResult uploadFilePost(@RequestParam("radioFile") MultipartFile radioFile,@RequestParam("multipleFile") MultipartFile multipleFile,@RequestParam("opinionFile") MultipartFile opinionFile,@RequestParam("sortFile") MultipartFile sortFile, String bankName, String area, String station,Integer id) {
         User user = getUser();
         Station s;
 
@@ -156,7 +159,11 @@ public class QuestionController extends BaseController {
         if (radioFile.isEmpty()&&multipleFile.isEmpty()&&opinionFile.isEmpty()&&sortFile.isEmpty()) {
             return JsonResult.failure(1,"文件为空,必须上传至少一个文件");
         } else {
-            QuestionBank bank = questionBankDao.findByName(bankName);
+
+            QuestionBank bank =questionBankDao.findOne(id);
+            if(null==bank) {
+                bank = questionBankDao.findByName(bankName);
+            }
             if (null == bank) {
                 bank = new QuestionBank();
                 bank.setName(bankName);
