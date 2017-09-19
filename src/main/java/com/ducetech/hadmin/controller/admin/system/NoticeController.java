@@ -66,6 +66,10 @@ public class NoticeController extends BaseController {
     public String form(Model map,Integer id) {
         logger.info("详情{}",id);
         Notice notice=noticeDao.findOne(id);
+        List<BigFile> files= fileDao.findByNotice(notice);
+        notice.setBigFiles(files);
+        logger.debug(files.size()+"|||||||"+notice.getBigFiles().size());
+
         map.addAttribute("notice",notice);
         logger.info("进入通知详情页");
         return "admin/notice/show";
