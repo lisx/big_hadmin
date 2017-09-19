@@ -80,6 +80,7 @@ public class NoticeController extends BaseController {
     public Page<Notice> list() {
         SimpleSpecificationBuilder<Notice> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
+        builder.add("ifUse", SpecificationOperator.Operator.eq.name(), 0);
         if(!StringUtil.isBlank(searchText)){
             builder.add("fileName", SpecificationOperator.Operator.likeAll.name(), searchText);
         }
@@ -90,7 +91,9 @@ public class NoticeController extends BaseController {
     @ResponseBody
     public JsonResult delete(@PathVariable Integer id) {
         try {
-            noticeDao.delete(id);
+            Notice notice=noticeDao.findOne(id);
+            notice.setIfUse(1);
+            noticeDao.saveAndFlush(notice);
         } catch (Exception e) {
             e.printStackTrace();
             return JsonResult.failure(e.getMessage());
