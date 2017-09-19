@@ -145,7 +145,6 @@ jQuery(function() {
         formData: {
             folder: $("#folder").val(),
             nodeCode: $("#nodeCode").val(),
-            guid: WebUploader.Base.guid()
         },
         //分片
         chunked: true,

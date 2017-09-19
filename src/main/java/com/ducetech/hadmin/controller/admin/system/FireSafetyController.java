@@ -183,7 +183,7 @@ public class FireSafetyController extends BaseController {
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, String folder,String nodeCode,String guid,String md5){
-        logger.info("进入培训资料上传文件");
+        logger.info("进入消防安全文件上传文件");
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
         MultipartFile file;

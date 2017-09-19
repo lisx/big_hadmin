@@ -4,9 +4,8 @@
 <#include "/admin/common/ztree.ftl">
 <style>
     .table tbody tr td{
-        overflow: hidden;
-        text-overflow:ellipsis;
-        white-space: nowrap;
+        word-wrap:break-word;
+        word-break:break-all
     }
 </style>
     <script type="text/javascript">
@@ -54,11 +53,11 @@
                 columns: [{
                     title: "编号",
                     field: "id",
-                    width: 80
+                    width: 50
                 },{
                     title: "文件名",
                     field: "empty",
-                    width: 200,
+                    width: 300,
                     formatter: function(value ,row,index) {
                         if (row.ifFolder == 1) {
                             return '<a href="javascript:void(0);" onclick="showFolder(\''+row.fileName+'\')"><i class="fa fa-folder-o"></i>' + row.fileName + '</a>';
@@ -69,7 +68,7 @@
                 },{
                     title: "归属",
                     field: "stationFile",
-                    width: 200,
+                    width: 180,
                     formatter: function(value ,row,index) {
                         if (value!=null) {
                             return value.nodeName;
@@ -244,7 +243,7 @@
                                 <!-- Example Card View -->
                                 <div class="example-wrap">
                                     <div class="example table-responsive ">
-                                        <table class="table table-bordered"  id="table_rules_list"  style="table-layout:fixed;overflow:hidden;"></table>
+                                        <table class="table table-bordered"  id="table_rules_list"  style="table-layout:fixed;word-wrap:break-word;"></table>
                                     </div>
                                 </div>
                                 <!-- End Example Card View -->

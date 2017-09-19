@@ -137,8 +137,8 @@ jQuery(function() {
 
         disableGlobalDnd: true,
         formData: {
+            folder: $("#folder").val(),
             nodeCode: $("#nodeCode").val(),
-            guid: WebUploader.Base.guid()
         },
         //分片
         chunked: true,
@@ -150,7 +150,6 @@ jQuery(function() {
         fileSingleSizeLimit: 2048 * 1024 * 1024    // 2048 M
     });
 
-    uploader.options.formData.nodeCode = $("#fileNodeCode").val();
     // 添加“添加文件”的按钮，
     uploader.addButton({
         id: '#filePicker2',

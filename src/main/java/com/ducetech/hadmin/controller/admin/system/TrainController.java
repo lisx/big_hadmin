@@ -83,7 +83,7 @@ public class TrainController  extends BaseController {
     @ResponseBody
     public Page<BigFile> list(String folder,String nodeCode) {
         logger.info("list:folder{},nodeCode{}",folder,nodeCode);
-        BigFile file1=fileDao.findByFileName(BigConstant.trainFolder1);
+        BigFile file1=fileDao.findByFileNameAndMenuType(BigConstant.trainFolder1,BigConstant.TRAIN);
         if(null==file1){
             file1=new BigFile();
             file1.setMenuType(BigConstant.TRAIN);
@@ -93,7 +93,7 @@ public class TrainController  extends BaseController {
             file1.setIfFolder(1);
             fileDao.saveAndFlush(file1);
         }
-        BigFile file2=fileDao.findByFileName(BigConstant.trainFolder2);
+        BigFile file2=fileDao.findByFileNameAndMenuType(BigConstant.trainFolder2,BigConstant.TRAIN);
         if(null==file2){
             file2=new BigFile();
             file2.setMenuType(BigConstant.TRAIN);
@@ -103,7 +103,7 @@ public class TrainController  extends BaseController {
             file2.setIfFolder(1);
             fileDao.saveAndFlush(file2);
         }
-        BigFile file3=fileDao.findByFileName(BigConstant.trainFolder3);
+        BigFile file3=fileDao.findByFileNameAndMenuType(BigConstant.trainFolder3,BigConstant.TRAIN);
         if(null==file3){
             file3=new BigFile();
             file3.setMenuType(BigConstant.TRAIN);
@@ -113,7 +113,7 @@ public class TrainController  extends BaseController {
             file3.setIfFolder(1);
             fileDao.saveAndFlush(file3);
         }
-        BigFile file4=fileDao.findByFileName(BigConstant.trainFolder4);
+        BigFile file4=fileDao.findByFileNameAndMenuType(BigConstant.trainFolder4,BigConstant.TRAIN);
         if(null==file4){
             file4=new BigFile();
             file4.setMenuType(BigConstant.TRAIN);

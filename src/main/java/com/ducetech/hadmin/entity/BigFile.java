@@ -112,19 +112,13 @@ public class BigFile extends BaseEntity {
         BufferedOutputStream stream;
         BigFile bf = new BigFile();
         try {
-//            String suffix= StringUtil.suffix(file.getOriginalFilename());
             filePath = upload + flag + file.getOriginalFilename();
             byte[] bytes = file.getBytes();
             stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
             stream.write(bytes);
             stream.close();
-//            if (fileType.equals(BigConstant.office)&&!suffix.equals(BigConstant.pdf)) {
-//                Office2PdfUtil.office2Pdf(filePath, filePath + BigConstant.pdf);
-//            }
-
             bf.setFileSize("" + Math.round(file.getSize() / 1024));
             bf.setMenuType(menuType);
-            //String md5=Md5CaculateUtil.getHash(filePath,"MD5");
             bf.setMd5(md5);
             bf.setFileType(fileType);
             if(menuType.equals(BigConstant.Question)) {
@@ -151,8 +145,6 @@ public class BigFile extends BaseEntity {
             filePath=upload+flag+file.getOriginalFilename();
             File newFile=new File(filePath);
             oldFile.renameTo(newFile);
-
-            //String md5=Md5CaculateUtil.getHash(filePath,"MD5");
             bf.setMd5(md5);
             bf.setFileSize("" + Math.round(size/ 1024));
             bf.setByteSize(size+"");
