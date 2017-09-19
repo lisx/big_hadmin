@@ -133,8 +133,8 @@ jQuery(function() {
         paste: document.body,
         accept: {
             title: 'intoTypes',
-            extensions: 'jpg,jpeg,bmp,png,doc,xls,docx,xlsx,pdf,mp4,avi,rmvb,mpg,wmv,swf',
-            mimeTypes: '.jpg,.jpeg,.bmp,.png,.doc,.xls,.docx,.xlsx,.pdf,.mp4,.avi,.rmvb,.mpg,.wmv,.swf'
+            extensions: 'jpg,jpeg,bmp,png,doc,xls,docx,xlsx,pdf,ppt,pptx,mp4,avi,rmvb,mpg,wmv,swf',
+            mimeTypes: '.jpg,.jpeg,.bmp,.png,.doc,.xls,.docx,.xlsx,.pdf,.ppt,.pptx,.mp4,.avi,.rmvb,.mpg,.wmv,.swf'
         },
 
         // swf文件路径
