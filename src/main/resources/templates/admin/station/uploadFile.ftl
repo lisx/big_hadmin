@@ -9,7 +9,7 @@
     <div class="page-container">
         <p>注意：请按照对应的站点上传车站信息文件。支持Word、Excel、PPT类型，单个文件不超过10M的文档；JEPG、PNG格式，单个文件不超过10M的图片；MP4，AVI，RMVB，MPG格式，单个视频大小不超过2GB的视频。</p>
         <div class="col-md-12">
-            <div class="form-group">
+            <div class="form-group" id="hiddenBox">
                 <input type="hidden" id="nodeCode" name="nodeCode" value="${nodeCode}">
                 <input type="hidden" id="menuType" name="menuType" value="${menuType}">
                 <input type="hidden" id="folder" name="folder" value="${folder}">

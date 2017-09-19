@@ -166,7 +166,9 @@ public class EmergencyController  extends BaseController {
     @ResponseBody
     public JsonResult delete(@PathVariable Integer id) {
         try {
-            fileDao.delete(id);
+            BigFile file=fileDao.findOne(id);
+            file.setIfUse(1);
+            fileDao.saveAndFlush(file);
         } catch (Exception e) {
             e.printStackTrace();
             return JsonResult.failure(e.getMessage());

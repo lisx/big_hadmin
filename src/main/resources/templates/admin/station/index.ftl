@@ -94,6 +94,9 @@
             view: {
                 selectedMulti: false
             },
+            check: {
+                enable: true
+            },
             edit: {
                 enable: true,
                 showRemoveBtn: false,
@@ -113,9 +116,31 @@
                 beforeRename: beforeRename,
                 onRemove: onRemove,
                 onRename: onRename,
-                onClick: onClick
+                onClick: onClick,
+                onCheck: onCheck
             }
         };
+        function onCheck(event, treeId, treeNode) {
+            console.log(treeNode.id + ", " + treeNode.name + "," + treeNode.checked);
+            if(treeNode.checked){
+                appendHidden(treeNode.id);
+                $(".fileUploadBtton").attr("data-id",treeNode.id);
+                $(".spanStation").html(treeNode.name);
+            }else{
+                removeHidden(treeNode.id);
+            }
+        };
+        function appendHidden(id){
+            var hiddenString = '<input type="hidden" name="allocation[]" value="'+id+'">';
+            $("#hiddenBox").append(hiddenString);
+        }
+        function removeHidden(id){
+            $("#hiddenBox>input").each(function(index, element) {
+                if($(this).val() == id){
+                    $(this).remove();
+                }
+            });
+        }
         var log, className = "dark";
         function beforeDrag(treeId, treeNodes) {
             return false;
@@ -207,7 +232,7 @@
         /*单击节点显示节点详情*/
         function onClick(e,treeId,treeNode){
             //初始化表格,动态从服务器加载数据
-            $(".fileUploadBtton").attr("dataid",treeNode.id);
+            $(".fileUploadBtton").attr("data-id",treeNode.id);
             $(".spanStation").html(treeNode.name);
             var opt = {
                 url: "${ctx!}/admin/station/list",
@@ -292,6 +317,9 @@
                             <h5 class="spanStation" style="margin-left: 20px"></h5>
                         </@shiro.hasPermission>
                         </p>
+                        <div id="hiddenBox">
+
+                        </div>
                     </div>
                     <div class="ibox-content">
                         <div class="row row-lg">
