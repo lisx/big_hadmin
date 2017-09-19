@@ -69,7 +69,7 @@
                 },{
                     title: "归属",
                     field: "stationFile",
-                    width: 200
+                    width: 200,
                     formatter: function(value ,row,index) {
                         if (value!=null) {
                             return value.nodeName;
@@ -80,15 +80,15 @@
                 },{
                     title: "大小",
                     field: "fileSize",
-                    width: 100
+                    width: 100,
                 },{
                     title: "创建时间",
                     field: "createTime",
-                    width:150
+                    width:150,
                 },{
                     title: "操作",
                     field: "empty",
-                    width:150
+                    width:150,
                     formatter: function (value, row, index) {
                         var operateHtml ='';
                             if(row.ifFolder==1){
@@ -124,7 +124,7 @@
                     onClick: onClick
                 }
             };
-            $.get("/admin/rules/tree",function(data){
+            $.get("${ctx!}/admin/rules/tree",function(data){
                 var zNodes =eval(data);
                 var zTreeObj=$.fn.zTree.init($("#treeDemo"), setting, zNodes);
                 zTreeObj.expandAll(true);
@@ -135,8 +135,8 @@
         function onClick(e,treeId,treeNode){
             console.log("|||"+treeNode.id+"|||"+treeNode.name)
             //初始化表格,动态从服务器加载数据
-            $(".uploadFile").attr("dataid",treeNode.id);
-            $(".addFolder").attr("dataid",treeNode.id);
+            $(".uploadFile").attr("data-id",treeNode.id);
+            $(".addFolder").attr("data-id",treeNode.id);
             $(".spanStation").html(treeNode.name);
             var opt = {
                 url: "${ctx!}/admin/rules/list",
@@ -163,7 +163,7 @@
         };
         //上传资料文件
         function uploadFile(){
-            var id=$(".addFolder").attr("dataid");
+            var id=$(".addFolder").attr("data-id");
             console.log("id:++"+id);
             layer.open({
                 type: 2,
@@ -179,7 +179,7 @@
         };
         //添加文件夹
         function addFolder(){
-            var nodeCode=$(".addFolder").attr("dataid");
+            var nodeCode=$(".addFolder").attr("data-id");
             $(".addFolder").attr("disabled","disabled");
             layer.open({
                 type: 2,
@@ -243,8 +243,8 @@
                             <div class="col-sm-9">
                                 <!-- Example Card View -->
                                 <div class="example-wrap">
-                                    <div class="example">
-                                        <table class="table table-bordered"  id="table_rules_list"></table>
+                                    <div class="example table-responsive ">
+                                        <table class="table table-bordered"  id="table_rules_list"  style="table-layout:fixed;overflow:hidden;"></table>
                                     </div>
                                 </div>
                                 <!-- End Example Card View -->

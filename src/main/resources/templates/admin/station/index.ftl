@@ -246,7 +246,7 @@
         };
 
         function upload(){
-            var id=$(".addFolder").attr("dataid");
+            var id=$(".addFolder").attr("data-id");
             console.log("id:++"+id);
             layer.open({
                 type: 2,
@@ -262,7 +262,7 @@
         };
 
         function uploadFile(){
-            var id=$(".fileUploadBtton").attr("dataid");
+            var id=$(".fileUploadBtton").attr("data-id");
             layer.open({
                 type: 2,
                 title: '上传文件',

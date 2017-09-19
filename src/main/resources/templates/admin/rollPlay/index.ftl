@@ -130,7 +130,7 @@
         function onClick(e,treeId,treeNode){
             console.log("|||"+treeNode.id+"|||"+treeNode.name)
             //初始化表格,动态从服务器加载数据
-            $(".uploadFile").attr("dataid",treeNode.id);
+            $(".uploadFile").attr("data-id",treeNode.id);
             $(".spanStation").html(treeNode.name);
             var opt = {
                 url: "${ctx!}/admin/rollPlay/list",
@@ -143,7 +143,7 @@
         };
         //上传文件
         function uploadFile(){
-            var id=$(".uploadFile").attr("dataid");
+            var id=$(".uploadFile").attr("data-id");
             console.log("id:++"+id);
             layer.open({
                 type: 2,

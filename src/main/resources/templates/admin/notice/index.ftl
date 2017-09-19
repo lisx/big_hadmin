@@ -104,7 +104,7 @@
         };
         //添加文件夹
         function addFolder(){
-            var nodeCode=$(".addFolder").attr("dataid");
+            var nodeCode=$(".addFolder").attr("data-id");
             layer.open({
                 type: 2,
                 title: '新建文件夹',
