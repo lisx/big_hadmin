@@ -10,6 +10,7 @@ import com.ducetech.hadmin.dao.IStationDao;
 import com.ducetech.hadmin.entity.BigFile;
 import com.ducetech.hadmin.entity.Station;
 import com.ducetech.hadmin.entity.User;
+import com.ducetech.hadmin.service.IBigFileService;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator;
 import org.apache.commons.io.FileUtils;
@@ -47,6 +48,8 @@ public class TrainController  extends BaseController {
     IBigFileDao fileDao;
     @Autowired
     IStationDao stationDao;
+    @Autowired
+    IBigFileService fileService;
     /**
      * 培训资料首页
      * @return
@@ -303,9 +306,7 @@ public class TrainController  extends BaseController {
     @ResponseBody
     public JsonResult delete(@PathVariable Integer id) {
         try {
-            BigFile file=fileDao.findOne(id);
-            file.setIfUse(1);
-            fileDao.saveAndFlush(file);
+            fileService.delete(id);
         } catch (Exception e) {
             e.printStackTrace();
             return JsonResult.failure(e.getMessage());

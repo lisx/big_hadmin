@@ -12,6 +12,7 @@ import com.ducetech.hadmin.dao.IStationDao;
 import com.ducetech.hadmin.entity.BigFile;
 import com.ducetech.hadmin.entity.Station;
 import com.ducetech.hadmin.entity.User;
+import com.ducetech.hadmin.service.IBigFileService;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator;
 import org.slf4j.Logger;
@@ -47,6 +48,8 @@ public class RollPlayController extends BaseController {
     private IStationDao stationDao;
     @Autowired
     IBigFileDao fileDao;
+    @Autowired
+    IBigFileService fileService;
     /**
      * 树形菜单
      * @return
@@ -101,7 +104,7 @@ public class RollPlayController extends BaseController {
     @ResponseBody
     public JsonResult delete(@PathVariable Integer id) {
         try {
-            fileDao.delete(id);
+            fileService.delete(id);
         } catch (Exception e) {
             e.printStackTrace();
             return JsonResult.failure(e.getMessage());

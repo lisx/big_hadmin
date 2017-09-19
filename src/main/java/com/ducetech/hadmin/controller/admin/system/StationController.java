@@ -10,6 +10,7 @@ import com.ducetech.hadmin.dao.IStationDao;
 import com.ducetech.hadmin.entity.BigFile;
 import com.ducetech.hadmin.entity.Station;
 import com.ducetech.hadmin.entity.User;
+import com.ducetech.hadmin.service.IBigFileService;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator;
 import org.apache.commons.io.FileUtils;
@@ -42,7 +43,8 @@ public class StationController extends BaseController {
     DucetechProperties properties;
     @Autowired
     StringRedisTemplate stringRedisTemplate;
-
+    @Autowired
+    IBigFileService fileService;
 
 
     /**
@@ -360,9 +362,12 @@ public class StationController extends BaseController {
     @RequestMapping(value = "/delete/{id}",method = RequestMethod.DELETE)
     @ResponseBody
     public JsonResult delete(@PathVariable Integer id){
-        logger.info("进入删除节点Id{}",id);
-
-        fileDao.delete(id);
+        try {
+            fileService.delete(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return JsonResult.failure(e.getMessage());
+        }
         return JsonResult.success();
     }
 

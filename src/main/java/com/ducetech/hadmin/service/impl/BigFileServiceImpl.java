@@ -29,7 +29,9 @@ public class BigFileServiceImpl extends BaseServiceImpl<BigFile,Integer> impleme
     }
     @Override
     public void delete(Integer id) {
-        super.delete(id);
+        BigFile file=bigFileDao.findOne(id);
+        file.setIfUse(1);
+        bigFileDao.saveAndFlush(file);
     }
 
 }

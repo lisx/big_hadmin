@@ -89,6 +89,7 @@ public class EmergencyController  extends BaseController {
         String searchText = request.getParameter("searchText");
         User user = getUser();
         nodeCode = Station.getQueryNodeCode(nodeCode, user, stationDao);
+        builder.add("ifUse", SpecificationOperator.Operator.eq.name(), 0);
         if (!StringUtil.isBlank(nodeCode) && !nodeCode.equals("undefined")) {
             builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
             builder.addOr("nodeCode", SpecificationOperator.Operator.eq.name(), "000");
