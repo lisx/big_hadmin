@@ -17,5 +17,5 @@ import java.util.Set;
  **/
 @Repository
 public interface INoticeDao extends IBaseDao<Notice,Integer> {
-    List<Notice> findByStationNameIsLikeAndCreateTimeLike(String stationName, String date);
+    List<Notice> findByStationNameIsLikeAndCreateTimeLikeAndIfUse(String stationName, String date,int ifUse);
 }

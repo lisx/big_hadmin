@@ -49,10 +49,14 @@ public class NoticeInterface {
     public JSONObject findByStation(String station,String date){
         logger.info("根据站点查询通知{}||{}",station,date);
         obj=new JSONObject();
-        List<Notice> notices=noticeDao.findByStationNameIsLikeAndCreateTimeLike("%"+station+"%","%"+date+"%");
-        for(Notice notice:notices){
-            List<BigFile> files=notice.getBigFiles();
+        List<Notice> notices=noticeDao.findByStationNameIsLikeAndCreateTimeLikeAndIfUse("%"+station+"%","%"+date+"%",0);
+        for(int i=0;i<notices.size();i++){
+            List<BigFile> files=notices.get(i).getBigFiles();
             logger.info(files.size()+"||");
+            if(null==files){
+                files=fileDao.findByNotice(notices.get(i));
+                notices.get(i).setBigFiles(files);
+            }
         }
         if(null!=notices&&notices.size()>0){
             state=1;
