@@ -54,10 +54,11 @@
                 columns: [{
                     title: "编号",
                     field: "id",
-                    sortable: true
+                    width: 80
                 },{
                     title: "文件名",
                     field: "empty",
+                    width: 200,
                     formatter: function(value ,row,index) {
                         if (row.ifFolder == 1) {
                             return '<a href="javascript:void(0);" onclick="showFolder(\''+row.fileName+'\')"><i class="fa fa-folder-o"></i>' + row.fileName + '</a>';
@@ -68,6 +69,7 @@
                 },{
                     title: "归属",
                     field: "stationFile",
+                    width: 200
                     formatter: function(value ,row,index) {
                         if (value!=null) {
                             return value.nodeName;
@@ -77,13 +79,16 @@
                     }
                 },{
                     title: "大小",
-                    field: "fileSize"
+                    field: "fileSize",
+                    width: 100
                 },{
                     title: "创建时间",
-                    field: "createTime"
+                    field: "createTime",
+                    width:150
                 },{
                     title: "操作",
                     field: "empty",
+                    width:150
                     formatter: function (value, row, index) {
                         var operateHtml ='';
                             if(row.ifFolder==1){

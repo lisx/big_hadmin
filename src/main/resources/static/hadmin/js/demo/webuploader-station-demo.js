@@ -67,6 +67,7 @@ jQuery(function() {
                 .then(function(ret) {
                     uploader.options.formData.md5=ret;
                     console.log("md5"+ret);
+                    $('#'+file.id ).find('p.imgWrap').text('读取文件成功...');
                     //偷懒，直接将文件的md5值赋值进file
                     file.md5 = ret;
                     //取得MD5值后，请求服务器查询对应文件是否已存在（秒传）
