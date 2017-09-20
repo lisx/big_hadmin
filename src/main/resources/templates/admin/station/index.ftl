@@ -148,7 +148,13 @@
                 if($(this).val() == id){
                     $(this).remove();
                 }
+                if(isContains($(this).val(),id)){
+                    $(this).remove();
+                }
             });
+        }
+        function isContains(str, substr) {
+            return str.indexOf(substr) >= 0;
         }
         var log, className = "dark";
         function beforeDrag(treeId, treeNodes) {
