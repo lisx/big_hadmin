@@ -60,10 +60,14 @@
                     field: "fileSize",
                 },{
                     title: "归属",
-                    field: "stationFile",
+                    field: "stations",
                     formatter: function(value ,row,index) {
                         if (value!=null) {
-                            return value.nodeName;
+                            var r = "";
+                            $(value).each(function (index,station){
+                                r = r + station.nodeName+",";
+                            });
+                            return r;
                         }else{
                             return "运三分公司";
                         }
@@ -131,7 +135,7 @@
             }
         };
         function appendHidden(id){
-            var hiddenString = '<input type="hidden" name="allocation[]" value="'+id+'">';
+            var hiddenString = '<input type="hidden" name="allocation" value="'+id+'">';
             $("#hiddenBox").append(hiddenString);
         }
         function removeHidden(id){
@@ -246,7 +250,7 @@
         };
 
         function upload(){
-            var id=$(".addFolder").attr("data-id");
+
             console.log("id:++"+id);
             layer.open({
                 type: 2,
@@ -262,7 +266,15 @@
         };
 
         function uploadFile(){
-            var id=$(".fileUploadBtton").attr("data-id");
+            var id=$(".addFolder").attr("data-id");
+            var valArr = new Array;
+            $("input[name='allocation']").each(function(i){
+                valArr[i] = $(this).val();
+            });
+            var priv = valArr.join(',');
+            alert(priv);
+            console.log("|||||||||||||||||||||"+priv)
+            var id=priv;
             layer.open({
                 type: 2,
                 title: '上传文件',

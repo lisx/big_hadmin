@@ -2,14 +2,11 @@ package com.ducetech.hadmin.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.ducetech.hadmin.common.utils.BigConstant;
-import com.ducetech.hadmin.common.utils.Md5CaculateUtil;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.dao.IBigFileDao;
 import com.ducetech.hadmin.dao.IStationDao;
 import com.ducetech.hadmin.entity.support.BaseEntity;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
@@ -18,7 +15,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 文件管理
@@ -98,16 +97,17 @@ public class BigFile extends BaseEntity {
     //审核ID
     @JSONField(serialize = false)
     private String checkId;
-    @ManyToOne
-    //@JSONField(serialize = false)
-    private Station stationFile;
+    @ManyToMany(cascade = { CascadeType.REFRESH }, fetch = FetchType.LAZY)
+    @JoinTable(name = "big_station_file", joinColumns = { @JoinColumn(name = "file_id") }, inverseJoinColumns = { @JoinColumn(name = "station_id") })
+    private List<Station> stations;
     @JSONField(serialize = false)
+    @Column(columnDefinition="longText")
     private String nodeCode;
     @ManyToOne
     @JSONField(serialize = false)
     private Notice notice;
 
-    public static BigFile saveFile(String md5,String upload,String folder, String nodeCode, User user, MultipartFile file, String fileType, String menuType, long flag, IBigFileDao fileDao, IStationDao stationDao) throws IOException {
+    public static BigFile saveFile(String md5, String upload, String folder, String nodeCode, User user, MultipartFile file, String fileType, String menuType, long flag, IBigFileDao fileDao, IStationDao stationDao) throws IOException {
         String filePath;
         BufferedOutputStream stream;
         BigFile bf = new BigFile();
@@ -161,39 +161,48 @@ public class BigFile extends BaseEntity {
         return bf;
     }
 
+    /**
+     * 保存站点及文件夹
+     * @param folder
+     * @param nodeCode
+     * @param bf
+     * @param user
+     * @param fileDao
+     * @param stationDao
+     */
     public static void stationFolder(String folder, String nodeCode, BigFile bf, User user, IBigFileDao fileDao, IStationDao stationDao) {
         if(null==folder||folder.equals(BigConstant.trainFolder1)||folder.equals(BigConstant.trainFolder2)||folder.equals(BigConstant.trainFolder3)||folder.equals(BigConstant.trainFolder4)){
-            Station area;
-            if(null!=nodeCode&&!nodeCode.equals("undefined")){
-                area=stationDao.findByNodeCode(nodeCode);
-            }else{
-                area=stationDao.findByNodeName(user.getStationArea());
-            }
-            if(null!=folder){
-                bf.setFolderName(folder);
-                BigFile folderd=fileDao.findByFileName(folder);
-                bf.setFolderFile(folderd);
-            }
-            if (null != area) {
-                nodeCode = area.getNodeCode();
-                bf.setNodeCode(nodeCode);
-                bf.setStationFile(area);
-            }else{
-                bf.setNodeCode("000");
-            }
+
         }else{
             bf.setFolderName(folder);
             BigFile folderd=fileDao.findByFileName(folder);
             bf.setFolderFile(folderd);
-            Station station = folderd.getStationFile();
-            if (null != station&&!folder.equals(BigConstant.trainFolder1)&&!folder.equals(BigConstant.trainFolder2)&&!folder.equals(BigConstant.trainFolder3)&&!folder.equals(BigConstant.trainFolder4)){
-                bf.setStationFile(station);
-                bf.setNodeCode(station.getNodeCode());
-            }else{
-                station=stationDao.findByNodeName(user.getStationArea());
-                bf.setStationFile(station);
-                bf.setNodeCode(station.getNodeCode());
+        }
+        List<Station> stations=new ArrayList<>();
+        Station area=null;
+        if(null!=nodeCode&&!nodeCode.equals("undefined")){
+            String [] node=nodeCode.split(",");
+            if(null!=node&&node.length>0){
+                String str="";
+                for(int i=0;i<node.length;i++){
+                    area=stationDao.findByNodeCode(node[i]);
+                    stations.add(area);
+                    List<String> list=stationDao.findNodeCode(node[i]+"%");
+                    str=str+StringUtil.join(list.toArray(),",");
+                }
+                bf.setNodeCode(str);
+                bf.setStations(stations);
             }
+        }else{
+            area=stationDao.findByNodeName(user.getStationArea());
+            stations.add(area);
+            bf.setStations(stations);
+            bf.setNodeCode(area.getNodeCode());
+        }
+        if(null!=folder){
+            bf.setFolderName(folder);
+            BigFile folderd=fileDao.findByFileName(folder);
+            bf.setFolderFile(folderd);
         }
         bf.setCreateTime(new Date());
         bf.setCreateId(user.getId());

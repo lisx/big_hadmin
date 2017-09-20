@@ -138,7 +138,7 @@ public class EmergencyController  extends BaseController {
             folder.setIfUse(0);
             folder.setCreateTime(new Date());
             folder.setCreateId(user.getId());
-            folder.setStationFile(area);
+            //folder.setStationFile(area);
             folder.setNodeCode(nodeCode);
             folder.setMenuType(menu);
             fileDao.saveAndFlush(folder);

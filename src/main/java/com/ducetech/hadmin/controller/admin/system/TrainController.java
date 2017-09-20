@@ -197,7 +197,7 @@ public class TrainController  extends BaseController {
             folder.setIfFolder(1);
             folder.setCreateTime(new Date());
             folder.setCreateId(user.getId());
-            folder.setStationFile(area);
+            //folder.setStationFile(area);
             folder.setNodeCode(nodeCode);
             folder.setMenuType(menuType);
             folder.setFolderName(menuType);

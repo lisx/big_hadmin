@@ -44,4 +44,7 @@ public interface IStationDao extends IBaseDao<Station,Integer> {
     List<String> findStations(@Param("nodeLength") int nodeLength,@Param("nodeCode")String nodeCode);
     @Query(value = "SELECT a.nodeName from Station a where length(a.nodeCode)>:nodeLength and a.nodeCode like :nodeCode order by a.nodeCode")
     List<String> findByTreeStations(@Param("nodeLength") int nodeLength,@Param("nodeCode")String nodeCode);
+
+    @Query(nativeQuery = true,value = "select o.node_code from big_line_station o where o.node_code like:nodeCode")
+    List<String> findNodeCode(@Param("nodeCode")String nodeCode);
 }

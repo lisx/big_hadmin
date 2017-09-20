@@ -228,7 +228,7 @@ public class StationController extends BaseController {
 
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, String folder,String nodeCode,String guid,String md5,String upStatus){
+    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, String folder,String nodeCode,String guid,String md5,String upStatus,String [] allocation){
         logger.info("进入上传文件{}"+upStatus);
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
