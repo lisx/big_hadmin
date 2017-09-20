@@ -4,9 +4,8 @@
 <#include "/admin/common/ztree.ftl">
 <style>
     .table tbody tr td{
-        overflow: hidden;
         text-overflow:ellipsis;
-        white-space: nowrap;
+        white-space: pre-wrap;
     }
 </style>
     <script type="text/javascript">
@@ -23,6 +22,10 @@
                 striped: true,
                 sortOrder: "desc", //排序方式
                 sortName:"id",
+                clickToSelect: true,                //是否启用点击选中行
+                uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+                showExport: true,                     //是否显示导出
+                exportDataType: "basic",              //basic', 'all', 'selected'.
                 //启动分页
                 pagination: true,
                 //每页显示的记录数
@@ -50,6 +53,8 @@
                 },
                 //数据列
                 columns: [{
+                    checkbox: true
+                },{
                     title: "编号",
                     field: "id"
                 },{
@@ -67,7 +72,7 @@
                             $(value).each(function (index,station){
                                 r = r + station.nodeName+",";
                             });
-                            return r;
+                            return r.replace(/(\,$)/g, "");
                         }else{
                             return "运三分公司";
                         }
@@ -272,7 +277,6 @@
                 valArr[i] = $(this).val();
             });
             var priv = valArr.join(',');
-            alert(priv);
             console.log("|||||||||||||||||||||"+priv)
             var id=priv;
             layer.open({
@@ -312,6 +316,31 @@
                 });
             });
         };
+        function removeAll(){
+            var obj=$('#table_station_list') .bootstrapTable('getAllSelections');
+            if (obj.length == 0) {
+                alert("请先选择一条数据");
+                return;
+            }
+            var ids="";
+            $(obj).each(function(index,data){
+                ids=ids+data.id+",";
+            });
+            console.log("ids"+ids)
+            layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
+                $.ajax({
+                    type: "DELETE",
+                    dataType: "json",
+                    url: "${ctx!}/admin/station/delete/" + ids,
+                    success: function(msg){
+                        layer.msg(msg.message, {time: 2000},function(){
+                            $('#table_station_list').bootstrapTable("refresh");
+                            layer.close(index);
+                        });
+                    }
+                });
+            });
+        }
     </script>
 
     <div class="wrapper wrapper-content  animated fadeInRight">
@@ -322,10 +351,11 @@
                         <h5>车站信息</h5>
                         <p>
                         <@shiro.hasPermission name="system:station:uploadFile">
+                            <button class="btn btn-success pull-right" onclick="removeAll()" type="button"><i class="fa fa-plus"></i>&nbsp;批量删除文件</button>
                             <button class="btn btn-success pull-right fileUploadBtton" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传文件</button>
-                            <button class="btn btn-success pull-right remove" id="remove" type="button"><i class="fa fa-plus"></i>&nbsp;删除</button>
-                            <button class="btn btn-success pull-right edit" id="edit" type="button"><i class="fa fa-plus"></i>&nbsp;编辑</button>
-                            <button class="btn btn-success pull-right addLeaf" id="addLeaf" type="button"><i class="fa fa-plus"></i>&nbsp;新增</button>
+                            <button class="btn btn-success pull-right remove" id="remove" type="button"><i class="fa fa-plus"></i>&nbsp;删除车站</button>
+                            <button class="btn btn-success pull-right edit" id="edit" type="button"><i class="fa fa-plus"></i>&nbsp;编辑车站</button>
+                            <button class="btn btn-success pull-right addLeaf" id="addLeaf" type="button"><i class="fa fa-plus"></i>&nbsp;新增车站</button>
                             <h5 class="spanStation" style="margin-left: 20px"></h5>
                         </@shiro.hasPermission>
                         </p>

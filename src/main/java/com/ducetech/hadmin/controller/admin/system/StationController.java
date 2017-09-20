@@ -356,14 +356,17 @@ public class StationController extends BaseController {
 
     /**
      * 删除
-     * @param id
+     * @param ids
      * @return
      */
-    @RequestMapping(value = "/delete/{id}",method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delete/{ids}",method = RequestMethod.DELETE)
     @ResponseBody
-    public JsonResult delete(@PathVariable Integer id){
+    public JsonResult delete(@PathVariable Integer[] ids){
+        logger.debug(ids.toString());
         try {
-            fileService.delete(id);
+            for(int i=0;i<ids.length-1;i++) {
+                fileService.delete(ids[i]);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return JsonResult.failure(e.getMessage());
