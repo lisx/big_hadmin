@@ -17,7 +17,7 @@
                                     <#--<button class="btn btn-success uploadFile" data-menu="${folder}" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传资料</button>-->
                                     <button class="btn btn-success addFolder" data-menu="${folder}" type="button" onclick="addFolder();"><i class="fa fa-plus"></i>&nbsp;新建文件夹</button>
                                     <button class="btn btn-success uploadFile" data-menu="${folder}" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传资料</button>
-                                    <button class="btn btn-success pull-right" onclick="removeAll()" type="button"><i class="fa fa-plus"></i>&nbsp;批量删除</button>
+                                    <button class="btn btn-success" onclick="removeAll()" type="button"><i class="fa fa-plus"></i>&nbsp;批量删除</button>
                                     <span class="spanStation" style="margin-left: 20px;font-weight:bold;"></span>
                                 </@shiro.hasPermission>
                                 </p>

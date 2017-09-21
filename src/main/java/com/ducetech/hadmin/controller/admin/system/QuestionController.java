@@ -71,8 +71,10 @@ public class QuestionController extends BaseController {
         if(null!=station){
             nodeCode="%"+station.getNodeCode()+"%";
         }
-        builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
-        builder.addOr("nodeCode", SpecificationOperator.Operator.eq.name(), "000");
+        if (!StringUtil.isBlank(nodeCode)&&!nodeCode.equals("undefined")) {
+            builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
+            builder.addOr("nodeCode", SpecificationOperator.Operator.eq.name(), BigConstant.ADMINCODE);
+        }
         builder.add("ifUse", SpecificationOperator.Operator.eq.name(), 0);
         if (!StringUtil.isBlank(searchText)) {
             builder.add("name", SpecificationOperator.Operator.likeAll.name(), searchText);
@@ -160,7 +162,9 @@ public class QuestionController extends BaseController {
             return JsonResult.failure(1,"文件为空,必须上传至少一个文件");
         } else {
 
-            QuestionBank bank =questionBankDao.findOne(id);
+            QuestionBank bank =null;
+            if(null!=id)
+                bank=questionBankDao.findOne(id);
             if(null==bank) {
                 bank = questionBankDao.findByName(bankName);
             }
@@ -190,6 +194,9 @@ public class QuestionController extends BaseController {
                     s = stationDao.findByNodeName(station);
                     bank.setStation(s);
                     bank.setNodeCode(s.getNodeCode());
+                }
+                if(StringUtil.isBlank(bank.getNodeCode())){
+                    bank.setNodeCode(BigConstant.ADMINCODE);
                 }
                 questionBankDao.save(bank);
             }
