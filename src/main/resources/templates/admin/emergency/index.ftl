@@ -150,18 +150,6 @@
                     return operateHtml;
                 }
             }],
-            <#--onClickRow: function (row) {-->
-                <#--console.log("||||" + row.id)-->
-                <#--$(".uploadFile").attr("folderId", row.id);-->
-                <#--var opt = {-->
-                    <#--url: "${ctx!}/admin/emergency/list",-->
-                    <#--silent: true,-->
-                    <#--query: {-->
-                        <#--folderId: row.id-->
-                    <#--}-->
-                <#--};-->
-                <#--$("#table_emergency_list").bootstrapTable('refresh', opt);-->
-            <#--}-->
         });
         var setting = {
             data: {

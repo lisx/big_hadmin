@@ -143,15 +143,16 @@ jQuery(function() {
 
         disableGlobalDnd: true,
         formData: {
-            folderId: $("#folderId").val(),
-            nodeCode: $("#nodeCode").val(),
-            guid: WebUploader.Base.guid()
+            folderId: $("#folderId").val()
+            ,nodeCode: $("#nodeCode").val()
+            ,folderId: $("#folderId").val()
+            ,menuType: $("#menuType").val()
         },
         //分片
         chunked: true,
         chunkSize:20 * 1024 * 1024,
         // server: 'http://webuploader.duapp.com/server/fileupload.php',
-        server: '/admin/emergency/uploadFilePost',
+        server: '/admin/station/uploadFilePost',
         fileNumLimit: 300,
         fileSizeLimit: 20480 * 1024 * 1024,    // 20480 M
         fileSingleSizeLimit: 2048 * 1024 * 1024    // 2048 M

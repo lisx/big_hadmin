@@ -81,7 +81,7 @@ jQuery(function() {
                             ,'fileType':file.ext
                             ,'fileName':file.name
                             ,'nodeCode': $("#nodeCode").val()
-                            ,'folder': $("#folder").val()
+                            ,'folderId': $("#folderId").val()
                             ,'menuType': $("#menuType").val()
                         },
                         dataType: 'json',
@@ -144,8 +144,10 @@ jQuery(function() {
 
         disableGlobalDnd: true,
         formData: {
-            nodeCode: $("#nodeCode").val(),
-            guid: WebUploader.Base.guid(),
+            folderId: $("#folderId").val()
+            ,nodeCode: $("#nodeCode").val()
+            ,folderId: $("#folderId").val()
+            ,menuType: $("#menuType").val()
         },
         //图片不压缩
         compress:false,
