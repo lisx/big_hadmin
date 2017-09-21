@@ -87,21 +87,19 @@ public class TrainController  extends BaseController {
         SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
         User user=getUser();
-        BigFile folder=null;
-        if(null!=folderId)
-            folder=fileDao.findOne(folderId);
+
         nodeCode = Station.getQueryNodeCode(nodeCode, user,stationDao);
         if (!StringUtil.isBlank(nodeCode)&&!nodeCode.equals("undefined")) {
             builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
             builder.addOr("nodeCode", SpecificationOperator.Operator.isNull.name(),null);
             builder.addOr("nodeCode", SpecificationOperator.Operator.eq.name(), BigConstant.ADMINCODE);
         }
+        BigFile folder=null;
+        if(null!=folderId)
+            folder=fileDao.findOne(folderId);
         if(null!=folder) {
             builder.add("folderFile", SpecificationOperator.Operator.eq.name(), folder);
         }
-//        else {
-//            builder.add("folderFile", SpecificationOperator.Operator.isNull.name(),null);
-//        }
         if(null!=folder) {
             builder.add("menuType", SpecificationOperator.Operator.eq.name(), folder.getFileName());
         }else{
@@ -150,15 +148,6 @@ public class TrainController  extends BaseController {
     public JsonResult edit(BigFile folder,String nodeCode,String menuType,Integer folderId){
         logger.info("新增培训资料文件夹nodeCode{},menu{}",nodeCode,menuType);
         User user=getUser();
-        Station area;
-        if(null!=nodeCode&&!nodeCode.equals("undefined")){
-            area=stationDao.findByNodeCode(nodeCode);
-        }else{
-            area=stationDao.findByNodeName(user.getStationArea());
-        }
-        if (null != area) {
-            nodeCode = area.getNodeCode();
-        }
         try {
             folder.setIfUse(0);
             folder.setIfFolder(1);

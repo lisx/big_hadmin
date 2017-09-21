@@ -86,21 +86,25 @@ public class EmergencyController  extends BaseController {
      */
     @RequestMapping(value = {"/list"})
     @ResponseBody
-    public Page<BigFile> list(String folder, String nodeCode) {
-        logger.info("list:folderId" + folder);
+    public Page<BigFile> list(Integer folderId, String nodeCode) {
+        logger.info("进入应急预案||||||||||||||||||||list:folderId" + folderId);
         SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
         User user = getUser();
+
         nodeCode = Station.getQueryNodeCode(nodeCode, user, stationDao);
         builder.add("ifUse", SpecificationOperator.Operator.eq.name(), 0);
         if (!StringUtil.isBlank(nodeCode) && !nodeCode.equals("undefined")) {
             builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
             builder.addOr("nodeCode", SpecificationOperator.Operator.eq.name(), "000");
         }
-        if (null != folder && !StringUtil.isBlank(folder)) {
-            builder.add("folderName", SpecificationOperator.Operator.eq.name(), folder);
-        } else {
-            builder.add("folderName", SpecificationOperator.Operator.isNull.name(), null);
+        BigFile folder=null;
+        if(null!=folderId)
+            folder=fileDao.findOne(folderId);
+        if(null!=folder) {
+            builder.add("folderFile", SpecificationOperator.Operator.eq.name(), folder);
+        }else{
+            builder.add("folderFile", SpecificationOperator.Operator.isNull.name(),null);
         }
         builder.add("menuType", SpecificationOperator.Operator.eq.name(), BigConstant.Emergency);
         if (!StringUtil.isBlank(searchText)) {
@@ -125,25 +129,12 @@ public class EmergencyController  extends BaseController {
      */
     @RequestMapping(value = {"/saveFolder"}, method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult edit(BigFile folder, String nodeCode, String menu) {
+    public JsonResult edit(BigFile folder, String nodeCode, String menu,Integer folderId) {
         logger.info("新增应急预案文件夹nodeCode{},menu{}", nodeCode, menu);
         User user = getUser();
-        Station area;
-        if (null != nodeCode && !nodeCode.equals("undefined")) {
-            area = stationDao.findByNodeCode(nodeCode);
-        } else {
-            area = stationDao.findByNodeName(user.getStationArea());
-            if (null != area)
-                nodeCode = area.getNodeCode();
-        }
         try {
-            folder.setIfFolder(1);
-            folder.setIfUse(0);
-            folder.setCreateTime(new Date());
-            folder.setCreateId(user.getId());
-            //folder.setStationFile(area);
-            folder.setNodeCode(nodeCode);
-            folder.setMenuType(menu);
+            folder.initData(user.getId(),nodeCode,menu);
+            folder.stationFolder(folderId, nodeCode, folder, user,fileDao,stationDao);
             fileDao.saveAndFlush(folder);
         } catch (Exception e) {
             return JsonResult.failure(e.getMessage());
@@ -159,9 +150,10 @@ public class EmergencyController  extends BaseController {
      * @return
      */
     @RequestMapping("/toFolder")
-    public String toFolder(String folder, Model map) {
+    public String toFolder(String folder,Integer folderId, Model map) {
         logger.info("进入应急预案文件夹folder{}", folder);
         map.addAttribute("folder", folder);
+        map.addAttribute("folderId", folderId);
         return "admin/emergency/folder";
     }
 
@@ -188,8 +180,8 @@ public class EmergencyController  extends BaseController {
      * @return
      */
     @RequestMapping(value = "/uploadFile", method = RequestMethod.GET)
-    public String uploadFile(Model map, String folder, String nodeCode) {
-        map.addAttribute("folder", folder);
+    public String uploadFile(Model map, Integer folderId, String nodeCode) {
+        map.addAttribute("folderId", folderId);
         map.addAttribute("menuType", BigConstant.Emergency);
         map.addAttribute("nodeCode", nodeCode);
         return "admin/emergency/uploadFile";

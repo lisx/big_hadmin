@@ -106,7 +106,14 @@ public class BigFile extends BaseEntity {
     @ManyToOne
     @JSONField(serialize = false)
     private Notice notice;
-
+    public void initData(Integer uId,String nodeCode,String menu){
+        this.setIfFolder(1);
+        this.setIfUse(0);
+        this.setCreateTime(new Date());
+        this.setCreateId(uId);
+        this.setNodeCode(nodeCode);
+        this.setMenuType(menu);
+    }
     public static BigFile saveFile(String md5, String upload, Integer folderId, String nodeCode, User user, MultipartFile file, String fileType, String menuType, long flag, IBigFileDao fileDao, IStationDao stationDao) throws IOException {
         String filePath;
         BufferedOutputStream stream;
@@ -197,9 +204,11 @@ public class BigFile extends BaseEntity {
 
             }else {
                 area = stationDao.findByNodeName(user.getStationArea());
-                stations.add(area);
-                bf.setStations(stations);
-                bf.setNodeCode(area.getNodeCode());
+                if(null!=area) {
+                    stations.add(area);
+                    bf.setStations(stations);
+                    bf.setNodeCode(area.getNodeCode());
+                }
             }
         }
         bf.setCreateTime(new Date());

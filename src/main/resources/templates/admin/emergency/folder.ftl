@@ -15,6 +15,9 @@
                             <div class="panel-body">
                                 <p>
                                 <@shiro.hasPermission name="system:resource:add">
+                                    <button class="btn btn-success pull-right" onclick="removeAll()" type="button"><i
+                                            class="fa fa-plus"></i>&nbsp;批量删除
+                                    </button>
                                     <button class="btn btn-success " type="button" onclick="uploadFile();"><i
                                             class="fa fa-plus"></i>&nbsp;上传
                                     </button>
@@ -53,7 +56,7 @@
             //必须设置，不然request.getParameter获取不到请求参数
             contentType: "application/x-www-form-urlencoded",
             //获取数据的Servlet地址
-            url: "${ctx!}/admin/emergency/list?folder=${folder}",
+            url: "${ctx!}/admin/emergency/list?folderId=${folderId}",
             //表格显示条纹
             striped: true,
             //启动分页
@@ -64,6 +67,8 @@
             pageNumber: 1,
             //记录数可选列表
             pageList: [5, 10, 15, 20, 25],
+            clickToSelect: true,                //是否启用点击选中行
+            uniqueId: "id",                     //每一行的唯一标识，一般为主键列
             //是否启用查询
             search: true,
             //是否启用详细信息视图
@@ -82,7 +87,7 @@
                 };
             },
             //数据列
-            columns: [{
+            columns: [{checkbox:true},{
                 title: "编号",
                 field: "id",
                 sortable: true
@@ -107,14 +112,39 @@
             }]
         });
     });
+    function removeAll() {
+        var obj = $('#table_folder_emergency_list').bootstrapTable('getAllSelections');
+        if (obj.length == 0) {
+            alert("请先选择一条数据");
+            return;
+        }
+        var ids = "";
+        $(obj).each(function (index, data) {
+            ids = ids + data.id + ",";
+        });
+        console.log("ids" + ids)
+        layer.confirm('确定删除吗?', {icon: 3, title: '提示'}, function (index) {
+            $.ajax({
+                type: "DELETE",
+                dataType: "json",
+                url: "${ctx!}/admin/emergency/delete/" + ids,
+                success: function (msg) {
+                    layer.msg(msg.message, {time: 1000}, function () {
+                        $('#table_folder_emergency_list').bootstrapTable("refresh");
+                        layer.close(index);
+                    });
+                }
+            });
+        });
+    }
     function uploadFile() {
         layer.open({
             type: 2,
             title: '批量上传资料',
             shadeClose: true,
             shade: false,
-            area: ['100%', '105%'],
-            content: '${ctx!}/admin/emergency/uploadFile?folder=${folder}',
+            area: ['100%', '100%'],
+            content: '${ctx!}/admin/emergency/uploadFile?folderId=${folderId}',
             end: function (index) {
                 $('#table_folder_emergency_list').bootstrapTable("refresh");
                 layer.close(index);
