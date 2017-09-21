@@ -194,10 +194,14 @@ public class BigFile extends BaseEntity {
                 bf.setStations(stations);
             }
         }else{
-            area=stationDao.findByNodeName(user.getStationArea());
-            stations.add(area);
-            bf.setStations(stations);
-            bf.setNodeCode(area.getNodeCode());
+            if(null!=folder){
+
+            }else {
+                area = stationDao.findByNodeName(user.getStationArea());
+                stations.add(area);
+                bf.setStations(stations);
+                bf.setNodeCode(area.getNodeCode());
+            }
         }
         if(null!=folder){
             bf.setFolderName(folder);

@@ -23,7 +23,7 @@
                             <div class="panel-body">
                                 <p>
                                 <@shiro.hasPermission name="system:resource:add">
-                                    <button class="btn btn-success uploadFile" data-menu="${folder}" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传资料</button>
+                                    <button class="btn btn-success uploadFile" data-menu="${folder}" data-code="${nodeCode}" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传资料</button>
                                     <h5 class="spanStation" style="margin-left: 20px;"></h5>
                                 </@shiro.hasPermission>
                                 </p>
@@ -150,16 +150,6 @@
             },{
                 title: "大小",
                 field: "fileSize",
-            },{
-                title: "归属",
-                field: "stationFile",
-                formatter: function(value ,row,index) {
-                    if (value!=null) {
-                        return value.nodeName;
-                    }else{
-                        return "运三分公司";
-                    }
-                }
             },{
                 title: "创建时间",
                 field: "createTime",

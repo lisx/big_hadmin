@@ -83,7 +83,6 @@ jQuery(function() {
                             ,'nodeCode': $("#nodeCode").val()
                             ,'folder': $("#folder").val()
                             ,'menuType': $("#menuType").val()
-                            ,'allocation':$("input[name='allocation']").val()
                         },
                         dataType: 'json',
                         async:true,//是否使用异步
@@ -147,7 +146,6 @@ jQuery(function() {
         formData: {
             nodeCode: $("#nodeCode").val(),
             guid: WebUploader.Base.guid(),
-            allocation:$("input[name='allocation']").val()
         },
         //图片不压缩
         compress:false,

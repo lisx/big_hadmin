@@ -228,13 +228,12 @@ public class StationController extends BaseController {
 
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, String folder,String nodeCode,String guid,String md5,String upStatus,String [] allocation){
+    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, String folder,String nodeCode,String md5,String upStatus){
         logger.info("进入上传文件{}"+upStatus);
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
         MultipartFile file;
         BufferedOutputStream stream;
-        guid=md5;
         FileInputStream fis= null;
         BigFile bf=null;
         for (int i =0; i< files.size(); ++i) {
@@ -258,7 +257,7 @@ public class StationController extends BaseController {
                             stringRedisTemplate.opsForValue().set("fileMd5"+md5,bf.getFileUrl());
                         }else{
                             logger.info("分片的情况");
-                            String tempFileDir = properties.getUpload()+guid+"/";
+                            String tempFileDir = properties.getUpload()+md5+"/";
                             String realname = file.getOriginalFilename();
                             // 临时目录用来存放所有分片文件
                             File parentFileDir = new File(tempFileDir+realname+"/");
@@ -294,7 +293,7 @@ public class StationController extends BaseController {
                                 fileNames= new ArrayList(new TreeSet(fileNames));
                                 Collections.sort(fileNames);
                                 //     得到 destTempFile 就是最终的文件
-                                FileUtil.merge(properties.getUpload(),fileNames,realname,guid,flag);
+                                FileUtil.merge(properties.getUpload(),fileNames,realname,md5,flag);
                                 // 删除临时目录中的分片文件
                                 FileUtils.deleteDirectory(parentFileDir);
                                 if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {

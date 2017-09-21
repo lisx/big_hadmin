@@ -69,10 +69,10 @@ public class TrainController  extends BaseController {
         return "admin/learn/folder";
     }
     @RequestMapping("/twoFolder")
-    public String twoFolder(String folder,String nodeCode,Model map) {
+    public String twoFolder(String folder,Integer id,Model map) {
+        BigFile file=fileDao.findOne(id);
         logger.info("进入培训资料文件夹");
         map.addAttribute("folder",folder);
-        map.addAttribute("nodeCode",nodeCode);
         return "admin/learn/twoFolder";
     }
     /**
@@ -197,10 +197,9 @@ public class TrainController  extends BaseController {
             folder.setIfFolder(1);
             folder.setCreateTime(new Date());
             folder.setCreateId(user.getId());
-            //folder.setStationFile(area);
-            folder.setNodeCode(nodeCode);
             folder.setMenuType(menuType);
             folder.setFolderName(menuType);
+            folder.stationFolder(null, nodeCode, folder, user,fileDao,stationDao);
             fileDao.saveAndFlush(folder);
         } catch (Exception e) {
             return JsonResult.failure(e.getMessage());
@@ -302,11 +301,13 @@ public class TrainController  extends BaseController {
         return JsonResult.success();
     }
 
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delete/{ids}", method = RequestMethod.DELETE)
     @ResponseBody
-    public JsonResult delete(@PathVariable Integer id) {
+    public JsonResult delete(@PathVariable Integer [] ids) {
         try {
-            fileService.delete(id);
+            for(int i=0;i<ids.length-1;i++) {
+                fileService.delete(ids[i]);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return JsonResult.failure(e.getMessage());
