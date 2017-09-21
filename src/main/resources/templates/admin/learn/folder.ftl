@@ -3,45 +3,52 @@
 <#include "/admin/common/css.ftl">
 <#include "/admin/common/ztree.ftl">
 <style>
-    .table tbody tr td{
-        text-overflow:ellipsis;
+    .table tbody tr td {
+        text-overflow: ellipsis;
         white-space: pre-wrap;
     }
 </style>
-                <div class="col-sm-12">
-                    <div class="tabs-container">
-                        <div class="tab-content">
-                            <div class="panel-body">
-                                <p>
-                                <@shiro.hasPermission name="system:resource:add">
-                                    <#--<button class="btn btn-success uploadFile" data-menu="${folder}" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传资料</button>-->
-                                    <button class="btn btn-success addFolder" data-menu="${folder}" type="button" onclick="addFolder();"><i class="fa fa-plus"></i>&nbsp;新建文件夹</button>
-                                    <button class="btn btn-success uploadFile" data-menu="${folder}" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传资料</button>
-                                    <button class="btn btn-success" onclick="removeAll()" type="button"><i class="fa fa-plus"></i>&nbsp;批量删除</button>
-                                    <span class="spanStation" style="margin-left: 20px;font-weight:bold;"></span>
-                                </@shiro.hasPermission>
-                                </p>
-                                <div id="hiddenBox">
+<div class="col-sm-12">
+    <div class="tabs-container">
+        <div class="tab-content">
+            <div class="panel-body">
+                <p>
+                <@shiro.hasPermission name="system:resource:add">
+                <#--<button class="btn btn-success uploadFile" data-menu="${folder}" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传资料</button>-->
+                    <button class="btn btn-success addFolder" data-menu="${folder}" data-id="${folderId}" type="button"
+                            onclick="addFolder();"><i class="fa fa-plus"></i>&nbsp;新建文件夹
+                    </button>
+                    <button class="btn btn-success uploadFile" data-menu="${folder}" data-id="${folderId}"  type="button"
+                            onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;上传资料
+                    </button>
+                    <button class="btn btn-success" onclick="removeAll()" type="button"><i class="fa fa-plus"></i>&nbsp;批量删除
+                    </button>
+                    <span class="spanStation" style="margin-left: 20px;font-weight:bold;"></span>
+                </@shiro.hasPermission>
+                </p>
+                <div id="hiddenBox">
 
-                                </div>
-                                <div class="row row-lg">
-                                    <div class="col-sm-3">
-                                        <div class='tree'><ul id="treeDemo" class="ztree"></ul></div>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <!-- Example Card View -->
-                                        <div class="example-wrap">
-                                            <div class="example">
-                                                <table class="table table-bordered"  id="table_folder_train_list"></table>
-                                            </div>
-                                        </div>
-                                        <!-- End Example Card View -->
-                                    </div>
-                                </div>
-                            </div>
+                </div>
+                <div class="row row-lg">
+                    <div class="col-sm-3">
+                        <div class='tree'>
+                            <ul id="treeDemo" class="ztree"></ul>
                         </div>
                     </div>
+                    <div class="col-sm-9">
+                        <!-- Example Card View -->
+                        <div class="example-wrap">
+                            <div class="example">
+                                <table class="table table-bordered" id="table_folder_train_list"></table>
+                            </div>
+                        </div>
+                        <!-- End Example Card View -->
+                    </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Page-Level Scripts -->
 <script>
     var setting = {
@@ -60,24 +67,24 @@
     };
     function onCheck(event, treeId, treeNode) {
         console.log(treeNode.id + ", " + treeNode.name + "," + treeNode.checked);
-        if(treeNode.checked){
+        if (treeNode.checked) {
             appendHidden(treeNode.id);
-            $(".fileUploadBtton").attr("data-id",treeNode.id);
+            $(".fileUploadBtton").attr("data-id", treeNode.id);
             $(".spanStation").html(treeNode.name);
-        }else{
+        } else {
             removeHidden(treeNode.id);
         }
     };
-    function appendHidden(id){
-        var hiddenString = '<input type="hidden" name="allocation" value="'+id+'">';
+    function appendHidden(id) {
+        var hiddenString = '<input type="hidden" name="allocation" value="' + id + '">';
         $("#hiddenBox").append(hiddenString);
     }
-    function removeHidden(id){
-        $("#hiddenBox>input").each(function(index, element) {
-            if($(this).val() == id){
+    function removeHidden(id) {
+        $("#hiddenBox>input").each(function (index, element) {
+            if ($(this).val() == id) {
                 $(this).remove();
             }
-            if(isContains($(this).val(),id)){
+            if (isContains($(this).val(), id)) {
                 $(this).remove();
             }
         });
@@ -86,41 +93,38 @@
         return str.indexOf(substr) >= 0;
     }
     /*单击节点显示节点详情*/
-    function onClick(e,treeId,treeNode){
-        console.log("|||"+treeNode.id+"|||"+treeNode.name)
+    function onClick(e, treeId, treeNode) {
+        console.log("|||" + treeNode.id + "|||" + treeNode.name)
         //初始化表格,动态从服务器加载数据
-        $(".uploadFile").attr("data-code",treeNode.id);
-        $(".addFolder").attr("data-code",treeNode.id);
-        var menuType=$(".addFolder").attr("data-menu");
         $(".spanStation").html(treeNode.name);
         var opt = {
-            url: "${ctx!}/admin/train/list?folder="+menuType,
+            url: "${ctx!}/admin/train/list?folderId=${folderId}",
             silent: true,
-            query:{
-                nodeCode:treeNode.id
+            query: {
+                nodeCode: treeNode.id
             }
         };
         $("#table_folder_train_list").bootstrapTable('refresh', opt);
 
     }
-    function removeAll(){
-        var obj=$('#table_folder_train_list') .bootstrapTable('getAllSelections');
+    function removeAll() {
+        var obj = $('#table_folder_train_list').bootstrapTable('getAllSelections');
         if (obj.length == 0) {
             alert("请先选择一条数据");
             return;
         }
-        var ids="";
-        $(obj).each(function(index,data){
-            ids=ids+data.id+",";
+        var ids = "";
+        $(obj).each(function (index, data) {
+            ids = ids + data.id + ",";
         });
-        console.log("ids"+ids)
-        layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
+        console.log("ids" + ids)
+        layer.confirm('确定删除吗?', {icon: 3, title: '提示'}, function (index) {
             $.ajax({
                 type: "DELETE",
                 dataType: "json",
                 url: "${ctx!}/admin/train/delete/" + ids,
-                success: function(msg){
-                    layer.msg(msg.message, {time: 2000},function(){
+                success: function (msg) {
+                    layer.msg(msg.message, {time: 2000}, function () {
                         $('#table_folder_train_list').bootstrapTable("refresh");
                         layer.close(index);
                     });
@@ -128,78 +132,77 @@
             });
         });
     }
-    function uploadFile(){
-        var menuType=$(".uploadFile").attr("data-menu");
-        var nodeCode=$(".uploadFile").attr("data-code");
+    function uploadFile() {
         var valArr = new Array;
-        $("input[name='allocation']").each(function(i){
+        $("input[name='allocation']").each(function (i) {
             valArr[i] = $(this).val();
         });
         var priv = valArr.join(',');
-        console.log("|||||||||||||||||||||"+priv)
-        var nodeCode=priv;
+        console.log("|||||||||||||||||||||" + priv)
+        var nodeCode = priv;
         layer.open({
             type: 2,
-            title:"${folder}上传文件",
+            title: "${folder}上传文件",
             shadeClose: true,
             shade: false,
             area: ['100%', '100%'],
-            content: '${ctx!}/admin/train/uploadFile?folder=${folder}&nodeCode='+nodeCode+'&menuType='+menuType,
-            end: function(index){
+            content: '${ctx!}/admin/train/uploadFile?folderId=${folderId}&nodeCode=' + nodeCode + '&menuType=${folder}',
+            end: function (index) {
                 var opt = {
-                    url: "${ctx!}/admin/train/list?folder="+menuType+"&nodeCode"+nodeCode
+                    url: "${ctx!}/admin/train/list?folderId=${folderId}&nodeCode" + nodeCode
                 };
                 $('#table_folder_train_list').bootstrapTable("refresh");
                 layer.close(index);
             }
         });
     }
-    function addFolder(){
-        var nodeCode=$(".addFolder").attr("data-code");
-        var menuType=$(".addFolder").attr("data-menu");
-        $(".addFolder").attr("disabled","disabled");
-        var valArr=new Array;
-        $("input[name='allocation']").each(function(i){
+    function addFolder() {
+        var nodeCode = $(".addFolder").attr("data-code");
+        var menuType = $(".addFolder").attr("data-menu");
+        var folderId = $(".addFolder").attr("data-id");
+        $(".addFolder").attr("disabled", "disabled");
+        var valArr = new Array;
+        $("input[name='allocation']").each(function (i) {
             valArr[i] = $(this).val();
         });
         var priv = valArr.join(',');
-        console.log("|||||||||||||||||||||"+priv)
-        var nodeCode=priv;
+        console.log("|||||||||||||||||||||" + priv)
+        var nodeCode = priv;
         layer.open({
             type: 2,
             title: '新建文件夹',
             shadeClose: true,
-            shade: [0.2,'#fff'],
+            shade: [0.2, '#fff'],
             area: ['400px', '400px'],
-            content: '${ctx!}/admin/train/add?nodeCode='+nodeCode+'&menuType='+menuType,
-            end: function(index){
+            content: '${ctx!}/admin/train/add?nodeCode=' + nodeCode + '&menuType=' + menuType+"&folderId="+folderId,
+            end: function (index) {
                 $('#table_folder_train_list').bootstrapTable("refresh");
-                $(".addFolder").attr("disabled",false);
+                $(".addFolder").attr("disabled", false);
             }
         });
     }
-    function showFolder(id,folder){
+    function showFolder(id, folder) {
         layer.open({
             type: 2,
-            title:folder,
+            title: folder,
             shadeClose: false,
             shade: false,
             area: ['100%', '100%'],
-            content: '${ctx!}/admin/train/twoFolder?folder='+folder+'&id='+id,
-            end: function(index){
+            content: '${ctx!}/admin/train/twoFolder?folder=' + folder + '&folderId=' + id,
+            end: function (index) {
                 $('#table_folder_train_list').bootstrapTable("refresh");
             }
         });
     }
 
-    function del(id){
-        layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
+    function del(id) {
+        layer.confirm('确定删除吗?', {icon: 3, title: '提示'}, function (index) {
             $.ajax({
                 type: "DELETE",
                 dataType: "json",
                 url: "${ctx!}/admin/train/delete/" + id,
-                success: function(msg){
-                    layer.msg(msg.message, {time: 2000},function(){
+                success: function (msg) {
+                    layer.msg(msg.message, {time: 2000}, function () {
                         $('#table_folder_train_list').bootstrapTable("refresh");
                         layer.close(index);
                     });
@@ -208,10 +211,10 @@
         });
     }
     //下载文件
-    function down(id,name){
-        console.log(id+"|||||"+name);
+    function down(id, name) {
+        console.log(id + "|||||" + name);
         var a = document.createElement('a');
-        a.href = "${ctx!}/admin/download/"+id;
+        a.href = "${ctx!}/admin/download/" + id;
         a.download = name;
         a.click();
     }
@@ -225,11 +228,13 @@
             //必须设置，不然request.getParameter获取不到请求参数
             contentType: "application/x-www-form-urlencoded",
             //获取数据的Servlet地址
-            url: "${ctx!}/admin/train/list?folder=${folder}",
+            url: "${ctx!}/admin/train/list?folderId=${folderId}",
             //表格显示条纹
             striped: true,
-            sortName:"id",
-            sortOrder:"desc",
+            sortName: "id",
+            sortOrder: "desc",
+            clickToSelect: true,                //是否启用点击选中行
+            uniqueId: "id",                     //每一行的唯一标识，一般为主键列
             //启动分页
             pagination: true,
             //每页显示的记录数
@@ -249,7 +254,7 @@
             //设置为limit可以获取limit, offset, search, sort, order
             queryParamsType: "undefined",
             //json数据解析
-            responseHandler: function(res) {
+            responseHandler: function (res) {
                 return {
                     "rows": res.content,
                     "total": res.totalElements
@@ -258,7 +263,7 @@
             //数据列
             columns: [{
                 checkbox: true
-            },{
+            }, {
                 title: "编号",
                 field: "id",
                 sortable: true
@@ -272,50 +277,47 @@
                         return row.fileName;
                     }
                 }
-            },{
+            }, {
                 title: "大小",
                 field: "fileSize",
-            },{
+            }, {
                 title: "归属",
                 field: "stations",
-                formatter: function(value ,row,index) {
-                    if (value!=null) {
-                        var r="";
-                        $(value).each(function(index,station){
-                            r=r+station.nodeName+","
+                formatter: function (value, row, index) {
+                    if (value != null) {
+                        var r = "";
+                        $(value).each(function (index, station) {
+                            r = r + station.nodeName + ","
                         });
-                        return r.replace(/(\,$)/,'');
-                    }else{
+                        return r.replace(/(\,$)/, '');
+                    } else {
                         return "运三分公司";
                     }
                 }
-            },{
+            }, {
                 title: "创建时间",
                 field: "createTime",
                 sortable: true
-            },{
+            }, {
                 title: "操作",
                 field: "empty",
                 formatter: function (value, row, index) {
-                    var operateHtml ='';
-                    if(row.ifFolder==1){
-                        operateHtml='<@shiro.hasPermission name="system:resource:add"><button class="btn btn-success btn-xs" type="button" onclick="showFolder(\''+row.id+'\',\''+row.fileName+'\')"><i class="fa fa-eye"></i>&nbsp;查看</button> &nbsp;</@shiro.hasPermission>';
-                    }else{
-                        operateHtml='<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="down(\''+row.id+'\',\''+row.fileName+'\')"><i class="fa fa-download"></i>&nbsp;下载</button> &nbsp;</@shiro.hasPermission>';
+                    var operateHtml = '';
+                    if (row.ifFolder == 1) {
+                        operateHtml = '<@shiro.hasPermission name="system:resource:add"><button class="btn btn-success btn-xs" type="button" onclick="showFolder(\''+ row.id+ '\',\''+ row.fileName+'\')"><i class="fa fa-eye"></i>&nbsp;查看</button> &nbsp;</@shiro.hasPermission>';
+                    } else {
+                        operateHtml = '<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="down(\''+ row.id+ '\',\''+ row.fileName+'\')"><i class="fa fa-download"></i>&nbsp;下载</button> &nbsp;</@shiro.hasPermission>';
                     }
-                    operateHtml = operateHtml + '<@shiro.hasPermission name="system:resource:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button></@shiro.hasPermission>';
+                    operateHtml = operateHtml + '<@shiro.hasPermission name="system:resource:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+ row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button></@shiro.hasPermission>';
                     return operateHtml;
                 }
             }]
         });
-        $.get("${ctx!}/admin/station/tree",function(data){
-            var zNodes =eval(data);
-            var zTreeObj=$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+        $.get("${ctx!}/admin/station/tree", function (data) {
+            var zNodes = eval(data);
+            var zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
             zTreeObj.expandAll(true);
         })
     });
 
 </script>
-</body>
-
-</html>

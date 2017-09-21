@@ -62,16 +62,17 @@ public class TrainController  extends BaseController {
 
 
     @RequestMapping("/toFolder")
-    public String toFolder(String folder,String nodeCode,Model map) {
+    public String toFolder(String folder,String nodeCode,Integer id,Model map) {
         logger.info("进入培训资料文件夹");
         map.addAttribute("folder",folder);
+        map.addAttribute("folderId",id);
         map.addAttribute("nodeCode",nodeCode);
         return "admin/learn/folder";
     }
     @RequestMapping("/twoFolder")
-    public String twoFolder(String folder,Integer id,Model map) {
-        BigFile file=fileDao.findOne(id);
+    public String twoFolder(String folder,Integer folderId,Model map) {
         logger.info("进入培训资料文件夹");
+        map.addAttribute("folderId",folderId);
         map.addAttribute("folder",folder);
         return "admin/learn/twoFolder";
     }
@@ -81,65 +82,28 @@ public class TrainController  extends BaseController {
      */
     @RequestMapping(value = { "/list" })
     @ResponseBody
-    public Page<BigFile> list(String folder,String nodeCode) {
-        logger.info("list:folder{},nodeCode{}",folder,nodeCode);
-        BigFile file1=fileDao.findByFileNameAndMenuType(BigConstant.trainFolder1,BigConstant.TRAIN);
-        if(null==file1){
-            file1=new BigFile();
-            file1.setMenuType(BigConstant.TRAIN);
-            file1.setFileName(BigConstant.trainFolder1);
-            file1.setId(1);
-            file1.setIfUse(0);
-            file1.setIfFolder(1);
-            fileDao.saveAndFlush(file1);
-        }
-        BigFile file2=fileDao.findByFileNameAndMenuType(BigConstant.trainFolder2,BigConstant.TRAIN);
-        if(null==file2){
-            file2=new BigFile();
-            file2.setMenuType(BigConstant.TRAIN);
-            file2.setFileName(BigConstant.trainFolder2);
-            file2.setId(2);
-            file2.setIfUse(0);
-            file2.setIfFolder(1);
-            fileDao.saveAndFlush(file2);
-        }
-        BigFile file3=fileDao.findByFileNameAndMenuType(BigConstant.trainFolder3,BigConstant.TRAIN);
-        if(null==file3){
-            file3=new BigFile();
-            file3.setMenuType(BigConstant.TRAIN);
-            file3.setFileName(BigConstant.trainFolder3);
-            file3.setId(3);
-            file3.setIfUse(0);
-            file3.setIfFolder(1);
-            fileDao.saveAndFlush(file3);
-        }
-        BigFile file4=fileDao.findByFileNameAndMenuType(BigConstant.trainFolder4,BigConstant.TRAIN);
-        if(null==file4){
-            file4=new BigFile();
-            file4.setMenuType(BigConstant.TRAIN);
-            file4.setFileName(BigConstant.trainFolder4);
-            file4.setId(4);
-            file4.setIfUse(0);
-            file4.setIfFolder(1);
-            fileDao.saveAndFlush(file4);
-        }
-
+    public Page<BigFile> list(Integer folderId,String nodeCode) {
+        logger.info("进入list|||||||||||||||||||||||:folderId{},nodeCode{}",folderId,nodeCode);
         SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
         User user=getUser();
+        BigFile folder=null;
+        if(null!=folderId)
+            folder=fileDao.findOne(folderId);
         nodeCode = Station.getQueryNodeCode(nodeCode, user,stationDao);
         if (!StringUtil.isBlank(nodeCode)&&!nodeCode.equals("undefined")) {
             builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
             builder.addOr("nodeCode", SpecificationOperator.Operator.isNull.name(),null);
             builder.addOr("nodeCode", SpecificationOperator.Operator.eq.name(), BigConstant.ADMINCODE);
         }
-        if(null!=folder&&!StringUtil.isBlank(folder)) {
-            builder.add("folderName", SpecificationOperator.Operator.eq.name(), folder);
-        }else {
-            builder.add("folderName", SpecificationOperator.Operator.isNull.name(),null);
-        }
         if(null!=folder) {
-            builder.add("menuType", SpecificationOperator.Operator.eq.name(), folder);
+            builder.add("folderFile", SpecificationOperator.Operator.eq.name(), folder);
+        }
+//        else {
+//            builder.add("folderFile", SpecificationOperator.Operator.isNull.name(),null);
+//        }
+        if(null!=folder) {
+            builder.add("menuType", SpecificationOperator.Operator.eq.name(), folder.getFileName());
         }else{
             builder.add("menuType", SpecificationOperator.Operator.eq.name(), BigConstant.TRAIN);
         }
@@ -147,7 +111,9 @@ public class TrainController  extends BaseController {
         if(!StringUtil.isBlank(searchText)){
             builder.add("fileName", SpecificationOperator.Operator.likeAll.name(), searchText);
         }
+        logger.debug("||||||||||||||||||||||||||||||||");
         Page<BigFile> bigFilePage=fileDao.findAll(builder.generateSpecification(), getPageRequest());
+        logger.debug("||||||||||||||||||||||||||||||||");
         return bigFilePage;
     }
 
@@ -159,18 +125,19 @@ public class TrainController  extends BaseController {
      * @return
      */
     @RequestMapping(value = "/uploadFile", method = RequestMethod.GET)
-    public String uploadFile(Model map,String folder,String nodeCode,String menuType) {
-        map.addAttribute("folder",folder);
+    public String uploadFile(Model map,Integer folderId,String nodeCode,String menuType) {
+        map.addAttribute("folderId",folderId);
         map.addAttribute("nodeCode",nodeCode);
         map.addAttribute("menuType",menuType);
         return "admin/learn/uploadTrain";
     }
 
     @RequestMapping(value="/add", method = RequestMethod.GET)
-    public String add(String nodeCode,String menuType,Model map) {
+    public String add(String nodeCode,String menuType,Integer folderId,Model map) {
         logger.info("进入培训资料添加文件夹{}",nodeCode);
         map.addAttribute("nodeCode",nodeCode);
         map.addAttribute("menuType",menuType);
+        map.addAttribute("folderId",folderId);
         return "admin/learn/form";
     }
 
@@ -180,7 +147,7 @@ public class TrainController  extends BaseController {
      */
     @RequestMapping(value= {"/saveFolder"} ,method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult edit(BigFile folder,String nodeCode,String menuType){
+    public JsonResult edit(BigFile folder,String nodeCode,String menuType,Integer folderId){
         logger.info("新增培训资料文件夹nodeCode{},menu{}",nodeCode,menuType);
         User user=getUser();
         Station area;
@@ -199,7 +166,7 @@ public class TrainController  extends BaseController {
             folder.setCreateId(user.getId());
             folder.setMenuType(menuType);
             folder.setFolderName(menuType);
-            folder.stationFolder(null, nodeCode, folder, user,fileDao,stationDao);
+            folder.stationFolder(folderId, nodeCode, folder, user,fileDao,stationDao);
             fileDao.saveAndFlush(folder);
         } catch (Exception e) {
             return JsonResult.failure(e.getMessage());
@@ -213,7 +180,7 @@ public class TrainController  extends BaseController {
      */
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, String folder,String nodeCode,String guid,String menuType,String md5){
+    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, Integer folderId,String nodeCode,String guid,String menuType,String md5){
         logger.info("进入培训资料上传文件");
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
@@ -230,11 +197,11 @@ public class TrainController  extends BaseController {
                                 logger.info("不分片的情况");
                                 //不分片的情况
                                 if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {
-                                    BigFile.saveFile(md5,properties.getUpload(),folder, nodeCode, user, file,BigConstant.office,menuType,flag,fileDao,stationDao);
+                                    BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file,BigConstant.office,menuType,flag,fileDao,stationDao);
                                 }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
-                                    BigFile.saveFile(md5,properties.getUpload(),folder, nodeCode, user, file,BigConstant.image,menuType,flag,fileDao,stationDao);
+                                    BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file,BigConstant.image,menuType,flag,fileDao,stationDao);
                                 }else {
-                                    BigFile.saveFile(md5,properties.getUpload(),folder, nodeCode, user, file, BigConstant.video, menuType, flag, fileDao, stationDao);
+                                    BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file, BigConstant.video, menuType, flag, fileDao, stationDao);
                                 }
                             }else{
                                 logger.info("分片的情况");
@@ -277,11 +244,11 @@ public class TrainController  extends BaseController {
                                     // 删除临时目录中的分片文件
                                     FileUtils.deleteDirectory(parentFileDir);
                                     if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {
-                                        BigFile.saveFile(md5,properties.getUpload(),size,folder, nodeCode, user, file,BigConstant.office,menuType,flag,fileDao,stationDao);
+                                        BigFile.saveFile(md5,properties.getUpload(),size,folderId, nodeCode, user, file,BigConstant.office,menuType,flag,fileDao,stationDao);
                                     }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
-                                        BigFile.saveFile(md5,properties.getUpload(),size,folder, nodeCode, user, file,BigConstant.image,menuType,flag,fileDao,stationDao);
+                                        BigFile.saveFile(md5,properties.getUpload(),size,folderId, nodeCode, user, file,BigConstant.image,menuType,flag,fileDao,stationDao);
                                     }else {
-                                        BigFile.saveFile(md5,properties.getUpload(),size,folder, nodeCode, user, file, BigConstant.video, menuType, flag, fileDao, stationDao);
+                                        BigFile.saveFile(md5,properties.getUpload(),size,folderId, nodeCode, user, file, BigConstant.video, menuType, flag, fileDao, stationDao);
                                     }
                                 } else {
                                     logger.info("上传中 chunks" + chunks + " chunk:" + chunk, "");

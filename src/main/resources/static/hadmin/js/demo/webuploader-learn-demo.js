@@ -79,7 +79,7 @@ jQuery(function() {
                             ,'fileType':file.ext
                             ,'fileName':file.name
                             ,'nodeCode': $("#nodeCode").val()
-                            ,'folder': $("#folder").val()
+                            ,'folderId': $("#folderId").val()
                             ,'menuType': $("#menuType").val()
                         },
                         dataType: 'json',
@@ -138,7 +138,7 @@ jQuery(function() {
 
         disableGlobalDnd: true,
         formData: {
-            folder: $("#folder").val(),
+            folderId: $("#folderId").val(),
             nodeCode: $("#nodeCode").val(),
             menuType: $("#menuType").val()
         },

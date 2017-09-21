@@ -197,7 +197,7 @@ public class StationController extends BaseController {
 
     @RequestMapping(value = "/uploadFileCheck", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFileCheck(String md5,Integer fileSize,String fileType,String fileName,String nodeCode,String folder,String menuType){
+    public JsonResult uploadFileCheck(String md5,Integer fileSize,String fileType,String fileName,String nodeCode,Integer folderId,String menuType){
         logger.debug("md5:{},fileSize:{},fileType:{},nodeCode{},param{}",md5,fileSize,fileType,nodeCode,menuType);
         String fileUrl=stringRedisTemplate.opsForValue().get("fileMd5"+md5);
         User user=getUser();
@@ -218,7 +218,7 @@ public class StationController extends BaseController {
             bf.setFileUrl(fileUrl);
             bf.setByteSize(fileSize+"");
             bf.setIfUse(0);
-            bf.stationFolder(folder, nodeCode, bf, user,fileDao,stationDao);
+            bf.stationFolder(folderId, nodeCode, bf, user,fileDao,stationDao);
             fileDao.saveAndFlush(bf);
             return JsonResult.success(fileUrl);
         }else{
@@ -228,7 +228,7 @@ public class StationController extends BaseController {
 
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, String folder,String nodeCode,String md5,String upStatus){
+    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, Integer folderId,String nodeCode,String md5,String upStatus){
         logger.info("进入上传文件{}"+upStatus);
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
@@ -248,11 +248,11 @@ public class StationController extends BaseController {
                             //不分片的情况
 
                             if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {
-                                bf=BigFile.saveFile(md5,properties.getUpload(),folder, nodeCode, user, file,BigConstant.office,BigConstant.Station,flag,fileDao,stationDao);
+                                bf=BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file,BigConstant.office,BigConstant.Station,flag,fileDao,stationDao);
                             }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
-                                bf=BigFile.saveFile(md5,properties.getUpload(),folder, nodeCode, user, file,BigConstant.image,BigConstant.Station,flag,fileDao,stationDao);
+                                bf=BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file,BigConstant.image,BigConstant.Station,flag,fileDao,stationDao);
                             }else {
-                                bf=BigFile.saveFile(md5,properties.getUpload(),folder, nodeCode, user, file, BigConstant.video, BigConstant.Station, flag, fileDao, stationDao);
+                                bf=BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file, BigConstant.video, BigConstant.Station, flag, fileDao, stationDao);
                             }
                             stringRedisTemplate.opsForValue().set("fileMd5"+md5,bf.getFileUrl());
                         }else{
@@ -297,11 +297,11 @@ public class StationController extends BaseController {
                                 // 删除临时目录中的分片文件
                                 FileUtils.deleteDirectory(parentFileDir);
                                 if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {
-                                    bf=BigFile.saveFile(md5,properties.getUpload(),size,folder, nodeCode, user, file,BigConstant.office,BigConstant.Station,flag,fileDao,stationDao);
+                                    bf=BigFile.saveFile(md5,properties.getUpload(),size,folderId, nodeCode, user, file,BigConstant.office,BigConstant.Station,flag,fileDao,stationDao);
                                 }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
-                                    bf=BigFile.saveFile(md5,properties.getUpload(),size,folder, nodeCode, user, file,BigConstant.image,BigConstant.Station,flag,fileDao,stationDao);
+                                    bf=BigFile.saveFile(md5,properties.getUpload(),size,folderId, nodeCode, user, file,BigConstant.image,BigConstant.Station,flag,fileDao,stationDao);
                                 }else {
-                                    bf=BigFile.saveFile(md5,properties.getUpload(),size,folder, nodeCode, user, file, BigConstant.video, BigConstant.Station, flag, fileDao, stationDao);
+                                    bf=BigFile.saveFile(md5,properties.getUpload(),size,folderId, nodeCode, user, file, BigConstant.video, BigConstant.Station, flag, fileDao, stationDao);
                                 }
                                 stringRedisTemplate.opsForValue().set("fileMd5"+md5,bf.getFileUrl());
                             } else {

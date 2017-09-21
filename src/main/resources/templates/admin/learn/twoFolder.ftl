@@ -60,10 +60,10 @@
             shadeClose: true,
             shade: false,
             area: ['100%', '100%'],
-            content: '${ctx!}/admin/train/uploadFile?folder=${folder}&nodeCode='+nodeCode+'&menuType='+menuType,
+            content: '${ctx!}/admin/train/uploadFile?folderId=${folderId}&nodeCode='+nodeCode+'&menuType='+menuType,
             end: function(index){
                 var opt = {
-                    url: "${ctx!}/admin/train/list?folder="+menuType+"&nodeCode"+nodeCode
+                    url: "${ctx!}/admin/train/list?folderId=${folderId}&nodeCode"+nodeCode
                 };
                 $('#table_folder_train_list').bootstrapTable("refresh");
                 layer.close(index);
@@ -104,7 +104,7 @@
             //必须设置，不然request.getParameter获取不到请求参数
             contentType: "application/x-www-form-urlencoded",
             //获取数据的Servlet地址
-            url: "${ctx!}/admin/train/list?folder=${folder}",
+            url: "${ctx!}/admin/train/list?folderId=${folderId}",
             //表格显示条纹
             striped: true,
             //启动分页

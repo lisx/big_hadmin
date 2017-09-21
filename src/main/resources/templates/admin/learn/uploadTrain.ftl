@@ -8,7 +8,7 @@
         <p>您可以尝试文件拖拽，使用QQ截屏工具，然后激活窗口后粘贴，或者点击添加图片按钮.</p>
         <div class="col-md-12">
             <div class="form-group">
-                <input type="hidden" id="folder" name="folder" value="${folder}">
+                <input type="hidden" id="folderId" name="folderId" value="${folderId}">
                 <input type="hidden" id="nodeCode" name="nodeCode" value="${nodeCode}">
                 <input type="hidden" id="menuType" name="menuType" value="${menuType}">
             </div>

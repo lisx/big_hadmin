@@ -107,7 +107,7 @@ public class BigFile extends BaseEntity {
     @JSONField(serialize = false)
     private Notice notice;
 
-    public static BigFile saveFile(String md5, String upload, String folder, String nodeCode, User user, MultipartFile file, String fileType, String menuType, long flag, IBigFileDao fileDao, IStationDao stationDao) throws IOException {
+    public static BigFile saveFile(String md5, String upload, Integer folderId, String nodeCode, User user, MultipartFile file, String fileType, String menuType, long flag, IBigFileDao fileDao, IStationDao stationDao) throws IOException {
         String filePath;
         BufferedOutputStream stream;
         BigFile bf = new BigFile();
@@ -129,14 +129,14 @@ public class BigFile extends BaseEntity {
             bf.setFileUrl(filePath);
             bf.setByteSize(file.getSize()+"");
             bf.setIfUse(0);
-            stationFolder(folder, nodeCode, bf, user,fileDao,stationDao);
+            stationFolder(folderId, nodeCode, bf, user,fileDao,stationDao);
             fileDao.saveAndFlush(bf);
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
         return bf;
     }
-    public static BigFile saveFile(String md5,String upload,Integer size,String folder, String nodeCode, User user, MultipartFile file, String fileType, String menuType, long flag, IBigFileDao fileDao, IStationDao stationDao) throws IOException {
+    public static BigFile saveFile(String md5,String upload,Integer size,Integer folderId, String nodeCode, User user, MultipartFile file, String fileType, String menuType, long flag, IBigFileDao fileDao, IStationDao stationDao) throws IOException {
         BigFile bf = new BigFile();
         try {
             String filePath;
@@ -153,7 +153,7 @@ public class BigFile extends BaseEntity {
             bf.setFileName(file.getOriginalFilename());
             bf.setFileUrl(filePath);
             bf.setIfUse(0);
-            stationFolder(folder, nodeCode, bf, user,fileDao,stationDao);
+            stationFolder(folderId, nodeCode, bf, user,fileDao,stationDao);
             fileDao.saveAndFlush(bf);
         }catch (Exception e){
             System.out.println(e.getMessage());
@@ -163,20 +163,19 @@ public class BigFile extends BaseEntity {
 
     /**
      * 保存站点及文件夹
-     * @param folder
+     * @param folderId
      * @param nodeCode
      * @param bf
      * @param user
      * @param fileDao
      * @param stationDao
      */
-    public static void stationFolder(String folder, String nodeCode, BigFile bf, User user, IBigFileDao fileDao, IStationDao stationDao) {
-        if(null==folder||folder.equals(BigConstant.trainFolder1)||folder.equals(BigConstant.trainFolder2)||folder.equals(BigConstant.trainFolder3)||folder.equals(BigConstant.trainFolder4)){
-
-        }else{
-            bf.setFolderName(folder);
-            BigFile folderd=fileDao.findByFileName(folder);
-            bf.setFolderFile(folderd);
+    public static void stationFolder(Integer folderId, String nodeCode, BigFile bf, User user, IBigFileDao fileDao, IStationDao stationDao) {
+        if(null!=folderId) {
+            BigFile folder = fileDao.findOne(folderId);
+            String folderName = folder.getFolderName();
+            bf.setFolderName(folderName);
+            bf.setFolderFile(folder);
         }
         List<Station> stations=new ArrayList<>();
         Station area=null;
@@ -194,7 +193,7 @@ public class BigFile extends BaseEntity {
                 bf.setStations(stations);
             }
         }else{
-            if(null!=folder){
+            if(null!=folderId){
 
             }else {
                 area = stationDao.findByNodeName(user.getStationArea());
@@ -202,11 +201,6 @@ public class BigFile extends BaseEntity {
                 bf.setStations(stations);
                 bf.setNodeCode(area.getNodeCode());
             }
-        }
-        if(null!=folder){
-            bf.setFolderName(folder);
-            BigFile folderd=fileDao.findByFileName(folder);
-            bf.setFolderFile(folderd);
         }
         bf.setCreateTime(new Date());
         bf.setCreateId(user.getId());

@@ -141,7 +141,7 @@
                     field: "empty",
                     formatter: function(value ,row,index) {
                         if (row.ifFolder == 1) {
-                            return '<a href="javascript:void(0);" onclick="showFolder(\''+row.fileName+'\')"><i class="fa fa-folder-o"></i>' + row.fileName + '</a>';
+                            return '<a href="javascript:void(0);" onclick="showFolder(\''+row.id+'\',\''+row.fileName+'\')"><i class="fa fa-folder-o"></i>' + row.fileName + '</a>';
                         }else{
                             return row.fileName;
                         }
@@ -298,7 +298,7 @@
             });
         });
 
-        function showFolder(folder){
+        function showFolder(id,folder){
             var station=$(".addFolder").attr("data-code");
             layer.open({
                 type: 2,
@@ -306,7 +306,7 @@
                 shadeClose: true,
                 shade: false,
                 area: ['97%', '94%'],
-                content: '${ctx!}/admin/train/toFolder?folder='+folder+'&nodeName'+station,
+                content: '${ctx!}/admin/train/toFolder?folder='+folder+'&nodeName'+station+"&id="+id,
                 end: function(index){
                     $('#table_train_list').bootstrapTable("refresh");
                 }

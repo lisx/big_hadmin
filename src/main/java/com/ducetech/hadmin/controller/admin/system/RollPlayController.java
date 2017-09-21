@@ -125,7 +125,7 @@ public class RollPlayController extends BaseController {
 
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(MultipartHttpServletRequest request, String folder,String nodeCode){
+    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer folderId,String nodeCode){
         logger.info("进入首页滚播图上传文件");
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
@@ -153,7 +153,7 @@ public class RollPlayController extends BaseController {
                     bf.setIfUse(0);
                     bf.setFileName(file.getOriginalFilename());
                     bf.setFileUrl(filePath);
-                    BigFile.stationFolder(folder, nodeCode, bf, user,fileDao,stationDao);
+                    BigFile.stationFolder(folderId, nodeCode, bf, user,fileDao,stationDao);
                     fileDao.saveAndFlush(bf);
 
                 } catch (Exception e) {

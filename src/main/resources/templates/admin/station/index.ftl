@@ -24,8 +24,6 @@
                 sortName:"id",
                 clickToSelect: true,                //是否启用点击选中行
                 uniqueId: "id",                     //每一行的唯一标识，一般为主键列
-                showExport: true,                     //是否显示导出
-                exportDataType: "basic",              //basic', 'all', 'selected'.
                 //启动分页
                 pagination: true,
                 //每页显示的记录数

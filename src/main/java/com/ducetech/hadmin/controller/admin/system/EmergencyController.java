@@ -12,8 +12,10 @@ import com.ducetech.hadmin.dao.IStationDao;
 import com.ducetech.hadmin.entity.BigFile;
 import com.ducetech.hadmin.entity.Station;
 import com.ducetech.hadmin.entity.User;
+import com.ducetech.hadmin.service.IBigFileService;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator;
+import com.ducetech.hadmin.service.support.IBaseService;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +52,8 @@ public class EmergencyController  extends BaseController {
     private IStationDao stationDao;
     @Autowired
     IBigFileDao fileDao;
-
+    @Autowired
+    IBigFileService fileService;
     /**
      * 树形菜单
      *
@@ -84,7 +87,7 @@ public class EmergencyController  extends BaseController {
     @RequestMapping(value = {"/list"})
     @ResponseBody
     public Page<BigFile> list(String folder, String nodeCode) {
-        logger.info("list:folder" + folder);
+        logger.info("list:folderId" + folder);
         SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
         User user = getUser();
@@ -163,13 +166,13 @@ public class EmergencyController  extends BaseController {
     }
 
 
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delete/{ids}", method = RequestMethod.DELETE)
     @ResponseBody
-    public JsonResult delete(@PathVariable Integer id) {
+    public JsonResult delete(@PathVariable Integer []ids) {
         try {
-            BigFile file=fileDao.findOne(id);
-            file.setIfUse(1);
-            fileDao.saveAndFlush(file);
+            for(int i=0;i<ids.length-1;i++) {
+                fileService.delete(ids[i]);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return JsonResult.failure(e.getMessage());
@@ -194,7 +197,7 @@ public class EmergencyController  extends BaseController {
 
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, String folder, String nodeCode, String guid, String md5) {
+    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, Integer folderId, String nodeCode, String guid, String md5) {
         logger.info("进入培训资料上传文件");
         List<MultipartFile> files = request.getFiles("file");
         User user = getUser();
@@ -211,11 +214,11 @@ public class EmergencyController  extends BaseController {
                             logger.info("不分片的情况");
                             //不分片的情况
                             if (suffix.equals(BigConstant.docx) || suffix.equals(BigConstant.doc) || suffix.equals(BigConstant.xlsx) || suffix.equals(BigConstant.xls) || suffix.equals(BigConstant.ppt) || suffix.equals(BigConstant.pdf)) {
-                                BigFile.saveFile(md5,properties.getUpload(),folder, nodeCode, user, file, BigConstant.office, BigConstant.Emergency, flag, fileDao, stationDao);
+                                BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file, BigConstant.office, BigConstant.Emergency, flag, fileDao, stationDao);
                             } else if (suffix.equals(BigConstant.png) || suffix.equals(BigConstant.jpeg) || suffix.equals(BigConstant.jpg)) {
-                                BigFile.saveFile(md5,properties.getUpload(),folder, nodeCode, user, file, BigConstant.image, BigConstant.Emergency, flag, fileDao, stationDao);
+                                BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file, BigConstant.image, BigConstant.Emergency, flag, fileDao, stationDao);
                             } else {
-                                BigFile.saveFile(md5,properties.getUpload(),folder, nodeCode, user, file, BigConstant.video, BigConstant.Emergency, flag, fileDao, stationDao);
+                                BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file, BigConstant.video, BigConstant.Emergency, flag, fileDao, stationDao);
                             }
                         } else {
                             logger.info("分片的情况");
@@ -258,11 +261,11 @@ public class EmergencyController  extends BaseController {
                                 // 删除临时目录中的分片文件
                                 FileUtils.deleteDirectory(parentFileDir);
                                 if (suffix.equals(BigConstant.docx) || suffix.equals(BigConstant.doc) || suffix.equals(BigConstant.xlsx) || suffix.equals(BigConstant.xls) || suffix.equals(BigConstant.ppt) || suffix.equals(BigConstant.pdf)) {
-                                    BigFile.saveFile(md5,properties.getUpload(),size, folder, nodeCode, user, file, BigConstant.office, BigConstant.Emergency, flag, fileDao, stationDao);
+                                    BigFile.saveFile(md5,properties.getUpload(),size, folderId, nodeCode, user, file, BigConstant.office, BigConstant.Emergency, flag, fileDao, stationDao);
                                 } else if (suffix.equals(BigConstant.png) || suffix.equals(BigConstant.jpeg) || suffix.equals(BigConstant.jpg)) {
-                                    BigFile.saveFile(md5,properties.getUpload(),size, folder, nodeCode, user, file, BigConstant.image, BigConstant.Emergency, flag, fileDao, stationDao);
+                                    BigFile.saveFile(md5,properties.getUpload(),size, folderId, nodeCode, user, file, BigConstant.image, BigConstant.Emergency, flag, fileDao, stationDao);
                                 } else {
-                                    BigFile.saveFile(md5,properties.getUpload(),size, folder, nodeCode, user, file, BigConstant.video, BigConstant.Emergency, flag, fileDao, stationDao);
+                                    BigFile.saveFile(md5,properties.getUpload(),size, folderId, nodeCode, user, file, BigConstant.video, BigConstant.Emergency, flag, fileDao, stationDao);
                                 }
                             } else {
                                 logger.info("上传中 chunks" + chunks + " chunk:" + chunk, "");

@@ -447,7 +447,7 @@ public class QuestionController extends BaseController {
 
     @RequestMapping(value = "/uploadQuestionPost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadQuestionPost(MultipartHttpServletRequest request, String folder, String nodeCode,String md5) {
+    public JsonResult uploadQuestionPost(MultipartHttpServletRequest request, Integer folderId, String nodeCode,String md5) {
         logger.info("进入练习考试上传文件");
         List<MultipartFile> files = request.getFiles("file");
         User user = getUser();
@@ -457,7 +457,7 @@ public class QuestionController extends BaseController {
             file = files.get(i);
             if (!file.isEmpty()) {
                 try {
-                    BigFile.saveFile(md5,properties.getUpload(),folder, nodeCode, user, file, BigConstant.image, BigConstant.Question, flag, fileDao, stationDao);
+                    BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file, BigConstant.image, BigConstant.Question, flag, fileDao, stationDao);
                 } catch (Exception e) {
                     logger.info(e.getMessage());
                 }

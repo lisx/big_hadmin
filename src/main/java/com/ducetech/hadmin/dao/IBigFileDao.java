@@ -21,10 +21,13 @@ import java.util.List;
 public interface IBigFileDao extends IBaseDao<BigFile,Integer> {
 //    @Query(value="select o from BigFile o where o.nodeCode =:nodeCode  ")
 //    List<BigFile> findByStation(@Param("nodeCode") String nodeCode);
+    @Query(nativeQuery = true,value = "insert into big_file(id,file_name,if_use,if_folder,menu_type)VALUES(1,'题库',0,1,'培训资料'),(2,'文档资料',0,1,'培训资料'),(3,'信号平面图',0,1,'培训资料'),(4,'案例库',0,1,'培训资料');")
+    int initTrain();
     @Query(value="select o from BigFile o where (o.nodeCode like:station or o.nodeCode=:ys or  o.nodeCode=:area ) and o.ifUse=0 and o.menuType=:menuType ")
     List<BigFile> findByStationFileOrStationFileAndMenuType(@Param("station") String station,@Param("ys") String ys,@Param("area") String area,@Param("menuType") String menuType);
     @Query(value="select o from BigFile o where (o.nodeCode like:station or o.nodeCode=:ys or  o.nodeCode=:area ) and o.ifUse=0  and o.menuType=:menuType and o.fileName like:name")
     List<BigFile> findByStationFileOrStationFileAndMenuTypeAndFileName(@Param("station") String station,@Param("ys") String ys,@Param("area") String area,@Param("menuType") String menuType,@Param("name") String name);
+
     BigFile findByFileName(String folder);
 
     BigFile findByFileNameAndMenuType(String folder,String menuType);
