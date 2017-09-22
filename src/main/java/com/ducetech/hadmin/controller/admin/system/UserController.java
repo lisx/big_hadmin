@@ -113,11 +113,11 @@ public class UserController extends BaseController {
                     for (List<List<String>> sheet : data) {
                         if (null != sheet && !sheet.isEmpty()) {
                             for (List<String> row : sheet) {
-                                String userName = StringUtil.trim(row.get(0));
+                                String line = StringUtil.trim(row.get(0));
                                 String stationArea = StringUtil.trim(row.get(1));
                                 String station = StringUtil.trim(row.get(2));
-                                String line = StringUtil.trim(row.get(3));
-                                String position = StringUtil.trim(row.get(4));
+                                String position = StringUtil.trim(row.get(3));
+                                String userName = StringUtil.trim(row.get(4));
                                 String userCode = StringUtil.trim(row.get(5));
                                 String fwxxkUrl = StringUtil.trim(row.get(6));
                                 String faszUrl = StringUtil.trim(row.get(7));
@@ -165,7 +165,8 @@ public class UserController extends BaseController {
                 }
             }
         } catch (Exception e) {
-            return JsonResult.failure(e.getMessage());
+            logger.debug(e.getMessage());
+            return JsonResult.failure("上传失败！");
         }
         return JsonResult.success("上传成功！");
     }
