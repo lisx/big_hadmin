@@ -31,10 +31,10 @@
                     <option value="站务员">站务员</option>
                     <option value="综控员">综控员</option>
                     <option value="值班站长">值班站长</option>
-                    <option value="副站长">副站长</option>
-                    <option value="站长">站长</option>
+                    <option value="站区助理">站区助理</option>
                     <option value="副站区长">副站区长</option>
                     <option value="站区长">站区长</option>
+                    <option value="科员">科员</option>
                 </select>
             </div>
         </div>
