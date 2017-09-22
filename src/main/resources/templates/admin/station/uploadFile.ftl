@@ -12,7 +12,7 @@
             <div class="form-group" id="hiddenBox">
                 <input type="hidden" id="nodeCode" name="nodeCode" value="${nodeCode}">
                 <input type="hidden" id="menuType" name="menuType" value="${menuType}">
-                <input type="hidden" id="folder" name="folder" value="${folder}">
+                <input type="hidden" id="folderId" name="folderId" value="${folderId}">
             </div>
         </div>
         <div id="uploader" class="wu-example">

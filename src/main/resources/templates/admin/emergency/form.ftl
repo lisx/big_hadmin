@@ -7,7 +7,7 @@
                                 <label class="col-sm-3 control-label">文件夹名：</label>
                                 <div class="col-sm-8">
 
-                                    <input id="name" name="fileName" class="form-control">
+                                    <input id="name" name="fileName" autocomplete="off" class="form-control">
                                 </div>
                             </div>
 
@@ -35,10 +35,10 @@
     	    	$.ajax({
    	    		   type: "POST",
    	    		   dataType: "json",
-   	    		   url: "${ctx!}/admin/emergency/saveFolder?nodeCode=${nodeCode}&menu=${menu}",
+   	    		   url: "${ctx!}/admin/emergency/saveFolder?nodeCode=${nodeCode}&menuType=${menuType}",
    	    		   data: $(form).serialize(),
    	    		   success: function(msg){
-	   	    			layer.msg(msg.message, {time: 2000},function(){
+	   	    			layer.msg(msg.message, {time: 1000},function(){
 	   						var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
 	   						parent.layer.close(index);
 	   					});

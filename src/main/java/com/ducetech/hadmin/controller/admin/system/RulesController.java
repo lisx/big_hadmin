@@ -102,10 +102,10 @@ public class RulesController extends BaseController {
     }
 
     @RequestMapping("/add")
-    public String add(String nodeCode,Model map) {
+    public String add(String nodeCode,String menuType,Model map) {
         logger.info("进入规章制度添加文件夹");
         map.addAttribute("nodeCode",nodeCode);
-        map.addAttribute("menu","规章制度");
+        map.addAttribute("menuType",menuType);
         return "admin/rules/form";
     }
 
@@ -148,12 +148,13 @@ public class RulesController extends BaseController {
      * @return
      */
     @RequestMapping("/toFolder")
-    public String toFolder(String folder,Model map) {
-        logger.info("进入规章制度文件夹folder{}",folder);
-        map.addAttribute("folder",folder);
+    public String toFolder(String folder, Integer folderId,String menuType, Model map) {
+        logger.info("进入规章制度文件夹folder{}", folder);
+        map.addAttribute("folder", folder);
+        map.addAttribute("folderId", folderId);
+        map.addAttribute("menuType", menuType);
         return "admin/rules/folder";
     }
-
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     @ResponseBody

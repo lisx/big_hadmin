@@ -40,13 +40,14 @@ import java.util.List;
 
 /**
  * 应急预案管理
- *  fire safety
+ * fire safety
+ *
  * @author lisx
  * @create 2017-08-15 08:47
  **/
 @Controller
 @RequestMapping("/admin/emergency")
-public class EmergencyController  extends BaseController {
+public class EmergencyController extends BaseController {
     private static Logger logger = LoggerFactory.getLogger(EmergencyController.class);
     @Autowired
     private IStationDao stationDao;
@@ -54,12 +55,13 @@ public class EmergencyController  extends BaseController {
     IBigFileDao fileDao;
     @Autowired
     IBigFileService fileService;
+
     /**
      * 树形菜单
      *
      * @return
      */
-    @RequestMapping("/tree")
+    @RequestMapping(value = {"/tree"},method = RequestMethod.GET)
     @ResponseBody
     public JSONArray tree() {
         logger.info("获取tree数据");
@@ -86,7 +88,7 @@ public class EmergencyController  extends BaseController {
      */
     @RequestMapping(value = {"/list"})
     @ResponseBody
-    public Page<BigFile> list(Integer folderId, String nodeCode) {
+    public Page<BigFile> list(Integer folderId, String nodeCode, String menuType) {
         logger.info("进入应急预案||||||||||||||||||||list:folderId" + folderId);
         SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
@@ -98,27 +100,31 @@ public class EmergencyController  extends BaseController {
             builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
             builder.addOr("nodeCode", SpecificationOperator.Operator.eq.name(), "000");
         }
-        BigFile folder=null;
-        if(null!=folderId)
-            folder=fileDao.findOne(folderId);
-        if(null!=folder) {
+        BigFile folder = null;
+        if (null != folderId)
+            folder = fileDao.findOne(folderId);
+        if (null != folder) {
             builder.add("folderFile", SpecificationOperator.Operator.eq.name(), folder);
-        }else{
-            builder.add("folderFile", SpecificationOperator.Operator.isNull.name(),null);
+        } else {
+            builder.add("folderFile", SpecificationOperator.Operator.isNull.name(), null);
         }
-        builder.add("menuType", SpecificationOperator.Operator.eq.name(), BigConstant.Emergency);
+        if (null != menuType) {
+            builder.add("menuType", SpecificationOperator.Operator.eq.name(), menuType);
+        }
         if (!StringUtil.isBlank(searchText)) {
             builder.add("fileName", SpecificationOperator.Operator.likeAll.name(), searchText);
         }
+        logger.debug("||||||||||||||||||||||||||||||||||||||||||||||");
         Page<BigFile> bigFilePage = fileDao.findAll(builder.generateSpecification(), getPageRequest());
+        logger.debug("||||||||||||||||||||||||||||||||||||||||||||||");
         return bigFilePage;
     }
 
     @RequestMapping("/add")
-    public String add(String nodeCode, Model map) {
+    public String add(String nodeCode, String menuType, Model map) {
         logger.info("进入应急预案添加文件夹");
         map.addAttribute("nodeCode", nodeCode);
-        map.addAttribute("menu", "应急预案");
+        map.addAttribute("menuType", menuType);
         return "admin/emergency/form";
     }
 
@@ -129,12 +135,12 @@ public class EmergencyController  extends BaseController {
      */
     @RequestMapping(value = {"/saveFolder"}, method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult edit(BigFile folder, String nodeCode, String menu,Integer folderId) {
-        logger.info("新增应急预案文件夹nodeCode{},menu{}", nodeCode, menu);
+    public JsonResult edit(BigFile folder, String nodeCode, String menuType, Integer folderId) {
+        logger.info("新增应急预案文件夹nodeCode{},menu{}", nodeCode, menuType);
         User user = getUser();
         try {
-            folder.initData(user.getId(),nodeCode,menu);
-            folder.stationFolder(folderId, nodeCode, folder, user,fileDao,stationDao);
+            folder.initData(user.getId(), nodeCode, menuType);
+            folder.stationFolder(folderId, nodeCode, folder, user, fileDao, stationDao);
             fileDao.saveAndFlush(folder);
         } catch (Exception e) {
             return JsonResult.failure(e.getMessage());
@@ -150,19 +156,32 @@ public class EmergencyController  extends BaseController {
      * @return
      */
     @RequestMapping("/toFolder")
-    public String toFolder(String folder,Integer folderId, Model map) {
+    public String toFolder(String folder, Integer folderId,String menuType, Model map) {
         logger.info("进入应急预案文件夹folder{}", folder);
         map.addAttribute("folder", folder);
         map.addAttribute("folderId", folderId);
+        map.addAttribute("menuType", menuType);
         return "admin/emergency/folder";
     }
 
 
-    @RequestMapping(value = "/delete/{ids}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    public JsonResult delete(@PathVariable Integer []ids) {
+    public JsonResult delete(@PathVariable Integer id) {
         try {
-            for(int i=0;i<ids.length-1;i++) {
+            fileService.delete(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return JsonResult.failure(e.getMessage());
+        }
+        return JsonResult.success();
+    }
+
+    @RequestMapping(value = "/removeAll/{ids}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public JsonResult removeAll(@PathVariable Integer[] ids) {
+        try {
+            for (int i = 0; i < ids.length - 1; i++) {
                 fileService.delete(ids[i]);
             }
         } catch (Exception e) {
@@ -180,9 +199,10 @@ public class EmergencyController  extends BaseController {
      * @return
      */
     @RequestMapping(value = "/uploadFile", method = RequestMethod.GET)
-    public String uploadFile(Model map, Integer folderId, String nodeCode) {
+    public String uploadFile(Model map, Integer folderId, String nodeCode, String menuType) {
+        logger.debug("folderId{},menuType{},nodeCode{}", folderId, menuType, nodeCode);
         map.addAttribute("folderId", folderId);
-        map.addAttribute("menuType", BigConstant.Emergency);
+        map.addAttribute("menuType", menuType);
         map.addAttribute("nodeCode", nodeCode);
         return "admin/emergency/uploadFile";
     }
@@ -206,11 +226,11 @@ public class EmergencyController  extends BaseController {
                             logger.info("不分片的情况");
                             //不分片的情况
                             if (suffix.equals(BigConstant.docx) || suffix.equals(BigConstant.doc) || suffix.equals(BigConstant.xlsx) || suffix.equals(BigConstant.xls) || suffix.equals(BigConstant.ppt) || suffix.equals(BigConstant.pdf)) {
-                                BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file, BigConstant.office, BigConstant.Emergency, flag, fileDao, stationDao);
+                                BigFile.saveFile(md5, properties.getUpload(), folderId, nodeCode, user, file, BigConstant.office, BigConstant.Emergency, flag, fileDao, stationDao);
                             } else if (suffix.equals(BigConstant.png) || suffix.equals(BigConstant.jpeg) || suffix.equals(BigConstant.jpg)) {
-                                BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file, BigConstant.image, BigConstant.Emergency, flag, fileDao, stationDao);
+                                BigFile.saveFile(md5, properties.getUpload(), folderId, nodeCode, user, file, BigConstant.image, BigConstant.Emergency, flag, fileDao, stationDao);
                             } else {
-                                BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file, BigConstant.video, BigConstant.Emergency, flag, fileDao, stationDao);
+                                BigFile.saveFile(md5, properties.getUpload(), folderId, nodeCode, user, file, BigConstant.video, BigConstant.Emergency, flag, fileDao, stationDao);
                             }
                         } else {
                             logger.info("分片的情况");
@@ -253,11 +273,11 @@ public class EmergencyController  extends BaseController {
                                 // 删除临时目录中的分片文件
                                 FileUtils.deleteDirectory(parentFileDir);
                                 if (suffix.equals(BigConstant.docx) || suffix.equals(BigConstant.doc) || suffix.equals(BigConstant.xlsx) || suffix.equals(BigConstant.xls) || suffix.equals(BigConstant.ppt) || suffix.equals(BigConstant.pdf)) {
-                                    BigFile.saveFile(md5,properties.getUpload(),size, folderId, nodeCode, user, file, BigConstant.office, BigConstant.Emergency, flag, fileDao, stationDao);
+                                    BigFile.saveFile(md5, properties.getUpload(), size, folderId, nodeCode, user, file, BigConstant.office, BigConstant.Emergency, flag, fileDao, stationDao);
                                 } else if (suffix.equals(BigConstant.png) || suffix.equals(BigConstant.jpeg) || suffix.equals(BigConstant.jpg)) {
-                                    BigFile.saveFile(md5,properties.getUpload(),size, folderId, nodeCode, user, file, BigConstant.image, BigConstant.Emergency, flag, fileDao, stationDao);
+                                    BigFile.saveFile(md5, properties.getUpload(), size, folderId, nodeCode, user, file, BigConstant.image, BigConstant.Emergency, flag, fileDao, stationDao);
                                 } else {
-                                    BigFile.saveFile(md5,properties.getUpload(),size, folderId, nodeCode, user, file, BigConstant.video, BigConstant.Emergency, flag, fileDao, stationDao);
+                                    BigFile.saveFile(md5, properties.getUpload(), size, folderId, nodeCode, user, file, BigConstant.video, BigConstant.Emergency, flag, fileDao, stationDao);
                                 }
                             } else {
                                 logger.info("上传中 chunks" + chunks + " chunk:" + chunk, "");

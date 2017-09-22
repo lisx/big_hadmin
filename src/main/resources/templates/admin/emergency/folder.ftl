@@ -18,8 +18,8 @@
                                     <button class="btn btn-success pull-right" onclick="removeAll()" type="button"><i
                                             class="fa fa-plus"></i>&nbsp;批量删除
                                     </button>
-                                    <button class="btn btn-success " type="button" onclick="uploadFile();"><i
-                                            class="fa fa-plus"></i>&nbsp;上传
+                                    <button class="btn btn-success pull-right" type="button" onclick="uploadFile();"><i
+                                            class="fa fa-plus"></i>&nbsp;上传资料
                                     </button>
                                 </@shiro.hasPermission>
                                 </p>
@@ -50,7 +50,7 @@
     $(document).ready(function () {
         console.log("++++++++++++++++++++++")
         //初始化表格,动态从服务器加载数据
-        $("#table_folder_emergency_list").bootstrapTable({
+        $("#table_list").bootstrapTable({
             //使用get请求到服务器获取数据
             method: "POST",
             //必须设置，不然request.getParameter获取不到请求参数

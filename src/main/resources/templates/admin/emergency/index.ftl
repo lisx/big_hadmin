@@ -43,7 +43,7 @@
                             <!-- Example Card View -->
                             <div class="example-wrap">
                                 <div class="example">
-                                    <table class="table table-bordered" id="table_emergency_list"></table>
+                                    <table class="table table-bordered" id="table_list"></table>
                                 </div>
                             </div>
                             <!-- End Example Card View -->
