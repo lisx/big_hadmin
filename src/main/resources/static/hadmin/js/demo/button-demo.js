@@ -42,6 +42,7 @@ var Button = {
         };
         button.uploadFile=function(url){
             var valArr = new Array;
+            console.log("url:::::"+url);
             $("input[name='allocation']").each(function (i) {
                 valArr[i] = $(this).val();
             });

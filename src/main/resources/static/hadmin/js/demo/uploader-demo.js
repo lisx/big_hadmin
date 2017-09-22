@@ -146,7 +146,6 @@ jQuery(function() {
         formData: {
             folderId: $("#folderId").val()
             ,nodeCode: $("#nodeCode").val()
-            ,folderId: $("#folderId").val()
             ,menuType: $("#menuType").val()
         },
         //图片不压缩

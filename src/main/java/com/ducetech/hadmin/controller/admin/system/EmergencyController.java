@@ -202,7 +202,7 @@ public class EmergencyController extends BaseController {
     public String uploadFile(Model map, Integer folderId, String nodeCode, String menuType) {
         logger.debug("folderId{},menuType{},nodeCode{}", folderId, menuType, nodeCode);
         map.addAttribute("folderId", folderId);
-        map.addAttribute("menuType", menuType);
+        map.addAttribute("menuType", menuType.replace("undefined",""));
         map.addAttribute("nodeCode", nodeCode);
         return "admin/emergency/uploadFile";
     }

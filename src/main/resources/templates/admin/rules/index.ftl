@@ -12,12 +12,12 @@
     }
 </style>
 <script type="text/javascript">
-
+    //初始化表格
     $(document).ready(function () {
         var table = Table.createNew();
         table.init("${ctx!}/admin/emergency/list?menuType=规章制度");
     });
-
+    //初始化tree
     var tree = Tree.createNew("${ctx!}/admin/emergency/tree");
     tree.init();
     function onClick(e, treeId, treeNode) {
@@ -34,6 +34,7 @@
         };
         $("#table_list").bootstrapTable('refresh', opt);
     }
+    //初始化按钮
     var button = Button.createNew();
     //进入文件夹
     function showFolder(folderId) {
@@ -55,6 +56,7 @@
     function del(id) {
         button.del("${ctx!}/admin/emergency/delete/" + id)
     };
+    //删除全部
     function removeAll() {
         button.removeAll("${ctx!}/admin/emergency/removeAll/");
     }
