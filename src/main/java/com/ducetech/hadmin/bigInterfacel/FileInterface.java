@@ -52,7 +52,7 @@ public class FileInterface {
         String area="";
         if(nodeCode.length()==12)
         area=nodeCode.substring(0,nodeCode.length()-3);
-        List<BigFile> stations = bigFileDao.findByStationFileOrStationFileAndMenuType(str.getNodeCode()+"%","000",area,menuType);
+        List<BigFile> stations = bigFileDao.findByStationFileOrStationFileAndMenuType("%"+str.getNodeCode()+"%","000","%"+area+"%",menuType);
         if(null==stations){
             msg="暂无数据";
             state=0;
