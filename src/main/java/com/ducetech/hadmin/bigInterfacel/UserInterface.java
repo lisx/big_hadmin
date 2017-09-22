@@ -57,6 +57,7 @@ public class UserInterface extends BaseController {
             }
         }else{
             msg="工号错误！";
+            user=new User();
             state=0;
         }
         obj=new JSONObject();

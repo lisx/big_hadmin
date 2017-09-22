@@ -85,6 +85,7 @@ public class UserController extends BaseController {
             builder.addOr("stationArea", Operator.likeAll.name(), searchText);
             builder.addOr("line", Operator.likeAll.name(), searchText);
 		}
+        builder.addOr("ifUse", Operator.eq.name(), 0);
 		logger.info("查询人员首页");
         return userDao.findAll(builder.generateSpecification(), getPageRequest());
 	}
@@ -104,6 +105,7 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/fileUploadUser", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult uploadUserExcel(@RequestParam("fileUpload") MultipartFile fileUpload) {
+	    logger.debug("进入上传用户||||||||||||||||||||||");
         try {
             if (fileUpload != null && !fileUpload.isEmpty()) {
                 List<List<List<String>>> data = PoiUtil.readExcelToList(fileUpload, 2);
@@ -281,6 +283,20 @@ public class UserController extends BaseController {
 		}
 		return JsonResult.success();
 	}
+
+    @RequestMapping(value = "/removeAll/{ids}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public JsonResult removeAll(@PathVariable Integer [] ids) {
+        try {
+            for(int i=0;i<ids.length- 1;i++) {
+                userService.delete(ids[i]);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return JsonResult.failure(e.getMessage());
+        }
+        return JsonResult.success();
+    }
 
 	@RequestMapping(value = "/grant/{id}", method = RequestMethod.GET)
 	public String grant(@PathVariable Integer id, ModelMap map) {

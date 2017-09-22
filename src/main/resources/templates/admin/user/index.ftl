@@ -17,6 +17,7 @@
                         <h5>人员信息</h5>
                     <@shiro.hasPermission name="system:user:add">
                         <p>
+                            <button class="btn btn-success pull-right" onclick="removeAll()" type="button"><i class="fa fa-plus"></i>&nbsp;批量删除人员</button>
                             <button class="btn btn-success pull-right" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;批量导入附件</button>
                             <button class="btn btn-success pull-right uploadUser" type="button" onclick="uploadUser();"><i class="fa fa-plus"></i>&nbsp;批量导入人员</button>
                             <button class="btn btn-success pull-right" type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;添加人员</button>
@@ -60,7 +61,9 @@
 			    pageSize: 10,
                 sortName:"id",
                 sortOrder:"desc",
-			    //当前第几页
+                clickToSelect: true,                //是否启用点击选中行
+                uniqueId: "id",
+                //当前第几页
 			    pageNumber: 1,
 			    //记录数可选列表
 			    pageList: [5, 10, 15, 20, 25],
@@ -82,7 +85,7 @@
 			        };
 			    },
 			    //数据列
-			    columns: [{
+			    columns: [{checkbox:true},{
 			        title: "编号",
 			        field: "id",
                     width:80
@@ -226,6 +229,31 @@
     	    		   }
     	    	});
        		});
+        }
+        function removeAll(){
+            var obj=$('#table_list') .bootstrapTable('getAllSelections');
+            if (obj.length == 0) {
+                alert("请先选择一条数据");
+                return;
+            }
+            var ids="";
+            $(obj).each(function(index,data){
+                ids=ids+data.id+",";
+            });
+            console.log("ids"+ids)
+            layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
+                $.ajax({
+                    type: "DELETE",
+                    dataType: "json",
+                    url: "${ctx!}/admin/user/removeAll/" + ids,
+                    success: function(msg){
+                        layer.msg(msg.message, {time: 2000},function(){
+                            $('#table_list').bootstrapTable("refresh");
+                            layer.close(index);
+                        });
+                    }
+                });
+            });
         }
     </script>
 </body>
