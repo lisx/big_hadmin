@@ -23,6 +23,6 @@ public interface IExamDao extends IBaseDao<Exam,Integer> {
     @Query(value = "select o from Exam o where o.nodeCode like:nodeCode or o.nodeCode='000'")
     List<Exam> findByStation(@Param("nodeCode") String nodeCode);
 
-    List<Exam> findByQuestionBank(QuestionBank bank);
+    List<Exam> findByQuestionBankAndIfUse(QuestionBank bank,Integer ifUse);
 }
 
