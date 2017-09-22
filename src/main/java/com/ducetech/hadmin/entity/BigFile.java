@@ -183,6 +183,7 @@ public class BigFile extends BaseEntity {
             String folderName = folder.getFolderName();
             bf.setFolderName(folderName);
             bf.setFolderFile(folder);
+            bf.setMenuType(folder.getMenuType());
         }
         List<Station> stations=new ArrayList<>();
         Station area=null;
