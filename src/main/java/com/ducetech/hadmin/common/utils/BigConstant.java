@@ -15,6 +15,7 @@ public class BigConstant {
     public static final String xlsx=".xlsx";
     public static final String xls=".xls";
     public static final String ppt=".ppt";
+    public static final String pptx=".pptx";
     public static final String pdf=".pdf";
     public static final String jpeg=".jepg";
     public static final String jpg=".jpg";

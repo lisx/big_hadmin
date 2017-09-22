@@ -112,7 +112,7 @@ public class ExamInterface  extends BaseController {
         QuestionBank bank=bankDao.findOne(bankId);
         List<Question> questions=questionDao.findByQuestionBankAndMenuType(bank,type);
         for (int i=0;i<questions.size();i++){
-            List<Proper> propers=questions.get(i).getPropers();
+            List<Proper> propers=properDao.findByQuestion(questions.get(i));
             Collections.shuffle(propers);
             questions.get(i).setPropers(propers);
         }
