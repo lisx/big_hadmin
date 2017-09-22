@@ -335,7 +335,7 @@
                 $.ajax({
                     type: "DELETE",
                     dataType: "json",
-                    url: "${ctx!}/admin/station/delete/" + ids,
+                    url: "${ctx!}/admin/station/removeAll/" + ids,
                     success: function(msg){
                         layer.msg(msg.message, {time: 2000},function(){
                             $('#table_station_list').bootstrapTable("refresh");

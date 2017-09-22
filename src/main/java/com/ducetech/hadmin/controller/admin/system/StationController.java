@@ -355,12 +355,23 @@ public class StationController extends BaseController {
 
     /**
      * 删除
-     * @param ids
      * @return
      */
-    @RequestMapping(value = "/delete/{ids}",method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delete/{id}",method = RequestMethod.DELETE)
     @ResponseBody
-    public JsonResult delete(@PathVariable Integer[] ids){
+    public JsonResult delete(@PathVariable Integer id){
+        try {
+                fileService.delete(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return JsonResult.failure(e.getMessage());
+        }
+        return JsonResult.success();
+    }
+
+    @RequestMapping(value = "/removeAll/{ids}",method = RequestMethod.DELETE)
+    @ResponseBody
+    public JsonResult removeAll(@PathVariable Integer[] ids){
         logger.debug(ids.toString());
         try {
             for(int i=0;i<ids.length-1;i++) {
