@@ -2,10 +2,9 @@
 <#include "/admin/common/css.ftl">
 <#include "/admin/common/js.ftl">
 <style>
-    .table tbody tr td{
-        overflow: hidden;
-        text-overflow:ellipsis;
-        white-space: nowrap;
+    .table tbody tr td {
+        text-overflow: ellipsis;
+        white-space: pre-wrap;
     }
 </style>
     <script type="text/javascript">
@@ -162,8 +161,8 @@
                             <div class="col-sm-12">
                                 <!-- Example Card View -->
                                 <div class="example-wrap">
-                                    <div class="example">
-                                        <table class="table table-bordered"  id="table_notice_list"></table>
+                                    <div class="example  table-responsive ">
+                                        <table class="table  table-bordered"  id="table_notice_list"  style="table-layout:fixed;word-wrap:break-word;"></table>
                                     </div>
                                 </div>
                                 <!-- End Example Card View -->

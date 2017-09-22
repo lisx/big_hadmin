@@ -32,6 +32,7 @@ public class Notice extends BaseEntity {
     @OneToMany(mappedBy = "notice")
     private List<BigFile> bigFiles;
     //站点
+    @Column(columnDefinition="longText")
     private String stationName;
     //是否使用
     private int ifUse;
