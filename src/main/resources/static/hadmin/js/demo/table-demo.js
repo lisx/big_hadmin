@@ -135,7 +135,7 @@ var Table = {
                 },
                 //数据列
                 columns: [{checkbox:true},{
-                    title: "ID",
+                    title: "编号",
                     field: "id",
                     sortable: true
                 },{
