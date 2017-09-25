@@ -170,9 +170,6 @@ public class ExamInterface  extends BaseController {
                                 logger.info("pros||||||{}|||||{}|||"+pros.size(),q.getId());
                                 Collections.shuffle(pros);
                                 q.setPropers(pros);
-                                if(!StringUtil.isBlank(q.getImgUrl())) {
-                                    q.setImgUrl(properties.getHttp() + q.getImgUrl());
-                                }
                                 questions.add(q);
                             }else{
                                 i--;
@@ -190,9 +187,6 @@ public class ExamInterface  extends BaseController {
                                 logger.info("pros||||||{}|||||{}|||"+pros.size(),q.getId());
                                 Collections.shuffle(pros);
                                 q.setPropers(pros);
-                                if(!StringUtil.isBlank(q.getImgUrl())) {
-                                    q.setImgUrl(properties.getHttp() + q.getImgUrl());
-                                }
                                 questions.add(q);
                             }else{
                                 i--;
@@ -206,9 +200,6 @@ public class ExamInterface  extends BaseController {
                             int l = rand.nextInt(judges.size());
                             Question q=judges.get(l);
                             if(!questions.contains(q)&&null!=q){
-                                if(!StringUtil.isBlank(q.getImgUrl())) {
-                                    q.setImgUrl(properties.getHttp() + q.getImgUrl());
-                                }
                                 questions.add(q);
                             }else{
                                 i--;
@@ -224,12 +215,8 @@ public class ExamInterface  extends BaseController {
                             if(!questions.contains(q)&&null!=q){
                                 logger.info(q.getPropers().size()+"排序");
                                 List<Proper> pros=properDao.findByQuestion(q);
-                                logger.info("pros||||||{}|||||{}|||"+pros.size(),q.getId());
                                 Collections.shuffle(pros);
                                 q.setPropers(pros);
-                                if(!StringUtil.isBlank(q.getImgUrl())) {
-                                    q.setImgUrl(properties.getHttp() + q.getImgUrl());
-                                }
                                 questions.add(q);
                             }else{
                                 i--;
@@ -249,7 +236,12 @@ public class ExamInterface  extends BaseController {
                     qlog.setQuestion(question);
                     qlog.setLog(log);
                     questionLogDao.save(qlog);
+                    if(!StringUtil.isBlank(question.getImgUrl())) {
+                        String url=question.getImgUrl().replaceAll(properties.getHttp(),"");
+                        question.setImgUrl(properties.getHttp() + url);
+                    }
                 }
+
                 o.put("log",log);
                 o.put("questions",questions);
                 obj=new JSONObject();

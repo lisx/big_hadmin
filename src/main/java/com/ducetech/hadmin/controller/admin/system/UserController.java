@@ -13,13 +13,10 @@ import com.ducetech.hadmin.service.IRoleService;
 import com.ducetech.hadmin.service.IUserService;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator.Operator;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -56,8 +53,6 @@ public class UserController extends BaseController {
 	@Autowired
     IStationDao stationDao;
     @Autowired
-    private StringRedisTemplate stringRedisTemplate;
-    @Autowired
     DucetechProperties properties;
     /**
 	 * 用户管理初始化页面
@@ -65,7 +60,6 @@ public class UserController extends BaseController {
 	 */
 	@RequestMapping(value = { "/", "/index" })
 	public String index() {
-		System.out.println("++++++"+request.getSession());
 	    return "admin/user/index";
 	}
 
@@ -155,10 +149,6 @@ public class UserController extends BaseController {
                                 user.setCreateTime(new Date());
                                 user.setIfUse(0);
                                 userService.saveOrUpdate(user);
-                                String redisValue = stringRedisTemplate.opsForValue().get("user"+user.getId());
-                                if (StringUtils.isEmpty(redisValue)) {
-                                    stringRedisTemplate.opsForValue().set("user"+user.getId(), user.getUserName());
-                                }
                             }
                         }
                     }
