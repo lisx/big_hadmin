@@ -58,6 +58,6 @@ public class EditionInterface {
         obj.put("data", file);
         obj.put("msg",msg);
         obj.put("state",state);
-        return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
+        return obj;
     }
 }

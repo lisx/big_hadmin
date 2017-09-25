@@ -252,13 +252,97 @@ public class UserController extends BaseController {
 
 	@RequestMapping(value= {"/edit"} ,method = RequestMethod.POST)
 	@ResponseBody
-	public JsonResult edit(User user){
+	public JsonResult edit(User user,@RequestParam("photoFile") MultipartFile photoFile,@RequestParam("fwxxkFile") MultipartFile fwxxkFile,@RequestParam("zkysgzFile") MultipartFile zkysgzFile,@RequestParam("faszFile") MultipartFile faszFile){
 		try {
 		    if(user.getStationArea().equals("请选择")){
 		        user.setStationArea("");
             }
             if(user.getStation().equals("请选择")){
                 user.setStation("");
+            }
+            if(null!=faszFile) {
+                String fasz=user.getFaszUrl();
+                String path= properties.getUpload()+fasz+BigConstant.jpg;
+                if(StringUtil.isBlank(fasz)){
+                    return JsonResult.failure("FAS证未填");
+                }
+                File dest = new File(path);
+                if (!dest.getParentFile().exists()) {
+                    dest.getParentFile().mkdirs();
+                }
+                BufferedOutputStream stream;
+                byte[] bytes = faszFile.getBytes();
+                stream = new BufferedOutputStream(new FileOutputStream(dest));
+                stream.write(bytes);
+                stream.close();
+                BigFile file=new BigFile();
+                file.setIfUse(0);
+                file.setFileName(fasz+BigConstant.jpg);
+                file.setMenuType(BigConstant.User);
+                file.setFileUrl(path);
+                fileDao.save(file);
+            }
+            if(null!=zkysgzFile) {
+                String zkysgz=user.getZkysgzUrl();
+                String path= properties.getUpload()+zkysgz+BigConstant.jpg;
+                if(StringUtil.isBlank(zkysgz)){
+                    return JsonResult.failure("综控员上岗证未填");
+                }
+                File dest = new File(path);
+                if (!dest.getParentFile().exists()) {
+                    dest.getParentFile().mkdirs();
+                }
+                BufferedOutputStream stream;
+                byte[] bytes = zkysgzFile.getBytes();
+                stream = new BufferedOutputStream(new FileOutputStream(dest));
+                stream.write(bytes);
+                stream.close();
+                BigFile file=new BigFile();
+                file.setIfUse(0);
+                file.setFileName(zkysgz+BigConstant.jpg);
+                file.setMenuType(BigConstant.User);
+                file.setFileUrl(path);
+                fileDao.save(file);
+            }
+            if(null!=fwxxkFile) {
+                String fwxxk=user.getFwxxkUrl();
+                String path= properties.getUpload()+fwxxk+BigConstant.jpg;
+                if(StringUtil.isBlank(fwxxk)){
+                    path= properties.getUpload()+"fw"+user.getUserCode();
+                }
+                File dest = new File(path);
+                if (!dest.getParentFile().exists()) {
+                    dest.getParentFile().mkdirs();
+                }
+                BufferedOutputStream stream;
+                byte[] bytes = fwxxkFile.getBytes();
+                stream = new BufferedOutputStream(new FileOutputStream(dest));
+                stream.write(bytes);
+                stream.close();
+                BigFile file=new BigFile();
+                file.setIfUse(0);
+                file.setFileName(fwxxk+BigConstant.jpg);
+                file.setMenuType(BigConstant.User);
+                file.setFileUrl(path);
+                fileDao.save(file);
+            }
+            if(null!=photoFile) {
+                String path= properties.getUpload()+user.getUserCode()+BigConstant.jpg;
+                File dest = new File(path);
+                if (!dest.getParentFile().exists()) {
+                    dest.getParentFile().mkdirs();
+                }
+                BufferedOutputStream stream;
+                byte[] bytes = photoFile.getBytes();
+                stream = new BufferedOutputStream(new FileOutputStream(dest));
+                stream.write(bytes);
+                stream.close();
+                BigFile file=new BigFile();
+                file.setIfUse(0);
+                file.setFileName(user.getUserCode()+BigConstant.jpg);
+                file.setMenuType(BigConstant.User);
+                file.setFileUrl(path);
+                fileDao.save(file);
             }
             user.setPhotoUrl(user.getUserCode());
 		    user.setPassword(MD5Utils.md5(user.getPassword()));
