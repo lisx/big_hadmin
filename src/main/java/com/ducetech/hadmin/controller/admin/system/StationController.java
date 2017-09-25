@@ -207,7 +207,7 @@ public class StationController extends BaseController {
             bf.setMenuType(menuType);
             bf.setMd5(md5);
             String suffix="."+fileType;
-            if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {
+            if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pptx)||suffix.equals(BigConstant.pdf)) {
                 bf.setFileType(BigConstant.office);
             }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
                 bf.setFileType(BigConstant.image);
