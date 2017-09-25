@@ -138,7 +138,7 @@ public class UserController extends BaseController {
                                 if(station.equals("西直门站")||station.equals("东直门站")||station.equals("建国门站")||station.equals("北土城站")||station.equals("慈寿寺站")){
                                     station=line+station;
                                 }
-                                User user=userService.findByUserCode(userCode);
+                                User user=userDao.findByUserCodeOne(userCode);
                                 if(null==user) {
                                     user = new User();
                                 }

@@ -18,6 +18,9 @@ import java.util.List;
 @Repository
 public interface IUserDao extends IBaseDao<User, Integer> {
 	User findByUserName(String userName);
+    @Query(value = "select t from User t where t.id=(select max(o.id) from User o where o.userCode=:userCode )")
+    User findByUserCodeOne(@Param("userCode")String userCode);
+
     User findByUserCode(String userCode);
     @Query(value="select o from User o where o.station=:station or o.stationArea=:station ")
     List<User> findAllByStation(@Param("station") String station);
