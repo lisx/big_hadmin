@@ -221,9 +221,9 @@ public class QuestionController extends BaseController {
 
                                     }else {
                                         if(StringUtil.isBlank(area)){
-                                            question.setImgUrl(imgUrl + BigConstant.jpg);
+                                            question.setImgUrl(imgUrl);
                                         }else {
-                                            question.setImgUrl(area + imgUrl + BigConstant.jpg);
+                                            question.setImgUrl(area + imgUrl);
                                         }
                                     }
                                     question.setQuestionBank(bank);
@@ -265,9 +265,9 @@ public class QuestionController extends BaseController {
 
                                     }else {
                                         if(StringUtil.isBlank(area)){
-                                            question.setImgUrl(imgUrl + BigConstant.jpg);
+                                            question.setImgUrl(imgUrl);
                                         }else {
-                                            question.setImgUrl(area + imgUrl + BigConstant.jpg);
+                                            question.setImgUrl(area + imgUrl);
                                         }
                                     }
                                     question.setQuestionBank(bank);
@@ -320,9 +320,9 @@ public class QuestionController extends BaseController {
 
                                     }else {
                                         if(StringUtil.isBlank(area)){
-                                            question.setImgUrl(imgUrl + BigConstant.jpg);
+                                            question.setImgUrl(imgUrl);
                                         }else {
-                                            question.setImgUrl(area + imgUrl + BigConstant.jpg);
+                                            question.setImgUrl(area + imgUrl);
                                         }
                                     }
                                     question.setQuestionBank(bank);
@@ -388,9 +388,9 @@ public class QuestionController extends BaseController {
 
                                     }else {
                                         if(StringUtil.isBlank(area)){
-                                            question.setImgUrl(imgUrl + BigConstant.jpg);
+                                            question.setImgUrl(imgUrl);
                                         }else {
-                                            question.setImgUrl(area + imgUrl + BigConstant.jpg);
+                                            question.setImgUrl(area + imgUrl);
                                         }
                                     }
                                     question.setQuestionBank(bank);

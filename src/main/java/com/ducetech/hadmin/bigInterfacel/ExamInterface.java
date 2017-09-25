@@ -3,7 +3,7 @@ package com.ducetech.hadmin.bigInterfacel;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.ValueFilter;
 import com.ducetech.hadmin.common.utils.BigConstant;
-import com.ducetech.hadmin.common.utils.DateUtil;
+import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.*;
 import com.ducetech.hadmin.entity.*;
@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -115,6 +113,7 @@ public class ExamInterface  extends BaseController {
             List<Proper> propers=properDao.findByQuestion(questions.get(i));
             Collections.shuffle(propers);
             questions.get(i).setPropers(propers);
+            questions.get(i).setImgUrl(properties.getHttp()+questions.get(i).getImgUrl());
         }
         Collections.shuffle(questions);
         if(null==questions){
@@ -171,6 +170,9 @@ public class ExamInterface  extends BaseController {
                                 logger.info("pros||||||{}|||||{}|||"+pros.size(),q.getId());
                                 Collections.shuffle(pros);
                                 q.setPropers(pros);
+                                if(!StringUtil.isBlank(q.getImgUrl())) {
+                                    q.setImgUrl(properties.getHttp() + q.getImgUrl());
+                                }
                                 questions.add(q);
                             }else{
                                 i--;
@@ -188,6 +190,9 @@ public class ExamInterface  extends BaseController {
                                 logger.info("pros||||||{}|||||{}|||"+pros.size(),q.getId());
                                 Collections.shuffle(pros);
                                 q.setPropers(pros);
+                                if(!StringUtil.isBlank(q.getImgUrl())) {
+                                    q.setImgUrl(properties.getHttp() + q.getImgUrl());
+                                }
                                 questions.add(q);
                             }else{
                                 i--;
@@ -201,6 +206,9 @@ public class ExamInterface  extends BaseController {
                             int l = rand.nextInt(judges.size());
                             Question q=judges.get(l);
                             if(!questions.contains(q)&&null!=q){
+                                if(!StringUtil.isBlank(q.getImgUrl())) {
+                                    q.setImgUrl(properties.getHttp() + q.getImgUrl());
+                                }
                                 questions.add(q);
                             }else{
                                 i--;
@@ -219,6 +227,9 @@ public class ExamInterface  extends BaseController {
                                 logger.info("pros||||||{}|||||{}|||"+pros.size(),q.getId());
                                 Collections.shuffle(pros);
                                 q.setPropers(pros);
+                                if(!StringUtil.isBlank(q.getImgUrl())) {
+                                    q.setImgUrl(properties.getHttp() + q.getImgUrl());
+                                }
                                 questions.add(q);
                             }else{
                                 i--;
