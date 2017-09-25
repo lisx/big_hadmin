@@ -3,7 +3,6 @@ package com.ducetech.hadmin.bigInterfacel;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.ValueFilter;
 import com.ducetech.hadmin.common.utils.BigConstant;
-import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.*;
 import com.ducetech.hadmin.entity.*;
@@ -236,10 +235,14 @@ public class ExamInterface  extends BaseController {
                     qlog.setQuestion(question);
                     qlog.setLog(log);
                     questionLogDao.save(qlog);
-                    if(!StringUtil.isBlank(question.getImgUrl())) {
-                        String url=question.getImgUrl().replaceAll(properties.getHttp(),"");
-                        question.setImgUrl(properties.getHttp() + url);
+                    String [] imgs=question.getImgUrl().split("=");
+                    String url="";
+                    if(null!=imgs&&imgs.length>0) {
+                        url=imgs[imgs.length - 1];
+                    }else{
+                        url=question.getImgUrl();
                     }
+                    question.setImgUrl(properties.getHttp()+url);
                 }
 
                 o.put("log",log);

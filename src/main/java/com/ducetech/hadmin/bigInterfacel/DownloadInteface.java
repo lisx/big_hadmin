@@ -143,12 +143,15 @@ public class DownloadInteface extends BaseController {
             logger.error(e.getMessage());
         }
     }
+
     @ApiOperation(value="获取用户文件", notes="根据code获取文件")
     @RequestMapping(value="/userImg", method = RequestMethod.GET)
     @ApiImplicitParam(name="code",value="文件code",dataType="String", paramType = "query")
     public void download( String code) throws IOException {
         System.out.println("||code||"+code);
-        BigFile file=fileDao.findByFileName(code+"%");
+        String [] codes=code.split("=");
+        System.out.println("|code|"+codes[1]);
+        BigFile file=fileDao.findByFileName(codes[1]+"%");
         if(null!=file) {
             response.setCharacterEncoding("utf-8");
             response.setContentType("application/force-download");// 设置强制下载不打开
