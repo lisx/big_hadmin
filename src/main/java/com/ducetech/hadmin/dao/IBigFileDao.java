@@ -28,7 +28,8 @@ public interface IBigFileDao extends IBaseDao<BigFile,Integer> {
     @Query(value="select o from BigFile o where (o.nodeCode like:station or o.nodeCode=:ys or  o.nodeCode=:area ) and o.ifUse=0  and o.menuType=:menuType and o.fileName like:name")
     List<BigFile> findByStationFileOrStationFileAndMenuTypeAndFileName(@Param("station") String station,@Param("ys") String ys,@Param("area") String area,@Param("menuType") String menuType,@Param("name") String name);
 
-    BigFile findByFileName(String folder);
+    @Query(value = "select o from BigFile  o where o.fileName=:folder order by o.id desc")
+    List<BigFile> findByFileName(@Param("folder") String folder);
 
     BigFile findByFileNameAndMenuType(String folder,String menuType);
 

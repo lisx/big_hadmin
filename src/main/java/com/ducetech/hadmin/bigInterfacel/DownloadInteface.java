@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.ServletOutputStream;
 import java.io.*;
 import java.net.URLEncoder;
+import java.util.List;
 
 /**
  * 下载文件
@@ -147,7 +148,10 @@ public class DownloadInteface extends BaseController {
     @ApiImplicitParam(name="code",value="文件code",dataType="String", paramType = "query")
     public void download( String code) throws IOException {
         System.out.println("||code||"+code);
-        BigFile file=fileDao.findByFileName(code+".jpg");
+        BigFile file=null;
+        List<BigFile> files=fileDao.findByFileName(code+".jpg");
+        if(null!=files&&files.size()>0)
+            file=files.get(0);
         if(null!=file) {
             response.setCharacterEncoding("utf-8");
             response.setContentType("application/force-download");// 设置强制下载不打开
