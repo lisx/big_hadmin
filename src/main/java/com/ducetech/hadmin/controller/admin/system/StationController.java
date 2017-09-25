@@ -247,7 +247,7 @@ public class StationController extends BaseController {
                             logger.info("不分片的情况");
                             //不分片的情况
 
-                            if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pdf)) {
+                            if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)|| suffix.equals(BigConstant.pptx)||suffix.equals(BigConstant.pdf)) {
                                 bf=BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file,BigConstant.office,BigConstant.Station,flag,fileDao,stationDao);
                             }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
                                 bf=BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file,BigConstant.image,BigConstant.Station,flag,fileDao,stationDao);

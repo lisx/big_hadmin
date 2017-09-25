@@ -192,12 +192,9 @@ public class UserController extends BaseController {
                     stream = new BufferedOutputStream(new FileOutputStream(f));
                     stream.write(bytes);
                     stream.close();
-                    BigFile bf = null;
-                    List<BigFile> bigFiles=fileDao.findByFileName(file.getOriginalFilename());
-                    if(null!=bigFiles&&bigFiles.size()>0) {
-                        if (null == bf)
-                            bf = new BigFile();
-                    }
+                    BigFile bf=fileDao.findByFileName(file.getOriginalFilename());
+                    if (null == bf)
+                        bf = new BigFile();
                     bf.setFileSize("" + Math.round(file.getSize() / 1024));
                     bf.setMenuType(BigConstant.User);
                     bf.setFileType(BigConstant.image);

@@ -195,7 +195,6 @@ public class EmergencyController extends BaseController {
      * 进入培训上传页面
      *
      * @param map
-     * @param folder
      * @return
      */
     @RequestMapping(value = "/uploadFile", method = RequestMethod.GET)
@@ -225,7 +224,7 @@ public class EmergencyController extends BaseController {
                         if (null == chunks) {
                             logger.info("不分片的情况");
                             //不分片的情况
-                            if (suffix.equals(BigConstant.docx) || suffix.equals(BigConstant.doc) || suffix.equals(BigConstant.xlsx) || suffix.equals(BigConstant.xls) || suffix.equals(BigConstant.ppt) || suffix.equals(BigConstant.pdf)) {
+                            if (suffix.equals(BigConstant.docx) || suffix.equals(BigConstant.doc) || suffix.equals(BigConstant.xlsx) || suffix.equals(BigConstant.xls) || suffix.equals(BigConstant.ppt)|| suffix.equals(BigConstant.pptx) || suffix.equals(BigConstant.pdf)) {
                                 BigFile.saveFile(md5, properties.getUpload(), folderId, nodeCode, user, file, BigConstant.office, BigConstant.Emergency, flag, fileDao, stationDao);
                             } else if (suffix.equals(BigConstant.png) || suffix.equals(BigConstant.jpeg) || suffix.equals(BigConstant.jpg)) {
                                 BigFile.saveFile(md5, properties.getUpload(), folderId, nodeCode, user, file, BigConstant.image, BigConstant.Emergency, flag, fileDao, stationDao);
