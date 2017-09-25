@@ -146,7 +146,7 @@ public class DownloadInteface extends BaseController {
     @RequestMapping(value="/userImg", method = RequestMethod.GET)
     @ApiImplicitParam(name="code",value="文件code",dataType="String", paramType = "query")
     public void download( String code) throws IOException {
-        System.out.println("|||||"+code);
+        System.out.println("||code||"+code);
         BigFile file=fileDao.findByFileName(code+".jpg");
         if(null!=file) {
             response.setCharacterEncoding("utf-8");

@@ -57,14 +57,12 @@ public class UserInterface extends BaseController {
             }
         }else{
             msg="工号错误！";
-            user=new User();
             state=0;
         }
-        obj=new JSONObject();
         obj.put("state",state);
         obj.put("msg",msg);
         obj.put("data",user);
-        return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
+        return obj;
     }
     static Map<Long, User> users = Collections.synchronizedMap(new HashMap<Long, User>());
     @ApiOperation(value="获取用户列表", notes="根据站点站区或线路获取用户")
