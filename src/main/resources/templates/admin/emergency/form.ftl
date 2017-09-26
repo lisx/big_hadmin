@@ -4,15 +4,16 @@
                     <div class="ibox-content">
                         <form class="form-horizontal m-t" id="frm" method="post" action="${ctx!}/admin/emergency/folder?station=${station}">
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">文件夹名：</label>
+                                <label class="col-sm-4 control-label">文件夹名：</label>
                                 <div class="col-sm-8">
 
                                     <input id="name" name="fileName" autocomplete="off" class="form-control">
                                 </div>
                             </div>
-
+                            <br>
+                            <br>
                             <div class="form-group">
-                                <div class="col-sm-8 col-sm-offset-3">
+                                <div class="col-sm-12 text-center">
                                     <button class="btn btn-primary" type="submit">提交</button>
                                 </div>
                             </div>
