@@ -62,7 +62,7 @@ public class QuestionController extends BaseController {
     @RequestMapping(value = {"/bank"})
     @ResponseBody
     public Page<QuestionBank> bank() {
-        logger.info("进入bank查询Page");
+//        logger.info("进入bank查询Page");
         SimpleSpecificationBuilder<QuestionBank> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
         User user=getUser();
@@ -448,7 +448,7 @@ public class QuestionController extends BaseController {
     @RequestMapping(value = "/uploadQuestionPost", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult uploadQuestionPost(MultipartHttpServletRequest request, Integer folderId, String nodeCode,String md5) {
-        logger.info("进入练习考试上传文件");
+//        logger.info("进入练习考试上传文件");
         List<MultipartFile> files = request.getFiles("file");
         User user = getUser();
         MultipartFile file;
@@ -459,7 +459,7 @@ public class QuestionController extends BaseController {
                 try {
                     BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file, BigConstant.image, BigConstant.Question, flag, fileDao, stationDao);
                 } catch (Exception e) {
-                    logger.info(e.getMessage());
+//                    logger.info(e.getMessage());
                 }
             } else {
                 return JsonResult.failure("You failed to upload " + i + " becausethe file was empty.");

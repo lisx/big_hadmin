@@ -39,7 +39,7 @@ public class EditionController extends BaseController {
     @RequestMapping(value = "/fileUploadEdition", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult fileUploadEdition(MultipartHttpServletRequest request){
-        logger.info("进入版本更新上传文件");
+//        logger.info("进入版本更新上传文件");
         MultipartFile file =request.getFile("file");
         User user=getUser();
         //创建临时文件夹

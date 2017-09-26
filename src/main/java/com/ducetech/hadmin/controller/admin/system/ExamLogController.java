@@ -53,7 +53,7 @@ public class ExamLogController extends BaseController {
 
     @RequestMapping("/index")
     public String index() {
-        logger.debug("测试进入exam首页");
+//        logger.debug("测试进入exam首页");
         return "admin/examlog/index";
     }
     /**

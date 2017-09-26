@@ -51,7 +51,7 @@ public class ExamController extends BaseController {
      */
     @RequestMapping("/add")
     public String index(ModelMap model) {
-        logger.info("测试进入exam配置试卷页");
+//        logger.info("测试进入exam配置试卷页");
         User user=getUser();
         Station station=stationDao.findByNodeName(user.getStationArea());
         String nodeCode="%000%";
@@ -73,7 +73,7 @@ public class ExamController extends BaseController {
      */
     @RequestMapping("/edit")
     public String edit(Integer id,Model model) {
-        logger.info("进入exam编辑配置试卷页");
+//        logger.info("进入exam编辑配置试卷页");
         if(null!=id) {
             Exam exam = examService.findOne(id);
             model.addAttribute("exam", exam);

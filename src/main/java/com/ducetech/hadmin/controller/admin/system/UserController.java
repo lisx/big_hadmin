@@ -155,7 +155,7 @@ public class UserController extends BaseController {
                 }
             }
         } catch (Exception e) {
-            logger.debug(e.getMessage());
+//            logger.debug(e.getMessage());
             return JsonResult.failure("上传失败！");
         }
         return JsonResult.success("上传成功！");
@@ -168,7 +168,7 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult uploadFilePost(HttpServletRequest request){
-        logger.info("进入上传方法");
+//        logger.info("进入上传方法");
         List<MultipartFile> files =((MultipartHttpServletRequest)request).getFiles("file");
         MultipartFile file;
         BufferedOutputStream stream;

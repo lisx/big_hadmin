@@ -58,20 +58,20 @@ public class NoticeController extends BaseController {
      */
     @RequestMapping("/index")
     public String index() {
-        logger.info("进入通知管理首页");
+//        logger.info("进入通知管理首页");
         return "admin/notice/index";
     }
 
     @RequestMapping("/show")
     public String form(Model map,Integer id) {
-        logger.info("详情{}",id);
+//        logger.info("详情{}",id);
         Notice notice=noticeDao.findOne(id);
         List<BigFile> files= fileDao.findByNotice(notice);
         notice.setBigFiles(files);
         logger.debug(files.size()+"|||||||"+notice.getBigFiles().size());
 
         map.addAttribute("notice",notice);
-        logger.info("进入通知详情页");
+//        logger.info("进入通知详情页");
         return "admin/notice/show";
     }
 
@@ -143,7 +143,7 @@ public class NoticeController extends BaseController {
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult uploadFilePost(MultipartHttpServletRequest request,String [] area, Notice notice){
-        logger.info("进入通知上传文件{}",area.length);
+//        logger.info("进入通知上传文件{}",area.length);
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
         MultipartFile file;
@@ -187,7 +187,7 @@ public class NoticeController extends BaseController {
                     fileDao.saveAndFlush(bigFile);
                     list.add(bigFile);
                 } catch (Exception e) {
-                    logger.info("上传失败{}", e.getMessage());
+//                    logger.info("上传失败{}", e.getMessage());
                 }
             }
         }

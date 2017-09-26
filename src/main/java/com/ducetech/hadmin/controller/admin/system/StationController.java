@@ -54,7 +54,7 @@ public class StationController extends BaseController {
     @RequestMapping("/tree")
     @ResponseBody
     public JSONArray tree(){
-        logger.info("获取tree数据");
+//        logger.info("获取tree数据");
         User user=getUser();
         return Station.getZtrees(user,stationDao);
     }
@@ -67,9 +67,8 @@ public class StationController extends BaseController {
     @RequestMapping("/getStation")
     @ResponseBody
     public List<String> getStation(String area){
-        logger.info("根据站区名获取站点数据{}",area);
+//        logger.info("根据站区名获取站点数据{}",area);
         Station station=stationDao.findByNodeName(area);
-
         List<String> list=null;
         if(null!=station)
                 list=stationDao.findStations(station.getNodeCode().length()+3,station.getNodeCode()+"___");
@@ -84,8 +83,7 @@ public class StationController extends BaseController {
     @RequestMapping(value = "/del/{nodeId}",method = RequestMethod.DELETE)
     @ResponseBody
     public JSONObject del(@PathVariable String nodeId){
-        logger.info("进入删除节点nodeId{}",nodeId);
-        //Station station = stationDao.findByNodeCode(nodeId);
+//        logger.info("进入删除节点nodeId{}",nodeId);
         List<Station> stations=stationDao.findByNodeCodeStartingWith(nodeId);
         stationDao.delete(stations);
         JSONObject obj=new JSONObject();
@@ -99,7 +97,7 @@ public class StationController extends BaseController {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
     public Station save(String name, String pId){
-        logger.info("进入新增节点name{}||pId{}",name,pId);
+//        logger.info("进入新增节点name{}||pId{}",name,pId);
         String pcode =StringUtil.trim(pId);
         List<Station> stations = stationDao.querySubNodesByCode(pcode+"___",pcode.length()+3);
         String nodeCode = Station.getNodeCode(stations,pcode);
@@ -115,7 +113,7 @@ public class StationController extends BaseController {
     @RequestMapping(value = "/update/{nodeCode}", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject update(@PathVariable String nodeCode, String name){
-        logger.info("进入编辑节点nodeCode{}||name{}",nodeCode,name);
+//        logger.info("进入编辑节点nodeCode{}||name{}",nodeCode,name);
         nodeCode = StringUtil.trim(nodeCode);
         String nodeName = StringUtil.trim(name);
         Station node = stationDao.findByNodeCode(nodeCode);
@@ -198,7 +196,7 @@ public class StationController extends BaseController {
     @RequestMapping(value = "/uploadFileCheck", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult uploadFileCheck(String md5,Integer fileSize,String fileType,String fileName,String nodeCode,Integer folderId,String menuType){
-        logger.debug("md5:{},fileSize:{},fileType:{},nodeCode{},param{}",md5,fileSize,fileType,nodeCode,menuType);
+//        logger.debug("md5:{},fileSize:{},fileType:{},nodeCode{},param{}",md5,fileSize,fileType,nodeCode,menuType);
         String fileUrl=stringRedisTemplate.opsForValue().get("fileMd5"+md5);
         User user=getUser();
         if(!StringUtil.isBlank(fileUrl)){
@@ -229,7 +227,7 @@ public class StationController extends BaseController {
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, Integer folderId,String nodeCode,String md5,String upStatus){
-        logger.info("进入上传文件{}"+upStatus);
+//        logger.info("进入上传文件{}"+upStatus);
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
         MultipartFile file;
@@ -244,9 +242,8 @@ public class StationController extends BaseController {
                     String suffix=StringUtil.suffix(file.getOriginalFilename());
                     try {
                         if(null==chunks) {
-                            logger.info("不分片的情况");
+//                            logger.info("不分片的情况");
                             //不分片的情况
-
                             if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pptx)||suffix.equals(BigConstant.pdf)) {
                                 bf=BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file,BigConstant.office,BigConstant.Station,flag,fileDao,stationDao);
                             }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
@@ -256,7 +253,7 @@ public class StationController extends BaseController {
                             }
                             stringRedisTemplate.opsForValue().set("fileMd5"+md5,bf.getFileUrl());
                         }else{
-                            logger.info("分片的情况");
+//                            logger.info("分片的情况");
                             String tempFileDir = properties.getUpload()+md5+"/";
                             String realname = file.getOriginalFilename();
                             // 临时目录用来存放所有分片文件
@@ -282,12 +279,12 @@ public class StationController extends BaseController {
                             }
                             // 所有分片文件都上传完成
                             // 将所有分片文件合并到一个文件中
-                            logger.info("|||||||"+uploadDone);
+//                            logger.info("|||||||"+uploadDone);
                             if (uploadDone) {
                                 File[] array = parentFileDir.listFiles();
                                 List<Integer> fileNames=new ArrayList<>();
                                 for (int a=0;a<array.length;a++){
-                                    logger.info("arr"+array[a].getName());
+//                                    logger.info("arr"+array[a].getName());
                                     fileNames.add(Integer.parseInt(array[a].getName()));
                                 }
                                 fileNames= new ArrayList(new TreeSet(fileNames));
@@ -328,8 +325,7 @@ public class StationController extends BaseController {
     @RequestMapping(value = { "/list" })
     @ResponseBody
     public Page<BigFile> list(String folder,String nodeCode) {
-        logger.info("list:folder"+folder+"|||||"+properties.getUploadChunk());
-
+//        logger.info("list:folder"+folder+"|||||"+properties.getUploadChunk());
         SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
         User user=getUser();

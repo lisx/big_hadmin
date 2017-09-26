@@ -53,7 +53,7 @@ public class RunningController extends BaseController {
      */
     @RequestMapping("/index")
     public String index() {
-        logger.info("获取站点文件全部数据");
+//        logger.info("获取站点文件全部数据");
         return "admin/running/index";
     }
 
@@ -134,7 +134,7 @@ public class RunningController extends BaseController {
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult uploadFilePost(MultipartHttpServletRequest request, Running running){
-        logger.info("进入运行图上传文件");
+//        logger.info("进入运行图上传文件");
         MultipartFile file =request.getFile("file");
         User user=getUser();
         //创建临时文件夹
@@ -147,7 +147,6 @@ public class RunningController extends BaseController {
         try {
             BufferedOutputStream stream;
             byte[] bytes = file.getBytes();
-
             stream = new BufferedOutputStream(new FileOutputStream(dest));
             stream.write(bytes);
             stream.close();

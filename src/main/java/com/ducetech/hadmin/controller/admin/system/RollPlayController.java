@@ -1,10 +1,8 @@
 package com.ducetech.hadmin.controller.admin.system;
 
-import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.ducetech.hadmin.common.JsonResult;
 import com.ducetech.hadmin.common.utils.BigConstant;
-import com.ducetech.hadmin.common.utils.FileUtil;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IBigFileDao;
@@ -31,7 +29,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -95,7 +92,7 @@ public class RollPlayController extends BaseController {
      */
     @RequestMapping("/index")
     public String index() {
-        logger.info("获取站点文件全部数据");
+//        logger.info("获取站点文件全部数据");
         return "admin/rollPlay/index";
     }
 
@@ -126,7 +123,7 @@ public class RollPlayController extends BaseController {
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer folderId,String nodeCode){
-        logger.info("进入首页滚播图上传文件");
+//        logger.info("进入首页滚播图上传文件");
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
         MultipartFile file;

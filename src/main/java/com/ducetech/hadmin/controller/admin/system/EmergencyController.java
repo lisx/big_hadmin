@@ -63,7 +63,7 @@ public class EmergencyController extends BaseController {
     @RequestMapping(value = {"/tree"},method = RequestMethod.GET)
     @ResponseBody
     public JSONArray tree() {
-        logger.info("获取tree数据");
+//        logger.info("获取tree数据");
         User user = getUser();
         return Station.getZtrees(user, stationDao);
     }
@@ -76,7 +76,7 @@ public class EmergencyController extends BaseController {
      */
     @RequestMapping("/index")
     public String index() {
-        logger.info("获取站点文件全部数据");
+//        logger.info("获取站点文件全部数据");
         return "admin/emergency/index";
     }
 
@@ -88,7 +88,7 @@ public class EmergencyController extends BaseController {
     @RequestMapping(value = {"/list"})
     @ResponseBody
     public Page<BigFile> list(Integer folderId, String nodeCode, String menuType) {
-        logger.info("进入应急预案||||||||||||||||||||list:folderId" + folderId);
+//        logger.info("进入应急预案||||||||||||||||||||list:folderId" + folderId);
         SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
         User user = getUser();
@@ -113,15 +113,15 @@ public class EmergencyController extends BaseController {
         if (!StringUtil.isBlank(searchText)) {
             builder.add("fileName", SpecificationOperator.Operator.likeAll.name(), searchText);
         }
-        logger.debug("||||||||||||||||||||||||||||||||||||||||||||||");
+//        logger.debug("||||||||||||||||||||||||||||||||||||||||||||||");
         Page<BigFile> bigFilePage = fileDao.findAll(builder.generateSpecification(), getPageRequest());
-        logger.debug("||||||||||||||||||||||||||||||||||||||||||||||");
+//        logger.debug("||||||||||||||||||||||||||||||||||||||||||||||");
         return bigFilePage;
     }
 
     @RequestMapping("/add")
     public String add(String nodeCode, String menuType, Model map) {
-        logger.info("进入应急预案添加文件夹");
+//        logger.info("进入应急预案添加文件夹");
         map.addAttribute("nodeCode", nodeCode);
         map.addAttribute("menuType", menuType);
         return "admin/emergency/form";
@@ -135,7 +135,7 @@ public class EmergencyController extends BaseController {
     @RequestMapping(value = {"/saveFolder"}, method = RequestMethod.POST)
     @ResponseBody
     public JsonResult edit(BigFile folder, String nodeCode, String menuType, Integer folderId) {
-        logger.info("新增应急预案文件夹nodeCode{},menu{}", nodeCode, menuType);
+//        logger.info("新增应急预案文件夹nodeCode{},menu{}", nodeCode, menuType);
         User user = getUser();
         try {
             folder.initData(user.getId(), nodeCode, menuType);
@@ -156,7 +156,7 @@ public class EmergencyController extends BaseController {
      */
     @RequestMapping("/toFolder")
     public String toFolder(String folder, Integer folderId,String menuType, Model map) {
-        logger.info("进入应急预案文件夹folder{}", folder);
+//        logger.info("进入应急预案文件夹folder{}", folder);
         map.addAttribute("folder", folder);
         map.addAttribute("folderId", folderId);
         map.addAttribute("menuType", menuType);
@@ -198,7 +198,7 @@ public class EmergencyController extends BaseController {
      */
     @RequestMapping(value = "/uploadFile", method = RequestMethod.GET)
     public String uploadFile(Model map, Integer folderId, String nodeCode, String menuType) {
-        logger.debug("folderId{},menuType{},nodeCode{}", folderId, menuType, nodeCode);
+//        logger.debug("folderId{},menuType{},nodeCode{}", folderId, menuType, nodeCode);
         map.addAttribute("folderId", folderId);
         map.addAttribute("menuType", menuType.replace("undefined",""));
         map.addAttribute("nodeCode", nodeCode);
@@ -208,7 +208,7 @@ public class EmergencyController extends BaseController {
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, Integer folderId, String nodeCode, String guid, String md5) {
-        logger.info("进入培训资料上传文件");
+//        logger.info("进入培训资料上传文件");
         List<MultipartFile> files = request.getFiles("file");
         User user = getUser();
         MultipartFile file;
@@ -221,7 +221,7 @@ public class EmergencyController extends BaseController {
                     String suffix = StringUtil.suffix(file.getOriginalFilename());
                     try {
                         if (null == chunks) {
-                            logger.info("不分片的情况");
+//                            logger.info("不分片的情况");
                             //不分片的情况
                             if (suffix.equals(BigConstant.docx) || suffix.equals(BigConstant.doc) || suffix.equals(BigConstant.xlsx) || suffix.equals(BigConstant.xls) || suffix.equals(BigConstant.ppt)|| suffix.equals(BigConstant.pptx) || suffix.equals(BigConstant.pdf)) {
                                 BigFile.saveFile(md5, properties.getUpload(), folderId, nodeCode, user, file, BigConstant.office, BigConstant.Emergency, flag, fileDao, stationDao);
@@ -231,7 +231,7 @@ public class EmergencyController extends BaseController {
                                 BigFile.saveFile(md5, properties.getUpload(), folderId, nodeCode, user, file, BigConstant.video, BigConstant.Emergency, flag, fileDao, stationDao);
                             }
                         } else {
-                            logger.info("分片的情况");
+//                            logger.info("分片的情况");
                             String tempFileDir = properties.getUploadChunk() + guid + "/";
                             String realname = file.getOriginalFilename();
                             // 临时目录用来存放所有分片文件
@@ -257,12 +257,12 @@ public class EmergencyController extends BaseController {
                             }
                             // 所有分片文件都上传完成
                             // 将所有分片文件合并到一个文件中
-                            logger.info("|||||||" + uploadDone);
+//                            logger.info("|||||||" + uploadDone);
                             if (uploadDone) {
                                 File[] array = parentFileDir.listFiles();
                                 List<Integer> fileNames = new ArrayList<>();
                                 for (int a = 0; a < array.length; a++) {
-                                    logger.info("arr" + array[a].getName());
+//                                    logger.info("arr" + array[a].getName());
                                     fileNames.add(Integer.parseInt(array[a].getName()));
                                 }
                                 Collections.sort(fileNames);

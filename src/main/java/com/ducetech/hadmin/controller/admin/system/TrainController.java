@@ -10,7 +10,6 @@ import com.ducetech.hadmin.dao.IStationDao;
 import com.ducetech.hadmin.entity.BigFile;
 import com.ducetech.hadmin.entity.Station;
 import com.ducetech.hadmin.entity.User;
-import com.ducetech.hadmin.service.IBigFileService;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator;
 import org.apache.commons.io.FileUtils;
@@ -19,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -48,42 +46,54 @@ public class TrainController  extends BaseController {
     IBigFileDao fileDao;
     @Autowired
     IStationDao stationDao;
-    @Autowired
-    IBigFileService fileService;
     /**
      * 培训资料首页
      * @return
      */
     @RequestMapping("/index")
     public String index() {
-        logger.info("获取站点文件全部数据");
         return "admin/learn/index";
     }
 
-
+    /**
+     * 进入培训资料文件夹
+     * @param folder
+     * @param nodeCode
+     * @param id
+     * @param map
+     * @return
+     */
     @RequestMapping("/toFolder")
     public String toFolder(String folder,String nodeCode,Integer id,Model map) {
-        logger.info("进入培训资料文件夹");
         map.addAttribute("folder",folder);
         map.addAttribute("folderId",id);
         map.addAttribute("nodeCode",nodeCode);
         return "admin/learn/folder";
     }
+
+    /**
+     * 进入二级文件夹
+     * @param folder
+     * @param folderId
+     * @param map
+     * @return
+     */
     @RequestMapping("/twoFolder")
     public String twoFolder(String folder,Integer folderId,Model map) {
-        logger.info("进入培训资料文件夹");
         map.addAttribute("folderId",folderId);
         map.addAttribute("folder",folder);
         return "admin/learn/twoFolder";
     }
+
     /**
-     * 查询集合
-     * @return Page<User>
+     * 获取集合
+     * @param folderId
+     * @param nodeCode
+     * @return
      */
     @RequestMapping(value = { "/list" })
     @ResponseBody
     public Page<BigFile> list(Integer folderId,String nodeCode) {
-        logger.info("进入list|||||||||||||||||||||||:folderId{},nodeCode{}",folderId,nodeCode);
         SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
         User user=getUser();
@@ -109,9 +119,7 @@ public class TrainController  extends BaseController {
         if(!StringUtil.isBlank(searchText)){
             builder.add("fileName", SpecificationOperator.Operator.likeAll.name(), searchText);
         }
-        logger.debug("||||||||||||||||||||||||||||||||");
         Page<BigFile> bigFilePage=fileDao.findAll(builder.generateSpecification(), getPageRequest());
-        logger.debug("||||||||||||||||||||||||||||||||");
         return bigFilePage;
     }
 
@@ -119,20 +127,26 @@ public class TrainController  extends BaseController {
     /**
      * 进入培训上传页面
      * @param map
-     * @param folder
      * @return
      */
     @RequestMapping(value = "/uploadFile", method = RequestMethod.GET)
-    public String uploadFile(Model map,Integer folderId,String nodeCode,String menuType) {
+    public String uploadFile(Model map, Integer folderId, String nodeCode, String menuType) {
         map.addAttribute("folderId",folderId);
         map.addAttribute("nodeCode",nodeCode);
-        map.addAttribute("menuType",menuType);
+        map.addAttribute("menuType", menuType);
         return "admin/learn/uploadTrain";
     }
 
+    /**
+     * 添加文件夹
+     * @param nodeCode
+     * @param menuType
+     * @param folderId
+     * @param map
+     * @return
+     */
     @RequestMapping(value="/add", method = RequestMethod.GET)
     public String add(String nodeCode,String menuType,Integer folderId,Model map) {
-        logger.info("进入培训资料添加文件夹{}",nodeCode);
         map.addAttribute("nodeCode",nodeCode);
         map.addAttribute("menuType",menuType);
         map.addAttribute("folderId",folderId);
@@ -146,7 +160,6 @@ public class TrainController  extends BaseController {
     @RequestMapping(value= {"/saveFolder"} ,method = RequestMethod.POST)
     @ResponseBody
     public JsonResult edit(BigFile folder,String nodeCode,String menuType,Integer folderId){
-        logger.info("新增培训资料文件夹nodeCode{},menu{}",nodeCode,menuType);
         User user=getUser();
         try {
             folder.setIfUse(0);
@@ -170,7 +183,6 @@ public class TrainController  extends BaseController {
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, Integer folderId,String nodeCode,String guid,String menuType,String md5){
-        logger.info("进入培训资料上传文件");
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
         MultipartFile file;
@@ -183,7 +195,6 @@ public class TrainController  extends BaseController {
                     String suffix=StringUtil.suffix(file.getOriginalFilename());
                         try {
                             if(null==chunks) {
-                                logger.info("不分片的情况");
                                 //不分片的情况
                                 if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)|| suffix.equals(BigConstant.pptx)||suffix.equals(BigConstant.pdf)) {
                                     BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file,BigConstant.office,menuType,flag,fileDao,stationDao);
@@ -193,7 +204,6 @@ public class TrainController  extends BaseController {
                                     BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file, BigConstant.video, menuType, flag, fileDao, stationDao);
                                 }
                             }else{
-                                logger.info("分片的情况");
                                 String tempFileDir = properties.getUpload()+guid+"/";
                                 String realname = file.getOriginalFilename();
                                 // 临时目录用来存放所有分片文件
@@ -240,15 +250,15 @@ public class TrainController  extends BaseController {
                                         BigFile.saveFile(md5,properties.getUpload(),size,folderId, nodeCode, user, file, BigConstant.video, menuType, flag, fileDao, stationDao);
                                     }
                                 } else {
-                                    logger.info("上传中 chunks" + chunks + " chunk:" + chunk, "");
+                                    //logger.info("上传中 chunks" + chunks + " chunk:" + chunk, "");
                                 }
                             }
                         } catch (Exception e) {
-                            logger.info("上传失败{}",e.getMessage());
+                            //logger.info("上传失败{}",e.getMessage());
                         }
 
                 } catch (Exception e) {
-                    logger.info(e.getMessage());
+                    //logger.info(e.getMessage());
                 }
             } else {
                 return JsonResult.failure("You failed to upload " + i + " becausethe file was empty.");
@@ -256,19 +266,4 @@ public class TrainController  extends BaseController {
         }
         return JsonResult.success();
     }
-
-    @RequestMapping(value = "/delete/{ids}", method = RequestMethod.DELETE)
-    @ResponseBody
-    public JsonResult delete(@PathVariable Integer [] ids) {
-        try {
-            for(int i=0;i<ids.length-1;i++) {
-                fileService.delete(ids[i]);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return JsonResult.failure(e.getMessage());
-        }
-        return JsonResult.success();
-    }
-
 }

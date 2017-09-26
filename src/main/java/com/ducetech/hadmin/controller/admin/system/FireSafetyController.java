@@ -28,7 +28,7 @@ public class FireSafetyController extends BaseController {
      */
     @RequestMapping("/index")
     public String index() {
-        logger.info("获取站点文件全部数据");
+//        logger.info("获取站点文件全部数据");
         return "admin/fire/index";
     }
 
@@ -40,7 +40,7 @@ public class FireSafetyController extends BaseController {
      */
     @RequestMapping("/toFolder")
     public String toFolder(String folder, Integer folderId,String menuType,Model map) {
-        logger.info("进入消防安全文件夹folder{}",folder);
+//        logger.info("进入消防安全文件夹folder{}",folder);
         map.addAttribute("folder", folder);
         map.addAttribute("folderId", folderId);
         map.addAttribute("menuType", menuType);
