@@ -86,7 +86,8 @@ public class NoticeController extends BaseController {
         String searchText = request.getParameter("searchText");
         builder.add("ifUse", SpecificationOperator.Operator.eq.name(), 0);
         if(!StringUtil.isBlank(searchText)){
-            builder.add("fileName", SpecificationOperator.Operator.likeAll.name(), searchText);
+            builder.add("content", SpecificationOperator.Operator.likeAll.name(), "%"+searchText+"%");
+            builder.addOr("title", SpecificationOperator.Operator.likeAll.name(), "%"+searchText+"%");
         }
         return  noticeDao.findAll(builder.generateSpecification(), getPageRequest());
     }

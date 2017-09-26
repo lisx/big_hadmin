@@ -1,17 +1,17 @@
 <!-- 全局js -->
 <#include "/admin/common/css.ftl">
 <#include "/admin/common/js.ftl">
+<script src="${ctx!}/hadmin/js/demo/button-demo.js"></script>
 <style>
-    .table tbody tr td{
-        overflow: hidden;
-        text-overflow:ellipsis;
-        white-space: nowrap;
+    .table tbody tr td {
+        text-overflow: ellipsis;
+        white-space: pre-wrap;
     }
 </style>
     <script type="text/javascript">
         $(document).ready(function () {
             //初始化表格,动态从服务器加载数据
-            $("#table_running_list").bootstrapTable({
+            $("#table_list").bootstrapTable({
                 //使用get请求到服务器获取数据
                 method: "GET",
                 //必须设置，不然request.getParameter获取不到请求参数
@@ -50,7 +50,7 @@
                     };
                 },
                 //数据列
-                columns: [{
+                columns: [{checkbox:true},{
                     title: "编号",
                     field: "id",
                     sortable: true
@@ -101,48 +101,30 @@
                             folderId:row.id
                         }
                     };
-                    $("#table_running_list").bootstrapTable('refresh', opt);
+                    $("#table_list").bootstrapTable('refresh', opt);
                 }
             });
         });
-        //上传文件
-        function addRunning(){
-            layer.open({
-                type: 2,
-                title: '新增运行图',
-                shadeClose: true,
-                shade: false,
-                area: ['97%', '94%'],
-                content: '${ctx!}/admin/running/uploadFile',
-                end: function(index){
-                    $('#table_running_list').bootstrapTable("refresh");
-                }
-            });
+
+        //初始化按钮
+        var button = Button.createNew();
+        //上传资料文件
+        function uploadFile() {
+            var url="${ctx!}/admin/running/uploadFile?menuType=运行图管理";
+            button.uploadFile(url)
         };
         //下载文件
-        function down(id,name){
-            console.log(id+"|||||"+name);
-            var a = document.createElement('a');
-            a.href = "${ctx!}/admin/download/"+id;
-            a.download = name;
-            a.click();
+        function down(id, name) {
+            button.down("${ctx!}/admin/download/" + id, name)
         }
         //删除文件夹或文件
-        function del(id){
-            layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
-                $.ajax({
-                    type: "DELETE",
-                    dataType: "json",
-                    url: "${ctx!}/admin/running/delete/" + id,
-                    success: function(msg){
-                        layer.msg(msg.message, {time: 2000},function(){
-                            $('#table_running_list').bootstrapTable("refresh");
-                            layer.close(index);
-                        });
-                    }
-                });
-            });
+        function del(id) {
+            button.del("${ctx!}/admin/running/delete/" + id)
         };
+        //删除全部
+        function removeAll() {
+            button.removeAll("${ctx!}/admin/running/removeAll/");
+        }
     </script>
 
 <body class="gray-bg">
@@ -154,7 +136,10 @@
                         <h5>运行图管理</h5>
                         <p>
                         <@shiro.hasPermission name="system:resource:add">
-                            <button class="btn btn-success pull-right" type="button" onclick="addRunning();"><i class="fa fa-plus"></i>&nbsp;新增运行图</button>
+                            <button class="btn btn-success pull-right" onclick="removeAll()" type="button"><i
+                                    class="fa fa-plus"></i>&nbsp;批量删除
+                            </button>
+                            <button class="btn btn-success pull-right" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;新增运行图</button>
                             <h5 class="spanStation" style="margin-left: 20px"></h5>
                         </@shiro.hasPermission>
                         </p>
@@ -166,7 +151,7 @@
                                 <!-- Example Card View -->
                                 <div class="example-wrap">
                                     <div class="example">
-                                        <table class="table table-bordered" id="table_running_list"></table>
+                                        <table class="table table-bordered" id="table_list"></table>
                                     </div>
                                 </div>
                                 <!-- End Example Card View -->

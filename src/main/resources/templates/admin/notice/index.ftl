@@ -53,10 +53,13 @@
                 columns: [{checkbox:true},{
                     title: "编号",
                     field: "id",
-                    sortable: true
+                    width: 80
                 },{
                     title: "标题",
                     field: "title"
+                },{
+                    title: "内容",
+                    field: "content"
                 },{
                     title: "接收单位",
                     field: "stationName"
@@ -88,61 +91,21 @@
                 }
             });
         };
-        //新增通知
-        function addRunning(){
-            layer.open({
-                type: 2,
-                title: '新增通知',
-                shadeClose: true,
-                shade: false,
-                area: ['97%', '94%'],
-                content: '${ctx!}/admin/notice/uploadFile',
-                end: function(index){
-                    $('#table_list').bootstrapTable("refresh");
-                }
-            });
-        };
-        //添加文件夹
-        function addFolder(){
-            var nodeCode=$(".addFolder").attr("data-id");
-            layer.open({
-                type: 2,
-                title: '新建文件夹',
-                shadeClose: true,
-                shade: false,
-                area: ['400px', '400px'],
-                content: '${ctx!}/admin/notice/add?nodeCode='+nodeCode+'&menu=应急预案',
-                end: function(index){
-                    $('#table_list').bootstrapTable("refresh");
-                }
-            });
-        }
-        //下载文件
-        function down(id,name){
-            console.log(id+"|||||"+name);
-            var a = document.createElement('a');
-            a.href = "${ctx!}/admin/download/"+id;
-            a.download = name;
-            a.click();
-        }
-        //删除文件夹或文件
-        function del(id){
-            layer.confirm('确定删除吗?', {icon: 3, title:'提示'}, function(index){
-                $.ajax({
-                    type: "DELETE",
-                    dataType: "json",
-                    url: "${ctx!}/admin/notice/delete/" + id,
-                    success: function(msg){
-                        layer.msg(msg.message, {time: 2000},function(){
-                            $('#table_list').bootstrapTable("refresh");
-                            layer.close(index);
-                        });
-                    }
-                });
-            });
-        };
         //初始化按钮
         var button = Button.createNew();
+        //上传资料文件
+        function uploadFile() {
+            var url = "${ctx!}/admin/notice/uploadFile?menuType=通知管理";
+            button.uploadFile(url)
+        };
+        //下载文件
+        function down(id, name) {
+            button.down("${ctx!}/admin/download/" + id, name)
+        };
+        //删除文件夹或文件
+        function del(id) {
+            button.del("${ctx!}/admin/notice/delete/" + id)
+        };
         //删除全部
         function removeAll() {
             button.removeAll("${ctx!}/admin/notice/removeAll/");
@@ -161,7 +124,7 @@
                             <button class="btn btn-success pull-right" onclick="removeAll()" type="button"><i
                                     class="fa fa-plus"></i>&nbsp;批量删除
                             </button>
-                            <button class="btn btn-success pull-right" type="button" onclick="addRunning();"><i class="fa fa-plus"></i>&nbsp;发布通知</button>
+                            <button class="btn btn-success pull-right" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;发布通知</button>
                             <span class="spanStation"></span>
                         </@shiro.hasPermission>
                         </p>

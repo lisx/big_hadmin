@@ -7,10 +7,7 @@ import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IBigFileDao;
 import com.ducetech.hadmin.dao.IRunningDao;
 import com.ducetech.hadmin.dao.IStationDao;
-import com.ducetech.hadmin.entity.BigFile;
-import com.ducetech.hadmin.entity.Running;
-import com.ducetech.hadmin.entity.Station;
-import com.ducetech.hadmin.entity.User;
+import com.ducetech.hadmin.entity.*;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator;
 import org.slf4j.Logger;
@@ -76,6 +73,11 @@ public class RunningController extends BaseController {
         return  runningDao.findAll(builder.generateSpecification(), getPageRequest());
     }
 
+    /**
+     * 删除
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public JsonResult delete(@PathVariable Integer id) {
@@ -83,6 +85,27 @@ public class RunningController extends BaseController {
             Running bigFile=runningDao.findOne(id);
             bigFile.setIfUse(1);
             runningDao.saveAndFlush(bigFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return JsonResult.failure(e.getMessage());
+        }
+        return JsonResult.success();
+    }
+
+    /**
+     * 批量删除
+     * @param ids
+     * @return
+     */
+    @RequestMapping(value = "/removeAll/{ids}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public JsonResult removeAll(@PathVariable Integer[] ids) {
+        try {
+            for (int i = 0; i < ids.length - 1; i++) {
+                Running bigFile=runningDao.findOne(ids[i]);
+                bigFile.setIfUse(1);
+                runningDao.saveAndFlush(bigFile);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return JsonResult.failure(e.getMessage());
@@ -102,6 +125,12 @@ public class RunningController extends BaseController {
         return "admin/running/uploadFile";
     }
 
+    /**
+     * 进入运行图上传附件
+     * @param request
+     * @param running
+     * @return
+     */
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult uploadFilePost(MultipartHttpServletRequest request, Running running){
