@@ -112,7 +112,14 @@ public class ExamInterface  extends BaseController {
             List<Proper> propers=properDao.findByQuestion(questions.get(i));
             Collections.shuffle(propers);
             questions.get(i).setPropers(propers);
-            questions.get(i).setImgUrl(properties.getHttp()+questions.get(i).getImgUrl());
+            String [] imgs=questions.get(i).getImgUrl().split("=");
+            String url="";
+            if(null!=imgs&&imgs.length>0) {
+                url=imgs[imgs.length - 1];
+            }else{
+                url=questions.get(i).getImgUrl();
+            }
+            questions.get(i).setImgUrl(properties.getHttp()+url);
         }
         Collections.shuffle(questions);
         if(null==questions){
