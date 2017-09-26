@@ -150,8 +150,13 @@ public class DownloadInteface extends BaseController {
     public void download( String code) throws IOException {
         System.out.println("||code||"+code);
         String [] codes=code.split("=");
-        System.out.println("|code|"+codes[1]);
-        BigFile file=fileDao.findByFileName(codes[1]+"%");
+        BigFile file=null;
+        if(null!=codes&&codes.length>1) {
+            System.out.println("|code|" + codes[1]);
+            file = fileDao.findByFileName(codes[1] + "%");
+        }else{
+            file = fileDao.findByFileName(codes[0] + "%");
+        }
         if(null!=file) {
             response.setCharacterEncoding("utf-8");
             response.setContentType("application/force-download");// 设置强制下载不打开
