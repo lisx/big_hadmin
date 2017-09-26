@@ -1,6 +1,7 @@
 <!-- 全局js -->
 <#include "/admin/common/js.ftl">
-
+<link href="${ctx!}/hadmin/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+<link href="${ctx!}/hadmin/css/animate.css" rel="stylesheet">
 <#include "/admin/common/css.ftl">
 <body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
     <div id="wrapper">
