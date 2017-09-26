@@ -25,7 +25,7 @@
 <#include "/admin/common/js.ftl">
 <script>
     $(document).ready(function () {
-        $("#frm").validate({
+        $("#uploadForm").validate({
             rules: {
                 fileUpload: {
                     required: true

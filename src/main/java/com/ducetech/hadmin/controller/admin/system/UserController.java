@@ -107,48 +107,50 @@ public class UserController extends BaseController {
                     for (List<List<String>> sheet : data) {
                         if (null != sheet && !sheet.isEmpty()) {
                             for (List<String> row : sheet) {
-                                String line = StringUtil.trim(row.get(0));
-                                String stationArea = StringUtil.trim(row.get(1));
-                                String station = StringUtil.trim(row.get(2));
-                                String position = StringUtil.trim(row.get(3));
-                                String userName = StringUtil.trim(row.get(4));
-                                String userCode = StringUtil.trim(row.get(5));
-                                String fwxxkUrl = StringUtil.trim(row.get(6));
-                                String faszUrl = StringUtil.trim(row.get(7));
-                                String zkysgzUrl = StringUtil.trim(row.get(8));
-                                if(stationArea.endsWith("站区")){
+                                if(row.size()>8) {
+                                    String line = StringUtil.trim(row.get(0));
+                                    String stationArea = StringUtil.trim(row.get(1));
+                                    String station = StringUtil.trim(row.get(2));
+                                    String position = StringUtil.trim(row.get(3));
+                                    String userName = StringUtil.trim(row.get(4));
+                                    String userCode = StringUtil.trim(row.get(5));
+                                    String fwxxkUrl = StringUtil.trim(row.get(6));
+                                    String faszUrl = StringUtil.trim(row.get(7));
+                                    String zkysgzUrl = StringUtil.trim(row.get(8));
+                                    if (stationArea.endsWith("站区")) {
 
-                                }else{
-                                    stationArea=stationArea+"站区";
-                                }
-                                if(stationArea.equals("西直门站区")||stationArea.equals("东直门站区")||stationArea.equals("建国门站区")||stationArea.equals("北土城站区")||stationArea.equals("慈寿寺站区")){
-                                    stationArea=line+stationArea;
-                                }
-                                if(station.endsWith("站")){
+                                    } else {
+                                        stationArea = stationArea + "站区";
+                                    }
+                                    if (stationArea.equals("西直门站区") || stationArea.equals("东直门站区") || stationArea.equals("建国门站区") || stationArea.equals("北土城站区") || stationArea.equals("慈寿寺站区")) {
+                                        stationArea = line + stationArea;
+                                    }
+                                    if (station.endsWith("站")) {
 
-                                }else{
-                                    station=station+"站";
+                                    } else {
+                                        station = station + "站";
+                                    }
+                                    if (station.equals("西直门站") || station.equals("东直门站") || station.equals("建国门站") || station.equals("北土城站") || station.equals("慈寿寺站")) {
+                                        station = line + station;
+                                    }
+                                    User user = userDao.findByUserCodeOne(userCode);
+                                    if (null == user) {
+                                        user = new User();
+                                    }
+                                    user.setUserName(userName);
+                                    user.setStationArea(stationArea);
+                                    user.setStation(station);
+                                    user.setLine(line);
+                                    user.setPosition(position);
+                                    user.setUserCode(userCode);
+                                    user.setPhotoUrl(userCode);
+                                    user.setFwxxkUrl(fwxxkUrl);
+                                    user.setZkysgzUrl(zkysgzUrl);
+                                    user.setFaszUrl(faszUrl);
+                                    user.setCreateTime(new Date());
+                                    user.setIfUse(0);
+                                    userService.saveOrUpdate(user);
                                 }
-                                if(station.equals("西直门站")||station.equals("东直门站")||station.equals("建国门站")||station.equals("北土城站")||station.equals("慈寿寺站")){
-                                    station=line+station;
-                                }
-                                User user=userDao.findByUserCodeOne(userCode);
-                                if(null==user) {
-                                    user = new User();
-                                }
-                                user.setUserName(userName);
-                                user.setStationArea(stationArea);
-                                user.setStation(station);
-                                user.setLine(line);
-                                user.setPosition(position);
-                                user.setUserCode(userCode);
-                                user.setPhotoUrl(userCode);
-                                user.setFwxxkUrl(fwxxkUrl);
-                                user.setZkysgzUrl(zkysgzUrl);
-                                user.setFaszUrl(faszUrl);
-                                user.setCreateTime(new Date());
-                                user.setIfUse(0);
-                                userService.saveOrUpdate(user);
                             }
                         }
                     }
