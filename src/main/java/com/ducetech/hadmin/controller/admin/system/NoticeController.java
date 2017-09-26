@@ -104,6 +104,21 @@ public class NoticeController extends BaseController {
         }
         return JsonResult.success();
     }
+    @RequestMapping(value = "/removeAll/{ids}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public JsonResult removeAll(@PathVariable Integer[] ids) {
+        try {
+            for (int i = 0; i < ids.length - 1; i++) {
+                Notice notice=noticeDao.findOne(ids[i]);
+                notice.setIfUse(1);
+                noticeDao.saveAndFlush(notice);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return JsonResult.failure(e.getMessage());
+        }
+        return JsonResult.success();
+    }
     /**
      * 进入培训上传页面
      * @param map

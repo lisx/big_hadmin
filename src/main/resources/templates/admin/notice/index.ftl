@@ -1,6 +1,7 @@
 <!-- 全局js -->
 <#include "/admin/common/css.ftl">
 <#include "/admin/common/js.ftl">
+<script src="${ctx!}/hadmin/js/demo/button-demo.js"></script>
 <style>
     .table tbody tr td {
         text-overflow: ellipsis;
@@ -10,7 +11,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             //初始化表格,动态从服务器加载数据
-            $("#table_notice_list").bootstrapTable({
+            $("#table_list").bootstrapTable({
                 //使用get请求到服务器获取数据
                 method: "GET",
                 //必须设置，不然request.getParameter获取不到请求参数
@@ -49,7 +50,7 @@
                     };
                 },
                 //数据列
-                columns: [{
+                columns: [{checkbox:true},{
                     title: "编号",
                     field: "id",
                     sortable: true
@@ -83,7 +84,7 @@
                 area: ['97%', '94%'],
                 content: '${ctx!}/admin/notice/show?id='+id,
                 end: function(index){
-                    $('#table_notice_list').bootstrapTable("refresh");
+                    $('#table_list').bootstrapTable("refresh");
                 }
             });
         };
@@ -97,7 +98,7 @@
                 area: ['97%', '94%'],
                 content: '${ctx!}/admin/notice/uploadFile',
                 end: function(index){
-                    $('#table_notice_list').bootstrapTable("refresh");
+                    $('#table_list').bootstrapTable("refresh");
                 }
             });
         };
@@ -112,7 +113,7 @@
                 area: ['400px', '400px'],
                 content: '${ctx!}/admin/notice/add?nodeCode='+nodeCode+'&menu=应急预案',
                 end: function(index){
-                    $('#table_notice_list').bootstrapTable("refresh");
+                    $('#table_list').bootstrapTable("refresh");
                 }
             });
         }
@@ -133,13 +134,19 @@
                     url: "${ctx!}/admin/notice/delete/" + id,
                     success: function(msg){
                         layer.msg(msg.message, {time: 2000},function(){
-                            $('#table_notice_list').bootstrapTable("refresh");
+                            $('#table_list').bootstrapTable("refresh");
                             layer.close(index);
                         });
                     }
                 });
             });
         };
+        //初始化按钮
+        var button = Button.createNew();
+        //删除全部
+        function removeAll() {
+            button.removeAll("${ctx!}/admin/notice/removeAll/");
+        }
     </script>
 
 <body class="gray-bg">
@@ -151,6 +158,9 @@
                         <h5>通知管理</h5>
                         <p>
                         <@shiro.hasPermission name="system:resource:add">
+                            <button class="btn btn-success pull-right" onclick="removeAll()" type="button"><i
+                                    class="fa fa-plus"></i>&nbsp;批量删除
+                            </button>
                             <button class="btn btn-success pull-right" type="button" onclick="addRunning();"><i class="fa fa-plus"></i>&nbsp;发布通知</button>
                             <span class="spanStation"></span>
                         </@shiro.hasPermission>
@@ -162,7 +172,7 @@
                                 <!-- Example Card View -->
                                 <div class="example-wrap">
                                     <div class="example  table-responsive ">
-                                        <table class="table  table-bordered"  id="table_notice_list"  style="table-layout:fixed;word-wrap:break-word;"></table>
+                                        <table class="table  table-bordered"  id="table_list"  style="table-layout:fixed;word-wrap:break-word;"></table>
                                     </div>
                                 </div>
                                 <!-- End Example Card View -->
