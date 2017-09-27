@@ -43,10 +43,10 @@ var Button = {
             $("input[name='allocation']").each(function (i) {
                 valArr[i] = $(this).val();
             });
-            if (valArr.length == 0) {
-                alert("请先选择一条数据");
-                return;
-            }
+            // if (valArr.length == 0) {
+            //     alert("请先选择一条数据");
+            //     return;
+            // }
             var priv = valArr.join(',');
             var nodeCode = priv;
             layer.open({
@@ -66,10 +66,10 @@ var Button = {
             $("input[name='allocation']").each(function (i) {
                 valArr[i] = $(this).val();
             });
-            if (valArr.length == 0) {
-                alert("请先选择一条数据");
-                return;
-            }
+            // if (valArr.length == 0) {
+            //     alert("请先选择一条数据");
+            //     return;
+            // }
             var priv = valArr.join(',');
             var nodeCode = priv;
             layer.open({
