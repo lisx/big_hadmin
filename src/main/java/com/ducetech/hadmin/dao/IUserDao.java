@@ -3,17 +3,11 @@ package com.ducetech.hadmin.dao;
 import com.ducetech.hadmin.dao.support.IBaseDao;
 import com.ducetech.hadmin.entity.User;
 
-import org.apache.poi.ss.formula.functions.T;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import javax.persistence.EntityResult;
 import java.util.List;
 @Repository
 public interface IUserDao extends IBaseDao<User, Integer> {

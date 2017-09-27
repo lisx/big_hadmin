@@ -1,12 +1,9 @@
 package com.ducetech.hadmin.entity;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.ducetech.hadmin.entity.support.BaseEntity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 文件管理

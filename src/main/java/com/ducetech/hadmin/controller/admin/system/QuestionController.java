@@ -25,8 +25,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.*;
 
-import static com.ducetech.hadmin.common.JsonResult.*;
-
 /**
  * 试题管理
  *

@@ -3,9 +3,7 @@ package com.ducetech.hadmin.bigInterfacel;
 import com.alibaba.fastjson.JSONObject;
 import com.ducetech.hadmin.common.utils.BigConstant;
 import com.ducetech.hadmin.dao.IRunningDao;
-import com.ducetech.hadmin.dao.IStationDao;
 import com.ducetech.hadmin.entity.Running;
-import com.ducetech.hadmin.entity.Station;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -14,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.ArrayList;
 import java.util.List;
 

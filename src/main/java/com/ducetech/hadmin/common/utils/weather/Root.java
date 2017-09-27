@@ -1,6 +1,5 @@
 package com.ducetech.hadmin.common.utils.weather;
 
-import lombok.Data;
 
 /**
  * @author lisx

@@ -1,6 +1,5 @@
 package com.ducetech.hadmin.bigInterfacel;
 
-import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IBigFileDao;
 import com.ducetech.hadmin.entity.BigFile;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.ServletOutputStream;
 import java.io.*;
 import java.net.URLEncoder;
-import java.util.List;
 
 /**
  * 下载文件

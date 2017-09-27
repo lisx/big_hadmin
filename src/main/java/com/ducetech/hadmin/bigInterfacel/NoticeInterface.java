@@ -4,10 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.ducetech.hadmin.common.utils.BigConstant;
 import com.ducetech.hadmin.dao.IBigFileDao;
 import com.ducetech.hadmin.dao.INoticeDao;
-import com.ducetech.hadmin.dao.IRunningDao;
 import com.ducetech.hadmin.entity.BigFile;
 import com.ducetech.hadmin.entity.Notice;
-import com.ducetech.hadmin.entity.Running;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -17,10 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * 通知管理接口

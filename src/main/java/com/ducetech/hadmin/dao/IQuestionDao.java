@@ -3,7 +3,6 @@ package com.ducetech.hadmin.dao;
 import com.ducetech.hadmin.dao.support.IBaseDao;
 import com.ducetech.hadmin.entity.Question;
 import com.ducetech.hadmin.entity.QuestionBank;
-import com.ducetech.hadmin.entity.Train;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,5 +16,4 @@ import java.util.List;
 @Repository
 public interface IQuestionDao extends IBaseDao<Question,Integer> {
     List<Question> findByQuestionBankAndMenuType(QuestionBank bank,String type);
-    List<Question> findByQuestionBank(QuestionBank bank);
 }

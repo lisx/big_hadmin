@@ -2,11 +2,9 @@ package com.ducetech.hadmin.dao;
 
 import com.ducetech.hadmin.dao.support.IBaseDao;
 import com.ducetech.hadmin.entity.Notice;
-import com.ducetech.hadmin.entity.Running;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Set;
 
 
 /**

@@ -3,7 +3,6 @@ package com.ducetech.hadmin.controller.admin.system;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IBigFileDao;
 import com.ducetech.hadmin.entity.BigFile;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

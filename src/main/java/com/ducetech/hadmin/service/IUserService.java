@@ -3,8 +3,6 @@ package com.ducetech.hadmin.service;
 import com.ducetech.hadmin.service.support.IBaseService;
 import com.ducetech.hadmin.entity.User;
 
-import java.util.List;
-
 /**
  * <p>
  * 用户服务类

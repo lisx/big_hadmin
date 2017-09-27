@@ -15,5 +15,5 @@ import java.util.List;
  **/
 @Repository
 public interface IRunningDao extends IBaseDao<Running,Integer> {
-    public List<Running> findByLineNameAndIfUse(String line,Integer ifUse);
+    List<Running> findByLineNameAndIfUse(String line,Integer ifUse);
 }

@@ -1,12 +1,9 @@
 package com.ducetech.hadmin.service.impl;
 
 import com.ducetech.hadmin.dao.IQuestionDao;
-import com.ducetech.hadmin.dao.ITrainDao;
 import com.ducetech.hadmin.dao.support.IBaseDao;
 import com.ducetech.hadmin.entity.Question;
-import com.ducetech.hadmin.entity.Train;
 import com.ducetech.hadmin.service.IQuestionService;
-import com.ducetech.hadmin.service.ITrainService;
 import com.ducetech.hadmin.service.support.impl.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

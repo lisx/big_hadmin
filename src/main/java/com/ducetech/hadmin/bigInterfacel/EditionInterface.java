@@ -1,12 +1,8 @@
 package com.ducetech.hadmin.bigInterfacel;
 
 import com.alibaba.fastjson.JSONObject;
-import com.ducetech.hadmin.common.utils.BigConstant;
 import com.ducetech.hadmin.dao.IBigFileDao;
-import com.ducetech.hadmin.dao.IRunningDao;
 import com.ducetech.hadmin.entity.BigFile;
-import com.ducetech.hadmin.entity.Running;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

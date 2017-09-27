@@ -1,7 +1,6 @@
 package com.ducetech.hadmin.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.ducetech.hadmin.common.utils.BigConstant;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.entity.support.BaseEntity;
 import lombok.Data;
