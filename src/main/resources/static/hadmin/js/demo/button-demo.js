@@ -11,7 +11,6 @@ var Button = {
                 return;
             }
             var priv = valArr.join(',');
-            console.log("|||||||||||||||||||||" + priv)
             var nodeCode = priv;
             layer.open({
                 type: 2,
@@ -27,7 +26,6 @@ var Button = {
             });
         };
         button.showFolder=function(url){
-
             layer.open({
                 type: 2,
                 title: '文件列表',
@@ -42,7 +40,6 @@ var Button = {
         };
         button.uploadFile=function(url){
             var valArr = new Array;
-            console.log("url:::::"+url);
             $("input[name='allocation']").each(function (i) {
                 valArr[i] = $(this).val();
             });
@@ -69,7 +66,10 @@ var Button = {
             $("input[name='allocation']").each(function (i) {
                 valArr[i] = $(this).val();
             });
-
+            if (valArr.length == 0) {
+                alert("请先选择一条数据");
+                return;
+            }
             var priv = valArr.join(',');
             var nodeCode = priv;
             layer.open({

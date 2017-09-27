@@ -39,13 +39,11 @@
     //进入文件夹
     function showFolder(folderId) {
         var url='${ctx!}/admin/fire/toFolder?folderId=' + folderId+'&menuType=应急预案';
-        console.log("url+++++++"+url)
         button.showFolder(url)
     };
     //上传资料文件
     function uploadFile() {
         var url="${ctx!}/admin/emergency/uploadFile?menuType=应急预案";
-        console.log("url+++++++"+url);
         button.uploadFile(url)
     };
     //添加文件夹
