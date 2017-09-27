@@ -8,9 +8,7 @@
                 <div class="ibox ">
                     <div class="ibox-content">
                         <p>
-                        <@shiro.hasPermission name="admin:examlog:exportLog">
                             <button class="btn btn-success uploadFile" type="button" onclick="exportLog();"><i class="fa fa-plus"></i>&nbsp;导出</button>
-                        </@shiro.hasPermission>
                         </p>
                         <div class="row row-lg">
                             <div class="col-sm-12">
