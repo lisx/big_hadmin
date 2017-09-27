@@ -84,6 +84,25 @@ var Button = {
                 }
             });
         };
+        button.uploadFileTwo=function(url,id){
+            var valArr = new Array;
+            $("input[name='allocation']").each(function (i) {
+                valArr[i] = $(this).val();
+            });
+            var priv = valArr.join(',');
+            var nodeCode = priv;
+            layer.open({
+                type: 2,
+                title: '上传文件',
+                shadeClose: true,
+                shade: false,
+                area: ['97%', '94%'],
+                content: url+id+'&nodeCode=' + nodeCode,
+                end: function (index) {
+                    $('#table_list').bootstrapTable("refresh");
+                }
+            });
+        };
         button.down=function(url,name){
             var a = document.createElement('a');
             a.href = url;
