@@ -5,7 +5,6 @@ import com.ducetech.hadmin.common.utils.DateUtil;
 import com.ducetech.hadmin.common.utils.PoiUtil;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
-import com.ducetech.hadmin.dao.IExamDao;
 import com.ducetech.hadmin.dao.IExamLogDao;
 import com.ducetech.hadmin.dao.IUserDao;
 import com.ducetech.hadmin.entity.ExamLog;
@@ -45,8 +44,6 @@ import java.util.List;
 public class ExamLogController extends BaseController {
     Logger logger= LoggerFactory.getLogger(ExamLogController.class);
     @Autowired
-    IExamDao examService;
-    @Autowired
     IExamLogDao examLogDao;
     @Autowired
     IUserDao userDao;
@@ -63,7 +60,13 @@ public class ExamLogController extends BaseController {
     @RequestMapping(value = { "/user" }, method = RequestMethod.GET)
     @ResponseBody
     public Page<User> user() {
-        return userDao.findByScore( getPageRequest());
+        Page<User> users=null;
+        try {
+            users = userDao.findByScore(getPageRequest());
+        }catch(Exception e){
+            logger.debug(e.getMessage());
+        }
+        return users;
     }
 
     @RequestMapping(value = { "/show/{id}" }, method = RequestMethod.GET)

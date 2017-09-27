@@ -2,13 +2,11 @@
 <#include "/admin/common/js.ftl">
 <#include "/admin/common/css.ftl">
 <style>
-    .table tbody tr td{
-        overflow: hidden;
-        text-overflow:ellipsis;
-        white-space: nowrap;
+    .table tbody tr td {
+        text-overflow: ellipsis;
+        white-space: pre-wrap;
     }
 </style>
-<body class="gray-bg">
     <div class="wrapper wrapper-content  animated fadeInRight">
         <div class="row">
             <div class="col-sm-12">
@@ -24,7 +22,7 @@
 		                    <div class="col-sm-12">
 		                        <!-- Example Card View -->
 		                        <div class="example-wrap">
-		                            <div class="example">
+		                            <div class="example table-responsive">
 		                            	<table class="table table-bordered"  id="table_list"></table>
 		                            </div>
 		                        </div>
@@ -93,9 +91,9 @@
                     field: "userName"
 			    },{
                     title: "考试次数",
-                    field: "logs.size",
+                    field: "logs",
                     formatter: function (value, row, index) {
-
+                        return value.size;
                     }
                 },{
 			        title: "操作",
