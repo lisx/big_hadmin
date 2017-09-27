@@ -11,16 +11,38 @@
             <div class="col-sm-4">
                 <input id="userCode" name="userCode" class="form-control" type="text" value="${user.userCode}" <#if user?exists> readonly="readonly"</#if> >
             </div>
-            <label class="col-sm-2 control-label">上传头像：</label>
-            <div class="col-sm-4">
-                <input type="file" class="form-control" name="photoFile" />
-            </div>
         </div>
+
         <div class="form-group">
             <label class="col-sm-2 control-label">登录密码：</label>
             <div class="col-sm-4">
                 <input id="password" name="password" class="form-control" type="text" value="123456" >
             </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">线路：</label>
+            <div class="col-sm-4">
+            <@my.select id="line" class="form-control" value=user.line datas=lines defaultValue="请选择"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">站区：</label>
+            <div class="col-sm-4">
+            <#--<@my.select id="stationArea" class="form-control" value=user.stationArea datas=areas defaultValue="请选择"/>-->
+                <select id="stationArea" name="stationArea" value="${user.stationArea}" class="form-control" >
+                    <option value="请选择">请选择</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">站点：</label>
+            <div class="col-sm-4">
+                <select id="station" name="station" value="${user.station}" class="form-control" >
+                    <option value="请选择">请选择</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
             <label class="col-sm-2 control-label">姓名：</label>
             <div class="col-sm-4">
                 <input id="userName" name="userName" class="form-control" type="text" value="${user.userName}">
@@ -40,44 +62,19 @@
                     <option value="科员">科员</option>
                 </select>
             </div>
-            <label class="col-sm-2 control-label">线路：</label>
-            <div class="col-sm-4">
-            <@my.select id="line" class="form-control" value=user.line datas=lines defaultValue="请选择"/>
-            </div>
         </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label">站区：</label>
-            <div class="col-sm-4">
-        <#--<@my.select id="stationArea" class="form-control" value=user.stationArea datas=areas defaultValue="请选择"/>-->
-            <select id="stationArea" name="stationArea" value="${user.stationArea}" class="form-control" >
-                <option value="请选择">请选择</option>
-            </select>
-            </div>
-            <label class="col-sm-2 control-label">站点：</label>
-            <div class="col-sm-4">
-            <select id="station" name="station" value="${user.station}" class="form-control" >
-                <option value="请选择">请选择</option>
-            </select>
-            </div>
-        </div>
+
         <div class="form-group">
             <label class="col-sm-2 control-label">服务信息卡编号：</label>
             <div class="col-sm-4">
                 <input id="fwxxkUrl" name="fwxxkUrl" class="form-control" value="${fwxxkUrl}">
             </div>
-            <label class="col-sm-2 control-label">上传服务信息卡：</label>
-            <div class="col-sm-4">
-                <input type="file" class="form-control" name="fwxxkFile" />
-            </div>
         </div>
+
         <div class="form-group">
             <label class="col-sm-2 control-label">综控员上岗证编号：</label>
             <div class="col-sm-4">
                 <input id="zkysgzUrl" name="zkysgzUrl" class="form-control" value="${zkysgzUrl}">
-            </div>
-            <label class="col-sm-2 control-label">上传综控员上岗证：</label>
-            <div class="col-sm-4">
-                <input type="file" class="form-control" name="zkysgzFile" />
             </div>
         </div>
         <div class="form-group">
@@ -85,6 +82,26 @@
             <div class="col-sm-4">
                 <input id="faszUrl" name="faszUrl" class="form-control" value="${faszUrl}">
             </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">上传头像：</label>
+            <div class="col-sm-4">
+                <input type="file" class="form-control" name="photoFile" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">上传服务信息卡：</label>
+            <div class="col-sm-4">
+                <input type="file" class="form-control" name="fwxxkFile" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">上传综控员上岗证：</label>
+            <div class="col-sm-4">
+                <input type="file" class="form-control" name="zkysgzFile" />
+            </div>
+        </div>
+        <div class="form-group">
             <label class="col-sm-2 control-label">上传FAS证：</label>
             <div class="col-sm-4">
                 <input type="file" class="form-control" name="faszFile" />

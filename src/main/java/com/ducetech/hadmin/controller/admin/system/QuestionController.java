@@ -218,6 +218,10 @@ public class QuestionController extends BaseController {
                                     if(imgUrl.equals("无")||StringUtil.isBlank(imgUrl)){
 
                                     }else {
+                                        if(imgUrl.endsWith(".0"))
+                                        {
+                                            imgUrl =imgUrl.substring(0,imgUrl.length() - 2);
+                                        }
                                             question.setImgUrl(imgUrl);
                                     }
                                     question.setQuestionBank(bank);
@@ -258,6 +262,10 @@ public class QuestionController extends BaseController {
                                     if(imgUrl.equals("无")||StringUtil.isBlank(imgUrl)){
 
                                     }else {
+                                        if(imgUrl.endsWith(".0"))
+                                        {
+                                            imgUrl =imgUrl.substring(0,imgUrl.length() - 2);
+                                        }
                                         question.setImgUrl(imgUrl);
                                     }
                                     question.setQuestionBank(bank);
@@ -309,6 +317,10 @@ public class QuestionController extends BaseController {
                                     if(imgUrl.equals("无")||StringUtil.isBlank(imgUrl)){
 
                                     }else {
+                                        if(imgUrl.endsWith(".0"))
+                                        {
+                                            imgUrl =imgUrl.substring(0,imgUrl.length() - 2);
+                                        }
                                             question.setImgUrl(imgUrl);
                                     }
                                     question.setQuestionBank(bank);
@@ -373,6 +385,10 @@ public class QuestionController extends BaseController {
                                     if(imgUrl.equals("无")||StringUtil.isBlank(imgUrl)){
 
                                     }else {
+                                        if(imgUrl.endsWith(".0"))
+                                        {
+                                            imgUrl =imgUrl.substring(0,imgUrl.length() - 2);
+                                        }
                                             question.setImgUrl(imgUrl);
                                     }
                                     question.setQuestionBank(bank);
