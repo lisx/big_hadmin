@@ -16,5 +16,5 @@ import java.util.List;
  **/
 public interface IExamLogDao extends IBaseDao<ExamLog,Integer> {
     List<ExamLog> findByUser(@Param("user")User user);
-    List<ExamLog> findByUserAndCreateTimeBetween(@Param("user")User user, Date start, Date end);
+    List<ExamLog> findByUserAndCreateTimeBetween(@Param("user")User user,@Param("start") Date start,@Param("end") Date end);
 }
