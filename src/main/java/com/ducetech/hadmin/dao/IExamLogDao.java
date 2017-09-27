@@ -5,6 +5,7 @@ import com.ducetech.hadmin.entity.ExamLog;
 import com.ducetech.hadmin.entity.User;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,4 +16,5 @@ import java.util.List;
  **/
 public interface IExamLogDao extends IBaseDao<ExamLog,Integer> {
     List<ExamLog> findByUser(@Param("user")User user);
+    List<ExamLog> findByUserAndCreateTimeBetween(@Param("user")User user, Date start, Date end);
 }

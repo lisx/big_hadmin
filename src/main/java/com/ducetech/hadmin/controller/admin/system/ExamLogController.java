@@ -31,6 +31,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -72,7 +75,14 @@ public class ExamLogController extends BaseController {
     @RequestMapping(value = { "/show/{id}" }, method = RequestMethod.GET)
     public String show(@PathVariable Integer id, Model model) {
         User user=userDao.findOne(id);
-        List<ExamLog> logs=examLogDao.findByUser(user);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        c.add(Calendar.MONTH, -1);
+        Date m = c.getTime();
+        String mon = format.format(m);
+        System.out.println("过去一个月："+mon);
+        List<ExamLog> logs=examLogDao.findByUserAndCreateTimeBetween(user,new Date(),m);
         model.addAttribute("user",user);
         model.addAttribute("logs",logs);
         return "admin/examlog/show";

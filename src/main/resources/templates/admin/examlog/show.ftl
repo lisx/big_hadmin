@@ -19,7 +19,7 @@
                                     <span class="col-sm-2">${user.userCode}</span>
                                     <lable class="col-sm-1">站区：</lable>
                                     <span class="col-sm-2">${user.stationArea}</span>
-                                    <lable class="col-sm-1">站区：</lable>
+                                    <lable class="col-sm-1">站点：</lable>
                                     <span class="col-sm-2">${user.station}</span>
                                 </div>
                             </div>
