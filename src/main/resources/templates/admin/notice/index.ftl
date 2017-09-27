@@ -103,7 +103,7 @@
                 shadeClose: true,
                 shade: false,
                 area: ['97%', '94%'],
-                content: url+'&nodeCode=' + nodeCode,
+                content: url,
                 end: function (index) {
                     $('#table_list').bootstrapTable("refresh");
                 }
