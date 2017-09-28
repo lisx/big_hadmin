@@ -142,6 +142,10 @@ public class UserController extends BaseController {
                                     user.setStation(station);
                                     user.setLine(line);
                                     user.setPosition(position);
+                                    if(userCode.endsWith(".0"))
+                                    {
+                                        userCode =userCode.substring(0,userCode.length() - 2);
+                                    }
                                     user.setUserCode(userCode);
                                     user.setPhotoUrl(userCode);
                                     user.setFwxxkUrl(fwxxkUrl);
