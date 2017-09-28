@@ -3,6 +3,7 @@ package com.ducetech.hadmin.bigInterfacel;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.ValueFilter;
 import com.ducetech.hadmin.common.utils.BigConstant;
+import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.*;
 import com.ducetech.hadmin.entity.*;
@@ -112,7 +113,10 @@ public class ExamInterface  extends BaseController {
             List<Proper> propers=properDao.findByQuestion(questions.get(i));
             Collections.shuffle(propers);
             questions.get(i).setPropers(propers);
-            String [] imgs=questions.get(i).getImgUrl().split("=");
+            String [] imgs=null;
+            if(!StringUtil.isBlank(questions.get(i).getImgUrl())){
+                imgs=questions.get(i).getImgUrl().split("=");
+            }
             String url="";
             if(null!=imgs&&imgs.length>0) {
                 url=imgs[imgs.length - 1];
