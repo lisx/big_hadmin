@@ -38,7 +38,7 @@
     var button = Button.createNew();
     //进入文件夹
     function showFolder(folderId) {
-        var url = '${ctx!}/admin/fire/toFolder?folderId=' + folderId + '&menuType=首页滚播图';
+        var url = '${ctx!}/admin/emergency/toFolder?folderId=' + folderId + '&menuType=首页滚播图';
         button.showFolder(url)
     };
     //上传资料文件
