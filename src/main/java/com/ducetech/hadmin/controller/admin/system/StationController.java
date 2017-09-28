@@ -192,196 +192,196 @@ public class StationController extends BaseController {
         map.addAttribute("menuType",BigConstant.Station);
         return "admin/station/uploadFile";
     }
+//
+//    @RequestMapping(value = "/uploadFileCheck", method = RequestMethod.POST)
+//    @ResponseBody
+//    public JsonResult uploadFileCheck(String md5,Integer fileSize,String fileType,String fileName,String nodeCode,Integer folderId,String menuType){
+////        logger.debug("md5:{},fileSize:{},fileType:{},nodeCode{},param{}",md5,fileSize,fileType,nodeCode,menuType);
+//        String fileUrl=null;
+//        List<BigFile> files=fileDao.findByMd5(md5);
+//        if(null!=files&&files.size()>0){
+//            fileUrl=files.get(0).getFileUrl();
+//        }
+//        User user=getUser();
+//        if(!StringUtil.isBlank(fileUrl)){
+//            BigFile bf = new BigFile();
+//            bf.setFileSize("" + Math.round(fileSize / 1024));
+//            bf.setMenuType(menuType);
+//            bf.setMd5(md5);
+//            String suffix="."+fileType;
+//            if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pptx)||suffix.equals(BigConstant.pdf)) {
+//                bf.setFileType(BigConstant.office);
+//            }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
+//                bf.setFileType(BigConstant.image);
+//            }else {
+//                bf.setFileType(BigConstant.video);
+//            }
+//            bf.setFileName(fileName);
+//            bf.setFileUrl(fileUrl);
+//            bf.setByteSize(fileSize+"");
+//            bf.setIfUse(0);
+//            bf.stationFolder(folderId, nodeCode, bf, user,fileDao,stationDao);
+//            fileDao.saveAndFlush(bf);
+//            return JsonResult.success(fileUrl);
+//        }else{
+//            return JsonResult.failure(fileUrl);
+//        }
+//    }
 
-    @RequestMapping(value = "/uploadFileCheck", method = RequestMethod.POST)
-    @ResponseBody
-    public JsonResult uploadFileCheck(String md5,Integer fileSize,String fileType,String fileName,String nodeCode,Integer folderId,String menuType){
-//        logger.debug("md5:{},fileSize:{},fileType:{},nodeCode{},param{}",md5,fileSize,fileType,nodeCode,menuType);
-        String fileUrl=null;
-        List<BigFile> files=fileDao.findByMd5(md5);
-        if(null!=files&&files.size()>0){
-            fileUrl=files.get(0).getFileUrl();
-        }
-        User user=getUser();
-        if(!StringUtil.isBlank(fileUrl)){
-            BigFile bf = new BigFile();
-            bf.setFileSize("" + Math.round(fileSize / 1024));
-            bf.setMenuType(menuType);
-            bf.setMd5(md5);
-            String suffix="."+fileType;
-            if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pptx)||suffix.equals(BigConstant.pdf)) {
-                bf.setFileType(BigConstant.office);
-            }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
-                bf.setFileType(BigConstant.image);
-            }else {
-                bf.setFileType(BigConstant.video);
-            }
-            bf.setFileName(fileName);
-            bf.setFileUrl(fileUrl);
-            bf.setByteSize(fileSize+"");
-            bf.setIfUse(0);
-            bf.stationFolder(folderId, nodeCode, bf, user,fileDao,stationDao);
-            fileDao.saveAndFlush(bf);
-            return JsonResult.success(fileUrl);
-        }else{
-            return JsonResult.failure(fileUrl);
-        }
-    }
-
-    @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
-    @ResponseBody
-    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, Integer folderId,String nodeCode,String md5,String upStatus){
-//        logger.info("进入上传文件{}"+upStatus);
-        List<MultipartFile> files =request.getFiles("file");
-        User user=getUser();
-        MultipartFile file;
-        BufferedOutputStream stream;
-        FileInputStream fis= null;
-        BigFile bf=null;
-        for (int i =0; i< files.size(); ++i) {
-            long flag=new Date().getTime();
-            file = files.get(i);
-            if (!file.isEmpty()) {
-                try {
-                    String suffix=StringUtil.suffix(file.getOriginalFilename());
-                    try {
-                        if(null==chunks) {
-//                            logger.info("不分片的情况");
-                            //不分片的情况
-                            if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pptx)||suffix.equals(BigConstant.pdf)) {
-                                bf=BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file,BigConstant.office,BigConstant.Station,flag,fileDao,stationDao);
-                            }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
-                                bf=BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file,BigConstant.image,BigConstant.Station,flag,fileDao,stationDao);
-                            }else {
-                                bf=BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file, BigConstant.video, BigConstant.Station, flag, fileDao, stationDao);
-                            }
-                            //stringRedisTemplate.opsForValue().set("fileMd5"+md5,bf.getFileUrl());
-                        }else{
-//                            logger.info("分片的情况");
-                            String tempFileDir = properties.getUpload()+md5+"/";
-                            String realname = file.getOriginalFilename();
-                            // 临时目录用来存放所有分片文件
-                            File parentFileDir = new File(tempFileDir+realname+"/");
-                            if (!parentFileDir.exists()) {
-                                parentFileDir.mkdirs();
-                            }
-                            // 分片处理时，前台会多次调用上传接口，每次都会上传文件的一部分到后台
-                            File tempPartFile = new File(parentFileDir, chunk+"");
-                            byte[] bytes = file.getBytes();
-                            stream = new BufferedOutputStream(new FileOutputStream(tempPartFile));
-                            stream.write(bytes);
-                            stream.close();
-                            // 是否全部上传完成
-                            // 所有分片都存在才说明整个文件上传完成
-                            boolean uploadDone = true;
-                            for (int c = 0; c < chunks; c++) {
-                                File partFile = new File(parentFileDir, c+"");
-                                if (!partFile.exists()) {
-                                    uploadDone = false;
-                                    break;
-                                }
-                            }
-                            // 所有分片文件都上传完成
-                            // 将所有分片文件合并到一个文件中
-//                            logger.info("|||||||"+uploadDone);
-                            if (uploadDone) {
-                                File[] array = parentFileDir.listFiles();
-                                List<Integer> fileNames=new ArrayList<>();
-                                for (int a=0;a<array.length;a++){
-//                                    logger.info("arr"+array[a].getName());
-                                    fileNames.add(Integer.parseInt(array[a].getName()));
-                                }
-                                fileNames= new ArrayList(new TreeSet(fileNames));
-                                Collections.sort(fileNames);
-                                //     得到 destTempFile 就是最终的文件
-                                FileUtil.merge(properties.getUpload(),fileNames,realname,md5,flag);
-                                // 删除临时目录中的分片文件
-                                FileUtils.deleteDirectory(parentFileDir);
-                                if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pptx)||suffix.equals(BigConstant.pdf)) {
-                                    bf=BigFile.saveFile(md5,properties.getUpload(),size,folderId, nodeCode, user, file,BigConstant.office,BigConstant.Station,flag,fileDao,stationDao);
-                                }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
-                                    bf=BigFile.saveFile(md5,properties.getUpload(),size,folderId, nodeCode, user, file,BigConstant.image,BigConstant.Station,flag,fileDao,stationDao);
-                                }else {
-                                    bf=BigFile.saveFile(md5,properties.getUpload(),size,folderId, nodeCode, user, file, BigConstant.video, BigConstant.Station, flag, fileDao, stationDao);
-                                }
-                                //stringRedisTemplate.opsForValue().set("fileMd5"+md5,bf.getFileUrl());
-                            } else {
-                                logger.info("上传中 chunks" + chunks + " chunk:" + chunk, "");
-                            }
-                        }
-                    } catch (Exception e) {
-                        logger.info("上传失败{}",e.getMessage());
-                    }
-
-                } catch (Exception e) {
-                    logger.info(e.getMessage());
-                }
-            } else {
-                return JsonResult.failure("You failed to upload " + i + " becausethe file was empty.");
-            }
-        }
-        return JsonResult.success();
-    }
-    /**
-     * 查询集合
-     * @return Page<User>
-     */
-    @RequestMapping(value = { "/list" })
-    @ResponseBody
-    public Page<BigFile> list(String folder,String nodeCode) {
-//        logger.info("list:folder"+folder+"|||||"+properties.getUploadChunk());
-        SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<>();
-        String searchText = request.getParameter("searchText");
-        User user=getUser();
-        nodeCode = Station.getQueryNodeCode(nodeCode, user,stationDao);
-        if (!StringUtil.isBlank(nodeCode)&&!nodeCode.equals("undefined")) {
-            builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
-            builder.addOr("nodeCode", SpecificationOperator.Operator.eq.name(), BigConstant.ADMINCODE);
-        }
-        if(null!=folder&&!StringUtil.isBlank(folder)) {
-            builder.add("folderName", SpecificationOperator.Operator.eq.name(), folder);
-        }else {
-            builder.add("folderName", SpecificationOperator.Operator.isNull.name(),null);
-        }
-        builder.add("ifUse", SpecificationOperator.Operator.eq.name(), 0);
-        builder.add("menuType", SpecificationOperator.Operator.eq.name(), BigConstant.Station);
-        if(!StringUtil.isBlank(searchText)){
-            builder.add("fileName", SpecificationOperator.Operator.likeAll.name(), searchText);
-        }
-        Page<BigFile> bigFilePage=fileDao.findAll(builder.generateSpecification(), getPageRequest());
-        return bigFilePage;
-    }
+//    @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
+//    @ResponseBody
+//    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, Integer folderId,String nodeCode,String md5,String upStatus){
+////        logger.info("进入上传文件{}"+upStatus);
+//        List<MultipartFile> files =request.getFiles("file");
+//        User user=getUser();
+//        MultipartFile file;
+//        BufferedOutputStream stream;
+//        FileInputStream fis= null;
+//        BigFile bf=null;
+//        for (int i =0; i< files.size(); ++i) {
+//            long flag=new Date().getTime();
+//            file = files.get(i);
+//            if (!file.isEmpty()) {
+//                try {
+//                    String suffix=StringUtil.suffix(file.getOriginalFilename());
+//                    try {
+//                        if(null==chunks) {
+////                            logger.info("不分片的情况");
+//                            //不分片的情况
+//                            if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pptx)||suffix.equals(BigConstant.pdf)) {
+//                                bf=BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file,BigConstant.office,BigConstant.Station,flag,fileDao,stationDao);
+//                            }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
+//                                bf=BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file,BigConstant.image,BigConstant.Station,flag,fileDao,stationDao);
+//                            }else {
+//                                bf=BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file, BigConstant.video, BigConstant.Station, flag, fileDao, stationDao);
+//                            }
+//                            //stringRedisTemplate.opsForValue().set("fileMd5"+md5,bf.getFileUrl());
+//                        }else{
+////                            logger.info("分片的情况");
+//                            String tempFileDir = properties.getUpload()+md5+"/";
+//                            String realname = file.getOriginalFilename();
+//                            // 临时目录用来存放所有分片文件
+//                            File parentFileDir = new File(tempFileDir+realname+"/");
+//                            if (!parentFileDir.exists()) {
+//                                parentFileDir.mkdirs();
+//                            }
+//                            // 分片处理时，前台会多次调用上传接口，每次都会上传文件的一部分到后台
+//                            File tempPartFile = new File(parentFileDir, chunk+"");
+//                            byte[] bytes = file.getBytes();
+//                            stream = new BufferedOutputStream(new FileOutputStream(tempPartFile));
+//                            stream.write(bytes);
+//                            stream.close();
+//                            // 是否全部上传完成
+//                            // 所有分片都存在才说明整个文件上传完成
+//                            boolean uploadDone = true;
+//                            for (int c = 0; c < chunks; c++) {
+//                                File partFile = new File(parentFileDir, c+"");
+//                                if (!partFile.exists()) {
+//                                    uploadDone = false;
+//                                    break;
+//                                }
+//                            }
+//                            // 所有分片文件都上传完成
+//                            // 将所有分片文件合并到一个文件中
+////                            logger.info("|||||||"+uploadDone);
+//                            if (uploadDone) {
+//                                File[] array = parentFileDir.listFiles();
+//                                List<Integer> fileNames=new ArrayList<>();
+//                                for (int a=0;a<array.length;a++){
+////                                    logger.info("arr"+array[a].getName());
+//                                    fileNames.add(Integer.parseInt(array[a].getName()));
+//                                }
+//                                fileNames= new ArrayList(new TreeSet(fileNames));
+//                                Collections.sort(fileNames);
+//                                //     得到 destTempFile 就是最终的文件
+//                                FileUtil.merge(properties.getUpload(),fileNames,realname,md5,flag);
+//                                // 删除临时目录中的分片文件
+//                                FileUtils.deleteDirectory(parentFileDir);
+//                                if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pptx)||suffix.equals(BigConstant.pdf)) {
+//                                    bf=BigFile.saveFile(md5,properties.getUpload(),size,folderId, nodeCode, user, file,BigConstant.office,BigConstant.Station,flag,fileDao,stationDao);
+//                                }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
+//                                    bf=BigFile.saveFile(md5,properties.getUpload(),size,folderId, nodeCode, user, file,BigConstant.image,BigConstant.Station,flag,fileDao,stationDao);
+//                                }else {
+//                                    bf=BigFile.saveFile(md5,properties.getUpload(),size,folderId, nodeCode, user, file, BigConstant.video, BigConstant.Station, flag, fileDao, stationDao);
+//                                }
+//                                //stringRedisTemplate.opsForValue().set("fileMd5"+md5,bf.getFileUrl());
+//                            } else {
+//                                logger.info("上传中 chunks" + chunks + " chunk:" + chunk, "");
+//                            }
+//                        }
+//                    } catch (Exception e) {
+//                        logger.info("上传失败{}",e.getMessage());
+//                    }
+//
+//                } catch (Exception e) {
+//                    logger.info(e.getMessage());
+//                }
+//            } else {
+//                return JsonResult.failure("You failed to upload " + i + " becausethe file was empty.");
+//            }
+//        }
+//        return JsonResult.success();
+//    }
+//    /**
+//     * 查询集合
+//     * @return Page<User>
+//     */
+//    @RequestMapping(value = { "/list" })
+//    @ResponseBody
+//    public Page<BigFile> list(String folder,String nodeCode) {
+////        logger.info("list:folder"+folder+"|||||"+properties.getUploadChunk());
+//        SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<>();
+//        String searchText = request.getParameter("searchText");
+//        User user=getUser();
+//        nodeCode = Station.getQueryNodeCode(nodeCode, user,stationDao);
+//        if (!StringUtil.isBlank(nodeCode)&&!nodeCode.equals("undefined")) {
+//            builder.add("nodeCode", SpecificationOperator.Operator.likeAll.name(), nodeCode);
+//            builder.addOr("nodeCode", SpecificationOperator.Operator.eq.name(), BigConstant.ADMINCODE);
+//        }
+//        if(null!=folder&&!StringUtil.isBlank(folder)) {
+//            builder.add("folderName", SpecificationOperator.Operator.eq.name(), folder);
+//        }else {
+//            builder.add("folderName", SpecificationOperator.Operator.isNull.name(),null);
+//        }
+//        builder.add("ifUse", SpecificationOperator.Operator.eq.name(), 0);
+//        builder.add("menuType", SpecificationOperator.Operator.eq.name(), BigConstant.Station);
+//        if(!StringUtil.isBlank(searchText)){
+//            builder.add("fileName", SpecificationOperator.Operator.likeAll.name(), searchText);
+//        }
+//        Page<BigFile> bigFilePage=fileDao.findAll(builder.generateSpecification(), getPageRequest());
+//        return bigFilePage;
+//    }
 
 
-    /**
-     * 删除
-     * @return
-     */
-    @RequestMapping(value = "/delete/{id}",method = RequestMethod.DELETE)
-    @ResponseBody
-    public JsonResult delete(@PathVariable Integer id){
-        try {
-                fileService.delete(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return JsonResult.failure(e.getMessage());
-        }
-        return JsonResult.success();
-    }
-
-    @RequestMapping(value = "/removeAll/{ids}",method = RequestMethod.DELETE)
-    @ResponseBody
-    public JsonResult removeAll(@PathVariable Integer[] ids){
-        logger.debug(ids.toString());
-        try {
-            for(int i=0;i<ids.length-1;i++) {
-                fileService.delete(ids[i]);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return JsonResult.failure(e.getMessage());
-        }
-        return JsonResult.success();
-    }
+//    /**
+//     * 删除
+//     * @return
+//     */
+//    @RequestMapping(value = "/delete/{id}",method = RequestMethod.DELETE)
+//    @ResponseBody
+//    public JsonResult delete(@PathVariable Integer id){
+//        try {
+//                fileService.delete(id);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return JsonResult.failure(e.getMessage());
+//        }
+//        return JsonResult.success();
+//    }
+//
+//    @RequestMapping(value = "/removeAll/{ids}",method = RequestMethod.DELETE)
+//    @ResponseBody
+//    public JsonResult removeAll(@PathVariable Integer[] ids){
+//        logger.debug(ids.toString());
+//        try {
+//            for(int i=0;i<ids.length-1;i++) {
+//                fileService.delete(ids[i]);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return JsonResult.failure(e.getMessage());
+//        }
+//        return JsonResult.success();
+//    }
 
 }

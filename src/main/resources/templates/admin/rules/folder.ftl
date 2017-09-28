@@ -53,7 +53,7 @@
     var button = Button.createNew();
     //上传
     function uploadFile() {
-        button.uploadFile('${ctx!}/admin/emergency/uploadFile?menuType=规章制度&folderId=','${folderId}')
+        button.uploadFileFolder('${ctx!}/admin/emergency/uploadFile?menuType=规章制度&folderId=','${folderId}')
     }
     //下载文件
     function down(id, name) {
