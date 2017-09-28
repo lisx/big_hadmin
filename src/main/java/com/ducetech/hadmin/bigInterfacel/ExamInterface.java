@@ -246,7 +246,10 @@ public class ExamInterface  extends BaseController {
                     qlog.setQuestion(question);
                     qlog.setLog(log);
                     questionLogDao.save(qlog);
-                    String [] imgs=question.getImgUrl().split("=");
+                    String [] imgs=null;
+                    if(!StringUtil.isBlank(question.getImgUrl())){
+                        imgs=question.getImgUrl().split("=");
+                    }
                     String url="";
                     if(null!=imgs&&imgs.length>0) {
                         url=imgs[imgs.length - 1];
