@@ -85,7 +85,7 @@ public class EmergencyController extends BaseController {
     @RequestMapping(value = {"/list"})
     @ResponseBody
     public Page<BigFile> list(Integer folderId, String nodeCode, String menuType) {
-//        logger.info("进入应急预案||||||||||||||||||||list:folderId" + folderId);
+        logger.info("获取数据list:folderId{},menuType{},nodeCode{}",folderId,menuType,nodeCode);
         SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
         User user = getUser();
@@ -220,6 +220,18 @@ public class EmergencyController extends BaseController {
         map.addAttribute("nodeCode", nodeCode);
         return "admin/emergency/uploadFile";
     }
+
+    /**
+     * 附件检查
+     * @param md5
+     * @param fileSize
+     * @param fileType
+     * @param fileName
+     * @param nodeCode
+     * @param folderId
+     * @param menuType
+     * @return
+     */
     @RequestMapping(value = "/uploadFileCheck", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult uploadFileCheck(String md5,Integer fileSize,String fileType,String fileName,String nodeCode,Integer folderId,String menuType){
@@ -263,7 +275,6 @@ public class EmergencyController extends BaseController {
      * @param size
      * @param folderId
      * @param nodeCode
-     * @param guid
      * @param md5
      * @return
      */

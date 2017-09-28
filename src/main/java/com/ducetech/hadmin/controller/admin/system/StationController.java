@@ -39,13 +39,6 @@ public class StationController extends BaseController {
 	private IStationDao stationDao;
     @Autowired
     IBigFileDao fileDao;
-    @Autowired
-    DucetechProperties properties;
-    //@Autowired
-   // StringRedisTemplate stringRedisTemplate;
-    @Autowired
-    IBigFileService fileService;
-
 
     /**
      * 树形菜单
@@ -186,12 +179,12 @@ public class StationController extends BaseController {
         return JsonResult.success("上传成功！");
     }
 
-    @RequestMapping(value = "/uploadFile", method = RequestMethod.GET)
-    public String uploadFile(String nodeCode,Model map) {
-        map.addAttribute("nodeCode",nodeCode);
-        map.addAttribute("menuType",BigConstant.Station);
-        return "admin/station/uploadFile";
-    }
+//    @RequestMapping(value = "/uploadFile", method = RequestMethod.GET)
+//    public String uploadFile(String nodeCode,Model map) {
+//        map.addAttribute("nodeCode",nodeCode);
+//        map.addAttribute("menuType",BigConstant.Station);
+//        return "admin/station/uploadFile";
+//    }
 //
 //    @RequestMapping(value = "/uploadFileCheck", method = RequestMethod.POST)
 //    @ResponseBody
