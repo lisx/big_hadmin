@@ -74,7 +74,7 @@ jQuery(function() {
 
                     $.ajax({
                         type: 'POST',
-                        url: '/admin/station/uploadFileCheck',
+                        url: '/admin/emergency/uploadFileCheck',
                         data: {
                             'md5':file.md5
                             ,'fileSize':file.size
@@ -154,7 +154,7 @@ jQuery(function() {
         chunked: true,
         chunkSize:100 * 1024 * 1024, //100M
         threads:1,
-        server: '/admin/station/uploadFilePost',
+        server: '/admin/emergency/uploadFilePost',
         fileNumLimit: 300,
         fileSizeLimit: 20480 * 1024 * 1024,    // 20480 M
         fileSingleSizeLimit: 2048 * 1024 * 1024    // 2048 M

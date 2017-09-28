@@ -43,10 +43,10 @@ var Button = {
             $("input[name='allocation']").each(function (i) {
                 valArr[i] = $(this).val();
             });
-            // if (valArr.length == 0) {
-            //     alert("请先选择一条数据");
-            //     return;
-            // }
+            if (valArr.length == 0) {
+                alert("请先选择一条数据");
+                return;
+            }
             var priv = valArr.join(',');
             var nodeCode = priv;
             layer.open({
@@ -66,10 +66,10 @@ var Button = {
             $("input[name='allocation']").each(function (i) {
                 valArr[i] = $(this).val();
             });
-            // if (valArr.length == 0) {
-            //     alert("请先选择一条数据");
-            //     return;
-            // }
+            if (valArr.length == 0) {
+                alert("请先选择一条数据");
+                return;
+            }
             var priv = valArr.join(',');
             var nodeCode = priv;
             layer.open({
@@ -84,20 +84,14 @@ var Button = {
                 }
             });
         };
-        button.uploadFileTwo=function(url,id){
-            var valArr = new Array;
-            $("input[name='allocation']").each(function (i) {
-                valArr[i] = $(this).val();
-            });
-            var priv = valArr.join(',');
-            var nodeCode = priv;
+        button.uploadFileFolder=function(url,id){
             layer.open({
                 type: 2,
                 title: '上传文件',
                 shadeClose: true,
                 shade: false,
                 area: ['97%', '94%'],
-                content: url+id+'&nodeCode=' + nodeCode,
+                content: url+id,
                 end: function (index) {
                     $('#table_list').bootstrapTable("refresh");
                 }

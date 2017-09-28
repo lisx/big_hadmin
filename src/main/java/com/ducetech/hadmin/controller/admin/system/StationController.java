@@ -41,8 +41,8 @@ public class StationController extends BaseController {
     IBigFileDao fileDao;
     @Autowired
     DucetechProperties properties;
-    @Autowired
-    StringRedisTemplate stringRedisTemplate;
+    //@Autowired
+   // StringRedisTemplate stringRedisTemplate;
     @Autowired
     IBigFileService fileService;
 
@@ -197,7 +197,11 @@ public class StationController extends BaseController {
     @ResponseBody
     public JsonResult uploadFileCheck(String md5,Integer fileSize,String fileType,String fileName,String nodeCode,Integer folderId,String menuType){
 //        logger.debug("md5:{},fileSize:{},fileType:{},nodeCode{},param{}",md5,fileSize,fileType,nodeCode,menuType);
-        String fileUrl=stringRedisTemplate.opsForValue().get("fileMd5"+md5);
+        String fileUrl=null;
+        List<BigFile> files=fileDao.findByMd5(md5);
+        if(null!=files&&files.size()>0){
+            fileUrl=files.get(0).getFileUrl();
+        }
         User user=getUser();
         if(!StringUtil.isBlank(fileUrl)){
             BigFile bf = new BigFile();
@@ -251,7 +255,7 @@ public class StationController extends BaseController {
                             }else {
                                 bf=BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file, BigConstant.video, BigConstant.Station, flag, fileDao, stationDao);
                             }
-                            stringRedisTemplate.opsForValue().set("fileMd5"+md5,bf.getFileUrl());
+                            //stringRedisTemplate.opsForValue().set("fileMd5"+md5,bf.getFileUrl());
                         }else{
 //                            logger.info("分片的情况");
                             String tempFileDir = properties.getUpload()+md5+"/";
@@ -300,7 +304,7 @@ public class StationController extends BaseController {
                                 }else {
                                     bf=BigFile.saveFile(md5,properties.getUpload(),size,folderId, nodeCode, user, file, BigConstant.video, BigConstant.Station, flag, fileDao, stationDao);
                                 }
-                                stringRedisTemplate.opsForValue().set("fileMd5"+md5,bf.getFileUrl());
+                                //stringRedisTemplate.opsForValue().set("fileMd5"+md5,bf.getFileUrl());
                             } else {
                                 logger.info("上传中 chunks" + chunks + " chunk:" + chunk, "");
                             }

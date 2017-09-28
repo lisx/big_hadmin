@@ -30,11 +30,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 应急预案管理
@@ -118,16 +116,24 @@ public class EmergencyController extends BaseController {
         return bigFilePage;
     }
 
+    /**
+     * 进入添加文件夹页
+     * @param nodeCode
+     * @param menuType
+     * @param map
+     * @return
+     */
     @RequestMapping("/add")
-    public String add(String nodeCode, String menuType, Model map) {
+    public String add(String nodeCode,String folderId, String menuType, Model map) {
 //        logger.info("进入应急预案添加文件夹");
         map.addAttribute("nodeCode", nodeCode);
         map.addAttribute("menuType", menuType);
+        map.addAttribute("folderId", folderId);
         return "admin/emergency/form";
     }
 
     /**
-     * 应急预案新增文件夹
+     * 保存文件夹
      *
      * @return
      */
@@ -155,14 +161,18 @@ public class EmergencyController extends BaseController {
      */
     @RequestMapping("/toFolder")
     public String toFolder(String folder, Integer folderId,String menuType, Model map) {
-//        logger.info("进入应急预案文件夹folder{}", folder);
+        logger.info("进入文件夹folder{},folderId{},menuType{}", folder,folderId,menuType);
         map.addAttribute("folder", folder);
         map.addAttribute("folderId", folderId);
         map.addAttribute("menuType", menuType);
         return "admin/emergency/folder";
     }
 
-
+    /**
+     * 删除
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public JsonResult delete(@PathVariable Integer id) {
@@ -175,6 +185,11 @@ public class EmergencyController extends BaseController {
         return JsonResult.success();
     }
 
+    /**
+     * 批量删除
+     * @param ids
+     * @return
+     */
     @RequestMapping(value = "/removeAll/{ids}", method = RequestMethod.DELETE)
     @ResponseBody
     public JsonResult removeAll(@PathVariable Integer[] ids) {
@@ -190,56 +205,107 @@ public class EmergencyController extends BaseController {
     }
 
     /**
-     * 进入培训上传页面
+     * 进入上传页面
      *
      * @param map
      * @return
      */
     @RequestMapping(value = "/uploadFile", method = RequestMethod.GET)
     public String uploadFile(Model map, Integer folderId, String nodeCode, String menuType) {
-//        logger.debug("folderId{},menuType{},nodeCode{}", folderId, menuType, nodeCode);
+        logger.debug("进入上传页面：folderId{},menuType{},nodeCode{}", folderId, menuType, nodeCode);
         map.addAttribute("folderId", folderId);
-        map.addAttribute("menuType", menuType.replace("undefined",""));
+        if(!StringUtil.isBlank(menuType)) {
+            map.addAttribute("menuType", menuType.replace("undefined", ""));
+        }
         map.addAttribute("nodeCode", nodeCode);
         return "admin/emergency/uploadFile";
     }
+    @RequestMapping(value = "/uploadFileCheck", method = RequestMethod.POST)
+    @ResponseBody
+    public JsonResult uploadFileCheck(String md5,Integer fileSize,String fileType,String fileName,String nodeCode,Integer folderId,String menuType){
+//        logger.debug("md5:{},fileSize:{},fileType:{},nodeCode{},param{}",md5,fileSize,fileType,nodeCode,menuType);
+        String fileUrl=null;
+        List<BigFile> files=fileDao.findByMd5(md5);
+        if(null!=files&&files.size()>0){
+            fileUrl=files.get(0).getFileUrl();
+        }
+        User user=getUser();
+        if(!StringUtil.isBlank(fileUrl)){
+            BigFile bf = new BigFile();
+            bf.setFileSize("" + Math.round(fileSize / 1024));
+            bf.setMenuType(menuType);
+            bf.setMd5(md5);
+            String suffix="."+fileType;
+            if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pptx)||suffix.equals(BigConstant.pdf)) {
+                bf.setFileType(BigConstant.office);
+            }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
+                bf.setFileType(BigConstant.image);
+            }else {
+                bf.setFileType(BigConstant.video);
+            }
+            bf.setFileName(fileName);
+            bf.setFileUrl(fileUrl);
+            bf.setByteSize(fileSize+"");
+            bf.setIfUse(0);
+            bf.stationFolder(folderId, nodeCode, bf, user,fileDao,stationDao);
+            fileDao.saveAndFlush(bf);
+            return JsonResult.success(fileUrl);
+        }else{
+            return JsonResult.failure(fileUrl);
+        }
+    }
 
+    /**
+     * 上传保存
+     * @param request
+     * @param chunk
+     * @param chunks
+     * @param size
+     * @param folderId
+     * @param nodeCode
+     * @param guid
+     * @param md5
+     * @return
+     */
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, Integer folderId, String nodeCode, String guid, String md5) {
-//        logger.info("进入培训资料上传文件");
-        List<MultipartFile> files = request.getFiles("file");
-        User user = getUser();
+    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, Integer folderId,String nodeCode,String md5,String upStatus){
+//        logger.info("进入上传文件{}"+upStatus);
+        List<MultipartFile> files =request.getFiles("file");
+        User user=getUser();
         MultipartFile file;
         BufferedOutputStream stream;
-        for (int i = 0; i < files.size(); ++i) {
-            long flag = new Date().getTime();
+        FileInputStream fis= null;
+        BigFile bf=null;
+        for (int i =0; i< files.size(); ++i) {
+            long flag=new Date().getTime();
             file = files.get(i);
             if (!file.isEmpty()) {
                 try {
-                    String suffix = StringUtil.suffix(file.getOriginalFilename());
+                    String suffix=StringUtil.suffix(file.getOriginalFilename());
                     try {
-                        if (null == chunks) {
+                        if(null==chunks) {
 //                            logger.info("不分片的情况");
                             //不分片的情况
-                            if (suffix.equals(BigConstant.docx) || suffix.equals(BigConstant.doc) || suffix.equals(BigConstant.xlsx) || suffix.equals(BigConstant.xls) || suffix.equals(BigConstant.ppt)|| suffix.equals(BigConstant.pptx) || suffix.equals(BigConstant.pdf)) {
-                                BigFile.saveFile(md5, properties.getUpload(), folderId, nodeCode, user, file, BigConstant.office, BigConstant.Emergency, flag, fileDao, stationDao);
-                            } else if (suffix.equals(BigConstant.png) || suffix.equals(BigConstant.jpeg) || suffix.equals(BigConstant.jpg)) {
-                                BigFile.saveFile(md5, properties.getUpload(), folderId, nodeCode, user, file, BigConstant.image, BigConstant.Emergency, flag, fileDao, stationDao);
-                            } else {
-                                BigFile.saveFile(md5, properties.getUpload(), folderId, nodeCode, user, file, BigConstant.video, BigConstant.Emergency, flag, fileDao, stationDao);
+                            if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pptx)||suffix.equals(BigConstant.pdf)) {
+                                bf=BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file,BigConstant.office,BigConstant.Station,flag,fileDao,stationDao);
+                            }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
+                                bf=BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file,BigConstant.image,BigConstant.Station,flag,fileDao,stationDao);
+                            }else {
+                                bf=BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file, BigConstant.video, BigConstant.Station, flag, fileDao, stationDao);
                             }
-                        } else {
+                            //stringRedisTemplate.opsForValue().set("fileMd5"+md5,bf.getFileUrl());
+                        }else{
 //                            logger.info("分片的情况");
-                            String tempFileDir = properties.getUploadChunk() + guid + "/";
+                            String tempFileDir = properties.getUpload()+md5+"/";
                             String realname = file.getOriginalFilename();
                             // 临时目录用来存放所有分片文件
-                            File parentFileDir = new File(tempFileDir + realname + "/");
+                            File parentFileDir = new File(tempFileDir+realname+"/");
                             if (!parentFileDir.exists()) {
                                 parentFileDir.mkdirs();
                             }
                             // 分片处理时，前台会多次调用上传接口，每次都会上传文件的一部分到后台
-                            File tempPartFile = new File(parentFileDir, chunk + "");
+                            File tempPartFile = new File(parentFileDir, chunk+"");
                             byte[] bytes = file.getBytes();
                             stream = new BufferedOutputStream(new FileOutputStream(tempPartFile));
                             stream.write(bytes);
@@ -248,7 +314,7 @@ public class EmergencyController extends BaseController {
                             // 所有分片都存在才说明整个文件上传完成
                             boolean uploadDone = true;
                             for (int c = 0; c < chunks; c++) {
-                                File partFile = new File(parentFileDir, c + "");
+                                File partFile = new File(parentFileDir, c+"");
                                 if (!partFile.exists()) {
                                     uploadDone = false;
                                     break;
@@ -256,32 +322,34 @@ public class EmergencyController extends BaseController {
                             }
                             // 所有分片文件都上传完成
                             // 将所有分片文件合并到一个文件中
-//                            logger.info("|||||||" + uploadDone);
+//                            logger.info("|||||||"+uploadDone);
                             if (uploadDone) {
                                 File[] array = parentFileDir.listFiles();
-                                List<Integer> fileNames = new ArrayList<>();
-                                for (int a = 0; a < array.length; a++) {
-//                                    logger.info("arr" + array[a].getName());
+                                List<Integer> fileNames=new ArrayList<>();
+                                for (int a=0;a<array.length;a++){
+//                                    logger.info("arr"+array[a].getName());
                                     fileNames.add(Integer.parseInt(array[a].getName()));
                                 }
+                                fileNames= new ArrayList(new TreeSet(fileNames));
                                 Collections.sort(fileNames);
                                 //     得到 destTempFile 就是最终的文件
-                                FileUtil.merge(properties.getUpload(), fileNames, realname, guid, flag);
+                                FileUtil.merge(properties.getUpload(),fileNames,realname,md5,flag);
                                 // 删除临时目录中的分片文件
                                 FileUtils.deleteDirectory(parentFileDir);
-                                if (suffix.equals(BigConstant.docx) || suffix.equals(BigConstant.doc) || suffix.equals(BigConstant.xlsx) || suffix.equals(BigConstant.xls) || suffix.equals(BigConstant.ppt)|| suffix.equals(BigConstant.pptx) || suffix.equals(BigConstant.pdf)) {
-                                    BigFile.saveFile(md5, properties.getUpload(), size, folderId, nodeCode, user, file, BigConstant.office, BigConstant.Emergency, flag, fileDao, stationDao);
-                                } else if (suffix.equals(BigConstant.png) || suffix.equals(BigConstant.jpeg) || suffix.equals(BigConstant.jpg)) {
-                                    BigFile.saveFile(md5, properties.getUpload(), size, folderId, nodeCode, user, file, BigConstant.image, BigConstant.Emergency, flag, fileDao, stationDao);
-                                } else {
-                                    BigFile.saveFile(md5, properties.getUpload(), size, folderId, nodeCode, user, file, BigConstant.video, BigConstant.Emergency, flag, fileDao, stationDao);
+                                if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pptx)||suffix.equals(BigConstant.pdf)) {
+                                    bf=BigFile.saveFile(md5,properties.getUpload(),size,folderId, nodeCode, user, file,BigConstant.office,BigConstant.Station,flag,fileDao,stationDao);
+                                }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
+                                    bf=BigFile.saveFile(md5,properties.getUpload(),size,folderId, nodeCode, user, file,BigConstant.image,BigConstant.Station,flag,fileDao,stationDao);
+                                }else {
+                                    bf=BigFile.saveFile(md5,properties.getUpload(),size,folderId, nodeCode, user, file, BigConstant.video, BigConstant.Station, flag, fileDao, stationDao);
                                 }
+                                //stringRedisTemplate.opsForValue().set("fileMd5"+md5,bf.getFileUrl());
                             } else {
                                 logger.info("上传中 chunks" + chunks + " chunk:" + chunk, "");
                             }
                         }
                     } catch (Exception e) {
-                        logger.info("上传失败{}", e.getMessage());
+                        logger.info("上传失败{}",e.getMessage());
                     }
 
                 } catch (Exception e) {

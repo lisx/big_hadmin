@@ -37,4 +37,6 @@ public interface IBigFileDao extends IBaseDao<BigFile,Integer> {
 
     List<BigFile> findByNotice(Notice notice);
 
+    List<BigFile> findByMd5(String md5);
+
 }

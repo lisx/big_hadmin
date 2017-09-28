@@ -53,7 +53,7 @@
     var button = Button.createNew();
     //上传
     function uploadFile() {
-        button.uploadFileTwo('${ctx!}/admin/emergency/uploadFile?menuType=应急预案&folderId=','${folderId}')
+        button.uploadFileFolder('${ctx!}/admin/emergency/uploadFile?menuType=${folder}&folderId=','${folderId}')
     }
     //下载文件
     function down(id, name) {
