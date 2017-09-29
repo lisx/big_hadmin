@@ -38,16 +38,16 @@
                                <a class="J_menuItem" href="${ctx!}/admin/user/index">人员信息</a>
                             </li>
                          </@shiro.hasPermission>
-                         <@shiro.hasPermission name="system:role:index">
+                         <@shiro.hasPermission name="system:user:index">
                             <li>
                                 <a class="J_menuItem" href="${ctx!}/admin/role/index">权限管理</a>
                             </li>
                          </@shiro.hasPermission>
-                         <#--<@shiro.hasPermission name="system:resource:index">-->
-                            <#--<li>-->
-                                <#--<a class="J_menuItem" href="${ctx!}/admin/resource/index">资源管理</a>-->
-                            <#--</li>-->
-                         <#--</@shiro.hasPermission>-->
+                         <@shiro.hasPermission name="system:user:index">
+                            <li>
+                                <a class="J_menuItem" href="${ctx!}/admin/resource/index">资源管理</a>
+                            </li>
+                         </@shiro.hasPermission>
                          <@shiro.hasPermission name="system:station:index">
                              <li>
                                  <a class="J_menuItem" href="${ctx!}/admin/station/index">车站信息</a>

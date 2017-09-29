@@ -262,22 +262,6 @@
         $("#table_list").bootstrapTable('refresh', opt);
     };
 
-    <#--function upload() {-->
-
-        <#--console.log("id:++" + id);-->
-        <#--layer.open({-->
-            <#--type: 2,-->
-            <#--title: '上传',-->
-            <#--shadeClose: true,-->
-            <#--shade: false,-->
-            <#--area: ['600px', '600px'],-->
-            <#--content: '${ctx!}/admin/emergency/upload?nodeCode=' + id,-->
-            <#--end: function (index) {-->
-                <#--$('#table_list').bootstrapTable("refresh");-->
-            <#--}-->
-        <#--});-->
-    <#--};-->
-
     function uploadFile() {
         var id = $(".addFolder").attr("data-id");
         var valArr = new Array;

@@ -42,7 +42,8 @@ public class LoginController extends BaseController {
 			 UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 			subject.login(token);
 			return redirect("/admin/index");
-		} catch (AuthenticationException e) {
+		} catch (Exception e) {
+		    System.out.println(e.getMessage());
 			model.put("message", e.getMessage());
 		}
 		return "admin/login";

@@ -111,7 +111,17 @@
         //上传资料文件
         function uploadFile() {
             var url="${ctx!}/admin/running/uploadFile?menuType=运行图管理";
-            button.uploadFile(url)
+            layer.open({
+                type: 2,
+                title: '上传文件',
+                shadeClose: true,
+                shade: false,
+                area: ['97%', '94%'],
+                content: url,
+                end: function (index) {
+                    $('#table_list').bootstrapTable("refresh");
+                }
+            });
         };
         //下载文件
         function down(id, name) {

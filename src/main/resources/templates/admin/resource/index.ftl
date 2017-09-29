@@ -8,9 +8,7 @@
                 <div class="ibox ">
                     <div class="ibox-content">
                         <p>
-                        	<@shiro.hasPermission name="system:resource:add">
                         		<button class="btn btn-success " type="button" onclick="add();"><i class="fa fa-plus"></i>&nbsp;添加</button>
-                        	</@shiro.hasPermission>
                         </p>
                         <hr>
                         <div class="row row-lg">
