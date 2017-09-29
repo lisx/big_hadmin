@@ -38,7 +38,7 @@
     var button = Button.createNew();
     //进入文件夹
     function showFolder(folderId) {
-        var url='${ctx!}/admin/fire/toFolder?folderId=' + folderId+'&menuType=应急预案';
+        var url='${ctx!}/admin/emergency/toFolder?folderId=' + folderId+'&menuType=应急预案';
         button.showFolder(url)
     };
     //上传资料文件
@@ -72,18 +72,22 @@
                 <div class="ibox-title">
                     <h5>应急预案</h5>
                 <p>
-                <@shiro.hasPermission name="system:resource:add">
+                <@shiro.hasPermission name="system:emergency:deleteBatch">
                     <button class="btn btn-success pull-right" onclick="removeAll()" type="button"><i
                             class="fa fa-plus"></i>&nbsp;批量删除
                     </button>
+                </@shiro.hasPermission>
+                <@shiro.hasPermission name="system:emergency:uploadFile">
                     <button class="btn btn-success pull-right uploadFile" type="button" onclick="uploadFile();"><i
                             class="fa fa-plus"></i>&nbsp;上传资料
                     </button>
+                </@shiro.hasPermission>
+                <@shiro.hasPermission name="system:emergency:addFolder">
                     <button class="btn btn-success pull-right addFolder" type="button" onclick="addFolder();"><i
                             class="fa fa-plus"></i>&nbsp;新建文件夹
                     </button>
-                    <h5 class="spanStation" style="margin-left: 20px"></h5>
                 </@shiro.hasPermission>
+                    <h5 class="spanStation" style="margin-left: 20px"></h5>
                     </p>
                     <div id="hiddenBox">
 
