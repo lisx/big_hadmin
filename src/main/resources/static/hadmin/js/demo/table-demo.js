@@ -1,7 +1,7 @@
 var Table = {
     createNew: function () {
         var table = {};
-        table.init=function(url){
+        table.init=function(url,func){
             $("#table_list").bootstrapTable({
                 //使用get请求到服务器获取数据
                 method: "GET",
@@ -81,20 +81,21 @@ var Table = {
                 },{
                     title: "操作",
                     field: "empty",
-                    formatter: function (value, row, index) {
-                        var operateHtml ='';
-                        if(row.ifFolder==1){
-                            operateHtml='<button class="btn btn-success btn-xs" type="button" onclick="showFolder(\''+row.id+'\',\''+row.fileName+'\')"><i class="fa fa-eye"></i>&nbsp;查看</button>';
-                        }else{
-                            operateHtml='<button class="btn btn-primary btn-xs" type="button" onclick="down(\''+row.id+'\',\''+row.fileName+'\')"><i class="fa fa-download"></i>&nbsp;下载</button>';
-                        }
-                        operateHtml = operateHtml + '<button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button>';
-                        return operateHtml;
-                    }
+                    formatter: func
+                    // function (value, row, index) {
+                    //     var operateHtml ='';
+                    //     if(row.ifFolder==1){
+                    //         operateHtml='<button class="btn btn-success btn-xs" type="button" onclick="showFolder(\''+row.id+'\',\''+row.fileName+'\')"><i class="fa fa-eye"></i>&nbsp;查看</button>';
+                    //     }else{
+                    //         operateHtml='<button class="btn btn-primary btn-xs" type="button" onclick="down(\''+row.id+'\',\''+row.fileName+'\')"><i class="fa fa-download"></i>&nbsp;下载</button>';
+                    //     }
+                    //     operateHtml = operateHtml + '<button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button>';
+                    //     return operateHtml;
+                    // }
                 }],
             });
         };
-        table.folder=function(url){
+        table.folder=function(url,func){
             $("#table_list").bootstrapTable({
                 //使用get请求到服务器获取数据
                 method: "POST",
@@ -151,11 +152,12 @@ var Table = {
                 },{
                     title: "操作",
                     field: "empty",
-                    formatter: function (value, row, index) {
-                        var operateHtml = '<button class="btn btn-primary btn-xs" type="button" onclick="down(\''+row.fileId+'\',\''+row.fileName+'\')"><i class="fa fa-download"></i>&nbsp;下载</button> &nbsp;';
-                        operateHtml = operateHtml + '<button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button>';
-                        return operateHtml;
-                    }
+                    formatter: func
+                    // function (value, row, index) {
+                    //     var operateHtml = '<button class="btn btn-primary btn-xs" type="button" onclick="down(\''+row.fileId+'\',\''+row.fileName+'\')"><i class="fa fa-download"></i>&nbsp;下载</button> &nbsp;';
+                    //     operateHtml = operateHtml + '<button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button>';
+                    //     return operateHtml;
+                    // }
                 }]
             });
         };

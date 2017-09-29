@@ -19,12 +19,18 @@
                     <div class="col-sm-13">
                         <div class="tabs-container">
                             <ul class="nav nav-tabs">
+<@shiro.hasPermission name="system:train:tab">
                                 <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true"> 培训资料</a>
                                 </li>
+</@shiro.hasPermission>
+<@shiro.hasPermission name="system:bank:tab">
                                 <li class="tab2"><a data-toggle="tab" href="#tab-2" aria-expanded="false">练习/考试</a>
                                 </li>
+</@shiro.hasPermission>
+<@shiro.hasPermission name="system:exam:tab">
                                 <li class="tab3"><a data-toggle="tab" href="#tab-3" aria-expanded="false">试卷类型</a>
                                 </li>
+</@shiro.hasPermission>
                             </ul>
                             <div class="tab-content">
                                 <div id="tab-1" class="tab-pane active">
