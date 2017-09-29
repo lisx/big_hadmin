@@ -52,7 +52,7 @@
         var table = Table.createNew();
         table.folder("${ctx!}/admin/emergency/list?folderId=${folderId}",
                 function (value, row, index) {
-                    var operateHtml = '<@shiro.hasPermission name="system:train:down"><button class="btn btn-primary btn-xs" type="button" onclick="down(\''+row.fileId+'\',\''+row.fileName+'\')"><i class="fa fa-download"></i>&nbsp;下载</button> &nbsp;</@shiro.hasPermission>';
+                    var operateHtml = '<@shiro.hasPermission name="system:train:down"><button class="btn btn-primary btn-xs" type="button" onclick="down(\''+row.id+'\',\''+row.fileName+'\')"><i class="fa fa-download"></i>&nbsp;下载</button> &nbsp;</@shiro.hasPermission>';
                     operateHtml = operateHtml + '<@shiro.hasPermission name="system:train:delete"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button></@shiro.hasPermission>';
                     return operateHtml;
                 }
@@ -65,7 +65,9 @@
     }
     //下载文件
     function down(id, name) {
-        button.down("${ctx!}/admin/download/" + id, name)
+        var url="${ctx!}/admin/download/" + id;
+        console.log("||||+++||||"+url)
+        button.down(url, name)
     }
     //删除文件夹或文件
     function del(id) {

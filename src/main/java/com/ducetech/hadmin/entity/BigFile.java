@@ -10,10 +10,7 @@ import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -106,6 +103,30 @@ public class BigFile extends BaseEntity {
     @ManyToOne
     @JSONField(serialize = false)
     private Notice notice;
+    public static void returnFile(String path, OutputStream out) throws FileNotFoundException, IOException {
+        // A FileInputStream is for bytes
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(path);
+            byte[] buf = null;
+            if(fis.available() > 4*1024){
+                buf = new byte[4*1024]; // 4K buffer
+            }else {
+                buf = new byte[fis.available()];
+            }
+            int bytesRead;
+            while ((bytesRead = fis.read(buf)) != -1) {
+                out.write(buf, 0, bytesRead);
+            }
+            out.flush();
+
+        } finally {
+            if(out!=null)
+                out.close();
+            if (fis != null)
+                fis.close();
+        }
+    }
     public void initData(Integer uId,String nodeCode,String menu){
         this.setIfFolder(1);
         this.setIfUse(0);

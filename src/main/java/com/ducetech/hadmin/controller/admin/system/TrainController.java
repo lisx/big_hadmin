@@ -79,9 +79,11 @@ public class TrainController  extends BaseController {
      * @return
      */
     @RequestMapping("/twoFolder")
-    public String twoFolder(String folder,Integer folderId,Model map) {
-        map.addAttribute("folderId",folderId);
-        map.addAttribute("folder",folder);
+    public String twoFolder(String folder, Integer folderId,String menuType, Model map) {
+        logger.info("进入文件夹folder{},folderId{},menuType{}", folder,folderId,menuType);
+        map.addAttribute("folder", folder);
+        map.addAttribute("folderId", folderId);
+        map.addAttribute("menuType", menuType);
         return "admin/learn/twoFolder";
     }
 

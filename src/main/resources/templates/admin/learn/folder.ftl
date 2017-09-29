@@ -49,7 +49,7 @@
     var button = Button.createNew();
     //进入文件夹
     function showFolder(folderId) {
-        button.showFolder('${ctx!}/admin/emergency/toFolder?folderId=' + folderId+'&menuType=${folder}')
+        button.showFolder('${ctx!}/admin/train/twoFolder?folderId=' + folderId+'&menuType=${folder}&folder=${folder}')
     };
     //上传资料文件
     function uploadFile() {
