@@ -72,6 +72,7 @@ public class UserController extends BaseController {
 	public Page<User> list() {
 		SimpleSpecificationBuilder<User> builder = new SimpleSpecificationBuilder<>();
 		String searchText = request.getParameter("searchText");
+		logger.debug("||||||||||"+searchText);
 		if(!StringUtil.isBlank(searchText)){
             builder.addOr("userName", Operator.likeAll.name(), searchText);
             builder.addOr("userCode", Operator.likeAll.name(), searchText);
@@ -79,7 +80,7 @@ public class UserController extends BaseController {
             builder.addOr("stationArea", Operator.likeAll.name(), searchText);
             builder.addOr("line", Operator.likeAll.name(), searchText);
 		}
-        builder.addOr("ifUse", Operator.eq.name(), 0);
+        builder.add("ifUse", Operator.eq.name(), 0);
 		logger.info("查询人员首页");
         return userDao.findAll(builder.generateSpecification(), getPageRequest());
 	}
