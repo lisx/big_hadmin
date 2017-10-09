@@ -15,7 +15,12 @@
     //初始化表格
     $(document).ready(function () {
         var table = Table.createNew();
-        table.init("${ctx!}/admin/emergency/list?menuType=首页滚播图");
+        table.init("${ctx!}/admin/emergency/list?menuType=首页滚播图",
+                function (value, row, index) {
+                    var operateHtml = '<@shiro.hasPermission name="system:rollPlay:down"><button class="btn btn-primary btn-xs" type="button" onclick="down(\''+row.id+'\',\''+row.fileName+'\')"><i class="fa fa-download"></i>&nbsp;下载</button> &nbsp;</@shiro.hasPermission>';
+                    operateHtml = operateHtml + '<@shiro.hasPermission name="system:rollPlay:delete"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button></@shiro.hasPermission>';
+                    return operateHtml;
+                });
     });
     //初始化tree
     var tree = Tree.createNew("${ctx!}/admin/emergency/tree");
@@ -73,15 +78,17 @@
                 <div class="ibox-title">
                     <h5>首页滚播图</h5>
                 <p>
-                <@shiro.hasPermission name="system:resource:add">
+                <@shiro.hasPermission name="system:rollPlay:deleteBatch">
                     <button class="btn btn-success pull-right" onclick="removeAll()" type="button"><i
                             class="fa fa-plus"></i>&nbsp;批量删除
                     </button>
+                </@shiro.hasPermission>
+                <@shiro.hasPermission name="system:rollPlay:uploadFile">
                     <button class="btn btn-success pull-right uploadFile" type="button" onclick="uploadFile();"><i
                             class="fa fa-plus"></i>&nbsp;上传图片
                     </button>
-                    <h5 class="spanStation" style="margin-left: 20px;"></h5>
                 </@shiro.hasPermission>
+                    <h5 class="spanStation" style="margin-left: 20px;"></h5>
                     </p>
                     <div id="hiddenBox">
 

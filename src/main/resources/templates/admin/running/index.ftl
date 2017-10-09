@@ -81,14 +81,8 @@
                     title: "操作",
                     field: "empty",
                     formatter: function (value, row, index) {
-                        var operateHtml ='';
-                            if(row.ifFolder==1){
-                                operateHtml='<@shiro.hasPermission name="system:resource:add"><button class="btn btn-success btn-xs" type="button" onclick="showFolder(\''+row.fileName+'\')"><i class="fa fa-eye"></i>&nbsp;查看</button> &nbsp;</@shiro.hasPermission>';
-                            }else{
-                                operateHtml='<@shiro.hasPermission name="system:resource:add"><button class="btn btn-primary btn-xs" type="button" onclick="down(\''+row.fileId+'\',\''+row.fileName+'\')"><i class="fa fa-edit"></i>&nbsp;下载</button> &nbsp;</@shiro.hasPermission>';
-                            }
-
-                        operateHtml = operateHtml + '<@shiro.hasPermission name="system:resource:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button></@shiro.hasPermission>';
+                        var operateHtml ='<@shiro.hasPermission name="system:running:add"><button class="btn btn-primary btn-xs" type="button" onclick="down(\''+row.fileId+'\',\''+row.fileName+'\')"><i class="fa fa-edit"></i>&nbsp;下载</button> &nbsp;</@shiro.hasPermission>';
+                        operateHtml = operateHtml + '<@shiro.hasPermission name="system:running:delete"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button></@shiro.hasPermission>';
                         return operateHtml;
                     }
                 }],
@@ -145,13 +139,15 @@
                     <div class="ibox-title">
                         <h5>运行图管理</h5>
                         <p>
-                        <@shiro.hasPermission name="system:resource:add">
+                        <@shiro.hasPermission name="system:running:deleteBatch">
                             <button class="btn btn-success pull-right" onclick="removeAll()" type="button"><i
                                     class="fa fa-plus"></i>&nbsp;批量删除
                             </button>
-                            <button class="btn btn-success pull-right" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;新增运行图</button>
-                            <h5 class="spanStation" style="margin-left: 20px"></h5>
                         </@shiro.hasPermission>
+                        <@shiro.hasPermission name="system:running:add">
+                            <button class="btn btn-success pull-right" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;新增运行图</button>
+                        </@shiro.hasPermission>
+                            <h5 class="spanStation" style="margin-left: 20px"></h5>
                         </p>
                     </div>
                     <div class="ibox-content">

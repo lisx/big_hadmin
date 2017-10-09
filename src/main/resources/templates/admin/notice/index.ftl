@@ -70,8 +70,8 @@
                     title: "操作",
                     field: "empty",
                     formatter: function (value, row, index) {
-                        var operateHtml ='<@shiro.hasPermission name="system:resource:add"><button class="btn btn-success btn-xs" type="button" onclick="show(\''+row.id+'\')"><i class="fa fa-eye"></i>&nbsp;详情</button> &nbsp;</@shiro.hasPermission>'
-                         + '<@shiro.hasPermission name="system:resource:deleteBatch"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button></@shiro.hasPermission>';
+                        var operateHtml ='<@shiro.hasPermission name="system:notice:show"><button class="btn btn-success btn-xs" type="button" onclick="show(\''+row.id+'\')"><i class="fa fa-eye"></i>&nbsp;详情</button> &nbsp;</@shiro.hasPermission>'
+                         + '<@shiro.hasPermission name="system:notice:delete"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button></@shiro.hasPermission>';
                         return operateHtml;
                     }
                 }],
@@ -131,13 +131,15 @@
                     <div class="ibox-title">
                         <h5>通知管理</h5>
                         <p>
-                        <@shiro.hasPermission name="system:resource:add">
+                        <@shiro.hasPermission name="system:notice:deleteBatch">
                             <button class="btn btn-success pull-right" onclick="removeAll()" type="button"><i
                                     class="fa fa-plus"></i>&nbsp;批量删除
                             </button>
-                            <button class="btn btn-success pull-right" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;发布通知</button>
-                            <span class="spanStation"></span>
                         </@shiro.hasPermission>
+                        <@shiro.hasPermission name="system:notice:add">
+                            <button class="btn btn-success pull-right" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;发布通知</button>
+                        </@shiro.hasPermission>
+                            <span class="spanStation"></span>
                         </p>
                     </div>
                     <div class="ibox-content">
