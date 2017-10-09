@@ -12,10 +12,12 @@
                         <div class="tab-content">
                             <div class="panel-body">
                                 <p>
-                                <@shiro.hasPermission name="system:resource:add">
+                                <@shiro.hasPermission name="system:rules:deleteBatch">
                                     <button class="btn btn-success pull-right" onclick="removeAll()" type="button"><i
                                             class="fa fa-plus"></i>&nbsp;批量删除
                                     </button>
+                                </@shiro.hasPermission>
+                                <@shiro.hasPermission name="system:rules:uploadFile">
                                     <button class="btn btn-success pull-right" type="button" onclick="uploadFile();"><i
                                             class="fa fa-plus"></i>&nbsp;上传资料
                                     </button>

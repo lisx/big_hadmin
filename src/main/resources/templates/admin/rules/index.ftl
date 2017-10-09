@@ -15,7 +15,18 @@
     //初始化表格
     $(document).ready(function () {
         var table = Table.createNew();
-        table.init("${ctx!}/admin/emergency/list?menuType=规章制度");
+        table.init("${ctx!}/admin/emergency/list?menuType=规章制度",
+            function (value, row, index) {
+                var operateHtml ='';
+                if(row.ifFolder==1){
+                    operateHtml='<@shiro.hasPermission name="system:rules:show"><button class="btn btn-success btn-xs" type="button" onclick="showFolder(\''+row.id+'\',\''+row.fileName+'\')"><i class="fa fa-eye"></i>&nbsp;查看</button>&nbsp;</@shiro.hasPermission>';
+                }else{
+                    operateHtml='<@shiro.hasPermission name="system:rules:down"><button class="btn btn-primary btn-xs" type="button" onclick="down(\''+row.id+'\',\''+row.fileName+'\')"><i class="fa fa-download"></i>&nbsp;下载</button>&nbsp;</@shiro.hasPermission>';
+                }
+                operateHtml = operateHtml + '<@shiro.hasPermission name="system:rules:delete"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button>&nbsp;</@shiro.hasPermission>';
+                return operateHtml;
+            }
+        );
     });
     //初始化tree
     var tree = Tree.createNew("${ctx!}/admin/emergency/tree");
@@ -70,18 +81,22 @@
                 <div class="ibox-title">
                     <h5>规章制度</h5>
                 <p>
-                <@shiro.hasPermission name="system:resource:add">
+                <@shiro.hasPermission name="system:rules:deleteBatch">
                     <button class="btn btn-success pull-right" onclick="removeAll()" type="button"><i
                             class="fa fa-plus"></i>&nbsp;批量删除
                     </button>
+                </@shiro.hasPermission>
+                <@shiro.hasPermission name="system:rules:uploadFile">
                     <button class="btn btn-success pull-right uploadFile" type="button" onclick="uploadFile();"><i
                             class="fa fa-plus"></i>&nbsp;上传资料
                     </button>
+                </@shiro.hasPermission>
+                <@shiro.hasPermission name="system:rules:addFolder">
                     <button class="btn btn-success pull-right addFolder" type="button" onclick="addFolder();"><i
                             class="fa fa-plus"></i>&nbsp;新建文件夹
                     </button>
-                    <h5 class="spanStation" style="margin-left: 20px"></h5>
                 </@shiro.hasPermission>
+                    <h5 class="spanStation" style="margin-left: 20px"></h5>
                     </p>
                     <div id="hiddenBox">
 
