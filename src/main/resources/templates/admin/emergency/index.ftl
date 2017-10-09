@@ -19,11 +19,11 @@
              function (value, row, index) {
                  var operateHtml ='';
                  if(row.ifFolder==1){
-                     operateHtml='<@shiro.hasPermission name="system:emergency:show"><button class="btn btn-success btn-xs" type="button" onclick="showFolder(\''+row.id+'\',\''+row.fileName+'\')"><i class="fa fa-eye"></i>&nbsp;查看</button>';
+                     operateHtml='<@shiro.hasPermission name="system:emergency:show"><button class="btn btn-success btn-xs" type="button" onclick="showFolder(\''+row.id+'\',\''+row.fileName+'\')"><i class="fa fa-eye"></i>&nbsp;查看</button>&nbsp;</@shiro.hasPermission>';
                  }else{
-                     operateHtml='<@shiro.hasPermission name="system:emergency:down"><button class="btn btn-primary btn-xs" type="button" onclick="down(\''+row.id+'\',\''+row.fileName+'\')"><i class="fa fa-download"></i>&nbsp;下载</button>';
+                     operateHtml='<@shiro.hasPermission name="system:emergency:down"><button class="btn btn-primary btn-xs" type="button" onclick="down(\''+row.id+'\',\''+row.fileName+'\')"><i class="fa fa-download"></i>&nbsp;下载</button>&nbsp;</@shiro.hasPermission>';
                  }
-                 operateHtml = operateHtml + '<@shiro.hasPermission name="system:emergency:delete"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button>';
+                 operateHtml = operateHtml + '<@shiro.hasPermission name="system:emergency:delete"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button>&nbsp;</@shiro.hasPermission>';
                  return operateHtml;
              }
         );
