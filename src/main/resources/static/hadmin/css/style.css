@@ -2147,6 +2147,10 @@ table.dataTable thead .sorting:after {
     border-color: #23b7e5 !important;
 }
 
+.form-control[type="file"]{
+    border:0 !important;
+}
+
 .has-success .form-control {
     border-color: #23b7e5;
 }
