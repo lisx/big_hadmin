@@ -164,7 +164,7 @@ public class QuestionController extends BaseController {
             if(null!=id)
                 bank=questionBankDao.findOne(id);
             if(null==bank) {
-                bank = questionBankDao.findByName(bankName);
+                bank = questionBankDao.findByNameAndIfUse(bankName,0);
             }
             if (null == bank) {
                 bank = new QuestionBank();
