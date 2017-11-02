@@ -74,13 +74,9 @@
 			    },
 			    //数据列
 			    columns: [{
-			        title: "编号",
-			        field: "id",
-                    width:50
-			    },{
                     title: "类型",
                     field: "menuType",
-                    width:50
+                    width:100
                 },{
 			        title: "问题",
 			        field: "title",
