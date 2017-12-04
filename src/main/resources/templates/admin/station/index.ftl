@@ -105,7 +105,7 @@
         var nodeId = treeNode.id;
         console.log(nodeId)
         $.ajax({
-            url: '/admin/emergency/del/' + nodeId,
+            url: '/admin/station/del/' + nodeId,
             type: 'DELETE',
             data: {}
         });
@@ -113,7 +113,7 @@
     /*修改节点*/
     function onRename(e, treeId, treeNode) {
         console.log("treeId:" + treeId);
-        $.post("/admin/emergency/update/" + treeNode.id, treeNode, function (data) {
+        $.post("/admin/station/update/" + treeNode.id, treeNode, function (data) {
         });
     };
     function beforeRename(treeId, treeNode, newName) {
@@ -133,7 +133,7 @@
         console.log(parentNode);
         var zTree = getTree();
         var _nodeName = "新节点";
-        $.post('/admin/emergency/save', {pId: parentNode.id, name: _nodeName}, function (data) {
+        $.post('/admin/station/save', {pId: parentNode.id, name: _nodeName}, function (data) {
             console.log("data.nodeCode" + data.nodeCode)
             var newCode = {id: data.nodeCode, pId: parentNode.id, name: _nodeName};
             newCode = zTree.addNodes(parentNode, newCode);

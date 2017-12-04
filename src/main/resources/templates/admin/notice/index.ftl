@@ -99,7 +99,7 @@
             var url = "${ctx!}/admin/notice/uploadFile?menuType=通知管理";
             layer.open({
                 type: 2,
-                title: '上传文件',
+                title: '发布通知',
                 shadeClose: true,
                 shade: false,
                 area: ['97%', '94%'],
