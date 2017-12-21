@@ -210,6 +210,9 @@ public class QuestionController extends BaseController {
                                 List<String> row=sheet.get(i);
                                 if (row.size() == 3) {
                                     title = StringUtil.trim(row.get(0));
+                                    if(null==title||StringUtils.isBlank(title)){
+                                        continue;
+                                    }
                                     imgUrl = StringUtil.trim(row.get(1));
                                     A = StringUtil.trim(row.get(2));
                                     Question question = new Question();
@@ -254,6 +257,9 @@ public class QuestionController extends BaseController {
                                 List<String> row=sheet.get(j);
                                 if (row.size() == 3) {
                                     title = StringUtil.trim(row.get(0));
+                                    if(null==title||StringUtils.isBlank(title)){
+                                        continue;
+                                    }
                                     imgUrl = StringUtil.trim(row.get(1));
                                     A = StringUtil.trim(row.get(2));
                                     Question question = new Question();
@@ -309,6 +315,9 @@ public class QuestionController extends BaseController {
                                 List<String> row=sheet.get(j);
                                 if (row.size() > 3) {
                                     title = StringUtil.trim(row.get(0));
+                                    if(null==title||StringUtils.isBlank(title)){
+                                        continue;
+                                    }
                                     imgUrl = StringUtil.trim(row.get(1));
                                     A = StringUtil.trim(row.get(2));
                                     Question question = new Question();
@@ -371,6 +380,9 @@ public class QuestionController extends BaseController {
                                 List<String> row=sheet.get(i);
                                 if (row.size() == 6) {
                                     title = StringUtil.trim(row.get(0));
+                                    if(null==title||StringUtils.isBlank(title)){
+                                        continue;
+                                    }
                                     imgUrl = StringUtil.trim(row.get(1));
                                     A = StringUtil.trim(row.get(2));
                                     B = StringUtil.trim(row.get(3));
