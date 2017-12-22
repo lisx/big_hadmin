@@ -3,7 +3,7 @@
 <div class="ibox-content">
     <div class="row">
         <div class="col-sm-12">
-            <form role="form" id="uploadForm" action="/admin/edition/fileUploadEdition" method="POST" enctype="multipart/form-data">
+            <form autocomplete="off"  role="form" id="uploadForm" action="/admin/edition/fileUploadEdition" method="POST" enctype="multipart/form-data">
                 <div class="form-group ">
                     <label>说明：请上传格式为apk的版本安装包。</label>
                     <input type="file" class="form-control" name="file"  accept=".apk" />

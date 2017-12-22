@@ -21,7 +21,7 @@
                         <h5>资源编辑</h5>
                     </div>
                     <div class="ibox-content">
-                        <form class="form-horizontal m-t" id="frm" method="post" action="${ctx!}/admin/resource/edit">
+                        <form autocomplete="off"  class="form-horizontal m-t" id="frm" method="post" action="${ctx!}/admin/resource/edit">
                         	<input type="hidden" id="id" name="id" value="${resource.id}">
                             <div class="form-group">
                                <label class="col-sm-3 control-label">上级资源：</label>

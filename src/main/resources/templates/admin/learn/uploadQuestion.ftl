@@ -5,7 +5,7 @@
 <div class="ibox-content">
     <div class="row">
         <div class="col-sm-12">
-            <form role="form" id="uploadForm" action="/admin/question/uploadFilePost" method="POST" enctype="multipart/form-data">
+            <form autocomplete="off"  role="form" id="uploadForm" action="/admin/question/uploadFilePost" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label class="col-sm-2  control-label" >题库名称：</label>
                     <div  class="col-sm-4">

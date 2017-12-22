@@ -3,7 +3,7 @@
 <div class="ibox-content">
     <div class="row">
         <div class="col-sm-12">
-            <form role="form" id="uploadForm" action="/admin/user/fileUploadUser" method="POST" enctype="multipart/form-data">
+            <form autocomplete="off"  role="form" id="uploadForm" action="/admin/user/fileUploadUser" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label>第一步: 请下载模板，然后按照模板内的示例要求将需要导入的人员信息填写到模板内。</label>
                     <button class="btn btn-sm btn-primary m-t-n-xs" onclick="downUploadUser()" type="button"><strong>模版下载</strong>

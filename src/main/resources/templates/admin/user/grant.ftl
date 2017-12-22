@@ -2,7 +2,7 @@
 <#include "/admin/common/js.ftl">
 <#include "/admin/common/css.ftl">
                 <div class="ibox-content">
-                    <form class="form-horizontal" id="frm" method="post" action="${ctx!}/admin/user/save">
+                    <form autocomplete="off"  class="form-horizontal" id="frm" method="post" action="${ctx!}/admin/user/save">
                         <input type="hidden" id="id" name="id" value="${user.id}">
                         <div class="form-group">
                         <#list roles as role>

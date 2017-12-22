@@ -5,7 +5,7 @@
 <!-- layerDate plugin javascript -->
 <script src="${ctx!}/hadmin/js/plugins/layer/laydate/laydate.js"></script>
 <div class="ibox-content">
-    <form class="form-horizontal m-t" id="frm" method="post" action="${ctx!}/admin/running/uploadFilePost" enctype="multipart/form-data">
+    <form autocomplete="off"  class="form-horizontal m-t" id="frm" method="post" action="${ctx!}/admin/running/uploadFilePost" enctype="multipart/form-data">
         <div class="form-group">
             <label class="col-sm-3 control-label">运行图名称：</label>
             <div class="col-sm-8">

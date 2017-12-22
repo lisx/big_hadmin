@@ -6,7 +6,7 @@
                     <div class="ibox-title">
                     </div>
                     <div class="ibox-content">
-                        <form class="form-horizontal m-t" id="frm" method="post" action="${ctx!}/admin/role/edit">
+                        <form autocomplete="off"  class="form-horizontal m-t" id="frm" method="post" action="${ctx!}/admin/role/edit">
                         	<input type="hidden" id="id" name="id" value="${role.id}">
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">权限key：</label>

@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-sm-12">
                         <div class="ibox-content">
-                            <form id="frm" method="post" action="${ctx!}/admin/exam/save">
+                            <form autocomplete="off"  id="frm" method="post" action="${ctx!}/admin/exam/save">
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">选择题库：</label>
                                     <div class="col-sm-4">

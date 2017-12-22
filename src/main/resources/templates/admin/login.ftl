@@ -25,7 +25,7 @@
 	                </div>
                 </#if>
 
-                <form method="post" action="${ctx!}/admin/login" id="frm" style="margin-left: 80px;">
+                <form autocomplete="off"  method="post" action="${ctx!}/admin/login" id="frm" style="margin-left: 80px;">
                     <h4 class="no-margins">登录：</h4>
                     <input type="text" class="form-control uname" name="username" id="username" placeholder="用户名" />
                     <input type="password" class="form-control pword m-b" name="password" id="password"  placeholder="密码" />

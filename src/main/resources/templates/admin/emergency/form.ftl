@@ -2,7 +2,7 @@
 <#include "/admin/common/js.ftl">
 <#include "/admin/common/css.ftl">
                     <div class="ibox-content">
-                        <form class="form-horizontal m-t" id="frm" method="post" action="${ctx!}/admin/emergency/folder?station=${station}">
+                        <form autocomplete="off"  class="form-horizontal m-t" id="frm" method="post" action="${ctx!}/admin/emergency/folder?station=${station}">
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">文件夹名：</label>
                                 <div class="col-sm-8">

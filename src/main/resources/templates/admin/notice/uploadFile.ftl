@@ -5,7 +5,7 @@
 <script type='text/javascript' src='${ctx!}/hadmin/js/plugins/treeselect/jquery.tree-multiselect.js'></script>
 <link rel='stylesheet' type='text/css' href='${ctx!}/hadmin/js/plugins/treeselect/jquery.tree-multiselect.css' />
 <div class="ibox-content">
-    <form class="form-horizontal m-t" id="frm" method="post" action="${ctx!}/admin/notice/uploadFilePost" enctype="multipart/form-data">
+    <form autocomplete="off"  class="form-horizontal m-t" id="frm" method="post" action="${ctx!}/admin/notice/uploadFilePost" enctype="multipart/form-data">
         <div class="form-group">
             <label class="col-sm-3 control-label">通知标题：</label>
             <div class="col-sm-8">
