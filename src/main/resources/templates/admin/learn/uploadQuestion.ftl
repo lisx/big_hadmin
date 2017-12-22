@@ -1,6 +1,7 @@
 <!-- 全局js -->
 <#include "/admin/common/js.ftl">
 <#include "/admin/common/css.ftl">
+<#include "/admin/common/multiselect.ftl">
 <#import "/admin/common/select.ftl" as my />
 <div class="ibox-content">
     <div class="row">
@@ -20,7 +21,7 @@
                 <div class="form-group">
                     <label class="col-sm-2  control-label">站区：</label>
                     <div class="col-sm-4">
-                    <@my.select id="area" class="form-control"  datas=areas defaultValue="全部"/>
+                    <@my.select id="area" class="form-control" multiple="multiple" datas=areas />
                     </div>
                     <label class="col-sm-2 control-label">站点：</label>
                     <div class="col-sm-4">
@@ -75,6 +76,12 @@
 
 <script>
     $(document).ready(function () {
+        $('#area').multiselect({
+            maxHeight:200,
+            includeSelectAllOption :true,
+            nonSelectedText:'全部',
+            selectAllText:'全选'
+        });
         $("#uploadForm").validate({
             rules: {
                 bankName: {
@@ -121,7 +128,7 @@
 //    }
     $("#area").change(function(){
         var area=$("#area").val();
-        area=area.replace("#","%23");
+//        area=area.replace("#","%23");
         console.log("||||"+area);
         $.ajax({
             url: '/admin/station/getStation?area='+area,

@@ -1,7 +1,9 @@
 <#--通用型的select语句-->
-<#macro select id class datas  style value="" defaultValue="" key="" text="">
-<select id="${id}" name="${id}" style="${style}" class="${class}">
-    <option value="">${defaultValue}</option>
+<#macro select id class datas multiple style value="" defaultValue="" key="" text="">
+<select id="${id}" name="${id}" multiple="${multiple}" style="${style}" class="${class}">
+    <#if defaultValue>
+        <option value="">${defaultValue}</option>
+    </#if>
 <#--判断对象是否为map-->
     <#if datas?is_hash_ex>
     <#--循环map的key值-->
