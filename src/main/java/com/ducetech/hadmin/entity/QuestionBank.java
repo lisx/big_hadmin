@@ -27,8 +27,9 @@ public class QuestionBank  extends BaseEntity {
     private String name;
     @OneToMany
     private List<Question> questionList;
-    @ManyToOne
-    private Station station;
+    @ManyToMany(cascade = { CascadeType.REFRESH }, fetch = FetchType.LAZY)
+    @JoinTable(name = "big_bank_area", joinColumns = { @JoinColumn(name = "bank_id") }, inverseJoinColumns = { @JoinColumn(name = "area_id") })
+    private java.util.Set<Station> stations;
 
     private String nodeCode;
     private int ifUse;

@@ -153,7 +153,7 @@ public class QuestionController extends BaseController {
     @ResponseBody
     public JsonResult uploadFilePost(@RequestParam("radioFile") MultipartFile radioFile,@RequestParam("multipleFile") MultipartFile multipleFile,@RequestParam("opinionFile") MultipartFile opinionFile,@RequestParam("sortFile") MultipartFile sortFile, String bankName, String area, String station,Integer id) {
         User user = getUser();
-        Station s;
+        Station s = null;
 
         Set<String> sets=new HashSet();
         if (radioFile.isEmpty()&&multipleFile.isEmpty()&&opinionFile.isEmpty()&&sortFile.isEmpty()) {
@@ -171,31 +171,46 @@ public class QuestionController extends BaseController {
                 bank.setName(bankName);
                 bank.setCreateId(user.getId());
                 bank.setCreateTime(new Date());
-                if (null != area && !area.equals("全部")) {
-                    s = stationDao.findByNodeName(area);
-                    if(null!=s) {
-                        bank.setStation(s);
-                        bank.setNodeCode(s.getNodeCode());
-                    }else{
-                        s = stationDao.findByNodeName(BigConstant.ADMIN);
-                        bank.setStation(s);
-                        bank.setNodeCode(s.getNodeCode());
-                    }
-                } else {
-                    s = stationDao.findByNodeName(user.getStationArea());
-                    if (null != s) {
-                        bank.setStation(s);
-                        bank.setNodeCode(s.getNodeCode());
-                    }
-                }
+                Set<Station> stations = new HashSet<>();
+                StringBuffer sb=new StringBuffer();
                 if (null != station && !station.equals("全部")) {
                     s = stationDao.findByNodeName(station);
-                    bank.setStation(s);
-                    bank.setNodeCode(s.getNodeCode());
+                    stations.add(s);
+                    sb.append(s.getNodeCode());
                 }
                 if(StringUtil.isBlank(bank.getNodeCode())){
                     bank.setNodeCode(BigConstant.ADMINCODE);
                 }
+                if (null != area && !area.equals("全部")) {
+                    String [] areas=area.split(",");
+
+                    for(int i=0;i<areas.length;i++) {
+                        if(!StringUtils.isBlank(areas[i]))
+                        s = stationDao.findByNodeName(areas[i]);
+                        if (null != s) {
+                            stations.add(s);
+                            sb.append(s.getNodeCode());
+
+                        } else {
+                            s = stationDao.findByNodeName(BigConstant.ADMIN);
+                            stations.add(s);
+                            sb.append(s.getNodeCode());
+                        }
+                        sb.append(",");
+                    }
+                    bank.setStations(stations);
+                    bank.setNodeCode(sb.toString());
+
+                } else {
+                    s = stationDao.findByNodeName(user.getStationArea());
+                    if (null != s) {
+                        stations.add(s);
+                        sb.append(s.getNodeCode());
+                    }
+                    bank.setStations(stations);
+                    bank.setNodeCode(sb.toString());
+                }
+
                 questionBankDao.save(bank);
             }
             if (!opinionFile.isEmpty()) {//判断
