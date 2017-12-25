@@ -235,7 +235,7 @@ public class EmergencyController extends BaseController {
     @RequestMapping(value = "/uploadFileCheck", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult uploadFileCheck(String md5,Integer fileSize,String fileType,String fileName,String nodeCode,Integer folderId,String menuType){
-//        logger.debug("md5:{},fileSize:{},fileType:{},nodeCode{},param{}",md5,fileSize,fileType,nodeCode,menuType);
+        logger.debug("md5:{},fileSize:{},fileType:{},nodeCode{},param{}",md5,fileSize,fileType,nodeCode,menuType);
         String fileUrl=null;
         List<BigFile> files=fileDao.findByMd5(md5);
         if(null!=files&&files.size()>0){
@@ -281,7 +281,7 @@ public class EmergencyController extends BaseController {
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, Integer folderId,String nodeCode,String md5,String upStatus){
-//        logger.info("进入上传文件{}"+upStatus);
+        logger.info("进入上传文件{}"+upStatus);
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
         MultipartFile file;

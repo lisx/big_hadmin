@@ -2,7 +2,7 @@
 <#include "/admin/common/js.ftl">
 <#include "/admin/common/css.ftl">
 <#include "/admin/common/webuploader.ftl">
-<script src="${ctx!}/hadmin/js/demo/webuploader-learn-demo.js"></script>
+<script src="${ctx!}/hadmin/js/demo/uploader-demo.js"></script>
 <div class="ibox-content">
     <div class="page-container">
         <p>您可以尝试文件拖拽，使用QQ截屏工具，然后激活窗口后粘贴，或者点击添加图片按钮.</p>

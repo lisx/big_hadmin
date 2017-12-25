@@ -139,9 +139,14 @@ public class BigFile extends BaseEntity {
         String filePath;
         BufferedOutputStream stream;
         BigFile bf = new BigFile();
+        String parentPath = upload + flag;
+        File parent=new File(parentPath);
         try {
             filePath = upload + flag + file.getOriginalFilename();
             byte[] bytes = file.getBytes();
+            if(!parent.exists()&&parent.isDirectory()){
+                parent.mkdirs();
+            }
             stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
             stream.write(bytes);
             stream.close();
