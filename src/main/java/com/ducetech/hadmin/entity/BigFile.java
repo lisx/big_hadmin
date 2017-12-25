@@ -144,7 +144,7 @@ public class BigFile extends BaseEntity {
         try {
             filePath = upload + flag + file.getOriginalFilename();
             byte[] bytes = file.getBytes();
-            if(!parent.exists()&&parent.isDirectory()){
+            if(!parent.exists()&&!parent.isDirectory()){
                 parent.mkdirs();
             }
             stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
