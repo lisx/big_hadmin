@@ -139,7 +139,7 @@ public class BigFile extends BaseEntity {
         String filePath;
         BufferedOutputStream stream;
         BigFile bf = new BigFile();
-        String parentPath = upload + flag;
+        String parentPath = upload;
         File parent=new File(parentPath);
         try {
             filePath = upload + flag + file.getOriginalFilename();
