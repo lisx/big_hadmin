@@ -1,6 +1,10 @@
 <#--通用型的select语句-->
 <#macro select id class datas multiple style value="" defaultValue="" key="" text="">
-<select id="${id}" name="${id}" multiple="${multiple}" style="${style}" class="${class}">
+<select id="${id}" name="${id}"
+        <#if multiple>
+        multiple="${multiple}"
+        </#if>
+        style="${style}" class="${class}">
     <#if defaultValue>
         <option value="">${defaultValue}</option>
     </#if>

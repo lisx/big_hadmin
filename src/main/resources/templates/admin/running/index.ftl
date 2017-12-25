@@ -144,6 +144,7 @@
                                     class="fa fa-plus"></i>&nbsp;批量删除
                             </button>
                         </@shiro.hasPermission>
+                            <button class="btn btn-success pull-right" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;新增运行图</button>
                         <@shiro.hasPermission name="system:running:add">
                             <button class="btn btn-success pull-right" type="button" onclick="uploadFile();"><i class="fa fa-plus"></i>&nbsp;新增运行图</button>
                         </@shiro.hasPermission>
