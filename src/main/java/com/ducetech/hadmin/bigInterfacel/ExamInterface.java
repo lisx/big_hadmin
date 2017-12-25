@@ -71,7 +71,7 @@ public class ExamInterface  extends BaseController {
             msg="未获取站点";
         }
         logger.debug("||||||{}||||{}",nodeCode,area);
-        banks=bankDao.findByStation(nodeCode,area);
+        banks=bankDao.findByStation(nodeCode,area+"%");
         for(int i=0;i<banks.size();i++) {
             exams = examDao.findByQuestionBankAndIfUse(banks.get(i),0);
             banks.get(i).setExams(exams);

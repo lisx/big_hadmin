@@ -20,7 +20,7 @@ public interface IQuestionBankDao extends IBaseDao<QuestionBank,Integer> {
     QuestionBank findByName(String name);
     QuestionBank findByNameAndIfUse(String name,Integer ifUse);
 
-    @Query(value="select o from QuestionBank o where (o.nodeCode like:station or o.nodeCode=:area or o.nodeCode='000') and o.ifUse=0")
+    @Query(value="select o from QuestionBank o where (o.nodeCode like:station or o.nodeCode like:area or o.nodeCode='000') and o.ifUse=0")
     List<QuestionBank> findByStation(@Param("station") String station,@Param("area") String area);
 
     @Query(value="SELECT COUNT(menuType) FROM Question WHERE questionBank=:bankId and menuType=:menuType")
