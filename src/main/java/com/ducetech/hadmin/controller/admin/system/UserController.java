@@ -63,16 +63,28 @@ public class UserController extends BaseController {
 	    return "admin/user/index";
 	}
 
+    @RequestMapping(value = { "/getUserArea" })
+    @ResponseBody
+	public String getUserArea(){
+	    return getUser().getStationArea();
+    }
     /**
      * 查询集合
      * @return Page<User>
      */
 	@RequestMapping(value = { "/list" })
 	@ResponseBody
-	public Page<User> list() {
+	public Page<User> list(String nodeCode) {
 		SimpleSpecificationBuilder<User> builder = new SimpleSpecificationBuilder<>();
 		String searchText = request.getParameter("searchText");
-		logger.debug("||||||||||"+searchText);
+		logger.debug(nodeCode+"||||||||||"+searchText);
+		if(!StringUtil.isBlank(nodeCode)) {
+            builder.addOr("stationArea", Operator.likeAll.name(), nodeCode);
+            builder.addOr("station", Operator.likeAll.name(), nodeCode);
+        }else{
+		    nodeCode=getUser().getStationArea();
+            builder.addOr("stationArea", Operator.likeAll.name(), nodeCode);
+        }
 		if(!StringUtil.isBlank(searchText)){
             builder.addOr("userName", Operator.likeAll.name(), searchText);
             builder.addOr("userCode", Operator.likeAll.name(), searchText);

@@ -1,6 +1,8 @@
 <!-- 全局js -->
 <#include "/admin/common/js.ftl">
 <#include "/admin/common/css.ftl">
+<#include "/admin/common/ztree.ftl">
+<script src="${ctx!}/hadmin/js/demo/tree-demo.js"></script>
 <style>
     .table tbody tr td{
         overflow: hidden;
@@ -26,17 +28,36 @@
                     </div>
                     <div class="ibox-content">
                         <div class="row row-lg">
-		                    <div class="col-sm-12">
-		                        <!-- Example Card View -->
-		                        <div class="example-wrap">
-		                            <div class="example table-responsive ">
-		                            	<table class="table table-bordered" id="table_list"></table>
-		                            </div>
-		                        </div>
-		                        <!-- End Example Card View -->
-		                    </div>
-	                    </div>
+                            <div class="col-sm-3">
+                                <div class='tree'>
+                                    <ul id="treeDemo" class="ztree"></ul>
+                                </div>
+                            </div>
+                            <div class="col-sm-9">
+                                <!-- Example Card View -->
+                                <div class="example-wrap">
+                                    <div class="example table-responsive ">
+                                        <table class="table table-bordered" id="table_list"
+                                               style="table-layout:fixed;word-wrap:break-word;"></table>
+                                    </div>
+                                </div>
+                                <!-- End Example Card View -->
+                            </div>
+                        </div>
                     </div>
+                    <#--<div class="ibox-content">-->
+                        <#--<div class="row row-lg">-->
+		                    <#--<div class="col-sm-12">-->
+		                        <#--<!-- Example Card View &ndash;&gt;-->
+		                        <#--<div class="example-wrap">-->
+		                            <#--<div class="example table-responsive ">-->
+		                            	<#--<table class="table table-bordered" id="table_list"></table>-->
+		                            <#--</div>-->
+		                        <#--</div>-->
+		                        <#--<!-- End Example Card View &ndash;&gt;-->
+		                    <#--</div>-->
+	                    <#--</div>-->
+                    <#--</div>-->
                 </div>
             </div>
         </div>
@@ -44,6 +65,20 @@
 
     <!-- Page-Level Scripts -->
     <script>
+        //初始化tree
+        var tree = Tree.createNew("${ctx!}/admin/emergency/tree");
+        tree.init();
+        function onClick(e, treeId, treeNode) {
+            //初始化表格,动态从服务器加载数据
+            var opt = {
+                url: "${ctx!}/admin/user/list?menuType=人员信息",
+                silent: true,
+                query: {
+                    nodeCode: treeNode.name
+                }
+            };
+            $("#table_list").bootstrapTable('refresh', opt);
+        }
         $(document).ready(function () {
         	//初始化表格,动态从服务器加载数据
 			$("#table_list").bootstrapTable({
