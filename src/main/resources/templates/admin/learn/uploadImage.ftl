@@ -6,6 +6,13 @@
 <div class="ibox-content">
     <div class="page-container">
         <p>练习考试批量导入附件文字：请将图片以创建题库时，下载的题型模板中“题干图片编号”一栏填入的字符，来命名将要上传的题干图片文件。</p>
+        <div class="col-md-12">
+            <div class="form-group">
+                <input type="hidden" id="folderId" name="folderId" value="${folderId}">
+                <input type="hidden" id="menuType" name="menuType" value="${menuType}">
+                <input type="hidden" id="nodeCode" name="nodeCode" value="${nodeCode}">
+            </div>
+        </div>
         <div id="uploader" class="wu-example">
             <div class="queueList">
                 <div id="dndArea" class="placeholder">

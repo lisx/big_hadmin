@@ -446,7 +446,7 @@
                 shadeClose: true,
                 shade: false,
                 area: ['97%', '94%'],
-                content: '${ctx!}/admin/question/uploadImage',
+                content: '${ctx!}/admin/question/uploadImage?menuType=练习考试',
                 end: function(index){
                     $('#table_bank_list').bootstrapTable("refresh");
                     $(".tab2").click();

@@ -280,7 +280,7 @@ public class EmergencyController extends BaseController {
      */
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, Integer folderId,String nodeCode,String md5,String upStatus){
+    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, Integer folderId,String nodeCode,String md5,String upStatus,String menuType){
         logger.info("进入上传文件{}"+upStatus);
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
@@ -299,11 +299,11 @@ public class EmergencyController extends BaseController {
 //                            logger.info("不分片的情况");
                             //不分片的情况
                             if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pptx)||suffix.equals(BigConstant.pdf)) {
-                                bf=BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file,BigConstant.office,BigConstant.Station,flag,fileDao,stationDao);
+                                bf=BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file,BigConstant.office,menuType,flag,fileDao,stationDao);
                             }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
-                                bf=BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file,BigConstant.image,BigConstant.Station,flag,fileDao,stationDao);
+                                bf=BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file,BigConstant.image,menuType,flag,fileDao,stationDao);
                             }else {
-                                bf=BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file, BigConstant.video, BigConstant.Station, flag, fileDao, stationDao);
+                                bf=BigFile.saveFile(md5,properties.getUpload(),folderId, nodeCode, user, file, BigConstant.video, menuType, flag, fileDao, stationDao);
                             }
                             //stringRedisTemplate.opsForValue().set("fileMd5"+md5,bf.getFileUrl());
                         }else{
@@ -348,11 +348,11 @@ public class EmergencyController extends BaseController {
                                 // 删除临时目录中的分片文件
                                 FileUtils.deleteDirectory(parentFileDir);
                                 if(suffix.equals(BigConstant.docx)||suffix.equals(BigConstant.doc)||suffix.equals(BigConstant.xlsx)||suffix.equals(BigConstant.xls)||suffix.equals(BigConstant.ppt)||suffix.equals(BigConstant.pptx)||suffix.equals(BigConstant.pdf)) {
-                                    bf=BigFile.saveFile(md5,properties.getUpload(),size,folderId, nodeCode, user, file,BigConstant.office,BigConstant.Station,flag,fileDao,stationDao);
+                                    bf=BigFile.saveFile(md5,properties.getUpload(),size,folderId, nodeCode, user, file,BigConstant.office,menuType,flag,fileDao,stationDao);
                                 }else if(suffix.equals(BigConstant.png)||suffix.equals(BigConstant.jpeg)||suffix.equals(BigConstant.jpg)){
-                                    bf=BigFile.saveFile(md5,properties.getUpload(),size,folderId, nodeCode, user, file,BigConstant.image,BigConstant.Station,flag,fileDao,stationDao);
+                                    bf=BigFile.saveFile(md5,properties.getUpload(),size,folderId, nodeCode, user, file,BigConstant.image,menuType,flag,fileDao,stationDao);
                                 }else {
-                                    bf=BigFile.saveFile(md5,properties.getUpload(),size,folderId, nodeCode, user, file, BigConstant.video, BigConstant.Station, flag, fileDao, stationDao);
+                                    bf=BigFile.saveFile(md5,properties.getUpload(),size,folderId, nodeCode, user, file, BigConstant.video, menuType, flag, fileDao, stationDao);
                                 }
                                 //stringRedisTemplate.opsForValue().set("fileMd5"+md5,bf.getFileUrl());
                             } else {

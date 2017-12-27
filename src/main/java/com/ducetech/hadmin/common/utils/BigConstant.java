@@ -47,5 +47,4 @@ public class BigConstant {
     public static final String trainFolder2="文档资料";
     public static final String trainFolder3="信号平面图";
     public static final String trainFolder4="案例库";
-
 }

@@ -464,9 +464,12 @@ public class QuestionController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/uploadImage", method = RequestMethod.GET)
-    public String uploadImage(Model model) {
+    public String uploadImage(Model model,String menuType) {
         List<String> areas = stationDao.findLines(6);
         model.addAttribute("areas", areas);
+        if(!StringUtil.isBlank(menuType)) {
+            model.addAttribute("menuType", menuType.replace("undefined", ""));
+        }
         return "admin/learn/uploadImage";
     }
 
