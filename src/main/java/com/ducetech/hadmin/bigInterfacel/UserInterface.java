@@ -25,7 +25,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/interface/user")
 public class UserInterface extends BaseController {
-    private static Logger logger = LoggerFactory.getLogger(UserInterface.class);
+//    private static Logger logger = LoggerFactory.getLogger(UserInterface.class);
 
     int state=0;
     String msg;
@@ -40,7 +40,7 @@ public class UserInterface extends BaseController {
             @ApiImplicitParam(name="code",value="用户工号",dataType="string", paramType = "query"),
             @ApiImplicitParam(name="password",value="用户密码",dataType="string", paramType = "query")})
     public JSONObject login(String code,String password){
-        logger.info("进入登录接口==code:{}|password:{}",code,password);
+//        logger.info("进入登录接口==code:{}|password:{}",code,password);
         User user=userDao.findByUserCode(code);
         obj=new JSONObject();
         if(null!=user){
@@ -66,7 +66,7 @@ public class UserInterface extends BaseController {
     @RequestMapping(value={"/list"}, method=RequestMethod.GET)
     @ApiImplicitParam(name="station",value="线路，站点，站区",dataType="string", paramType = "query")
     public JSONObject getUserList(String station) {
-        logger.info("进入获取用户列表接口==station:{}"+station);
+//        logger.info("进入获取用户列表接口==station:{}"+station);
         obj=new JSONObject();
         int state=1;
         String msg;
@@ -94,7 +94,7 @@ public class UserInterface extends BaseController {
     @ApiImplicitParam(name = "id", value = "用户ID",  dataType = "Integer", paramType = "query")
     @RequestMapping(value="/detail", method=RequestMethod.GET)
     public JSONObject getUser(Integer id) {
-        logger.info("进入获取用户详情接口=={}"+id);
+//        logger.info("进入获取用户详情接口=={}"+id);
         obj=new JSONObject();
         User user=userDao.findOne(id);
         user.getImage(properties.getHttp());
