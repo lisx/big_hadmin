@@ -265,6 +265,9 @@
                     title: "试卷名称",
                     field: "examName",
                 },{
+                    title: "所选题库",
+                    field: "bankName",
+                },{
                     title: "单选题",
                     field: "singleNum",
                 },{

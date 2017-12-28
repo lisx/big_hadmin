@@ -56,7 +56,7 @@ public class ExamInterface  extends BaseController {
     public JSONObject findQuestionBankAll(String station){
         logger.info("获取试卷题库");
         User user=null;
-        List<QuestionBank> banks=null;
+        List<QuestionBank> banks=new ArrayList<>();
         List<Exam> exams=null;
         Station sub=stationDao.findByNodeName(station);
         String nodeCode="%000%";
@@ -66,12 +66,19 @@ public class ExamInterface  extends BaseController {
             msg="查询成功";
             nodeCode="%"+sub.getNodeCode()+"%";
             area=sub.getNodeCode().substring(0,sub.getNodeCode().length()-3);
+            area="%"+area+"%";
         }else{
             state=0;
             msg="未获取站点";
         }
         logger.debug("||||||{}||||{}",nodeCode,area);
-        banks=bankDao.findByStation(nodeCode,area+"%");
+        //banks=bankDao.findByStation(nodeCode,area+"%");
+        exams=examDao.findByStationAndIfUse(nodeCode,area);
+        for(int i=0;i<exams.size();i++){
+            QuestionBank bank=bankDao.findOne(exams.get(i).getBankId());
+            banks.add(bank);
+        }
+        exams=new ArrayList<>();
         for(int i=0;i<banks.size();i++) {
             exams = examDao.findByQuestionBankAndIfUse(banks.get(i),0);
             banks.get(i).setExams(exams);

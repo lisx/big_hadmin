@@ -21,6 +21,9 @@ public interface IExamDao extends IBaseDao<Exam,Integer> {
     @Query(value = "select o from Exam o where o.nodeCode like:nodeCode or o.nodeCode='000'")
     List<Exam> findByStation(@Param("nodeCode") String nodeCode);
 
+    @Query(value = "select o from Exam o where (o.nodeCode like:nodeCode or o.nodeCode like:area  or o.nodeCode='000') and o.ifUse=0")
+    List<Exam> findByStationAndIfUse(@Param("nodeCode") String nodeCode,@Param("area") String area);
+
     List<Exam> findByQuestionBankAndIfUse(QuestionBank bank,Integer ifUse);
 }
 
