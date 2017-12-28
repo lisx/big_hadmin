@@ -85,8 +85,8 @@ public class UserInterface extends BaseController {
             msg="查询成功";
         }
         obj=new JSONObject();
-        obj.put("state",state);
         obj.put("msg",msg);
+        obj.put("state",state);
         obj.put("data",r);
         return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
