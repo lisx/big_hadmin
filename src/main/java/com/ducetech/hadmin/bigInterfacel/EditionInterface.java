@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * 更新接口
+ * 更新APP大屏接口
  *
  * @author lisx
  * @create 2017-08-28 09:57

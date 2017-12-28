@@ -18,12 +18,8 @@ public interface IStationService extends IBaseService<Station, Integer> {
      */
     JSONArray tree(int ifUse);
 
-//    Station findByNodeCode(String nodeCode);
-
     Station findByNodeName(String nodeName);
 
-//    List<Station> findByStationArea(int nodeLength);
-//    List<Station> querySubNodesByCode(String parentCode,int nodeLength);
     /**
      * 修改或者新增资源
      * @param station

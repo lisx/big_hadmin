@@ -16,11 +16,6 @@ import java.util.List;
  **/
 @Repository
 public interface IStationDao extends IBaseDao<Station,Integer> {
-//    @Modifying
-//    @Query(nativeQuery = true,value = "DELETE FROM big_station WHERE parent_id = :id")
-//    void deleteGrant(@Param("id") Integer id);
-//
-//    Set<Station> findAllByIfUse(Integer ifUse);
 
     Station findByNodeCode(String nodeCode);
 

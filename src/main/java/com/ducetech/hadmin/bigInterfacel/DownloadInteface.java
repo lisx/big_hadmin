@@ -17,7 +17,7 @@ import java.io.*;
 import java.net.URLEncoder;
 
 /**
- * 下载文件
+ * 下载文件接口
  *
  * @author lisx
  * @create 2017-08-22 17:08
@@ -29,7 +29,12 @@ public class DownloadInteface extends BaseController {
 
     @Autowired
     IBigFileDao fileDao;
-    //文件下载相关代码
+
+    /**
+     * 文件下载相关代码
+     * @param id
+     * @throws IOException
+     */
     @ApiOperation(value="获取文件", notes="根据id获取文件")
     @RequestMapping(value="/download", method = RequestMethod.GET)
     @ApiImplicitParam(name="id",value="文件id",dataType="Integer", paramType = "query")
@@ -142,6 +147,11 @@ public class DownloadInteface extends BaseController {
         }
     }
 
+    /**
+     * 根据code获取文件
+     * @param code
+     * @throws IOException
+     */
     @ApiOperation(value="获取用户文件", notes="根据code获取文件")
     @RequestMapping(value="/userImg", method = RequestMethod.GET)
     @ApiImplicitParam(name="code",value="文件code",dataType="String", paramType = "query")
