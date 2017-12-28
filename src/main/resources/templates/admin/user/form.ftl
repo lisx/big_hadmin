@@ -127,13 +127,16 @@
                 contentType: false
             }).done(function(areas) {
                 console.log(areas);
+                $("#stationArea").empty();
                 for(var i in areas){
+
                     $("#stationArea").append("<option>"+areas[i]+"</option>");
                 };
                 $("#stationArea").val("${user.stationArea}");
                 $("#stationArea").change(function(){
                     var area=$("#stationArea").val();
                     console.log("||||"+area);
+                    $("#station").empty();
                     $.ajax({
                         url: '/admin/station/getStation?area='+area,
                         type: 'GET',
