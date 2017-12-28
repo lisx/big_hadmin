@@ -78,20 +78,19 @@ public class UserController extends BaseController {
 		SimpleSpecificationBuilder<User> builder = new SimpleSpecificationBuilder<>();
 		String searchText = request.getParameter("searchText");
 		logger.debug(nodeCode+"||||||||||"+searchText);
-		if(!StringUtil.isBlank(nodeCode)) {
-            builder.addOr("stationArea", Operator.likeAll.name(), nodeCode);
+
+		if(!StringUtil.isBlank(searchText)){
+            builder.addOr("userName", Operator.eq.name(), searchText);
+            builder.addOr("userCode", Operator.eq.name(), searchText);
+            builder.addOr("line", Operator.eq.name(), searchText);
+		}
+        if(!StringUtil.isBlank(nodeCode)) {
+            builder.add("stationArea", Operator.likeAll.name(), nodeCode);
             builder.addOr("station", Operator.likeAll.name(), nodeCode);
         }else{
-		    nodeCode=getUser().getStationArea();
-            builder.addOr("stationArea", Operator.likeAll.name(), nodeCode);
+            nodeCode=getUser().getStationArea();
+            builder.add("stationArea", Operator.likeAll.name(), nodeCode);
         }
-		if(!StringUtil.isBlank(searchText)){
-            builder.addOr("userName", Operator.likeAll.name(), searchText);
-            builder.addOr("userCode", Operator.likeAll.name(), searchText);
-            builder.addOr("station", Operator.likeAll.name(), searchText);
-            builder.addOr("stationArea", Operator.likeAll.name(), searchText);
-            builder.addOr("line", Operator.likeAll.name(), searchText);
-		}
         builder.add("ifUse", Operator.eq.name(), 0);
 		logger.info("查询人员首页");
         return userDao.findAll(builder.generateSpecification(), getPageRequest());
