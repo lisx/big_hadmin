@@ -3,10 +3,15 @@
 <#include "/admin/common/js.ftl">
 <script src="${ctx!}/hadmin/js/demo/button-demo.js"></script>
 <style>
-    .table tbody tr td {
-        text-overflow: ellipsis;
-        white-space: pre-wrap;
+    .detail{
+        width:50px;
     }
+    .table tbody tr td{
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+    }
+    span{word-break:normal; width:auto; display:block; white-space:pre-wrap;word-wrap : break-word ;overflow: hidden ;}
 </style>
     <script type="text/javascript">
         $(document).ready(function () {
@@ -34,8 +39,8 @@
                 //是否启用查询
                 search: true,
                 //是否启用详细信息视图
-                //detailView:true,
-                //detailFormatter:detailFormatter,
+                detailView:true,
+                detailFormatter:detailFormatter,
                 //表示服务端请求
                 sidePagination: "server",
                 //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
@@ -77,6 +82,27 @@
                 }],
             });
         });
+        function detailFormatter(index, row) {
+            var html = [];
+            html.push('<span><b>标题:</b> ' + row.title + '</span>'+'<br/><span><b>内容:</b> ' + row.content + '</span>'+'<br/><span><b>接收单位:</b> ' + row.stationName + '</span>');
+            return html.join('');
+        }
+        $("#table_list").on("click","tr td:nth-child(4)",function(){
+            var content=$(this).text();
+            layer.open({
+                type: 4,
+                close:false,
+                content: [content, $(this)] //数组第二项即吸附元素选择器或者DOM
+            });
+        })
+        $("#table_list").on("click","tr td:nth-child(5)",function(){
+            var content=$(this).text();
+            layer.open({
+                type: 4,
+                shade:[0.2,'#fff'],
+                content: [content, $(this)] //数组第二项即吸附元素选择器或者DOM
+            });
+        })
         //通知详情
         function show(id){
             layer.open({
@@ -148,7 +174,7 @@
                                 <!-- Example Card View -->
                                 <div class="example-wrap">
                                     <div class="example  table-responsive ">
-                                        <table class="table  table-bordered"  id="table_list"  style="table-layout:fixed;word-wrap:break-word;"></table>
+                                        <table class="table  table-bordered"  id="table_list"   style="table-layout:fixed;overflow:hidden;"></table>
                                     </div>
                                 </div>
                                 <!-- End Example Card View -->
