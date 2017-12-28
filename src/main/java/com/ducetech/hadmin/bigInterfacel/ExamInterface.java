@@ -327,21 +327,6 @@ public class ExamInterface  extends BaseController {
                 } else {
                     score = exam.getRankScore();
                 }
-//            String[] ids = properIds.split(",");
-//            if (ids.length > 0) {
-//                String answer="";
-//                for (String id : ids) {
-//                    Proper proper = properDao.findOne(Integer.parseInt(id));
-//                    if(null!=proper) {
-//                        propers.add(proper);
-//                        answer = answer + proper.getName() + "/";
-//                    }
-//                }
-//                answer=answer.substring(0, answer.length()-1);
-//                if(question.getProper().equals(answer)){
-//                    score=exam.getRankScore();
-//                }
-//            }
             } else {
                 String[] ids = properIds.split(",");
                 if (ids.length > 0) {

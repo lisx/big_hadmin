@@ -6,7 +6,6 @@ import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.entity.User;
 import com.ducetech.hadmin.service.IUserService;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;

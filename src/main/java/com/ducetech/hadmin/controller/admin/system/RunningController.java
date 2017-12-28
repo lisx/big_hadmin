@@ -39,7 +39,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin/running")
 public class RunningController extends BaseController {
-    private static Logger logger = LoggerFactory.getLogger(RunningController.class);
+//    private static Logger logger = LoggerFactory.getLogger(RunningController.class);
     @Autowired
     private IStationDao stationDao;
     @Autowired

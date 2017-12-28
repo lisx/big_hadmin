@@ -5,7 +5,6 @@ import com.ducetech.hadmin.common.utils.BigConstant;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IBigFileDao;
 import com.ducetech.hadmin.entity.BigFile;
-import com.ducetech.hadmin.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +13,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
-import static com.ducetech.hadmin.common.JsonResult.*;
 
 /**
- * 下载文件
+ * 版本更新
  *
  * @author lisx
  * @create 2017-08-22 17:08
@@ -33,15 +34,15 @@ public class EditionController extends BaseController {
     //文件下载相关代码
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String uploadUser() {
+        logger.info("进入上传APP界面");
         return "admin/edition/form";
     }
 
     @RequestMapping(value = "/fileUploadEdition", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult fileUploadEdition(MultipartHttpServletRequest request){
-//        logger.info("进入版本更新上传文件");
+        logger.info("进入版本更新上传文件");
         MultipartFile file =request.getFile("file");
-        User user=getUser();
         //创建临时文件夹
         String path= properties.getUpload()+file.getOriginalFilename();
         File dest = new File(path);
@@ -63,10 +64,10 @@ public class EditionController extends BaseController {
             bigFile.setFileSize(""+Math.round(file.getSize()/1024));
             bigFile.setMenuType(BigConstant.Edition);
             fileDao.save(bigFile);
-            return success("上传成功");
+            return JsonResult.success("上传成功");
         } catch (IOException e) {
             e.printStackTrace();
-            return failure("上传失败");
+            return JsonResult.failure("上传失败");
         }
     }
 }
