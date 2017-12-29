@@ -174,6 +174,8 @@ public class DownloadInteface extends BaseController {
             ServletOutputStream out = response.getOutputStream();
             //file.returnFile(path, outputStream);
             FileInputStream fis = null;
+            File filePath=new File(path);
+            if(filePath.exists())
             try {
                 fis = new FileInputStream(path);
                 byte[] buf = null;
