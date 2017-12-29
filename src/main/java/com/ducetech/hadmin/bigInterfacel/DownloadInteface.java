@@ -188,9 +188,9 @@ public class DownloadInteface extends BaseController {
                         out.write(buf, 0, bytesRead);
                     }
                     out.flush();
+                }else{
+                    System.out.println("找不文件");
                 }
-            }catch (FileNotFoundException e){
-                System.out.println("找不文件");
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
