@@ -176,7 +176,7 @@ public class DownloadInteface extends BaseController {
             try {
                 System.out.println("path"+path);
                 File filePath=new File(path);
-                if(filePath.exists()) {
+                if(filePath.exists()&&filePath.length()>0) {
                     fis = new FileInputStream(path);
                     byte[] buf = null;
                     if (fis.available() > 4 * 1024) {
