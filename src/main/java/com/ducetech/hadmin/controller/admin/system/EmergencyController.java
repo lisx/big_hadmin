@@ -124,7 +124,7 @@ public class EmergencyController extends BaseController {
      */
     @RequestMapping("/add")
     public String add(String nodeCode,String folderId, String menuType, Model map) {
-//        logger.info("进入应急预案添加文件夹");
+        logger.info("进入应急预案添加文件夹");
         map.addAttribute("nodeCode", nodeCode);
         map.addAttribute("menuType", menuType);
         map.addAttribute("folderId", folderId);
