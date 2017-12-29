@@ -155,7 +155,7 @@ public class DownloadInteface extends BaseController {
     @ApiOperation(value="获取用户文件", notes="根据code获取文件")
     @RequestMapping(value="/userImg", method = RequestMethod.GET)
     @ApiImplicitParam(name="code",value="文件code",dataType="String", paramType = "query")
-    public void download( String code) throws IOException {
+    public String download( String code) throws IOException {
         System.out.println("||code||"+code);
         String [] codes=code.split("=");
         BigFile file;
@@ -204,6 +204,6 @@ public class DownloadInteface extends BaseController {
         }else{
             System.out.println("|userCode|空|||");
         }
-
+        return null;
     }
 }
