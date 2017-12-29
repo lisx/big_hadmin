@@ -158,7 +158,7 @@ public class DownloadInteface extends BaseController {
     public void download( String code) throws IOException {
         System.out.println("||code||"+code);
         String [] codes=code.split("=");
-        BigFile file=null;
+        BigFile file;
         if(null!=codes&&codes.length>1) {
             System.out.println("|code|" + codes[1]);
             file = fileDao.findByFileName(codes[1] + "%");
@@ -169,38 +169,41 @@ public class DownloadInteface extends BaseController {
             response.setCharacterEncoding("utf-8");
             response.setContentType("application/force-download");// 设置强制下载不打开
             response.addHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(file.getFileName(), "UTF-8"));// 设置文件名
-            request.setCharacterEncoding("utf-8");
             String path = file.getFileUrl();
             ServletOutputStream out = response.getOutputStream();
-            //file.returnFile(path, outputStream);
             FileInputStream fis = null;
-            File filePath=new File(path);
-            if(filePath.exists())
+
             try {
-                fis = new FileInputStream(path);
-                byte[] buf = null;
-                if (fis.available() > 4 * 1024) {
-                    buf = new byte[4 * 1024]; // 4K buffer
-                } else {
-                    buf = new byte[fis.available()];
+                File filePath=new File(path);
+                if(filePath.exists()) {
+                    fis = new FileInputStream(path);
+                    byte[] buf = null;
+                    if (fis.available() > 4 * 1024) {
+                        buf = new byte[4 * 1024]; // 4K buffer
+                    } else {
+                        buf = new byte[fis.available()];
+                    }
+                    int bytesRead;
+                    while ((bytesRead = fis.read(buf)) != -1) {
+                        out.write(buf, 0, bytesRead);
+                    }
+                    out.flush();
                 }
-                int bytesRead;
-                while ((bytesRead = fis.read(buf)) != -1) {
-                    out.write(buf, 0, bytesRead);
-                }
-                out.flush();
             }catch (FileNotFoundException e){
                 System.out.println("找不文件");
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
-                if(out!=null)
+                if(out!=null) {
                     out.close();
-                if (fis != null)
+                }
+                if (fis != null) {
                     fis.close();
+                }
             }
         }else{
-            System.out.println("|||空|||");
+            System.out.println("|userCode|空|||");
         }
+
     }
 }
