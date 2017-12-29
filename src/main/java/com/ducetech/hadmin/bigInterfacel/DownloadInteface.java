@@ -44,7 +44,7 @@ public class DownloadInteface extends BaseController {
         BufferedInputStream bis = null;
         try {
             File file = new File(location);
-            if (file.exists()) {
+            if (file.exists()&&file.length()>0) {
                 long p = 0L;
                 long toLength = 0L;
                 long contentLength = 0L;
