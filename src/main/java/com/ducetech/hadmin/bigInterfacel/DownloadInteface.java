@@ -174,6 +174,7 @@ public class DownloadInteface extends BaseController {
             FileInputStream fis = null;
 
             try {
+                System.out.println("path"+path);
                 File filePath=new File(path);
                 if(filePath.exists()) {
                     fis = new FileInputStream(path);
@@ -202,7 +203,7 @@ public class DownloadInteface extends BaseController {
                 }
             }
         }else{
-            System.out.println("|userCode|空|||");
+            System.out.println("|数据库|空|||");
         }
         return null;
     }
