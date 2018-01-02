@@ -85,11 +85,11 @@ public class UserController extends BaseController {
             builder.addOr("line", Operator.eq.name(), searchText);
 		}
         if(!StringUtil.isBlank(nodeCode)) {
-            builder.add("stationArea", Operator.likeAll.name(), nodeCode);
-            builder.addOr("station", Operator.likeAll.name(), nodeCode);
+            builder.add("stationArea", Operator.eq.name(), nodeCode);
+            builder.addOr("station", Operator.eq.name(), nodeCode);
         }else{
             nodeCode=getUser().getStationArea();
-            builder.add("stationArea", Operator.likeAll.name(), nodeCode);
+            builder.add("stationArea", Operator.eq.name(), nodeCode);
         }
         builder.add("ifUse", Operator.eq.name(), 0);
 		logger.info("查询人员首页");

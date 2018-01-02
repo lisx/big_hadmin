@@ -182,6 +182,7 @@
         //初始化表格,动态从服务器加载数据
         $(".fileUploadBtton").attr("data-id", treeNode.id);
         $(".spanStation").html(treeNode.name);
+        console.log("nodeCode"+JSON.stringify(treeNode))
         var opt = {
             url: "${ctx!}/admin/emergency/list?menuType=车站信息",
             silent: true,
