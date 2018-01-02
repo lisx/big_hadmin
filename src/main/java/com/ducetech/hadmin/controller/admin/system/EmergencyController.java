@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.NumberFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -83,7 +84,7 @@ public class EmergencyController extends BaseController {
      */
     @RequestMapping(value = {"/list"})
     @ResponseBody
-    public Page<BigFile> list(Integer folderId, String nodeCode, String menuType) {
+    public Page<BigFile> list( @NumberFormat(style= NumberFormat.Style.NUMBER)Integer folderId, String nodeCode, String menuType) {
         logger.info("获取数据list:folderId{},menuType{},nodeCode{}",folderId,menuType,nodeCode);
         SimpleSpecificationBuilder<BigFile> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
@@ -159,7 +160,7 @@ public class EmergencyController extends BaseController {
      * @return
      */
     @RequestMapping("/toFolder")
-    public String toFolder(String folder, Integer folderId,String menuType, Model map) {
+    public String toFolder(String folder, @NumberFormat(style= NumberFormat.Style.NUMBER) Integer folderId, String menuType, Model map) {
         logger.info("进入文件夹folder{},folderId{},menuType{}", folder,folderId,menuType);
         map.addAttribute("folder", folder);
         map.addAttribute("folderId", folderId);
@@ -210,7 +211,7 @@ public class EmergencyController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/uploadFile", method = RequestMethod.GET)
-    public String uploadFile(Model map, Integer folderId, String nodeCode, String menuType) {
+    public String uploadFile(Model map, @NumberFormat(style= NumberFormat.Style.NUMBER) Integer folderId, String nodeCode, String menuType) {
         logger.debug("进入上传页面：folderId{},menuType{},nodeCode{}", folderId, menuType, nodeCode);
         map.addAttribute("folderId", folderId);
         if(!StringUtil.isBlank(menuType)) {
@@ -233,7 +234,7 @@ public class EmergencyController extends BaseController {
      */
     @RequestMapping(value = "/uploadFileCheck", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFileCheck(String md5,Integer fileSize,String fileType,String fileName,String nodeCode,Integer folderId,String menuType){
+    public JsonResult uploadFileCheck(String md5,Integer fileSize,String fileType,String fileName,String nodeCode, @NumberFormat(style= NumberFormat.Style.NUMBER)Integer folderId,String menuType){
         logger.debug("md5:{},fileSize:{},fileType:{},nodeCode{},param{}",md5,fileSize,fileType,nodeCode,menuType);
         String fileUrl=null;
         List<BigFile> files=fileDao.findByMd5(md5);
@@ -279,7 +280,7 @@ public class EmergencyController extends BaseController {
      */
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, Integer folderId,String nodeCode,String md5,String upStatus,String menuType){
+    public JsonResult uploadFilePost(MultipartHttpServletRequest request, Integer chunk, Integer chunks, Integer size, @NumberFormat(style= NumberFormat.Style.NUMBER) Integer folderId,String nodeCode,String md5,String upStatus,String menuType){
         logger.info("进入上传文件{}"+upStatus);
         List<MultipartFile> files =request.getFiles("file");
         User user=getUser();
