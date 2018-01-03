@@ -373,15 +373,16 @@ public class ExamInterface  extends BaseController {
         }
         if(null!=log&&null!=propers) {
             log.setSelectProper(propers);
+            log.setScore(score);
+            if(null!=log)
+                questionLogDao.save(log);
         }
         if(score!=0&&score>0) {
             msg="答对";
         }else{
             msg="答错";
         }
-        log.setScore(score);
-        if(null!=log)
-            questionLogDao.save(log);
+
         JSONObject o=new JSONObject();
         if(null!=examLog.getScore()) {
                 o.put("score",score);
