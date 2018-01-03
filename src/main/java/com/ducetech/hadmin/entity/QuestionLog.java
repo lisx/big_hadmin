@@ -26,6 +26,8 @@ public class QuestionLog extends BaseEntity {
     //问题
     @ManyToOne
     private Question question;
+    //分数
+    private Integer score;
     //已选答案
     @ManyToMany
     @JoinTable(name = "big_question_log_select_proper", joinColumns = { @JoinColumn(name = "log_id") }, inverseJoinColumns = { @JoinColumn(name = "proper_id") })

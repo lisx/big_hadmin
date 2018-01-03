@@ -322,21 +322,30 @@ public class ExamInterface  extends BaseController {
             log = questionLogDao.findByQuestionAndLog(question, examLog);
 
             if (question.getMenuType().equals("判断")) {
-
                 if (question.getProper().equals(properIds)) {
                     score = exam.getJudgeScore();
                 }
+                if(log.getSelectProper().size()>0&&log.getScore()>0){
+                    score -= exam.getJudgeScore();
+                }
+
             } else if (question.getMenuType().equals("单选")) {
                 Proper proper = properDao.findOne(Integer.parseInt(properIds));
                 propers.add(proper);
                 if (question.getProper().equals(proper.getName())) {
                     score = exam.getSingleScore();
                 }
+                if(log.getSelectProper().size()>0&&log.getScore()>0){
+                    score -= exam.getSingleScore();
+                }
             } else if (question.getMenuType().equals("排序")) {
                 if (properIds.equals("0")) {
 
                 } else {
                     score = exam.getRankScore();
+                }
+                if(log.getSelectProper().size()>0&&log.getScore()>0){
+                    score = -exam.getRankScore();
                 }
             } else {
                 String[] ids = properIds.split(",");
@@ -356,19 +365,23 @@ public class ExamInterface  extends BaseController {
                     if (answers.size() == 0) {
                         score = exam.getMultipleScore();
                     }
+                    if(log.getSelectProper().size()>0&&log.getScore()>0){
+                        score -= exam.getMultipleScore();
+                    }
                 }
             }
         }
         if(null!=log&&null!=propers) {
             log.setSelectProper(propers);
         }
-        if(null!=log)
-        questionLogDao.save(log);
-        if(score!=0) {
+        if(score!=0&&score>0) {
             msg="答对";
         }else{
             msg="答错";
         }
+        log.setScore(score);
+        if(null!=log)
+            questionLogDao.save(log);
         JSONObject o=new JSONObject();
         if(null!=examLog.getScore()) {
                 o.put("score",score);
