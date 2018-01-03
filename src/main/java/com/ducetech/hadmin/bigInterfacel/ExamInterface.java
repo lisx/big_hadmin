@@ -51,9 +51,12 @@ public class ExamInterface  extends BaseController {
     IStationDao stationDao;
 
     @ApiOperation(value="获取用户所属站区试卷和题库", notes="获取用户所属站区试卷和题库")
-    @ApiImplicitParam(name="station",value="站点",dataType="String", paramType = "query")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "station", value = "站点", dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "type", value = "类型0是考试1是练习", dataType = "String", paramType = "query")
+    })
     @RequestMapping(value="/findQuestionBankAll", method = RequestMethod.GET)
-    public JSONObject findQuestionBankAll(String station){
+    public JSONObject findQuestionBankAll(String station,String type){//type=0是考试1是练习
         logger.info("获取试卷题库");
         User user=null;
         List<QuestionBank> banks=new ArrayList<>();
@@ -72,16 +75,23 @@ public class ExamInterface  extends BaseController {
             msg="未获取站点";
         }
         logger.debug("||||||{}||||{}",nodeCode,area);
-        //banks=bankDao.findByStation(nodeCode,area+"%");
-        exams=examDao.findByStationAndIfUse(nodeCode,area);
-        for(int i=0;i<exams.size();i++){
-            QuestionBank bank=bankDao.findOne(exams.get(i).getBankId());
-            banks.add(bank);
-        }
-        exams=new ArrayList<>();
-        for(int i=0;i<banks.size();i++) {
-            exams = examDao.findByQuestionBankAndIfUse(banks.get(i),0);
-            banks.get(i).setExams(exams);
+        //考试
+        if(null!=type&&type.equals("0")){
+            exams=examDao.findByStationAndIfUse(nodeCode,area);
+            for(int i=0;i<exams.size();i++){
+                QuestionBank bank=bankDao.findOne(exams.get(i).getBankId());
+                banks.add(bank);
+            }
+            for (int i = 0; i < banks.size(); i++) {
+                exams = examDao.findByQuestionBankAndIfUse(banks.get(i), 0);
+                banks.get(i).setExams(exams);
+            }
+        }else {//练习
+            banks=bankDao.findByStation(nodeCode,area+"%");
+            for (int i = 0; i < banks.size(); i++) {
+                exams = examDao.findByQuestionBankAndIfUse(banks.get(i), 0);
+                banks.get(i).setExams(exams);
+            }
         }
         obj=new JSONObject();
         ValueFilter filter = new ValueFilter() {
@@ -312,6 +322,7 @@ public class ExamInterface  extends BaseController {
             log = questionLogDao.findByQuestionAndLog(question, examLog);
 
             if (question.getMenuType().equals("判断")) {
+
                 if (question.getProper().equals(properIds)) {
                     score = exam.getJudgeScore();
                 }
