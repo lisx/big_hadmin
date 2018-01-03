@@ -74,7 +74,7 @@ public class UserController extends BaseController {
      */
 	@RequestMapping(value = { "/list" })
 	@ResponseBody
-	public Page<User> list(String nodeCode) {
+	public Page<User> list(String nodeCode,Model model) {
 		SimpleSpecificationBuilder<User> builder = new SimpleSpecificationBuilder<>();
 		String searchText = request.getParameter("searchText");
 		logger.debug(nodeCode+"||||||||||"+searchText);
@@ -91,6 +91,7 @@ public class UserController extends BaseController {
             nodeCode=getUser().getStationArea();
             builder.add("stationArea", Operator.eq.name(), nodeCode);
         }
+        model.addAttribute("nodeCode",nodeCode);
         builder.add("ifUse", Operator.eq.name(), 0);
 		logger.info("查询人员首页");
         return userDao.findAll(builder.generateSpecification(), getPageRequest());

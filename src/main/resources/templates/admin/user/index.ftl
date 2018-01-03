@@ -36,6 +36,7 @@
                             <div class="col-sm-9">
                                 <!-- Example Card View -->
                                 <div class="example-wrap">
+                                    <input type="hidden" id="nodeCode" name="nodeCode"/>
                                     <div class="example table-responsive ">
                                         <table class="table table-bordered" id="table_list"
                                                style="table-layout:fixed;word-wrap:break-word;"></table>
@@ -70,6 +71,7 @@
         tree.init();
         function onClick(e, treeId, treeNode) {
             //初始化表格,动态从服务器加载数据
+            $("#nodeCode").val(treeNode.name);
             var opt = {
                 url: "${ctx!}/admin/user/list?menuType=人员信息",
                 silent: true,
@@ -81,7 +83,7 @@
         }
         $(document).ready(function () {
         	//初始化表格,动态从服务器加载数据
-			$("#table_list").bootstrapTable({
+			$("#table_list").bootstrapTable('destroy').bootstrapTable({
 			    //使用get请求到服务器获取数据
 			    method: "POST",
 			    //必须设置，不然request.getParameter获取不到请求参数
@@ -102,6 +104,7 @@
 			    pageNumber: 1,
 			    //记录数可选列表
 			    pageList: [5, 10, 15, 20, 25],
+
 			    //是否启用查询
 			    search: true,
 			    //是否启用详细信息视图
@@ -111,7 +114,12 @@
 			    sidePagination: "server",
 			    //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
 			    //设置为limit可以获取limit, offset, search, sort, order
-			    queryParamsType: "undefined",
+			    queryParamsType: "",
+                queryParams:function(params){
+			        params["nodeCode"]=$("#nodeCode").val();
+			        console.log(JSON.stringify(params));
+                    return params;
+                },
 			    //json数据解析
 			    responseHandler: function(res) {
 			        return {
