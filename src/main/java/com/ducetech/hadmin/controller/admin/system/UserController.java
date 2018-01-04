@@ -87,6 +87,7 @@ public class UserController extends BaseController {
         if(!StringUtil.isBlank(nodeCode)) {
             builder.add("stationArea", Operator.eq.name(), nodeCode);
             builder.addOr("station", Operator.eq.name(), nodeCode);
+            builder.addOr("line", Operator.eq.name(), nodeCode);
         }else{
             nodeCode=getUser().getStationArea();
             builder.add("stationArea", Operator.eq.name(), nodeCode);
@@ -263,13 +264,13 @@ public class UserController extends BaseController {
 	@ResponseBody
 	public JsonResult edit(User user,@RequestParam("photoFile") MultipartFile photoFile,@RequestParam("fwxxkFile") MultipartFile fwxxkFile,@RequestParam("zkysgzFile") MultipartFile zkysgzFile,@RequestParam("faszFile") MultipartFile faszFile){
 		try {
-		    if(user.getStationArea().equals("请选择")){
+		    if(null==user.getStationArea()||user.getStationArea().equals("请选择")){
 		        user.setStationArea("");
             }
-            if(user.getStation().equals("请选择")){
+            if(null==user.getStation()||user.getStation().equals("请选择")){
                 user.setStation("");
             }
-            if(null!=faszFile) {
+            if(!faszFile.isEmpty()) {
                 String fasz=user.getFaszUrl();
                 String path= properties.getUpload()+fasz+BigConstant.jpg;
                 if(StringUtil.isBlank(fasz)){
@@ -291,7 +292,7 @@ public class UserController extends BaseController {
                 file.setFileUrl(path);
                 fileDao.save(file);
             }
-            if(null!=zkysgzFile) {
+            if(!zkysgzFile.isEmpty()) {
                 String zkysgz=user.getZkysgzUrl();
                 String path= properties.getUpload()+zkysgz+BigConstant.jpg;
                 if(StringUtil.isBlank(zkysgz)){
@@ -313,7 +314,7 @@ public class UserController extends BaseController {
                 file.setFileUrl(path);
                 fileDao.save(file);
             }
-            if(null!=fwxxkFile) {
+            if(!fwxxkFile.isEmpty()) {
                 String fwxxk=user.getFwxxkUrl();
                 String path= properties.getUpload()+fwxxk+BigConstant.jpg;
                 if(StringUtil.isBlank(fwxxk)){
@@ -335,7 +336,7 @@ public class UserController extends BaseController {
                 file.setFileUrl(path);
                 fileDao.save(file);
             }
-            if(null!=photoFile) {
+            if(!photoFile.isEmpty()) {
                 String path= properties.getUpload()+user.getUserCode()+BigConstant.jpg;
                 File dest = new File(path);
                 if (!dest.getParentFile().exists()) {
@@ -361,7 +362,7 @@ public class UserController extends BaseController {
 			userService.saveOrUpdate(user);
             // 插入缓存
 		} catch (Exception e) {
-			return JsonResult.failure(e.getMessage());
+			return JsonResult.failure("数据异常");
 		}
 		return JsonResult.success();
 	}
