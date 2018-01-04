@@ -306,6 +306,7 @@ public class ExamInterface  extends BaseController {
             @ApiImplicitParam(name = "endTime", value = "交卷时间", dataType = "String", paramType = "query"),
     })
     public JSONObject setExamLog(Integer logId,Integer score,String endTime){
+        logger.info("设置考试记录:{}|score{}|endTime{}",logId,score,endTime);
         ExamLog examLog=examLogDao.findOne(logId);
         examLog.setScore(score);
         examLog.setEndTime(endTime);
@@ -313,6 +314,7 @@ public class ExamInterface  extends BaseController {
         obj=new JSONObject();
         obj.put("state",state);
         obj.put("msg","完成考试");
+        obj.put("data","完成考试");
         JSONObject jobj=JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
         logger.info(jobj.toJSONString());
         return jobj;
