@@ -6,7 +6,6 @@
     <title> - 表单验证 jQuery Validation</title>
     <meta name="keywords" content="">
     <meta name="description" content="">
-    <link rel="shortcut icon" href="favicon.ico">
     <link href="${ctx!}/hadmin/css/bootstrap.min.css?v=${version!}" rel="stylesheet">
     <link href="${ctx!}/hadmin/css/font-awesome.css?v=${version!}" rel="stylesheet">
     <link href="${ctx!}/hadmin/css/animate.css?v=${version!}" rel="stylesheet">
