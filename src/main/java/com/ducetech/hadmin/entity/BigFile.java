@@ -106,25 +106,27 @@ public class BigFile extends BaseEntity {
     public static void returnFile(String path, OutputStream out) throws FileNotFoundException, IOException {
         // A FileInputStream is for bytes
         FileInputStream fis = null;
-        try {
-            fis = new FileInputStream(path);
-            byte[] buf = null;
-            if(fis.available() > 4*1024){
-                buf = new byte[4*1024]; // 4K buffer
-            }else {
-                buf = new byte[fis.available()];
+        File f=new File(path);
+        if(f.exists()) {
+            try {
+                fis = new FileInputStream(f);
+                byte[] buf = null;
+                if (fis.available() > 4 * 1024) {
+                    buf = new byte[4 * 1024]; // 4K buffer
+                } else {
+                    buf = new byte[fis.available()];
+                }
+                int bytesRead;
+                while ((bytesRead = fis.read(buf)) != -1) {
+                    out.write(buf, 0, bytesRead);
+                }
+                out.flush();
+            } finally {
+                if (out != null)
+                    out.close();
+                if (fis != null)
+                    fis.close();
             }
-            int bytesRead;
-            while ((bytesRead = fis.read(buf)) != -1) {
-                out.write(buf, 0, bytesRead);
-            }
-            out.flush();
-
-        } finally {
-            if(out!=null)
-                out.close();
-            if (fis != null)
-                fis.close();
         }
     }
     public void initData(Integer uId,String nodeCode,String menu){
