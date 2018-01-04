@@ -232,7 +232,6 @@ public class UserController extends BaseController {
                 fileDao.save(file);
             }
             user.setPhotoUrl(user.getUserCode());
-            user.setPassword(MD5Utils.md5(user.getPassword()));
             user.setIfUse(0);
             user.setCreateTime(new Date());
             user.setCreateId(getUser().getId());

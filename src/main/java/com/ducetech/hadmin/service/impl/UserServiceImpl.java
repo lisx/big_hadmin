@@ -48,7 +48,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Integer> implements I
 		    User dbUser=find(user.getId());
 		    dbUser.setStationArea(user.getStationArea());
 		    dbUser.setStation(user.getStation());
-		    dbUser.setPassword(user.getPassword());
+		    dbUser.setPassword(null==user.getPassword()?"123456":user.getPassword());
 		    dbUser.setUserCode(user.getUserCode());
 		    dbUser.setUserName(user.getUserName());
 		    dbUser.setPosition(user.getPosition());
