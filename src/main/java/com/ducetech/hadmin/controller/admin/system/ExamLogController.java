@@ -62,10 +62,10 @@ public class ExamLogController extends BaseController {
      */
     @RequestMapping(value = { "/user" }, method = RequestMethod.GET)
     @ResponseBody
-    public Page<User> user() {
+    public Page<User> user(String station) {
         Page<User> users=null;
         try {
-            users = userDao.findByScore(getPageRequest());
+            users = userDao.findByScore(getPageRequest(),station);
         }catch(Exception e){
             logger.debug(e.getMessage());
         }

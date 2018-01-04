@@ -19,8 +19,8 @@ public interface IUserDao extends IBaseDao<User, Integer> {
     @Query(value="select o from User o where o.station=:station or o.stationArea=:station ")
     List<User> findAllByStation(@Param("station") String station);
     @Query(nativeQuery = true,
-        value = "select u.* from (select user_id,count(score) scount from big_exam_log  GROUP BY user_id) t ,big_user u where t.scount>0 and u.id = t.user_id  \n#pageable \n",
-        countQuery = "select count(u.id) from (select user_id,count(score) scount from big_exam_log  GROUP BY user_id) t ,big_user u where t.scount>0 and u.id = t.user_id"
+        value = "select u.* from (select user_id,count(score) scount from big_exam_log  GROUP BY user_id) t ,big_user u where t.scount>0 and u.id = t.user_id and (u.station=:station or u.station_area=:station)  \n#pageable \n",
+        countQuery = "select count(u.id) from (select user_id,count(score) scount from big_exam_log  GROUP BY user_id) t ,big_user u where t.scount>0 and u.id = t.user_id and (u.station=:station or u.station_area=:station)"
     )
-    Page<User> findByScore(@Param("pageable") Pageable pageable);
+    Page<User> findByScore(@Param("pageable") Pageable pageable,@Param("station") String station);
 }

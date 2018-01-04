@@ -1,6 +1,8 @@
 <!-- 全局js -->
 <#include "/admin/common/js.ftl">
 <#include "/admin/common/css.ftl">
+<#include "/admin/common/ztree.ftl">
+<script src="${ctx!}/hadmin/js/demo/tree-demo.js"></script>
 <style>
     .table tbody tr td {
         text-overflow: ellipsis;
@@ -19,7 +21,12 @@
                     </div>
                     <div class="ibox-content">
                         <div class="row row-lg">
-		                    <div class="col-sm-12">
+                            <div class="col-sm-3">
+                                <div class='tree'>
+                                    <ul id="treeDemo" class="ztree"></ul>
+                                </div>
+                            </div>
+		                    <div class="col-sm-9">
 		                        <!-- Example Card View -->
 		                        <div class="example-wrap">
 		                            <div class="example table-responsive">
@@ -37,6 +44,21 @@
 
     <!-- Page-Level Scripts -->
     <script>
+        //初始化tree
+        var tree = Tree.createNew("${ctx!}/admin/emergency/tree");
+        tree.init();
+        function onClick(e, treeId, treeNode) {
+            //初始化表格,动态从服务器加载数据
+            $("#nodeCode").val(treeNode.name);
+            var opt = {
+                url: "${ctx!}/admin/examlog/user",
+                silent: true,
+                query: {
+                    station: treeNode.name
+                }
+            };
+            $("#table_list").bootstrapTable('refresh', opt);
+        }
         $(document).ready(function () {
         	//初始化表格,动态从服务器加载数据
 			$("#table_list").bootstrapTable({
