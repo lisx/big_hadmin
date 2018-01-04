@@ -3,9 +3,7 @@
 <#include "/admin/common/css.ftl">
 <#import "/admin/common/select.ftl" as my />
 <div class="ibox-content">
-    <form autocomplete="off"  class="form-horizontal m-t" id="frm" method="post" action="${ctx!}/admin/user/update"  enctype="multipart/form-data">
-        <input type="hidden" id="id" name="id" value="${user.id}">
-
+    <form autocomplete="off"  class="form-horizontal m-t" id="frm" method="post" action="${ctx!}/admin/user/save"  enctype="multipart/form-data">
         <div class="form-group">
             <label class="col-sm-2 control-label">工号：</label>
             <div class="col-sm-4">
@@ -180,7 +178,7 @@
                     dataType: "json",
                     processData: false,
                     contentType: false,
-   	    		   url: "${ctx!}/admin/user/edit",
+   	    		   url: "${ctx!}/admin/user/save",
    	    		   data: new FormData($('#frm')[0]),
    	    		   success: function(msg){
 	   	    			layer.msg(msg.message, {time: 2000},function(){
