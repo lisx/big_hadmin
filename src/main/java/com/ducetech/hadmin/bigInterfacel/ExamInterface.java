@@ -298,6 +298,25 @@ public class ExamInterface  extends BaseController {
 
     }
 
+    @ApiOperation(value="设置考试记录", notes="设置考试记录")
+    @RequestMapping(value="/setExamLog", method = RequestMethod.GET)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "logId", value = "考试记录Id", dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "score", value = "分数", dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "endTime", value = "交卷时间", dataType = "String", paramType = "query"),
+    })
+    public JSONObject setExamLog(Integer logId,Integer score,String endTime){
+        ExamLog examLog=examLogDao.findOne(logId);
+        examLog.setScore(score);
+        examLog.setEndTime(endTime);
+        examLogDao.saveAndFlush(examLog);
+        obj=new JSONObject();
+        obj.put("state",state);
+        obj.put("msg","完成考试");
+        JSONObject jobj=JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
+        logger.info(jobj.toJSONString());
+        return jobj;
+    }
 
     @ApiOperation(value="设置考试记录", notes="设置考试记录")
     @RequestMapping(value="/questionExamLog", method = RequestMethod.GET)
