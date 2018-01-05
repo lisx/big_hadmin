@@ -15,7 +15,12 @@
         var table = Table.createNew();
         table.init("${ctx!}/admin/emergency/list?menuType=车站信息",
             function (value, row, index) {
-                var operateHtml = '<@shiro.hasPermission name="system:station:down"><button class="btn btn-primary btn-xs" type="button" onclick="down(\''+ row.id+ '\',\''+ row.fileName+'\')"><i class="fa fa-download"></i>&nbsp;下载</button> &nbsp;</@shiro.hasPermission>';
+                var operateHtml ='';
+                if(row.ifFolder==1){
+                    operateHtml='<@shiro.hasPermission name="system:station:down"><button class="btn btn-success btn-xs" type="button" onclick="showFolder(\''+row.id+'\',\''+row.fileName+'\')"><i class="fa fa-eye"></i>&nbsp;查看</button>&nbsp;</@shiro.hasPermission>';
+                }else{
+                    operateHtml='<@shiro.hasPermission name="system:station:down"><button class="btn btn-primary btn-xs" type="button" onclick="down(\''+ row.id+ '\',\''+ row.fileName+'\')"><i class="fa fa-download"></i>&nbsp;下载</button> &nbsp;</@shiro.hasPermission>';
+                }
                 operateHtml = operateHtml + '<@shiro.hasPermission name="system:station:deleteFile"><button class="btn btn-danger btn-xs" type="button" onclick="del(\''+ row.id+'\')"><i class="fa fa-remove"></i>&nbsp;删除</button> &nbsp;</@shiro.hasPermission>';
                 return operateHtml;
             }
@@ -205,7 +210,15 @@
         console.log("uploadFile"+url);
         button.uploadFile(url)
     };
-
+    //进入文件夹
+    function showFolder(folderId) {
+        var url='${ctx!}/admin/emergency/toFolder?folderId=' + folderId+'&menuType=车站信息';
+        button.showFolder(url)
+    };
+    //添加文件夹
+    function addFolder() {
+        button.addFolder('${ctx!}/admin/emergency/add?menuType=车站信息')
+    }
     //下载文件
     function down(id, name) {
         button.down("${ctx!}/admin/download/" + id, name)
@@ -235,6 +248,9 @@
 <@shiro.hasPermission name="system:station:uploadFile">
                     <button class="btn btn-success pull-right fileUploadBtton" type="button" onclick="uploadFile();"><i
                             class="fa fa-plus"></i>&nbsp;上传文件
+                    </button>
+                    <button class="btn btn-success pull-right addFolder" type="button" onclick="addFolder();"><i
+                            class="fa fa-plus"></i>&nbsp;新建文件夹
                     </button>
 </@shiro.hasPermission>
 <@shiro.hasPermission name="system:station:delete">

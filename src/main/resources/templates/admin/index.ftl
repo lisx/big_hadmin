@@ -38,7 +38,7 @@
                                <a class="J_menuItem" href="${ctx!}/admin/user/index">人员信息</a>
                             </li>
                          </@shiro.hasPermission>
-                         <@shiro.hasPermission name="system:user:index">
+                         <@shiro.hasPermission name="system:role:index">
                             <li>
                                 <a class="J_menuItem" href="${ctx!}/admin/role/index">权限管理</a>
                             </li>
