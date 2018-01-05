@@ -29,6 +29,7 @@
 		                    <div class="col-sm-9">
 		                        <!-- Example Card View -->
 		                        <div class="example-wrap">
+                                    <input type="hidden" id="nodeCode" name="nodeCode"/>
 		                            <div class="example table-responsive">
 		                            	<table class="table table-bordered"  id="table_list"></table>
 		                            </div>
@@ -83,6 +84,11 @@
 			    //是否启用详细信息视图
 			    //detailView:true,
 			    //detailFormatter:detailFormatter,
+                queryParams:function(params){
+                    params["nodeCode"]=$("#nodeCode").val();
+                    console.log(JSON.stringify(params));
+                    return params;
+                },
 			    //表示服务端请求
 			    sidePagination: "server",
 			    //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder

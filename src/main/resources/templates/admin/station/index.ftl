@@ -180,6 +180,7 @@
     /*单击节点显示节点详情*/
     function onClick(e, treeId, treeNode) {
         //初始化表格,动态从服务器加载数据
+        $("#nodeCode").val(treeNode.id);
         $(".fileUploadBtton").attr("data-id", treeNode.id);
         $(".spanStation").html(treeNode.name);
         console.log("nodeCode"+JSON.stringify(treeNode))
@@ -266,6 +267,7 @@
                         <div class="col-sm-9">
                             <!-- Example Card View -->
                             <div class="example-wrap">
+                                <input type="hidden" id="nodeCode" name="nodeCode"/>
                                 <div class="example">
                                     <table class="table table-bordered" id="table_list"></table>
                                 </div>
