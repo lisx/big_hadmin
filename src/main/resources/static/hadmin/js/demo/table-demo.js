@@ -34,6 +34,11 @@ var Table = {
                 //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
                 //设置为limit可以获取limit, offset, search, sort, order
                 queryParamsType: "undefined",
+                queryParams:function(params){
+                    params["nodeCode"]=$("#nodeCode").val();
+                    console.log(JSON.stringify(params));
+                    return params;
+                },
                 clickToSelect: true,
                 //json数据解析
                 responseHandler: function(res) {
