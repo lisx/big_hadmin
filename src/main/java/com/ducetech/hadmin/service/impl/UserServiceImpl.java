@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -76,7 +77,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Integer> implements I
 	public void grant(Integer id, String[] roleIds) {
 		User user = find(id);
 		Assert.notNull(user, "用户不存在");
-		//Assert.state(!"admin".equals(user.getUserName()),"超级管理员用户不能修改管理角色");
+		Assert.state(!"运三管理员".equals(user.getUserName()),"超级管理员用户不能修改管理角色");
 		Role role;
 		Set<Role> roles = new HashSet<Role>();
 		if(roleIds != null){
@@ -87,6 +88,8 @@ public class UserServiceImpl extends BaseServiceImpl<User, Integer> implements I
 			}
 		}
 		user.setRoles(roles);
+		user.setUpdateTime(new Date());
+        user.setUpdateId(9);
 		update(user);
 	}
 

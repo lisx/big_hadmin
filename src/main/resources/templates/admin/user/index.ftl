@@ -96,7 +96,7 @@
 			    pagination: true,
 			    //每页显示的记录数
 			    pageSize: 10,
-                sortName:"id",
+                sortName:"updateId",
                 sortOrder:"desc",
                 clickToSelect: true,                //是否启用点击选中行
                 uniqueId: "id",
