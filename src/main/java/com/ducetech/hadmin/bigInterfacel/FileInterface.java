@@ -99,7 +99,7 @@ public class FileInterface {
     public JSONObject findFolder(Integer folderId) {
         logger.info("获取文件夹内全部数据");
         BigFile fold=bigFileDao.findOne(folderId);
-        List<BigFile> files=bigFileDao.findByFolderFile(fold);
+        List<BigFile> files=bigFileDao.findByFolderFileAndIfUse(fold,0);
         if(null==files){
             msg="暂无数据";
             state=0;

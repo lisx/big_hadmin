@@ -25,7 +25,7 @@ public interface IBigFileDao extends IBaseDao<BigFile,Integer> {
     @Query(value = "select t from BigFile t where t.id=(select max(o.id) from BigFile  o where o.fileName like:folder)")
     BigFile findByFileName(@Param("folder") String folder);
 
-    List<BigFile> findByFolderFile(BigFile file);
+    List<BigFile> findByFolderFileAndIfUse(BigFile file,int ifuse);
 
     List<BigFile> findByMenuType(String menuType);
 

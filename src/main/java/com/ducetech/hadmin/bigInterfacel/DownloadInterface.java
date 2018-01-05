@@ -24,8 +24,8 @@ import java.net.URLEncoder;
  **/
 @Controller
 @RequestMapping("/interface")
-public class DownloadInteface extends BaseController {
-    private static Logger logger = LoggerFactory.getLogger(DownloadInteface.class);
+public class DownloadInterface extends BaseController {
+    private static Logger logger = LoggerFactory.getLogger(DownloadInterface.class);
 
     @Autowired
     IBigFileDao fileDao;
