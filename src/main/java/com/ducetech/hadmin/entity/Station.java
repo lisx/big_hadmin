@@ -65,6 +65,18 @@ public class Station extends BaseEntity {
         if(user.getStationArea().equals("运三分公司")||user.getStationArea().equals("")||user.getStationArea().equals(null
         )){
             stations=stationDao.findAll();
+        }else if(user.getStationArea().equals("建国门站区")){
+            Station s1=stationDao.findByNodeName("建国门站区");
+            String station1=s1.getNodeCode();
+            Station s2=stationDao.findByNodeName("1号线建国门站区");
+            String station2=s2.getNodeCode();
+            stations= stationDao.findByNodeCodeStartingWithOrNodeCodeStartingWith(station1,station2);
+        }else if(user.getStationArea().equals("慈寿寺站区")){
+            Station s1=stationDao.findByNodeName("慈寿寺站区");
+            String station1=s1.getNodeCode();
+            Station s2=stationDao.findByNodeName("6号线建国门站区");
+            String station2=s2.getNodeCode();
+            stations= stationDao.findByNodeCodeStartingWithOrNodeCodeStartingWith(station1,station2);
         }else{
             Station s=stationDao.findByNodeName(user.getStationArea());
             String station=s.getNodeCode();

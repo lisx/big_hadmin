@@ -58,6 +58,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Integer> implements I
 		    dbUser.setZkysgzUrl(user.getZkysgzUrl());
 			update(dbUser);
 		}else{
+            user.setPassword(MD5Utils.md5(null==user.getPassword()?"123456":user.getPassword()));
 			save(user);
 		}
 	}

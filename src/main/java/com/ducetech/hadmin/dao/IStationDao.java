@@ -23,6 +23,8 @@ public interface IStationDao extends IBaseDao<Station,Integer> {
 
     List<Station> findByNodeCodeStartingWith(String nodeCode);
 
+    List<Station> findByNodeCodeStartingWithOrNodeCodeStartingWith(String nodeCode,String node);
+
     Station save(Station station);
 
     @Query(value = "SELECT a from Station a where length(a.nodeCode)=:nodeLength order by a.nodeCode")
