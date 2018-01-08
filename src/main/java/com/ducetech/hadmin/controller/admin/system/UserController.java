@@ -195,7 +195,9 @@ public class UserController extends BaseController {
                 String fwxxk = user.getFwxxkUrl();
                 String path = properties.getUpload() + fwxxk + BigConstant.jpg;
                 if (StringUtil.isBlank(fwxxk)) {
-                    path = properties.getUpload() + "fw" + user.getUserCode();
+                    fwxxk="fw" + user.getUserCode();
+                    path = properties.getUpload() + fwxxk;
+                    user.setFwxxkUrl(fwxxk);
                 }
                 File dest = new File(path);
                 if (!dest.getParentFile().exists()) {
