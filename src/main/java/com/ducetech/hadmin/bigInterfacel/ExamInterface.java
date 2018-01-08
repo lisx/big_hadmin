@@ -140,7 +140,11 @@ public class ExamInterface  extends BaseController {
             }else{
                 url=questions.get(i).getImgUrl();
             }
-            questions.get(i).setImgUrl(properties.getHttp()+url);
+            if(StringUtil.isBlank(url)||url.equals("null")){
+                questions.get(i).setImgUrl("");
+            }else {
+                questions.get(i).setImgUrl(properties.getHttp() + url);
+            }
         }
         Collections.shuffle(questions);
         if(null==questions){
