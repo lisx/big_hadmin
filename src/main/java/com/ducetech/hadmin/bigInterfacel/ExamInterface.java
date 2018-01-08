@@ -273,7 +273,7 @@ public class ExamInterface  extends BaseController {
                     }else{
                         url=question.getImgUrl();
                     }
-                    if(StringUtil.isBlank(url)){
+                    if(StringUtil.isBlank(url)||url.equals("null")){
                         question.setImgUrl("");
                     }else {
                         question.setImgUrl(properties.getHttp() + url);
