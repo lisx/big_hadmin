@@ -273,7 +273,11 @@ public class ExamInterface  extends BaseController {
                     }else{
                         url=question.getImgUrl();
                     }
-                    question.setImgUrl(properties.getHttp()+url);
+                    if(StringUtil.isBlank(url)){
+                        question.setImgUrl("");
+                    }else {
+                        question.setImgUrl(properties.getHttp() + url);
+                    }
                 }
 
                 o.put("log",log);
