@@ -25,23 +25,23 @@ public class Exam extends BaseEntity {
     //试卷名称
     private String examName;
     //单选题
-    private Integer singleNum;
+    private int singleNum;
     //单选分
-    private Integer singleScore;
+    private int singleScore;
     //多选题
-    private Integer multipleNum;
+    private int multipleNum;
     //多选分
-    private Integer multipleScore;
+    private int multipleScore;
     //判断题
-    private Integer judgeNum;
+    private int judgeNum;
     //判断分
-    private Integer judgeScore;
+    private int judgeScore;
     //排序提
-    private Integer rankNum;
+    private int rankNum;
     //排序分
-    private Integer rankScore;
+    private int rankScore;
     //归属题库
-    private Integer bankId;
+    private int bankId;
     //归属题库
     private String bankName;
     //归属站区
@@ -51,7 +51,7 @@ public class Exam extends BaseEntity {
 
     private String nodeCode;
 
-    private Integer ifUse;
+    private int ifUse;
     @JSONField(serialize = false)
     @ManyToOne
     private QuestionBank questionBank;
@@ -60,12 +60,12 @@ public class Exam extends BaseEntity {
      */
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
-    private Integer createId;
+    private int createId;
     /**
      * 更新时间
      */
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
-    private Integer updateId;
+    private int updateId;
 
 }

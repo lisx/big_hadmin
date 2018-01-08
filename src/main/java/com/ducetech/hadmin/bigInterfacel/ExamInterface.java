@@ -188,7 +188,7 @@ public class ExamInterface  extends BaseController {
                     List<Question> judges;
                     List<Question> ranks;
                     Random rand = new Random();
-                    if(null!=exam.getSingleNum()&&exam.getSingleNum()>0){
+                    if(exam.getSingleNum()>0){
                         singles = questionDao.findByQuestionBankAndMenuType(bank,"单选");
                         if(singles.size()>0)
                         for(int i=0;i<exam.getSingleNum();i++) {
@@ -207,7 +207,7 @@ public class ExamInterface  extends BaseController {
                             }
                         }
                     }
-                    if(null!=exam.getMultipleNum()&&exam.getMultipleNum()>0){
+                    if(exam.getMultipleNum()>0){
                         multiples = questionDao.findByQuestionBankAndMenuType(bank,"多选");
                         if(multiples.size()>0)
                         for(int i=0;i<exam.getMultipleNum();i++) {
@@ -224,7 +224,7 @@ public class ExamInterface  extends BaseController {
                             }
                         }
                     }
-                    if(null!=exam.getJudgeNum()&&exam.getJudgeNum()>0){
+                    if(exam.getJudgeNum()>0){
                         judges = questionDao.findByQuestionBankAndMenuType(bank,"判断");
                         if(judges.size()>0)
                         for(int i=0;i<exam.getJudgeNum();i++) {
@@ -237,7 +237,7 @@ public class ExamInterface  extends BaseController {
                             }
                         }
                     }
-                    if(null!=exam.getRankNum()&&exam.getRankNum()>0){
+                    if(exam.getRankNum()>0){
                         ranks = questionDao.findByQuestionBankAndMenuType(bank,"排序");
                         if(ranks.size()>0)
                         for(int i=0;i<exam.getRankNum();i++) {
