@@ -28,7 +28,7 @@ import java.util.Date;
 public class WeatherUtils {
     @Autowired
     IWeatherDao weatherDao;
-    @Scheduled(cron = "0 */30 * * * ?") // 每20秒执行一次
+    @Scheduled(cron = "0 */30 * * * ?") // 每30分钟执行一次
     public void setWeather()  throws IOException{
         try {
             //测试获取实时天气1(包含风况，湿度)

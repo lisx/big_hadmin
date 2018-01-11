@@ -7,9 +7,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * @author 贤人
- * @blog http://zhengyunfei.iteye.com/
- * @qq 799078779
+ * MD5 加密
  */
 
 public class MD5Utils {
