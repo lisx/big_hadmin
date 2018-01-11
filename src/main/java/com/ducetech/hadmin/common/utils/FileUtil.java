@@ -1,7 +1,9 @@
 package com.ducetech.hadmin.common.utils;
 
+import org.apache.tomcat.jni.Directory;
 import java.io.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * 文件类
@@ -63,6 +65,8 @@ public class FileUtil {
             }
         }
     }
+
+
     public static void deleteAllFilesOfDir(File path) {
         if (!path.exists())
             return;

@@ -133,13 +133,13 @@
             <artifactId>springfox-swagger-ui</artifactId>
             <version>2.2.2</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.jodconverter/jodconverter-spring-boot-starter -->
+        <!-- https://mvnrepository.com/artifact/com.drewnoakes/metadata-extractor -->
         <!--<dependency>-->
-            <!--<groupId>org.jodconverter</groupId>-->
-            <!--<artifactId>jodconverter-spring-boot-starter</artifactId>-->
-            <!--<version>4.0.0-RELEASE</version>-->
+            <!--<groupId>com.drewnoakes</groupId>-->
+            <!--<artifactId>metadata-extractor</artifactId>-->
+            <!--<version>2.11.0</version>-->
         <!--</dependency>-->
+
     </dependencies>
 
 	<build>
