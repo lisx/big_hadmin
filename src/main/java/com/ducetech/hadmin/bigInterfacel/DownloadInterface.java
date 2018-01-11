@@ -161,9 +161,9 @@ public class DownloadInterface extends BaseController {
         BigFile file;
         if(null!=codes&&codes.length>1) {
             System.out.println("|code|" + codes[1]);
-            file = fileDao.findByFileName(codes[1]+"%");
+            file = fileDao.findByFileName(codes[1]+".%");
         }else{
-            file = fileDao.findByFileName(codes[0]+"%");
+            file = fileDao.findByFileName(codes[0]+".%");
         }
         if(null!=file) {
             response.setCharacterEncoding("utf-8");
