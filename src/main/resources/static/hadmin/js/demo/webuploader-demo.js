@@ -184,7 +184,7 @@ jQuery(function() {
         $btns.on( 'click', 'span', function() {
             var index = $(this).index(),
                 deg;
-
+                console.log("|||||"+index);
             switch ( index ) {
                 case 0:
                     uploader.removeFile( file );
@@ -198,6 +198,9 @@ jQuery(function() {
                     file.rotation -= 90;
                     break;
             }
+            console.log(file)
+            console.log(uploader.options.formData)
+            //uploader.options.formData.rotation = file.rotation;
 
             if ( supportTransition ) {
                 deg = 'rotate(' + file.rotation + 'deg)';
@@ -209,7 +212,7 @@ jQuery(function() {
                 });
             } else {
                 $wrap.css( 'filter', 'progid:DXImageTransform.Microsoft.BasicImage(rotation='+ (~~((file.rotation/90)%4 + 4)%4) +')');
-                // use jquery animate to rotation
+                //use jquery animate to rotation
                 // $({
                 //     rotation: rotation
                 // }).animate({
@@ -218,10 +221,10 @@ jQuery(function() {
                 //     easing: 'linear',
                 //     step: function( now ) {
                 //         now = now * Math.PI / 180;
-
+                //
                 //         var cos = Math.cos( now ),
                 //             sin = Math.sin( now );
-
+                //
                 //         $wrap.css( 'filter', "progid:DXImageTransform.Microsoft.Matrix(M11=" + cos + ",M12=" + (-sin) + ",M21=" + sin + ",M22=" + cos + ",SizingMethod='auto expand')");
                 //     }
                 // });

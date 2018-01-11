@@ -13,6 +13,7 @@ import com.ducetech.hadmin.service.IRoleService;
 import com.ducetech.hadmin.service.IUserService;
 import com.ducetech.hadmin.service.specification.SimpleSpecificationBuilder;
 import com.ducetech.hadmin.service.specification.SpecificationOperator.Operator;
+import javafx.scene.image.Image;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -350,23 +351,31 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/uploadFilePost", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult uploadFilePost(HttpServletRequest request) {
-//        logger.info("进入上传方法");
+        logger.info("进入用户上传图片方法");
         List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
+        String rotate=request.getParameter("rotation");
         MultipartFile file;
         BufferedOutputStream stream;
         for (MultipartFile file1 : files) {
             file = file1;
             if (!file.isEmpty()) {
+                BigFile bf = fileDao.findByFileName(file.getOriginalFilename());
+                if (null == bf)
+                    bf = new BigFile();
                 try {
                     byte[] bytes = file.getBytes();
                     String path = properties.getUpload() + file.getOriginalFilename();
                     File f = new File(path);
-                    stream = new BufferedOutputStream(new FileOutputStream(f));
-                    stream.write(bytes);
-                    stream.close();
-                    BigFile bf = fileDao.findByFileName(file.getOriginalFilename());
-                    if (null == bf)
-                        bf = new BigFile();
+                    if(!StringUtil.isBlank(rotate)) {
+                        String rotatePath = properties.getUpload() +"rotate"+ file.getOriginalFilename();
+                        f = new File(rotatePath);
+                        file.transferTo(f);
+                        ImageUtil.rotate(f, Integer.parseInt(rotate),path);
+                    }else {
+                        stream = new BufferedOutputStream(new FileOutputStream(f));
+                        stream.write(bytes);
+                        stream.close();
+                    }
                     bf.setFileSize("" + Math.round(file.getSize() / 1024));
                     bf.setMenuType(BigConstant.User);
                     bf.setFileType(BigConstant.image);
