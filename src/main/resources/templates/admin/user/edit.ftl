@@ -3,7 +3,7 @@
 <#include "/admin/common/css.ftl">
 <#import "/admin/common/select.ftl" as my />
 <div class="ibox-content">
-    <form autocomplete="off"  class="form-horizontal m-t" id="frm" method="post" action="${ctx!}/admin/user/edit"  enctype="multipart/form-data">
+    <form autocomplete="off"  class="form-horizontal m-t" id="frm" method="post" action="${ctx!}/admin/user/update"  enctype="multipart/form-data">
         <input type="hidden" id="id" name="id" value="${user.id}">
 
         <div class="form-group">
