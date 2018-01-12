@@ -92,7 +92,11 @@ public class UserController extends BaseController {
             for(Role role:roles)
             {
                 if(role.getName().equals("管理员")){
-
+                    if (!StringUtil.isBlank(nodeCode)) {
+                        builder.add("stationArea", Operator.eq.name(), nodeCode);
+                        builder.addOr("station", Operator.eq.name(), nodeCode);
+                        builder.addOr("line", Operator.eq.name(), nodeCode);
+                    }
                 }else{
                     if (!StringUtil.isBlank(nodeCode)) {
                         builder.add("stationArea", Operator.eq.name(), nodeCode);
