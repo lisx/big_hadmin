@@ -94,9 +94,17 @@ public class UserController extends BaseController {
             {
                 if(role.getName().equals("管理员")){
                     if (!StringUtil.isBlank(nodeCode)) {
-                        builder.add("stationArea", Operator.eq.name(), nodeCode);
-                        builder.addOr("station", Operator.eq.name(), nodeCode);
-                        builder.addOr("line", Operator.eq.name(), nodeCode);
+                        if(nodeCode.equals("运三分公司")){
+                            builder.add("stationArea", Operator.eq.name(), nodeCode);
+                            builder.addOr("stationArea", Operator.eq.name(), "");
+                            builder.addOr("station", Operator.eq.name(), nodeCode);
+                            builder.addOr("line", Operator.eq.name(), nodeCode);
+                        }else{
+                            builder.add("stationArea", Operator.eq.name(), nodeCode);
+                            builder.addOr("station", Operator.eq.name(), nodeCode);
+                            builder.addOr("line", Operator.eq.name(), nodeCode);
+                        }
+
                     }
                 }else{
                     if (!StringUtil.isBlank(nodeCode)) {
