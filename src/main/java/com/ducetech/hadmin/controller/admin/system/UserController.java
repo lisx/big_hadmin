@@ -297,6 +297,13 @@ public class UserController extends BaseController {
                                     String fwxxkUrl = StringUtil.trim(row.get(6));
                                     String faszUrl = StringUtil.trim(row.get(7));
                                     String zkysgzUrl = StringUtil.trim(row.get(8));
+                                    User user = userDao.findByUserCodeOne(userCode);
+                                    if (null == user) {
+                                        user = new User();
+                                    }else{
+                                        System.out.println("已存在用户"+i);
+                                        continue;
+                                    }
                                     if (stationArea.endsWith("站区")) {
 
                                     } else {
@@ -323,10 +330,7 @@ public class UserController extends BaseController {
                                         System.out.println("有问题"+i);
                                         continue;
                                     }
-                                    User user = userDao.findByUserCodeOne(userCode);
-                                    if (null == user) {
-                                        user = new User();
-                                    }
+
                                     user.setUserName(userName);
                                     user.setStationArea(stationArea);
                                     user.setStation(station);

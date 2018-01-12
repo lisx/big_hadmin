@@ -53,13 +53,14 @@
                     required: true
                 },
                 content: {
-                    required: true
+                    required: true,
+                    maxlength: 250
                 }
             },
             messages: {
-                content:"内容必填",
+                content:"内容必填,字数不要超过250字",
                 area:"必选",
-                title:"标题必填"
+                title:"标题必填,字数不要超过250字"
             },
             submitHandler:function(form){
                 $.ajax({
