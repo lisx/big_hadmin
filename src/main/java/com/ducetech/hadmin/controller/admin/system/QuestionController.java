@@ -161,11 +161,10 @@ public class QuestionController extends BaseController {
         } else {
 
             QuestionBank bank =null;
-            if(null!=id)
-                bank=questionBankDao.findOne(id);
-//            if(null==bank) {
-//                bank = questionBankDao.findByNameAndIfUse(bankName,0);
-//            }
+            if(null!=id) {
+                bank = questionBankDao.findOne(id);
+                questionService.deleteByQuestionBank(id);
+            }
             if (null == bank) {
                 bank = new QuestionBank();
                 bank.setName(bankName);

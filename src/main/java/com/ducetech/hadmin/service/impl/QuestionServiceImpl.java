@@ -3,12 +3,14 @@ package com.ducetech.hadmin.service.impl;
 import com.ducetech.hadmin.dao.IQuestionDao;
 import com.ducetech.hadmin.dao.support.IBaseDao;
 import com.ducetech.hadmin.entity.Question;
+import com.ducetech.hadmin.entity.QuestionBank;
 import com.ducetech.hadmin.service.IQuestionService;
 import com.ducetech.hadmin.service.support.impl.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -43,6 +45,10 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question, Integer> impl
 		super.delete(id);
 	}
 
+    @Override
+    public void deleteByQuestionBank(Integer id) {
+        trainDao.deleteByQuestionBank(id);
+    }
 
 
 }
