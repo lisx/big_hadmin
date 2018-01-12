@@ -117,7 +117,7 @@
     <script type="text/javascript">
         $("#line").change(function(){
             var line=$("#line").val();
-            console.log("||||"+line);
+            console.log("||line||"+line);
             $.ajax({
                 url: '/admin/station/getStation?area='+line,
                 type: 'GET',
@@ -135,8 +135,9 @@
                 $("#stationArea").val("${user.stationArea}");
                 $("#stationArea").change(function(){
                     var area=$("#stationArea").val();
-                    console.log("||||"+area);
+                    console.log("||area||"+area);
                     $("#station").empty();
+                    if(area!=null)
                     $.ajax({
                         url: '/admin/station/getStation?area='+area,
                         type: 'GET',
@@ -145,7 +146,10 @@
                         processData: false,
                         contentType: false
                     }).done(function(stations) {
+                        console.log("start-----------------")
                         console.log(stations);
+                        console.log("end-------------------")
+                        $("#station").empty();
                         for(var i in stations){
                             $("#station").append("<option>"+stations[i]+"</option>");
                         };
