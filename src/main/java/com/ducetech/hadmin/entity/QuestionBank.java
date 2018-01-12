@@ -32,7 +32,7 @@ public class QuestionBank  extends BaseEntity {
     private java.util.Set<Station> stations;
 
     private String nodeCode;
-    private int ifUse;
+    private int ifUse=0;
     private String contain;
     @OneToMany
     private List<Exam> exams;

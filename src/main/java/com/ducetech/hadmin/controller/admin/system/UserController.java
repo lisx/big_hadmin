@@ -28,10 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author lisx
@@ -86,18 +83,29 @@ public class UserController extends BaseController {
         SimpleSpecificationBuilder<User> builder = new SimpleSpecificationBuilder<>();
         String searchText = request.getParameter("searchText");
         if (!StringUtil.isBlank(searchText)) {
-            builder.addOr("userName", Operator.eq.name(), searchText);
+            builder.add("userName", Operator.eq.name(), searchText);
             builder.addOr("userCode", Operator.eq.name(), searchText);
             builder.addOr("line", Operator.eq.name(), searchText);
         }
-        if (!StringUtil.isBlank(nodeCode)) {
-            builder.add("stationArea", Operator.eq.name(), nodeCode);
-            builder.addOr("station", Operator.eq.name(), nodeCode);
-            builder.addOr("line", Operator.eq.name(), nodeCode);
-        } else {
-            nodeCode = getUser().getStationArea();
-            builder.add("stationArea", Operator.eq.name(), nodeCode);
+        if(getUser().getRoles().size()>0){
+            Set<Role> roles =getUser().getRoles();
+            for(Role role:roles)
+            {
+                if(role.getName().equals("管理员")){
+
+                }else{
+                    if (!StringUtil.isBlank(nodeCode)) {
+                        builder.add("stationArea", Operator.eq.name(), nodeCode);
+                        builder.addOr("station", Operator.eq.name(), nodeCode);
+                        builder.addOr("line", Operator.eq.name(), nodeCode);
+                    } else {
+                        nodeCode = getUser().getStationArea();
+                        builder.add("stationArea", Operator.eq.name(), nodeCode);
+                    }
+                }
+            }
         }
+
         model.addAttribute("nodeCode", nodeCode);
         builder.add("ifUse", Operator.eq.name(), 0);
         logger.info("查询人员首页");

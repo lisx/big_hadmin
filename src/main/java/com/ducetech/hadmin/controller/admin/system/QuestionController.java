@@ -163,9 +163,9 @@ public class QuestionController extends BaseController {
             QuestionBank bank =null;
             if(null!=id)
                 bank=questionBankDao.findOne(id);
-            if(null==bank) {
-                bank = questionBankDao.findByNameAndIfUse(bankName,0);
-            }
+//            if(null==bank) {
+//                bank = questionBankDao.findByNameAndIfUse(bankName,0);
+//            }
             if (null == bank) {
                 bank = new QuestionBank();
                 bank.setName(bankName);
@@ -453,6 +453,9 @@ public class QuestionController extends BaseController {
                 }
             }
             bank.setContain(StringUtils.join(sets.toArray(),","));
+            if(StringUtil.isBlank(bank.getNodeCode())){
+                bank.setNodeCode("000");
+            }
             questionBankDao.saveAndFlush(bank);
         }
         return JsonResult.success("上传成功！");
