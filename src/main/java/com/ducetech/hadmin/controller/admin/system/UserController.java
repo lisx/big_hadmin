@@ -8,6 +8,7 @@ import com.ducetech.hadmin.dao.IStationDao;
 import com.ducetech.hadmin.dao.IUserDao;
 import com.ducetech.hadmin.entity.BigFile;
 import com.ducetech.hadmin.entity.Role;
+import com.ducetech.hadmin.entity.Station;
 import com.ducetech.hadmin.entity.User;
 import com.ducetech.hadmin.service.IRoleService;
 import com.ducetech.hadmin.service.IUserService;
@@ -283,7 +284,9 @@ public class UserController extends BaseController {
                 if (null != data && !data.isEmpty()) {
                     for (List<List<String>> sheet : data) {
                         if (null != sheet && !sheet.isEmpty()) {
+                            int i=0;
                             for (List<String> row : sheet) {
+                                i++;
                                 if (row.size() > 8) {
                                     String line = StringUtil.trim(row.get(0));
                                     String stationArea = StringUtil.trim(row.get(1));
@@ -302,6 +305,11 @@ public class UserController extends BaseController {
                                     if (stationArea.equals("西直门站区") || stationArea.equals("东直门站区") || stationArea.equals("建国门站区") || stationArea.equals("北土城站区") || stationArea.equals("慈寿寺站区")) {
                                         stationArea = line + stationArea;
                                     }
+                                    Station stationAreaEntity=stationDao.findByNodeName(stationArea);
+                                    if(null==stationAreaEntity){
+                                        System.out.println("有问题"+i);
+                                        continue;
+                                    }
                                     if (station.endsWith("站")) {
 
                                     } else {
@@ -309,6 +317,11 @@ public class UserController extends BaseController {
                                     }
                                     if (station.equals("西直门站") || station.equals("东直门站") || station.equals("建国门站") || station.equals("北土城站") || station.equals("慈寿寺站")) {
                                         station = line + station;
+                                    }
+                                    Station stationEntity=stationDao.findByNodeName(station);
+                                    if(null==stationEntity){
+                                        System.out.println("有问题"+i);
+                                        continue;
                                     }
                                     User user = userDao.findByUserCodeOne(userCode);
                                     if (null == user) {

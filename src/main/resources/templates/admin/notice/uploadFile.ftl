@@ -47,7 +47,7 @@
             rules: {
                 title: {
                     required: true,
-                    maxlength: 40
+                    maxlength: 250
                 },
                 area: {
                     required: true
