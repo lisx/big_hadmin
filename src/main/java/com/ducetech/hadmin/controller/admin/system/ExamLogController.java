@@ -72,6 +72,16 @@ public class ExamLogController extends BaseController {
         return users;
     }
 
+
+    @RequestMapping(value = { "/exportLogSize/{id}" }, method = RequestMethod.GET)
+    @ResponseBody
+    public int exportLogSize(@PathVariable Integer id) {
+        User user = userDao.findOne(id);
+        int size = examLogDao.findByUserLogSize(user);
+        System.out.println("|||"+size);
+        return size;
+    }
+
     @RequestMapping(value = { "/show/{id}" }, method = RequestMethod.GET)
     public String show(@PathVariable Integer id, Model model) {
         User user=userDao.findOne(id);

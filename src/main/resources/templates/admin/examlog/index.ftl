@@ -117,9 +117,19 @@
                     field: "userName"
 			    },{
                     title: "考试次数",
-                    field: "logs",
+                    field: "empty",
                     formatter: function (value, row, index) {
-                        return value.size;
+                        var size=0;
+                        $.ajax({
+                            type : "get",
+                            url : "/admin/examlog/exportLogSize/"+row.id,
+                            async : false,
+                            success : function(data){
+                                console.log("|||"+data)
+                                size= data;
+                            }
+                        });
+                        return size;
                     }
                 },{
 			        title: "操作",

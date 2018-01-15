@@ -96,6 +96,7 @@ public class User extends BaseEntity {
     private Date updateTime;
     private Integer updateId;
 
+    private Integer logSize=0;
 
 	@OneToMany(cascade = { CascadeType.REFRESH }, fetch = FetchType.EAGER)
     private List<ExamLog> logs;
