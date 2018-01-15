@@ -125,7 +125,7 @@ public class ExamInterface  extends BaseController {
     public JSONObject findExamQuestion(Integer bankId,String type){
         logger.info("获取练习题");
         QuestionBank bank=bankDao.findOne(bankId);
-        List<Question> questions=questionDao.findByQuestionBankAndMenuType(bank,type);
+        List<Question> questions=questionDao.findByQuestionBankAndMenuTypeAndIfUse(bank,type,0);
         for (int i=0;i<questions.size();i++){
             List<Proper> propers=properDao.findByQuestion(questions.get(i));
             Collections.shuffle(propers);
@@ -189,7 +189,7 @@ public class ExamInterface  extends BaseController {
                     List<Question> ranks;
                     Random rand = new Random();
                     if(exam.getSingleNum()>0){
-                        singles = questionDao.findByQuestionBankAndMenuType(bank,"单选");
+                        singles = questionDao.findByQuestionBankAndMenuTypeAndIfUse(bank,"单选",0);
                         if(singles.size()>0)
                         for(int i=0;i<exam.getSingleNum();i++) {
                             int l = rand.nextInt(singles.size());
@@ -208,7 +208,7 @@ public class ExamInterface  extends BaseController {
                         }
                     }
                     if(exam.getMultipleNum()>0){
-                        multiples = questionDao.findByQuestionBankAndMenuType(bank,"多选");
+                        multiples = questionDao.findByQuestionBankAndMenuTypeAndIfUse(bank,"多选",0);
                         if(multiples.size()>0)
                         for(int i=0;i<exam.getMultipleNum();i++) {
                             int l = rand.nextInt(multiples.size());
@@ -225,7 +225,7 @@ public class ExamInterface  extends BaseController {
                         }
                     }
                     if(exam.getJudgeNum()>0){
-                        judges = questionDao.findByQuestionBankAndMenuType(bank,"判断");
+                        judges = questionDao.findByQuestionBankAndMenuTypeAndIfUse(bank,"判断",0);
                         if(judges.size()>0)
                         for(int i=0;i<exam.getJudgeNum();i++) {
                             int l = rand.nextInt(judges.size());
@@ -238,7 +238,7 @@ public class ExamInterface  extends BaseController {
                         }
                     }
                     if(exam.getRankNum()>0){
-                        ranks = questionDao.findByQuestionBankAndMenuType(bank,"排序");
+                        ranks = questionDao.findByQuestionBankAndMenuTypeAndIfUse(bank,"排序",0);
                         if(ranks.size()>0)
                         for(int i=0;i<exam.getRankNum();i++) {
                             int l = rand.nextInt(ranks.size());

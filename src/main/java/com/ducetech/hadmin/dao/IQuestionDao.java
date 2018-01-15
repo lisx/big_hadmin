@@ -18,7 +18,7 @@ import java.util.List;
  **/
 @Repository
 public interface IQuestionDao extends IBaseDao<Question,Integer> {
-    List<Question> findByQuestionBankAndMenuType(QuestionBank bank,String type);
+    List<Question> findByQuestionBankAndMenuTypeAndIfUse(QuestionBank bank,String type,int ifUse);
 
     @Modifying
     @Query(nativeQuery = true,value = "DELETE FROM big_question WHERE question_bank_id = :id")

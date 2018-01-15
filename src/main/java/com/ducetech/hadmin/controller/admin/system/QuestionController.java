@@ -87,6 +87,7 @@ public class QuestionController extends BaseController {
             QuestionBank bank=questionBankDao.findOne(id);
             bank.setIfUse(1);
             questionBankDao.saveAndFlush(bank);
+
         } catch (Exception e) {
             e.printStackTrace();
             return JsonResult.failure(e.getMessage());
