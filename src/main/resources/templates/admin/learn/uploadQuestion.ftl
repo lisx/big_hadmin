@@ -5,8 +5,9 @@
 <#import "/admin/common/select.ftl" as my />
 <div class="ibox-content">
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-22">
             <form autocomplete="off"  role="form" id="uploadForm" action="/admin/question/uploadFilePost" method="POST" enctype="multipart/form-data">
+                <div class="row">
                 <div class="form-group">
                     <label class="col-sm-2  control-label" >题库名称：</label>
                     <div  class="col-sm-4">
@@ -17,7 +18,8 @@
                     <div  class="col-sm-4">
                     </div>
                 </div>
-                <br><br>
+                </div>
+                <div class="row">
                 <div class="form-group">
                     <label class="col-sm-2  control-label">站区：</label>
                     <div class="col-sm-4">
@@ -29,6 +31,7 @@
                         <option value="全部">全部</option>
                     </select>
                     </div>
+                </div>
                 </div>
                 <br><br>
                 <div class="form-group">
@@ -86,7 +89,7 @@
             rules: {
                 bankName: {
                     required: true,
-                    maxlength: 10
+                    maxlength: 50
                 }
             },
             messages: {},
