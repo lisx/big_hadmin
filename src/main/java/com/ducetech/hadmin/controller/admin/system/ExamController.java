@@ -111,7 +111,7 @@ public class ExamController extends BaseController {
         builder.addOr("nodeCode", SpecificationOperator.Operator.eq.name(), "000");
         builder.add("ifUse", SpecificationOperator.Operator.eq.name(), 0);
         if(!StringUtil.isBlank(searchText)){
-            builder.add("name", SpecificationOperator.Operator.likeAll.name(), searchText);
+            builder.add("examName", SpecificationOperator.Operator.likeAll.name(), searchText);
         }
         return examService.findAll(builder.generateSpecification(), getPageRequest());
     }
