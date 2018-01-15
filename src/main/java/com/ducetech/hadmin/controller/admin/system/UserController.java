@@ -317,9 +317,7 @@ public class UserController extends BaseController {
                                     } else {
                                         stationArea = stationArea + "站区";
                                     }
-                                    if (stationArea.equals("西直门站区") || stationArea.equals("东直门站区") || stationArea.equals("建国门站区") || stationArea.equals("北土城站区") || stationArea.equals("慈寿寺站区")) {
-                                        stationArea = line + stationArea;
-                                    }
+
                                     Station stationAreaEntity=stationDao.findByNodeName(stationArea);
                                     if(null==stationAreaEntity){
                                         System.out.println("有问题"+i);
