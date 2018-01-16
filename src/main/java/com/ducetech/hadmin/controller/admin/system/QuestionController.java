@@ -80,6 +80,11 @@ public class QuestionController extends BaseController {
         return questionBankDao.findAll(builder.generateSpecification(), getPageRequest());
     }
 
+    /**
+     * 删除题库
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/bank/delete/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public JsonResult bankDelete(@PathVariable Integer id) {
@@ -94,6 +99,12 @@ public class QuestionController extends BaseController {
         }
         return JsonResult.success();
     }
+
+    /**
+     * 删除试题
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public JsonResult delete(@PathVariable Integer id) {
@@ -225,6 +236,7 @@ public class QuestionController extends BaseController {
                                 if (row.size() == 3) {
                                     title = StringUtil.trim(row.get(0));
                                     if(null==title||StringUtils.isBlank(title)){
+                                        continue;
                                        // return JsonResult.failure(1, "上传的判断文件第" + err + "行没有试题,请重新编辑.");
                                     }
                                     imgUrl = StringUtil.trim(row.get(1));
@@ -272,6 +284,7 @@ public class QuestionController extends BaseController {
                                 if (row.size() == 3) {
                                     title = StringUtil.trim(row.get(0));
                                     if(null==title||StringUtils.isBlank(title)){
+                                        continue;
                                         //return JsonResult.failure(1, "上传的排序文件第" + err + "行没有试题,请重新编辑.");
                                     }
                                     imgUrl = StringUtil.trim(row.get(1));
@@ -330,6 +343,7 @@ public class QuestionController extends BaseController {
                                 if (row.size() > 3) {
                                     title = StringUtil.trim(row.get(0));
                                     if(null==title||StringUtils.isBlank(title)){
+                                        continue;
                                         //return JsonResult.failure(1, "上传的多选文件第" + err + "行没有试题,请重新编辑.");
                                     }
                                     imgUrl = StringUtil.trim(row.get(1));
@@ -395,6 +409,7 @@ public class QuestionController extends BaseController {
                                 if (row.size() == 6) {
                                     title = StringUtil.trim(row.get(0));
                                     if(null==title||StringUtils.isBlank(title)){
+                                        continue;
                                         //return JsonResult.failure(1, "上传的单选文件第" + err + "行没有试题,请重新编辑.");
                                     }
                                     imgUrl = StringUtil.trim(row.get(1));
