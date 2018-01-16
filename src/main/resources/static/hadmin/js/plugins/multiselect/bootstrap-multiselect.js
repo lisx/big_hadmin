@@ -314,7 +314,7 @@
             preventInputChangeEvent: false,
             nonSelectedText: 'None selected',
             nSelectedText: 'selected',
-            allSelectedText: 'All selected',
+            allSelectedText: '全选',
             numberDisplayed: 3,
             disableIfEmpty: false,
             templates: {
