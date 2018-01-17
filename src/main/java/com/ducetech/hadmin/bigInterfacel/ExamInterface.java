@@ -94,25 +94,26 @@ public class ExamInterface  extends BaseController {
             }
         }
         obj=new JSONObject();
-        ValueFilter filter = new ValueFilter() {
-            @Override
-            public Object process(Object obj, String s, Object v) {
-                if(v==null){
-                    return 0;
-                }
-                if(s.equals("createTime")||s.equals("updateTime")){
-                    return ((Date) v).getTime();
-                }
-                return v;
-            }
-        };
+//        ValueFilter filter = new ValueFilter() {
+//            @Override
+//            public Object process(Object obj, String s, Object v) {
+//                if(v==null){
+//                    return 0;
+//                }
+//                if(s.equals("createTime")||s.equals("updateTime")){
+//                    return ((Date) v).getTime();
+//                }
+//                return v;
+//            }
+//        };
         JSONObject o=new JSONObject();
         o.put("banks",banks);
         //o.put("exams",exams);
         obj.put("state",state);
         obj.put("msg",msg);
         obj.put("data",o);
-        return JSONObject.parseObject(JSONObject.toJSONString(obj, filter));
+        return obj;
+        //return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
 
 
@@ -188,7 +189,7 @@ public class ExamInterface  extends BaseController {
                     List<Question> judges;
                     List<Question> ranks;
                     Random rand = new Random();
-                    if(exam.getSingleNum()>0){
+                    if(null!=exam.getSingleNum()&&exam.getSingleNum()>0){
                         singles = questionDao.findByQuestionBankAndMenuTypeAndIfUse(bank,"单选",0);
                         if(singles.size()>0)
                         for(int i=0;i<exam.getSingleNum();i++) {
@@ -207,7 +208,7 @@ public class ExamInterface  extends BaseController {
                             }
                         }
                     }
-                    if(exam.getMultipleNum()>0){
+                    if(null!=exam.getMultipleNum()&&exam.getMultipleNum()>0){
                         multiples = questionDao.findByQuestionBankAndMenuTypeAndIfUse(bank,"多选",0);
                         if(multiples.size()>0)
                         for(int i=0;i<exam.getMultipleNum();i++) {
@@ -224,7 +225,7 @@ public class ExamInterface  extends BaseController {
                             }
                         }
                     }
-                    if(exam.getJudgeNum()>0){
+                    if(null!=exam.getJudgeNum()&&exam.getJudgeNum()>0){
                         judges = questionDao.findByQuestionBankAndMenuTypeAndIfUse(bank,"判断",0);
                         if(judges.size()>0)
                         for(int i=0;i<exam.getJudgeNum();i++) {
@@ -237,7 +238,7 @@ public class ExamInterface  extends BaseController {
                             }
                         }
                     }
-                    if(exam.getRankNum()>0){
+                    if(null!=exam.getRankNum()&&exam.getRankNum()>0){
                         ranks = questionDao.findByQuestionBankAndMenuTypeAndIfUse(bank,"排序",0);
                         if(ranks.size()>0)
                         for(int i=0;i<exam.getRankNum();i++) {
@@ -302,7 +303,7 @@ public class ExamInterface  extends BaseController {
             obj.put("msg","缺少用户");
             obj.put("data","");
         }
-        return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
+        return obj;
 
     }
 
