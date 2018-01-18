@@ -24,9 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/interface/weather")
 public class WeatherInterface extends BaseController {
     private static Logger logger = LoggerFactory.getLogger(WeatherInterface.class);
-    int state=0;//1正常
-    String msg;
-    JSONObject obj;
+
     @Autowired
     IWeatherDao weatherDao;
     @Autowired
@@ -35,11 +33,13 @@ public class WeatherInterface extends BaseController {
     @RequestMapping(value="/detail", method = RequestMethod.GET)
     public JSONObject getWeather(){
         logger.info("获取天气预报");
+        int state=BigConstant.state_success;//1正常
+        String msg;
+        JSONObject obj;
         WeatherInfo info=null;
         try {
             info=weatherDao.findWeatherInfo();
             info.setUrl(properties.getIcon()+info.getCode()+BigConstant.png);
-            state=1;
             msg="查询正常";
             if(null==info){
                 state=0;

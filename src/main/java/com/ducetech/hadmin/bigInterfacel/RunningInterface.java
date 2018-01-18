@@ -25,9 +25,7 @@ import java.util.List;
 @RequestMapping("/interface/running")
 public class RunningInterface {
     private static Logger logger = LoggerFactory.getLogger(StationInterface.class);
-    int state=0;//1正常
-    String msg;
-    JSONObject obj;
+
     @Autowired
     IRunningDao runningDao;
 
@@ -35,20 +33,19 @@ public class RunningInterface {
     @RequestMapping(value="/findByLine",method = RequestMethod.GET)
     @ApiImplicitParam(name="line",value="线路",dataType="string", paramType = "query")
     public JSONObject findLineALl(String line){
-        logger.info("获取线路全部数据");
+        logger.info("根据线路查询运行图line:{}",line);
+        int state=BigConstant.state_success;//1正常
+        String msg;
+        JSONObject obj=new JSONObject();;
         List<Running> runnings=runningDao.findByLineNameAndIfUse(line,0);
         if(null==runnings){
-            runnings=new ArrayList<>();
-            msg="暂无数据";
-            state=1;
+            msg=BigConstant.state_2;
         }else{
-            msg="查询成功";
-            state=1;
+            msg=BigConstant.state_1;
         }
-        obj=new JSONObject();
         obj.put("msg",msg);
         obj.put("state",state);
         obj.put("data", runnings);
-        return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
+        return obj;
     }
 }

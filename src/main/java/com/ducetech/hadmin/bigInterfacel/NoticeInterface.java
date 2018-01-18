@@ -28,9 +28,7 @@ import java.util.List;
 @RequestMapping("/interface/notice")
 public class NoticeInterface {
     private static Logger logger = LoggerFactory.getLogger(NoticeInterface.class);
-    int state=0;//1正常
-    String msg;
-    JSONObject obj;
+
     @Autowired
     INoticeDao noticeDao;
     @Autowired
@@ -43,7 +41,10 @@ public class NoticeInterface {
             @ApiImplicitParam(name="date",value="时间",dataType="string", paramType = "query")
     })
     public JSONObject findByStation(String station,String date){
-        logger.info("根据站点查询通知{}||{}",station,date);
+        logger.info("根据站点查询通知station:{},date:{}",station,date);
+        int state=BigConstant.state_success;//1正常
+        String msg;
+        JSONObject obj;
         obj=new JSONObject();
         List<Notice> notices=noticeDao.findByStationNameIsLikeAndCreateTimeLikeAndIfUse("%"+station+"%","%"+date+"%",0);
         for(int i=0;i<notices.size();i++){
@@ -55,17 +56,13 @@ public class NoticeInterface {
             }
         }
         if(null!=notices&&notices.size()>0){
-            state=1;
-            msg="查询成功";
+            msg=BigConstant.state_2;
         }else{
-            notices=new ArrayList<>();
-            state=1;
-            msg="暂无数据";
+            msg=BigConstant.state_1;
         }
-        logger.info("|||||"+String.valueOf(notices.size()));
         obj.put("data", notices);
         obj.put("msg",msg);
         obj.put("state",state);
-        return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
+        return obj;
     }
 }

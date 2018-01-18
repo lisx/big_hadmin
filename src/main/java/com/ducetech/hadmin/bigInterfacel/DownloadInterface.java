@@ -39,6 +39,7 @@ public class DownloadInterface extends BaseController {
     @RequestMapping(value="/download", method = RequestMethod.GET)
     @ApiImplicitParam(name="id",value="文件id",dataType="Integer", paramType = "query")
     public void download( Integer id) throws IOException {
+        logger.info("根据id:{}获取文件",id);
         BigFile bigFile=fileDao.findOne(id);
         String location=bigFile.getFileUrl();
         BufferedInputStream bis = null;
@@ -156,7 +157,7 @@ public class DownloadInterface extends BaseController {
     @RequestMapping(value="/userImg", method = RequestMethod.GET)
     @ApiImplicitParam(name="code",value="文件code",dataType="String", paramType = "query")
     public String download( String code) throws IOException {
-        System.out.println("||code||"+code);
+        logger.info("根据code:{}获取文件",code);
         String [] codes=code.split("=");
         BigFile file;
         if(null!=codes&&codes.length>1) {

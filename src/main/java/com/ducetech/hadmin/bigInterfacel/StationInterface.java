@@ -24,9 +24,7 @@ import java.util.List;
 @RequestMapping("/interface/station")
 public class StationInterface {
     private static Logger logger = LoggerFactory.getLogger(StationInterface.class);
-    int state=0;
-    String msg;
-    JSONObject obj;
+
     @Autowired
     IStationDao stationDao;
 
@@ -34,70 +32,68 @@ public class StationInterface {
     @RequestMapping(value="/findLineAll",method = RequestMethod.GET)
     public JSONObject findLineALl(){
         logger.info("获取线路全部数据");
-        obj=new JSONObject();
+        int state=BigConstant.state_success;
+        String msg;
+        JSONObject obj=new JSONObject();
         List<Station> stations = stationDao.findByStationArea(6);
         if(null==stations){
-            msg="暂无数据";
-            state=0;
+            msg=BigConstant.state_2;
         }else{
-            msg="查询成功";
-            state=1;
+            msg=BigConstant.state_1;
         }
         obj.put("data", stations);
         obj.put("msg",msg);
         obj.put("state",state);
-        return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
+        return obj;
     }
 
     @ApiOperation(value="根据线路获取站区全部数据",notes="根据线路获取站区全部数据")
     @RequestMapping(value="/findByLine",method = RequestMethod.GET)
     @ApiImplicitParam(name="line",value="线路",dataType="string", paramType = "query")
     public JSONObject findByLine(String line){
-        logger.info("进入根据站区获取站点全部数据{}",line);
+        logger.info("进入根据站区获取站点全部数据line:{}",line);
+        int state=BigConstant.state_success;
+        String msg;
+        JSONObject obj;
         obj=new JSONObject();
         Station str=stationDao.findByNodeName(line);
         List<Station> stations=null;
         if(null!=str) {
             stations = stationDao.querySubNodesByCode(str.getNodeCode()+"___", 9);
-            obj.put("data", stations);
-        }else{
-            obj.put("data","");
         }
         if(null==stations){
-            msg="暂无数据";
-            state=0;
+            msg=BigConstant.state_2;
         }else{
-            msg="查询成功";
-            state=1;
+            msg=BigConstant.state_1;
         }
+        obj.put("data", stations);
         obj.put("msg",msg);
         obj.put("state",state);
-        return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
+        return obj;
     }
     @ApiOperation(value="根据站区获取站点全部数据",notes="根据站区获取站点全部数据")
     @RequestMapping(value="/findByArea",method = RequestMethod.GET)
     @ApiImplicitParam(name="area",value="站区",dataType="string", paramType = "query")
     public JSONObject findByArea(String area){
-        logger.info("进入根据站区获取站点全部数据{}",area);
+        logger.info("进入根据站区获取站点全部数据area:{}",area);
+        int state=BigConstant.state_success;
+        String msg;
+        JSONObject obj;
         obj=new JSONObject();
         Station str=stationDao.findByNodeName(area);
         List<Station> stations =null;
         if(null!=str) {
             stations = stationDao.querySubNodesByCode(str.getNodeCode()+"___", 12);
-            obj.put("data", stations);
-        }else{
-            obj.put("data","");
         }
         if(null==stations){
-            msg="暂无数据";
-            state=0;
+            msg=BigConstant.state_2;
         }else{
-            msg="查询成功";
-            state=1;
+            msg=BigConstant.state_1;
         }
+        obj.put("data", stations);
         obj.put("msg",msg);
         obj.put("state",state);
-        return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
+        return obj;
     }
 
 }

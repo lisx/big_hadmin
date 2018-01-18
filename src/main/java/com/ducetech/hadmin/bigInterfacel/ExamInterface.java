@@ -1,7 +1,6 @@
 package com.ducetech.hadmin.bigInterfacel;
 
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.ValueFilter;
 import com.ducetech.hadmin.common.utils.BigConstant;
 import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
@@ -10,6 +9,7 @@ import com.ducetech.hadmin.entity.*;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +30,6 @@ import java.util.*;
 public class ExamInterface  extends BaseController {
     private static Logger logger = LoggerFactory.getLogger(ExamInterface.class);
 
-    int state=1;
-    String msg;
-    JSONObject obj;
     @Autowired
     IExamDao examDao;
     @Autowired
@@ -57,29 +54,42 @@ public class ExamInterface  extends BaseController {
     })
     @RequestMapping(value="/findQuestionBankAll", method = RequestMethod.GET)
     public JSONObject findQuestionBankAll(String station,String type){//type=0是考试1是练习
-        logger.info("获取试卷题库");
-        User user=null;
+        logger.info("获取用户所属站区试卷和题库type0是考试1是练习station:{},type:{}",station,type);
+        int state=BigConstant.state_success;
+        String msg;
+        JSONObject obj=new JSONObject();
         List<QuestionBank> banks=new ArrayList<>();
         List<Exam> exams=null;
         Station sub=stationDao.findByNodeName(station);
         String nodeCode="%000%";
         String area="";
         if(null!=sub){
-            state=1;
-            msg="查询成功";
+            msg=BigConstant.state_1;
             nodeCode="%"+sub.getNodeCode()+"%";
             area=sub.getNodeCode().substring(0,sub.getNodeCode().length()-3);
             area="%"+area+"%";
         }else{
-            state=0;
-            msg="未获取站点";
+            msg=BigConstant.state_2;
         }
-        logger.debug("||||||{}||||{}",nodeCode,area);
+        String[] menuTypes={"单选","多选","排序","判断"};
         //考试
         if(null!=type&&type.equals("0")){
             exams=examDao.findByStationAndIfUse(nodeCode,area);
-            for(int i=0;i<exams.size();i++){
-                QuestionBank bank=bankDao.findOne(exams.get(i).getBankId());
+            if(null==exams){
+                msg=BigConstant.state_2;
+            }
+            for(int i=0;i<exams.size();i++){QuestionBank bank=bankDao.findOne(exams.get(i).getBankId());
+                Set<String> sets=new HashSet<>();
+                for(String menuType:menuTypes) {
+                    List<Question> questions = questionDao.findByQuestionBankAndMenuTypeAndIfUse(bank,menuType,0 );
+                    if(null!=questions&&questions.size()>0){
+                        sets.add(menuType);
+                    }
+                }
+                bank.setContain(StringUtils.join(sets.toArray(),","));
+                if(StringUtil.isBlank(bank.getContain())){
+                    continue;
+                }
                 banks.add(bank);
             }
             for (int i = 0; i < banks.size(); i++) {
@@ -87,33 +97,33 @@ public class ExamInterface  extends BaseController {
                 banks.get(i).setExams(exams);
             }
         }else {//练习
+
             banks=bankDao.findByStation(nodeCode,area+"%");
+            if(null==banks){
+                msg=BigConstant.state_2;
+            }
             for (int i = 0; i < banks.size(); i++) {
+                Set<String> sets=new HashSet<>();
                 exams = examDao.findByQuestionBankAndIfUse(banks.get(i), 0);
                 banks.get(i).setExams(exams);
+                for (String menuType : menuTypes) {
+                    List<Question> questions = questionDao.findByQuestionBankAndMenuTypeAndIfUse(banks.get(i), menuType, 0);
+                    if (null != questions && questions.size() > 0) {
+                        sets.add(menuType);
+                    }
+                }
+                banks.get(i).setContain(StringUtils.join(sets.toArray(), ","));
+                if(StringUtil.isBlank(banks.get(i).getContain())){
+                    banks.remove(i);
+                }
             }
         }
-        obj=new JSONObject();
-//        ValueFilter filter = new ValueFilter() {
-//            @Override
-//            public Object process(Object obj, String s, Object v) {
-//                if(v==null){
-//                    return 0;
-//                }
-//                if(s.equals("createTime")||s.equals("updateTime")){
-//                    return ((Date) v).getTime();
-//                }
-//                return v;
-//            }
-//        };
         JSONObject o=new JSONObject();
         o.put("banks",banks);
-        //o.put("exams",exams);
         obj.put("state",state);
         obj.put("msg",msg);
         obj.put("data",o);
         return obj;
-        //return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
 
 
@@ -124,7 +134,10 @@ public class ExamInterface  extends BaseController {
             @ApiImplicitParam(name = "type", value = "试题类型", dataType = "String", paramType = "query")
     })
     public JSONObject findExamQuestion(Integer bankId,String type){
-        logger.info("获取练习题");
+        logger.info("获取练习题bankId:{},type:{}",bankId,type);
+        int state=BigConstant.state_success;
+        String msg;
+        JSONObject obj=new JSONObject();
         QuestionBank bank=bankDao.findOne(bankId);
         List<Question> questions=questionDao.findByQuestionBankAndMenuTypeAndIfUse(bank,type,0);
         for (int i=0;i<questions.size();i++){
@@ -149,17 +162,15 @@ public class ExamInterface  extends BaseController {
         }
         Collections.shuffle(questions);
         if(null==questions){
-            msg="暂无数据";
-            state=0;
+            msg=BigConstant.state_2;
         }else{
-            msg="查询成功";
-            state=1;
+            msg=BigConstant.state_1;
         }
-        obj=new JSONObject();
         obj.put("state",state);
         obj.put("msg",msg);
         obj.put("data",questions);
-        return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
+        return obj;
+        //return JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
     }
 
 
@@ -171,7 +182,10 @@ public class ExamInterface  extends BaseController {
             @ApiImplicitParam(name="userId",value="用户id",dataType="String", paramType = "query")
     })
     public JSONObject findQuestionById(Integer examId,Integer bankId,Integer userId){
-        logger.info("获取试卷类型examId{}||bankId{}||userId{}",examId,bankId,userId);
+        logger.info("获取试卷及考试题examId:{},bankId:{},userId:{}",examId,bankId,userId);
+        int state=BigConstant.state_success;
+        String msg;
+        JSONObject obj=new JSONObject();
         User user=null;
         ExamLog log=new ExamLog();
         JSONObject o=new JSONObject();
@@ -287,21 +301,19 @@ public class ExamInterface  extends BaseController {
 
                 o.put("log",log);
                 o.put("questions",questions);
-                obj=new JSONObject();
                 obj.put("state",state);
-                obj.put("msg","获取成功");
+                obj.put("msg",BigConstant.state_1);
                 obj.put("data",o);
             }else{
-                obj=new JSONObject();
                 obj.put("state",state);
-                obj.put("msg","缺少用户");
-                obj.put("data","");
+                obj.put("msg",BigConstant.state_3);
+                obj.put("data",null);
             }
         }else{
             obj=new JSONObject();
             obj.put("state",state);
-            obj.put("msg","缺少用户");
-            obj.put("data","");
+            obj.put("msg",BigConstant.state_3);
+            obj.put("data",null);
         }
         return obj;
 
@@ -315,18 +327,21 @@ public class ExamInterface  extends BaseController {
             @ApiImplicitParam(name = "endTime", value = "交卷时间", dataType = "String", paramType = "query"),
     })
     public JSONObject setExamLog(Integer logId,Integer score,String endTime){
-        logger.info("设置考试记录:{}|score{}|endTime{}",logId,score,endTime);
+        logger.info("设置考试记录logId:{}|score{}|endTime{}",logId,score,endTime);
+        int state=BigConstant.state_success;
+        String msg;
+        JSONObject obj=new JSONObject();
         ExamLog examLog=examLogDao.findOne(logId);
         examLog.setScore(score);
         examLog.setEndTime(endTime);
         examLogDao.saveAndFlush(examLog);
-        obj=new JSONObject();
         obj.put("state",state);
         obj.put("msg","完成考试");
         obj.put("data","完成考试");
-        JSONObject jobj=JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
-        logger.info(jobj.toJSONString());
-        return jobj;
+        return obj;
+//        JSONObject jobj=JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
+//        logger.info(jobj.toJSONString());
+//        return jobj;
     }
 
     @ApiOperation(value="设置考试记录", notes="设置考试记录")
@@ -339,12 +354,13 @@ public class ExamInterface  extends BaseController {
     })
     public JSONObject questionExamLog(Integer logId,Integer questionId,String properIds,String endTime){
         logger.info("设置考试记录:{}|questionId:{}|properIds:{}|endTime{}",logId,questionId,properIds,endTime);
+        int state=0;
+        String msg;
+        JSONObject obj=new JSONObject();
         ExamLog examLog=examLogDao.findOne(logId);
         Question question=questionDao.findOne(questionId);
         List<Proper> propers=new ArrayList<>();
         QuestionLog log=null;
-
-
         Exam exam=examLog.getExam();
         //分数
         int score=0;
@@ -427,13 +443,12 @@ public class ExamInterface  extends BaseController {
             examLog.setEndTime(endTime);
         }
         examLogDao.saveAndFlush(examLog);
-
-        obj=new JSONObject();
         obj.put("state",state);
         obj.put("msg",msg);
         obj.put("data",o);
-        JSONObject jobj=JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
-        logger.info(jobj.toJSONString());
-        return jobj;
+        return obj;
+//        JSONObject jobj=JSONObject.parseObject(JSONObject.toJSONString(obj, BigConstant.filter));
+//        logger.info(jobj.toJSONString());
+//        return jobj;
     }
 }

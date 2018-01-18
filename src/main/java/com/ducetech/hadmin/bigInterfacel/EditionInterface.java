@@ -1,6 +1,7 @@
 package com.ducetech.hadmin.bigInterfacel;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ducetech.hadmin.common.utils.BigConstant;
 import com.ducetech.hadmin.dao.IBigFileDao;
 import com.ducetech.hadmin.entity.BigFile;
 import io.swagger.annotations.ApiOperation;
@@ -23,9 +24,7 @@ import java.util.List;
 @RequestMapping("/interface/update")
 public class EditionInterface {
     private static Logger logger = LoggerFactory.getLogger(EditionInterface.class);
-    int state=0;//1正常
-    String msg;
-    JSONObject obj;
+
     @Autowired
     IBigFileDao fileDao;
 
@@ -33,8 +32,10 @@ public class EditionInterface {
     @RequestMapping(value="/getUpdateApk",method = RequestMethod.GET)
     public JSONObject getUpdateApk(){
         logger.info("获取更新文件");
-        obj=new JSONObject();
-        List<BigFile> files=fileDao.findByMenuType("前端版本更新");
+        int state= BigConstant.state_success;//1正常
+        String msg;
+        JSONObject obj=new JSONObject();
+        List<BigFile> files=fileDao.findByMenuType(BigConstant.Edition);
 
         BigFile file=null;
         if(null!=files&&files.size()>0) {
