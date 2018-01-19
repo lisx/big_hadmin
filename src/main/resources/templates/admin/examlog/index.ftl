@@ -85,7 +85,7 @@
 			    //detailView:true,
 			    //detailFormatter:detailFormatter,
                 queryParams:function(params){
-                    params["nodeCode"]=$("#nodeCode").val();
+                    params["station"]=$("#nodeCode").val();
                     console.log(JSON.stringify(params));
                     return params;
                 },
