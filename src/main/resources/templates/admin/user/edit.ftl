@@ -67,20 +67,20 @@
         <div class="form-group">
             <label class="col-sm-2 control-label">服务信息卡编号：</label>
             <div class="col-sm-4">
-                <input id="fwxxkUrl" name="fwxxkUrl" class="form-control" value="${fwxxkUrl}">
+                <input id="fwxxkUrl" name="fwxxkUrl" class="form-control" value="${user.fwxxkUrl}">
             </div>
         </div>
 
         <div class="form-group">
             <label class="col-sm-2 control-label">综控员上岗证编号：</label>
             <div class="col-sm-4">
-                <input id="zkysgzUrl" name="zkysgzUrl" class="form-control" value="${zkysgzUrl}">
+                <input id="zkysgzUrl" name="zkysgzUrl" class="form-control" value="${user.zkysgzUrl}">
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">FAS证编号：</label>
             <div class="col-sm-4">
-                <input id="faszUrl" name="faszUrl" class="form-control" value="${faszUrl}">
+                <input id="faszUrl" name="faszUrl" class="form-control" value="${user.faszUrl}">
             </div>
         </div>
         <div class="form-group">

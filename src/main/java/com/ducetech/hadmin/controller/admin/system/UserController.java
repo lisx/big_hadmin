@@ -436,30 +436,30 @@ public class UserController extends BaseController {
         User user = userService.find(id);
         List<String> lines = stationDao.findLines(6);
         map.addAttribute("lines", lines);
-        if (null != user.getFwxxkUrl()) {
-            String[] fw = user.getFwxxkUrl().split("=");
-            if (fw.length > 1) {
-                map.put("fwxxkUrl", fw[1]);
-            } else {
-                map.put("fwxxkUrl", fw[0]);
-            }
-        }
-        if (null != user.getZkysgzUrl()) {
-            String[] fw = user.getZkysgzUrl().split("=");
-            if (fw.length > 1) {
-                map.put("zkysgzUrl", fw[1]);
-            } else {
-                map.put("zkysgzUrl", fw[0]);
-            }
-        }
-        if (null != user.getFaszUrl()) {
-            String[] fw = user.getFaszUrl().split("=");
-            if (fw.length > 1) {
-                map.put("faszUrl", fw[1]);
-            } else {
-                map.put("faszUrl", fw[0]);
-            }
-        }
+//        if (null != user.getFwxxkUrl()) {
+//            String[] fw = user.getFwxxkUrl().split("=");
+//            if (fw.length > 1) {
+//                map.put("fwxxkUrl", fw[1]);
+//            } else {
+//                map.put("fwxxkUrl", fw[0]);
+//            }
+//        }
+//        if (null != user.getZkysgzUrl()) {
+//            String[] fw = user.getZkysgzUrl().split("=");
+//            if (fw.length > 1) {
+//                map.put("zkysgzUrl", fw[1]);
+//            } else {
+//                map.put("zkysgzUrl", fw[0]);
+//            }
+//        }
+//        if (null != user.getFaszUrl()) {
+//            String[] fw = user.getFaszUrl().split("=");
+//            if (fw.length > 1) {
+//                map.put("faszUrl", fw[1]);
+//            } else {
+//                map.put("faszUrl", fw[0]);
+//            }
+//        }
         map.put("user", user);
         return "admin/user/edit";
     }
