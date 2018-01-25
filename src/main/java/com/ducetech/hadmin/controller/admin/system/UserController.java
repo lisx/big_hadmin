@@ -444,7 +444,7 @@ public class UserController extends BaseController {
                 map.put("fwxxkUrl", fw[0]);
             }
         }
-        if (null != user.getFwxxkUrl()) {
+        if (null != user.getZkysgzUrl()) {
             String[] fw = user.getZkysgzUrl().split("=");
             if (fw.length > 1) {
                 map.put("zkysgzUrl", fw[1]);
@@ -452,7 +452,7 @@ public class UserController extends BaseController {
                 map.put("zkysgzUrl", fw[0]);
             }
         }
-        if (null != user.getFwxxkUrl()) {
+        if (null != user.getFaszUrl()) {
             String[] fw = user.getFaszUrl().split("=");
             if (fw.length > 1) {
                 map.put("faszUrl", fw[1]);
