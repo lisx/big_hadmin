@@ -1,6 +1,7 @@
 package com.ducetech.hadmin.service.impl;
 
 import com.ducetech.hadmin.common.utils.MD5Utils;
+import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.dao.IUserDao;
 import com.ducetech.hadmin.dao.support.IBaseDao;
 import com.ducetech.hadmin.entity.Role;
@@ -49,7 +50,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Integer> implements I
 		    User dbUser=find(user.getId());
 		    dbUser.setStationArea(user.getStationArea());
 		    dbUser.setStation(user.getStation());
-		    dbUser.setPassword(MD5Utils.md5(null==user.getPassword()?"123456":user.getPassword()));
+		    dbUser.setPassword(MD5Utils.md5(StringUtil.isBlank(user.getPassword())?"123456":user.getPassword()));
 		    dbUser.setUserCode(user.getUserCode());
 		    dbUser.setUserName(user.getUserName());
 		    dbUser.setPosition(user.getPosition());
@@ -59,7 +60,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Integer> implements I
 		    dbUser.setZkysgzUrl(user.getZkysgzUrl());
 			update(dbUser);
 		}else{
-            user.setPassword(MD5Utils.md5(null==user.getPassword()?"123456":user.getPassword()));
+            user.setPassword(MD5Utils.md5(StringUtil.isBlank(user.getPassword())?"123456":user.getPassword()));
 			save(user);
 		}
 	}
