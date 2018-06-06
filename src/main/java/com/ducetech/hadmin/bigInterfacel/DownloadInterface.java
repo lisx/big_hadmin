@@ -133,9 +133,11 @@ public class DownloadInterface extends BaseController {
                             out.write(bytes, 0, n);
                         }
                     }
-                    out.flush();
+
                 } else {
+                    if (logger.isDebugEnabled()) {
                         logger.debug("Error: file " + location + " not found.");
+                    }
                 }
             } catch (IOException ie) {
                 // 忽略 ClientAbortException 之类的异常
@@ -144,6 +146,7 @@ public class DownloadInterface extends BaseController {
                 logger.error(e.getMessage());
             } finally {
                 if (out != null) {
+                    out.flush();
                     out.close();
                 }
                 if (bis != null)
