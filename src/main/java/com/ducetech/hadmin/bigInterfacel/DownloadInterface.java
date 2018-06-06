@@ -42,7 +42,8 @@ public class DownloadInterface extends BaseController {
         logger.info("根据id:{}获取文件",id);
         BigFile bigFile=fileDao.findOne(id);
         String location=bigFile.getFileUrl();
-        BufferedInputStream bis = null;
+        BufferedInputStream bis=null;
+        OutputStream out=null;
         try {
             File file = new File(location);
             if (file.exists()&&file.length()>0) {
@@ -107,13 +108,11 @@ public class DownloadInterface extends BaseController {
                             .append(fileLength).toString();
                     response.setHeader("Content-Range", contentRange);
                 }
-
                 String fileName = file.getName();
                 response.setContentType("application/octet-stream");
                 response.addHeader("Content-Disposition", "attachment;filename=" + fileName);
-
-                OutputStream out = response.getOutputStream();
-                int n = 0;
+                out = response.getOutputStream();
+                int n;
                 long readLength = 0;
                 int bsize = 1024;
                 byte[] bytes = new byte[bsize];
@@ -133,9 +132,7 @@ public class DownloadInterface extends BaseController {
                         out.write(bytes,0,n);
                     }
                 }
-                out.flush();
-                out.close();
-                bis.close();
+
             } else {
                 if (logger.isDebugEnabled()) {
                     logger.debug("Error: file " + location + " not found.");
@@ -143,8 +140,16 @@ public class DownloadInterface extends BaseController {
             }
         } catch (IOException ie) {
             // 忽略 ClientAbortException 之类的异常
+            logger.error(ie.getMessage());
         } catch (Exception e) {
             logger.error(e.getMessage());
+        }finally {
+            if (out != null) {
+                out.flush();
+                out.close();
+            }
+            if (bis != null)
+                bis.close();
         }
     }
 
