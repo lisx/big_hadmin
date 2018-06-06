@@ -107,7 +107,7 @@ public class BigFile extends BaseEntity {
         // A FileInputStream is for bytes
         FileInputStream fis = null;
         File f=new File(path);
-        if(f.exists()) {
+        if(f.exists()&&f.length()>0) {
             try {
                 fis = new FileInputStream(f);
                 byte[] buf = null;
