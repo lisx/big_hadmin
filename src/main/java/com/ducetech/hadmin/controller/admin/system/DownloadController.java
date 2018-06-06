@@ -30,13 +30,15 @@ public class DownloadController extends BaseController {
     @RequestMapping(value="/download/{id}", method = RequestMethod.GET)
     public void download(@PathVariable Integer id) throws IOException {
         BigFile file=fileDao.findOne(id);
-        response.setCharacterEncoding("utf-8");
-        response.setContentType("application/force-download");// 设置强制下载不打开
-        response.addHeader("Content-Disposition","attachment;fileName=" + URLEncoder.encode(file.getFileName(), "UTF-8"));// 设置文件名
-        request.setCharacterEncoding("utf-8");
-        String path= file.getFileUrl();
-        ServletOutputStream outputStream = response.getOutputStream();
-        file.returnFile(path,outputStream);
+        if(null!=file) {
+            response.setCharacterEncoding("utf-8");
+            response.setContentType("application/force-download");// 设置强制下载不打开
+            response.addHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(file.getFileName(), "UTF-8"));// 设置文件名
+            request.setCharacterEncoding("utf-8");
+            String path = file.getFileUrl();
+            ServletOutputStream outputStream = response.getOutputStream();
+            file.returnFile(path, outputStream);
+        }
     }
 
 
