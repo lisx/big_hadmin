@@ -1,10 +1,13 @@
 package com.ducetech.hadmin.bigInterfacel;
 
+import com.ducetech.hadmin.common.utils.StringUtil;
 import com.ducetech.hadmin.controller.BaseController;
 import com.ducetech.hadmin.dao.IBigFileDao;
 import com.ducetech.hadmin.entity.BigFile;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import lombok.Synchronized;
+import org.hibernate.annotations.Synchronize;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -160,31 +163,35 @@ public class DownloadInterface extends BaseController {
      * @param code
      * @throws IOException
      */
+    @Synchronized
     @ApiOperation(value="获取用户文件", notes="根据code获取文件")
     @RequestMapping(value="/userImg", method = RequestMethod.GET)
     @ApiImplicitParam(name="code",value="文件code",dataType="String", paramType = "query")
-    public String download( String code) throws IOException {
+    public void download( String code) throws IOException {
         logger.info("根据code:{}获取文件",code);
-        String [] codes=code.split("=");
-        BigFile file;
-        if(null!=codes&&codes.length>1) {
-            System.out.println("|code|" + codes[1]);
-            file = fileDao.findByFileName(codes[1]+".%");
-        }else{
-            file = fileDao.findByFileName(codes[0]+".%");
+        System.out.println("|||||||||||||"+code);
+        BigFile file=null;
+        if(!StringUtil.isBlank(code)) {
+            file = fileDao.findByFileName(code + ".%");
+//            String[] codes = code.split("=");
+//            if (null != codes && codes.length > 1) {
+//                file = fileDao.findByFileName(codes[1] + ".%");
+//            } else {
+//                file = fileDao.findByFileName(codes[0] + ".%");
+//            }
         }
         if(null!=file) {
-            response.setCharacterEncoding("utf-8");
-            response.setContentType("application/force-download");// 设置强制下载不打开
-            response.addHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(file.getFileName(), "UTF-8"));// 设置文件名
             String path = file.getFileUrl();
-            ServletOutputStream out = response.getOutputStream();
+            ServletOutputStream out = null;
             FileInputStream fis = null;
-
             try {
                 System.out.println("path"+path);
                 File filePath=new File(path);
                 if(filePath.exists()&&filePath.length()>0) {
+                    response.setCharacterEncoding("utf-8");
+                    response.setContentType("application/force-download");// 设置强制下载不打开
+                    response.addHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(file.getFileName(), "UTF-8"));// 设置文件名
+                    out = response.getOutputStream();
                     fis = new FileInputStream(path);
                     byte[] buf = null;
                     if (fis.available() > 4 * 1024) {
@@ -213,6 +220,5 @@ public class DownloadInterface extends BaseController {
         }else{
             System.out.println("|数据库|空|||");
         }
-        return null;
     }
 }
